@@ -1,0 +1,20 @@
+# Set Index
+
+The following table provides the reference numbers used by Pauperformance (p12e) to uniquely identify Magic sets.
+
+The table is automatically generated using [Scryfall API](https://scryfall.com/docs/api/sets).
+Due to Magic's long and complicated history, Scryfall includes many un-official sets as a way to group promotional or outlier cards together.
+
+For this reason, the set index looks different from other versions available online, such as the one in the [Magic: The Gathering Wiki](https://mtg.fandom.com/wiki/Set#List_of_Magic_expansions_and_sets).
+
+However, this index is built in a cross-format, stable, backward- and forward-compatible way and is thus preferred.
+
+Pauperformance decks use the **p12e code** as identified.
+
+| p12e code | Scryfall code | Set name                                        | Release date |
+| ----------| ------------- | ----------------------------------------------- | ------------ |
+{% for set in index -%}
+| {{ "%-10s" % set.index -}} | {{ "%-13s" % set.code }} | {{ "%-47s" % set.name }} | {{ "%-12s" % set.date }} |
+{% endfor %}
+
+*Last updated: {{ last_update_date }}.*
