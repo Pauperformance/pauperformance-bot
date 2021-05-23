@@ -1,0 +1,24 @@
+# {{ name }}
+
+**Aliases**: {{ aliases | map('tagify') | join(', ') }}
+
+**Dominant colours**: {{ colours | map('tagify') | join(', ') }}
+
+**Types**: {{ types | map('tagify') | join(', ') }}
+
+**Description**: {{ description }}
+
+**Staples**:
+
+{% for staple in staples -%}
+[<img src="{{ staple.image_url }}" width="300"/>]({{ staple.page_url }})
+{% endfor %}
+
+**Frequent cards**:
+
+{% for frequent in frequents -%}
+[<img src="{{ frequent.image_url }}" width="300"/>]({{ frequent.page_url }})
+{% endfor %}
+
+*Last updated: {{ last_update_date }}.*
+
