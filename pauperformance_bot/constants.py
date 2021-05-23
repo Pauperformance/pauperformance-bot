@@ -11,6 +11,8 @@ DEFAULT_DATE_FORMAT = "%Y-%m-%d, %H:%M:%S"  # allows chronological sorting
 TOP_DIR = Path(__file__).parent.parent.resolve()
 SOURCE_DIR = posix_path(TOP_DIR.as_posix(), "pauperformance_bot")
 
+DECKSTATS_PAUPERFORMANCE_FOLDER = "Pauperformance"
+
 # pauperformance-bot resources
 RESOURCES_DIR = posix_path(TOP_DIR.as_posix(), "resources")
 
@@ -33,3 +35,4 @@ SET_INDEX_OUTPUT_FILE = posix_path(PAUPERFORMANCE_PAGES_DIR, "set_index.md")
 
 # third-party resources
 SCRYFALL_API_ENDPOINT = "https://api.scryfall.com"
+DECKSTATS_API_ENDPOINT = "https://deckstats.net/api.php"

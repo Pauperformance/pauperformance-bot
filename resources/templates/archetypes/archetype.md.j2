@@ -20,5 +20,11 @@
 [<img src="{{ frequent.image_url }}" width="300"/>]({{ frequent.page_url }})
 {% endfor %}
 
+**Decks**:
+
+{% for deck in decks -%}
+[{{ deck.name }}.{{ deck.owner_name }}]({{ deck.url }}) (*{{ pretty_str(deck.added) }}*)
+{% endfor %}
+
 *Last updated: {{ last_update_date }}.*
 

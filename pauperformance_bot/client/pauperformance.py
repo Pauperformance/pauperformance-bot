@@ -1,11 +1,13 @@
 import glob
 from pathlib import Path
 
+from pauperformance_bot.client.deckstats import Deckstats
 from pauperformance_bot.client.scryfall import Scryfall
 from pauperformance_bot.constants import \
     SET_INDEX_TEMPLATE_FILE, SET_INDEX_OUTPUT_FILE, TEMPLATES_PAGES_DIR, \
     CONFIG_ARCHETYPES_DIR, TEMPLATES_ARCHETYPES_DIR, \
     PAUPERFORMANCE_ARCHETYPES_DIR, ARCHETYPE_TEMPLATE_FILE
+from pauperformance_bot.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.util.config import read_config, read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
@@ -63,12 +65,16 @@ class Pauperformance:
             pauperformance_archetypes_dir=PAUPERFORMANCE_ARCHETYPES_DIR,
     ):
         logger.info(f"Generating archetypes...")
+        all_decks = self.get_pauperformance_decks()
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
             values = read_archetype_config(archetype_config_file)
             values['staples'] = self._get_rendered_card_info(values['staples'])
             values['frequents'] = self._get_rendered_card_info(values['frequents'])
             archetype_name = values['name']
+            values['decks'] = [
+                deck for deck in all_decks if deck.archetype == archetype_name
+            ]
             archetype_file_name = Path(archetype_config_file).name
 
             archetype_output_file = posix_path(
@@ -93,6 +99,16 @@ class Pauperformance:
             rendered_cards.append({
                 'name': card,
                 "image_url": scryfall_card["image_uris"]["normal"],
-                "page_url": scryfall_card["scryfall_uri"],
+                "page_url": scryfall_card["scryfall_uri"].replace('?utm_source=api', ''),
             })
         return rendered_cards
+
+    def get_pauperformance_decks(self):
+        all_decks = []
+        for player in PAUPERFORMANCE_PLAYERS:
+            logger.info(f"Processing player {player.name}...")
+            deckstats = Deckstats(owner_id=player.deckstats_id)
+            player_decks = deckstats.list_pauperformance_decks(player.deckstats_name)
+            logger.info(f"Found {len(player_decks)} decks.")
+            all_decks += player_decks
+        return all_decks
