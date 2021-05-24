@@ -1,3 +1,9 @@
+import re
+
+import requests
+from pyquery import PyQuery
+
+from pauperformance_bot.util.request import execute_http_request
 from pauperformance_bot.util.time import pretty_str
 
 
@@ -25,6 +31,26 @@ class DeckstatsDeck:
     @property
     def archetype(self):
         return self.name.rsplit(' ', maxsplit=1)[0]
+
+    @property
+    def p13e_code(self):
+        return self.name.rsplit(' ', maxsplit=1)[1].split('.')[0]
+
+    @property
+    def description(self):
+        url = self.url
+        method = requests.get
+        response = execute_http_request(method, url)
+        pq = PyQuery(response.content)
+        description_div = pq(
+            ".deck_text_editable_display_content.deck_text_display_markdown")
+        try:
+            raw_description = str(next(description_div.items()))
+            raw_description = next(
+                (l for l in raw_description.split("\n") if '</p>' in l))
+            return re.sub('<[^<]+?>', '', raw_description).rstrip()
+        except StopIteration:  # no description
+            return ""
 
     def __str__(self):
         return f"owner_id: {self.owner_id}; " \

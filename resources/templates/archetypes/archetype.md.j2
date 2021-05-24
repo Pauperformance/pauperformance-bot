@@ -2,28 +2,28 @@
 
 **Aliases**: {{ aliases | map('tagify') | join(', ') }}
 
-**Dominant colours**: {{ colours | map('tagify') | join(', ') }}
+**Dominant mana**: {{ mana | map('to_archetype_page_mana') | join(' ') }}
 
-**Types**: {{ types | map('tagify') | join(', ') }}
+**Type**: {{ type | map('tagify') | join(', ') }}
 
 **Description**: {{ description }}
 
-**Staples**:
+## **Staples**
 
 {% for staple in staples -%}
 [<img src="{{ staple.image_url }}" width="300"/>]({{ staple.page_url }})
 {% endfor %}
 
-**Frequent cards**:
+## **Frequent cards**
 
 {% for frequent in frequents -%}
 [<img src="{{ frequent.image_url }}" width="300"/>]({{ frequent.page_url }})
 {% endfor %}
 
-**Decks**:
+## **Decks**
 
 {% for deck in decks -%}
-[{{ deck.name }}.{{ deck.owner_name }}]({{ deck.url }}) (*{{ pretty_str(deck.added) }}*)
+[{{ deck.name }}.{{ deck.owner_name }}]({{ deck.url }}) | *{{ pretty_str(deck.added) }}* | {{ deck.description }}
 {% endfor %}
 
 *Last updated: {{ last_update_date }}.*

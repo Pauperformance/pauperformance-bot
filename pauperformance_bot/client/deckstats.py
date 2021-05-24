@@ -6,6 +6,7 @@ import requests
 from pauperformance_bot.constants import DECKSTATS_API_ENDPOINT, DECKSTATS_PAUPERFORMANCE_FOLDER
 from pauperformance_bot.entity.deckstats_deck import DeckstatsDeck
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYER
+from pauperformance_bot.util.naming import is_valid_p13e_deckstats_name
 from pauperformance_bot.util.request import execute_http_request
 
 
@@ -76,11 +77,14 @@ class Deckstats:
         folders = self.list_user_folders_id()
         if DECKSTATS_PAUPERFORMANCE_FOLDER not in folders:
             return []
-        # TODO: check if name is valid
-        return self.list_public_decks_in_folder(
-            owner_name,
-            folders[DECKSTATS_PAUPERFORMANCE_FOLDER]
-        )
+        return [
+            deck
+            for deck in self.list_public_decks_in_folder(
+                owner_name,
+                folders[DECKSTATS_PAUPERFORMANCE_FOLDER]
+            )
+            if is_valid_p13e_deckstats_name(deck.name)
+        ]
 
     def get_deck(self, deck_id):
         url = self.endpoint
@@ -95,4 +99,3 @@ class Deckstats:
         method = partial(method, params=params)
         response = execute_http_request(method, url)
         return json.loads(response.content)
-

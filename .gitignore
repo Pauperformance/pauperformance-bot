@@ -7,3 +7,5 @@ venv/
 
 # IDE
 .idea/
+
+pauperformance_bot/test.py

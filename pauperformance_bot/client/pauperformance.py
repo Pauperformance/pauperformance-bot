@@ -18,8 +18,9 @@ logger = get_application_logger()
 
 
 class Pauperformance:
-    def __init__(self, scryfall=Scryfall()):
+    def __init__(self, scryfall=Scryfall(), players=PAUPERFORMANCE_PLAYERS):
         self.scryfall = scryfall
+        self.players = players
 
     def get_set_index(self):
         logger.info("Building set index...")
@@ -73,7 +74,9 @@ class Pauperformance:
             values['frequents'] = self._get_rendered_card_info(values['frequents'])
             archetype_name = values['name']
             values['decks'] = [
-                deck for deck in all_decks if deck.archetype == archetype_name
+                deck
+                for deck in all_decks
+                if deck.archetype == archetype_name
             ]
             archetype_file_name = Path(archetype_config_file).name
 
@@ -105,10 +108,10 @@ class Pauperformance:
 
     def get_pauperformance_decks(self):
         all_decks = []
-        for player in PAUPERFORMANCE_PLAYERS:
+        for player in self.players:
             logger.info(f"Processing player {player.name}...")
             deckstats = Deckstats(owner_id=player.deckstats_id)
             player_decks = deckstats.list_pauperformance_decks(player.deckstats_name)
             logger.info(f"Found {len(player_decks)} decks.")
             all_decks += player_decks
-        return all_decks
+        return sorted(all_decks, reverse=True, key=lambda d: d.p13e_code)

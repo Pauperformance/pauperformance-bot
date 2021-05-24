@@ -20,7 +20,7 @@ def read_archetype_config(config_file_path):
         **config["values"],
         "last_update_date": pretty_str(now()),
     }
-    list_fields = ["aliases", "colours", "types", "staples", "frequents"]
+    list_fields = ["aliases", "mana", "type", "staples", "frequents"]
     for field in list_fields:
         values[field] = _parse_list_value(config["values"][field])
     return values
