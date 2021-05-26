@@ -13,15 +13,13 @@ Further information about reference numbers used by Pauperformance (p12e) to uni
 The total number of cards in the Pauper pool is: {{ tot_cards_number }}.
 
 {% for p12e_code in card_index %}
+{%- if card_index[p12e_code] | length > 0 -%}
 ## {{ set_index[p12e_code - 1].name }} ({{ set_index[p12e_code - 1].scryfall_code }})
 *p12e_code: {{ p12e_code }} | release: {{ set_index[p12e_code - 1].date }} | new cards added: {{ card_index[p12e_code] | length }}*
-
 {% for card in card_index[p12e_code] %}
-[{{ card.name }}]({{ card.scryfall_uri }})
+[{{ card.name }}]({{ card.scryfall_uri }})  {% endfor %}
 
-{% endfor %}
-
-
+{% endif -%}
 {% endfor %}
 
 *Last updated: {{ last_update_date }}.*
