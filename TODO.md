@@ -1,0 +1,1 @@
+* Pool - You can click on each set to get a visual preview of the cards.

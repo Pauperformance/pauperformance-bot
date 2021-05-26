@@ -6,18 +6,31 @@ Every group lists common cards that were introduced in the format (and that are 
 These cards can be new cards or downshifts, while reprints are excluded.
 
 This page should be useful for Pauper players that haven't followed the latest releases and would like to be informed on what has recently changed.
-You can click on each set to get a visual preview of the cards.
 
-Further information about reference numbers used by Pauperformance (p12e) to uniquely identify Magic sets can be found in the [Set Index page]().
+Further information about reference numbers used by Pauperformance (p12e) to uniquely identify Magic sets can be found in the [Set Index page]({{ set_index_page }}).
 
 The total number of cards in the Pauper pool is: {{ tot_cards_number }}.
+
+---
+Table of Contents
+=================
+{% for p12e_code in card_index %}
+{%- if card_index[p12e_code] | length > 0 -%}
+* [{{ set_index[p12e_code - 1].name }}](#{{ to_github_anchor(set_index[p12e_code - 1].name + " " + set_index[p12e_code - 1].scryfall_code) }}) (*release: {{ set_index[p12e_code - 1].date }} | p12e_code: {{ p12e_code }}*)
+{% endif -%}
+{% endfor %}
+---
 
 {% for p12e_code in card_index %}
 {%- if card_index[p12e_code] | length > 0 -%}
 ## {{ set_index[p12e_code - 1].name }} ({{ set_index[p12e_code - 1].scryfall_code }})
-*p12e_code: {{ p12e_code }} | release: {{ set_index[p12e_code - 1].date }} | new cards added: {{ card_index[p12e_code] | length }}*
+*release: {{ set_index[p12e_code - 1].date }} | p12e_code: {{ p12e_code }}*
+
+<details>
+  <summary>Click to see {{ card_index[p12e_code] | length }} new cards</summary>
 {% for card in card_index[p12e_code] %}
 [{{ card.name }}]({{ card.scryfall_uri }})  {% endfor %}
+</details>
 
 {% endif -%}
 {% endfor %}

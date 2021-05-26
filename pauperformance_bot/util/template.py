@@ -16,6 +16,10 @@ def to_archetype_page_mana(mana):
     return f"<img src=\"../{PAUPERFORMANCE_RESOURCES_IMAGES_MANA_RELATIVE_URL}/{mana}.png\" width=\"25\"/>"
 
 
+def to_github_anchor(name):
+    return name.lower().replace(' ', '-').replace('.', '').replace(':', '')
+
+
 def render_template(template_dir, template_file, output_file, values):
     env = Environment(
         loader=FileSystemLoader(template_dir),
@@ -26,6 +30,7 @@ def render_template(template_dir, template_file, output_file, values):
     rendered_file = env.get_template(template_file).render(
         values,
         pretty_str=pretty_str,
+        to_github_anchor=to_github_anchor,
     )
     with open(output_file, "w") as out_f:
         logger.debug(

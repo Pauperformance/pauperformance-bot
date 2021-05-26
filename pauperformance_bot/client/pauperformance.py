@@ -10,7 +10,7 @@ from pauperformance_bot.constants import \
     CONFIG_ARCHETYPES_DIR, TEMPLATES_ARCHETYPES_DIR, \
     PAUPERFORMANCE_ARCHETYPES_DIR, ARCHETYPE_TEMPLATE_FILE, \
     KNOWN_SET_WITH_NO_PAUPER_CARDS, PAUPER_POOL_TEMPLATE_FILE, \
-    PAUPER_POOL_OUTPUT_FILE
+    PAUPER_POOL_OUTPUT_FILE, SET_INDEX_PAGE_NAME
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.util.config import read_config, read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
@@ -120,6 +120,7 @@ class Pauperformance:
                 "set_index": set_index,
                 "card_index": card_index,
                 "last_update_date": pretty_str(now()),
+                "set_index_page": SET_INDEX_PAGE_NAME,
             }
         )
         logger.info(f"Rendered pauper pool to {pauper_pool_template_file}.")
@@ -150,11 +151,8 @@ class Pauperformance:
     def get_pauper_cards_index(self, skip_sets=KNOWN_SET_WITH_NO_PAUPER_CARDS):
         set_index = self.get_set_index()
         card_index = {}
-        count = 0
         for item in set_index:
             p12e_code = item['p12e_code']
-            # if p12e_code != 677:
-            #     continue
             if p12e_code in skip_sets:
                 card_index[p12e_code] = []
                 continue
@@ -162,9 +160,6 @@ class Pauperformance:
             query = f"set:{scryfall_code} rarity:common legal:pauper"
             cards = self.scryfall.search_cards(query)
             card_index[p12e_code] = cards
-            count += 1
-            if count == 2:
-                break
             sleep(0.3)
         return card_index
 
