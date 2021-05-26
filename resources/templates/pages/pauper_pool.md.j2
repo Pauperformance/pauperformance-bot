@@ -1,0 +1,28 @@
+# Pauper Pool
+
+This page shows how the pool of legal Pauper cards has increased over time.
+
+Every group lists common cards that were introduced in the format (and that are currently not banned).
+These cards can be new cards or downshifts, while reprints are excluded.
+
+This page should be useful for Pauper players that haven't followed the latest releases and would like to be informed on what has recently changed.
+You can click on each set to get a visual preview of the cards.
+
+Further information about reference numbers used by Pauperformance (p12e) to uniquely identify Magic sets can be found in the [Set Index page]().
+
+The total number of cards in the Pauper pool is: {{ tot_cards_number }}.
+
+{% for p12e_code in card_index %}
+## {{ set_index[p12e_code - 1].name }} ({{ set_index[p12e_code - 1].scryfall_code }})
+*p12e_code: {{ p12e_code }} | release: {{ set_index[p12e_code - 1].date }} | new cards added: {{ card_index[p12e_code] | length }}*
+
+{% for card in card_index[p12e_code] %}
+[{{ card.name }}]({{ card.scryfall_uri }})
+
+{% endfor %}
+
+
+{% endfor %}
+
+*Last updated: {{ last_update_date }}.*
+

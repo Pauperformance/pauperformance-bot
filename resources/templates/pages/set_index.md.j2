@@ -14,7 +14,7 @@ Pauperformance decks use the **p12e code** as identified.
 | p12e code | Scryfall code | Set name                                        | Release date |
 | ----------| ------------- | ----------------------------------------------- | ------------ |
 {% for set in index -%}
-| {{ "%-10s" % set.index -}} | {{ "%-13s" % set.code }} | {{ "%-47s" % set.name }} | {{ "%-12s" % set.date }} |
+| {{ "%-10s" % set.p12e_code -}} | {{ "%-13s" % set.scryfall_code }} | {{ "%-47s" % set.name }} | {{ "%-12s" % set.date }} |
 {% endfor %}
 
 *Last updated: {{ last_update_date }}.*

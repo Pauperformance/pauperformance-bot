@@ -1,12 +1,16 @@
 import glob
+from functools import lru_cache
 from pathlib import Path
+from time import sleep
 
 from pauperformance_bot.client.deckstats import Deckstats
 from pauperformance_bot.client.scryfall import Scryfall
 from pauperformance_bot.constants import \
     SET_INDEX_TEMPLATE_FILE, SET_INDEX_OUTPUT_FILE, TEMPLATES_PAGES_DIR, \
     CONFIG_ARCHETYPES_DIR, TEMPLATES_ARCHETYPES_DIR, \
-    PAUPERFORMANCE_ARCHETYPES_DIR, ARCHETYPE_TEMPLATE_FILE
+    PAUPERFORMANCE_ARCHETYPES_DIR, ARCHETYPE_TEMPLATE_FILE, \
+    KNOWN_SET_WITH_NO_PAUPER_CARDS, PAUPER_POOL_TEMPLATE_FILE, \
+    PAUPER_POOL_OUTPUT_FILE
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.util.config import read_config, read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
@@ -22,6 +26,7 @@ class Pauperformance:
         self.scryfall = scryfall
         self.players = players
 
+    @lru_cache(maxsize=1)
     def get_set_index(self):
         logger.info("Building set index...")
         sets = self.scryfall.get_sets()
@@ -31,11 +36,11 @@ class Pauperformance:
         logger.info("Built set index.")
         return [
             {
-                "index": index,
-                "code": s['code'],
+                "p12e_code": p12e_code,
+                "scryfall_code": s['code'],
                 "name": s['name'],
                 "date": s['released_at'],
-            } for index, s in enumerate(sorted_sets, start=1)
+            } for p12e_code, s in enumerate(sorted_sets, start=1)
         ]
 
     def update_set_index(
@@ -95,6 +100,30 @@ class Pauperformance:
             )
         logger.info(f"Generated archetypes.")
 
+    def update_pauper_pool(
+            self,
+            templates_pages_dir=TEMPLATES_PAGES_DIR,
+            pauper_pool_template_file=PAUPER_POOL_TEMPLATE_FILE,
+            pauper_pool_output_file=PAUPER_POOL_OUTPUT_FILE,
+    ):
+        logger.info(
+            f"Rendering pauper pool in {templates_pages_dir} from {pauper_pool_template_file}..."
+        )
+        set_index = self.get_set_index()
+        card_index = self.get_pauper_cards_incremental_index()
+        render_template(
+            templates_pages_dir,
+            pauper_pool_template_file,
+            pauper_pool_output_file,
+            {
+                "tot_cards_number": sum(len(i) for i in card_index.values()),
+                "set_index": set_index,
+                "card_index": card_index,
+                "last_update_date": pretty_str(now()),
+            }
+        )
+        logger.info(f"Rendered pauper pool to {pauper_pool_template_file}.")
+
     def _get_rendered_card_info(self, cards):
         rendered_cards = []
         for card in sorted(cards):
@@ -106,6 +135,7 @@ class Pauperformance:
             })
         return rendered_cards
 
+    @lru_cache(maxsize=1)
     def get_pauperformance_decks(self):
         all_decks = []
         for player in self.players:
@@ -115,3 +145,43 @@ class Pauperformance:
             logger.info(f"Found {len(player_decks)} decks.")
             all_decks += player_decks
         return sorted(all_decks, reverse=True, key=lambda d: d.p13e_code)
+
+    @lru_cache(maxsize=1)
+    def get_pauper_cards_index(self, skip_sets=KNOWN_SET_WITH_NO_PAUPER_CARDS):
+        set_index = self.get_set_index()
+        card_index = {}
+        count = 0
+        for item in set_index:
+            p12e_code = item['p12e_code']
+            # if p12e_code != 677:
+            #     continue
+            if p12e_code in skip_sets:
+                card_index[p12e_code] = []
+                continue
+            scryfall_code = item['scryfall_code']
+            query = f"set:{scryfall_code} rarity:common legal:pauper"
+            cards = self.scryfall.search_cards(query)
+            card_index[p12e_code] = cards
+            count += 1
+            if count == 2:
+                break
+            sleep(0.3)
+        return card_index
+
+    @lru_cache(maxsize=1)
+    def get_pauper_cards_incremental_index(self):
+        card_index = self.get_pauper_cards_index()
+        incremental_card_index = {}
+        existing_card_names = set()
+        for p12e_code, cards in card_index.items():
+            logger.info(f"Processing set with p12e_code: {p12e_code}...")
+            new_cards = []
+            for card in cards:
+                if card['name'] in existing_card_names:
+                    continue
+                new_cards.append(card)
+                existing_card_names.add(card['name'])
+            incremental_card_index[p12e_code] = new_cards
+            logger.info(f"Found {len(new_cards)} new cards.")
+            logger.info(f"Processed set with p12e_code: {p12e_code}.")
+        return incremental_card_index

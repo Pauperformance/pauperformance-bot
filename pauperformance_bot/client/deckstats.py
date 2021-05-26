@@ -6,7 +6,7 @@ import requests
 from pauperformance_bot.constants import DECKSTATS_API_ENDPOINT, DECKSTATS_PAUPERFORMANCE_FOLDER
 from pauperformance_bot.entity.deckstats_deck import DeckstatsDeck
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYER
-from pauperformance_bot.util.naming import is_valid_p13e_deckstats_name
+from pauperformance_bot.util.naming import is_valid_p12e_deckstats_name
 from pauperformance_bot.util.request import execute_http_request
 
 
@@ -83,7 +83,7 @@ class Deckstats:
                 owner_name,
                 folders[DECKSTATS_PAUPERFORMANCE_FOLDER]
             )
-            if is_valid_p13e_deckstats_name(deck.name)
+            if is_valid_p12e_deckstats_name(deck.name)
         ]
 
     def get_deck(self, deck_id):

@@ -27,4 +27,4 @@ def read_archetype_config(config_file_path):
 
 
 def _parse_list_value(raw_value):
-    return [value.strip(" ") for value in raw_value.split(",")]
+    return [value.strip(" ") for value in raw_value.split(",")] if raw_value else []

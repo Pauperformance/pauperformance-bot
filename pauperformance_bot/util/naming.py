@@ -1,4 +1,4 @@
-def is_valid_p13e_deckstats_name(deck_name):
+def is_valid_p12e_deckstats_name(deck_name):
     tokens = deck_name.rsplit(' ', maxsplit=1)
     if not len(tokens) == 2:
         return False
