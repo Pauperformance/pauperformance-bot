@@ -16,6 +16,13 @@ DECKSTATS_PAUPERFORMANCE_FOLDER = "Pauperformance"
 # pauperformance-bot resources
 RESOURCES_DIR = posix_path(TOP_DIR.as_posix(), "resources")
 
+CACHE_DIR = posix_path(RESOURCES_DIR, "cache")
+SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
+DECKSTATS_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "deckstats_decks")
+PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(
+    CACHE_DIR, "pauper_cards_index.pkl"
+)
+
 CONFIG_DIR = posix_path(RESOURCES_DIR, "config")
 CONFIG_ARCHETYPES_DIR = posix_path(CONFIG_DIR, "archetypes")
 ARCHETYPE_TEMPLATE_FILE = "archetype.md.j2"
@@ -42,7 +49,7 @@ PAUPERFORMANCE_RESOURCES_IMAGES_MANA_RELATIVE_URL = posix_path("resources", "ima
 SCRYFALL_API_ENDPOINT = "https://api.scryfall.com"
 DECKSTATS_API_ENDPOINT = "https://deckstats.net/api.php"
 
-KNOWN_SET_WITH_NO_PAUPER_CARDS = [
+KNOWN_SETS_WITH_NO_PAUPER_CARDS = [
     3,
     4,
     5,
@@ -567,6 +574,6 @@ KNOWN_SET_WITH_NO_PAUPER_CARDS = [
     673,
     674,
     675,
-    676,
     677,
+    678,
 ]

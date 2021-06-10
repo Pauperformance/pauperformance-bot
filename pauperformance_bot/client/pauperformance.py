@@ -1,4 +1,5 @@
 import glob
+import pickle
 from functools import lru_cache
 from pathlib import Path
 from time import sleep
@@ -9,8 +10,9 @@ from pauperformance_bot.constants import \
     SET_INDEX_TEMPLATE_FILE, SET_INDEX_OUTPUT_FILE, TEMPLATES_PAGES_DIR, \
     CONFIG_ARCHETYPES_DIR, TEMPLATES_ARCHETYPES_DIR, \
     PAUPERFORMANCE_ARCHETYPES_DIR, ARCHETYPE_TEMPLATE_FILE, \
-    KNOWN_SET_WITH_NO_PAUPER_CARDS, PAUPER_POOL_TEMPLATE_FILE, \
-    PAUPER_POOL_OUTPUT_FILE, SET_INDEX_PAGE_NAME
+    KNOWN_SETS_WITH_NO_PAUPER_CARDS, PAUPER_POOL_TEMPLATE_FILE, \
+    PAUPER_POOL_OUTPUT_FILE, SET_INDEX_PAGE_NAME, \
+    PAUPER_CARDS_INDEX_CACHE_FILE
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.util.config import read_config, read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
@@ -52,12 +54,14 @@ class Pauperformance:
         logger.info(
             f"Rendering set index in {templates_pages_dir} from {set_index_template_file}..."
         )
+        index = self.get_set_index()
+        index = self._boldify_sets_with_new_cards(index)
         render_template(
             templates_pages_dir,
             set_index_template_file,
             set_index_output_file,
             {
-                "index": self.get_set_index(),
+                "index": index,
                 "last_update_date": pretty_str(now()),
             }
         )
@@ -75,14 +79,16 @@ class Pauperformance:
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
             values = read_archetype_config(archetype_config_file)
-            values['staples'] = self._get_rendered_card_info(values['staples'])
-            values['frequents'] = self._get_rendered_card_info(values['frequents'])
             archetype_name = values['name']
-            values['decks'] = [
+            archetype_decks = [
                 deck
                 for deck in all_decks
                 if deck.archetype == archetype_name
             ]
+            staples, frequents = self._analyze_cards_frequency(archetype_decks)
+            values['staples'] = self._get_rendered_card_info(staples)
+            values['frequents'] = self._get_rendered_card_info(frequents)
+            values['decks'] = archetype_decks
             archetype_file_name = Path(archetype_config_file).name
 
             archetype_output_file = posix_path(
@@ -148,11 +154,23 @@ class Pauperformance:
         return sorted(all_decks, reverse=True, key=lambda d: d.p13e_code)
 
     @lru_cache(maxsize=1)
-    def get_pauper_cards_index(self, skip_sets=KNOWN_SET_WITH_NO_PAUPER_CARDS):
-        set_index = self.get_set_index()
+    def get_pauper_cards_index(
+            self,
+            skip_sets=KNOWN_SETS_WITH_NO_PAUPER_CARDS,
+            cards_index_cache_file=PAUPER_CARDS_INDEX_CACHE_FILE
+    ):
         card_index = {}
+        try:
+            with open(cards_index_cache_file, "rb") as cache_f:
+                card_index = pickle.load(cache_f)
+                logger.debug(f"Loaded card index from cache: {card_index}")
+        except FileNotFoundError:
+            logger.debug("No cache found for card index.")
+        set_index = self.get_set_index()
         for item in set_index:
             p12e_code = item['p12e_code']
+            if p12e_code in card_index:
+                continue  # cached
             if p12e_code in skip_sets:
                 card_index[p12e_code] = []
                 continue
@@ -161,6 +179,8 @@ class Pauperformance:
             cards = self.scryfall.search_cards(query)
             card_index[p12e_code] = cards
             sleep(0.3)
+        with open(cards_index_cache_file, 'wb') as cache_f:
+            pickle.dump(card_index, cache_f)
         return card_index
 
     @lru_cache(maxsize=1)
@@ -180,3 +200,44 @@ class Pauperformance:
             logger.info(f"Found {len(new_cards)} new cards.")
             logger.info(f"Processed set with p12e_code: {p12e_code}.")
         return incremental_card_index
+
+    def _boldify_sets_with_new_cards(self, set_index):
+        card_index = self.get_pauper_cards_incremental_index()
+        bolded_index = []
+        for item in set_index:
+            p12e_code = item['p12e_code']
+            if len(card_index[p12e_code]) == 0:
+                bolded_index.append(item)
+            else:
+                bolded_index.append({
+                    k: f"**{v}**"
+                    for k, v in item.items()
+                })
+        return bolded_index
+
+    def _analyze_cards_frequency(self, archetype_decks):
+        if len(archetype_decks) < 2:
+            return [], []
+        lands = set(land['name'] for land in self.scryfall.get_legal_lands())
+        deckstats_accounts = {}
+        decks_cards = {}
+        all_cards = set()
+        for deck in archetype_decks:
+            ownerd_id = str(deck.owner_id)
+            deckstats = deckstats_accounts.get(
+                ownerd_id, Deckstats(owner_id=ownerd_id)
+            )
+            deckstats_accounts[ownerd_id] = deckstats
+            deck_content = deckstats.get_deck(str(deck.saved_id))
+            if len(deck_content['sections']) != 1:
+                logger.error(f"More than one section for deck {deck.saved_id}")
+                raise ValueError()
+            cards = [c['name'] for c in deck_content['sections'][0]['cards']]
+            decks_cards[deck.saved_id] = cards
+            all_cards.update(cards)
+        staples = set(all_cards)
+        for deck_list in decks_cards.values():
+            staples = staples & set(deck_list)
+        staples = staples - lands
+        frequents = all_cards - staples - lands
+        return list(staples), list(frequents)

@@ -9,3 +9,4 @@ venv/
 .idea/
 
 pauperformance_bot/test.py
+resources/cache/
