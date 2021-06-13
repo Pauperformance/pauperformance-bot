@@ -66,12 +66,16 @@ class Deckstats:
             if 'decks' not in response['folder']:
                 continue
             for deck in response['folder']['decks']:
+                actual_name = deck['name']
+                actual_owner = owner_name
+                if owner_name == PAUPERFORMANCE_PLAYER.deckstats_name:
+                    actual_name, actual_owner = deck['name'].rsplit('.', maxsplit=1)
                 fetched_decks.append(DeckstatsDeck(
                     owner_id=deck['owner_id'],
-                    owner_name=owner_name,
+                    owner_name=actual_owner,
                     saved_id=deck['saved_id'],
                     folder_id=folder_id,
-                    name=deck['name'],
+                    name=actual_name,
                     added=deck['added'] * 1000,
                     updated=deck['updated'] * 1000,
                     url=f"https:{deck['url_neutral']}",
