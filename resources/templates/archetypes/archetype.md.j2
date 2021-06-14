@@ -23,7 +23,7 @@
 ## **Decks**
 
 {% for deck in decks -%}
-[{{ deck.name }}.{{ deck.owner_name }}]({{ deck.url }}) | *{{ pretty_str(deck.added) }}* | {{ deck.description }}
+[{{ deck.name }}.{{ deck.owner_name }}]({{ deck.url }}) | *{{ pretty_str(deck.added) }}* | {{ deck.description }}  
 {% endfor %}
 
 *Last updated: {{ last_update_date }}.*

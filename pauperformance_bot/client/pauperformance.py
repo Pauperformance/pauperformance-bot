@@ -12,7 +12,8 @@ from pauperformance_bot.constants import \
     PAUPERFORMANCE_ARCHETYPES_DIR, ARCHETYPE_TEMPLATE_FILE, \
     KNOWN_SETS_WITH_NO_PAUPER_CARDS, PAUPER_POOL_TEMPLATE_FILE, \
     PAUPER_POOL_OUTPUT_FILE, SET_INDEX_PAGE_NAME, \
-    PAUPER_CARDS_INDEX_CACHE_FILE
+    PAUPER_CARDS_INDEX_CACHE_FILE, ARCHETYPES_INDEX_TEMPLATE_FILE, \
+    ARCHETYPES_INDEX_OUTPUT_FILE, PAUPERFORMANCE_ARCHETYPES_DIR_RELATIVE_URL
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.util.config import read_config, read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
@@ -44,6 +45,42 @@ class Pauperformance:
                 "date": s['released_at'],
             } for p12e_code, s in enumerate(sorted_sets, start=1)
         ]
+
+    def update_archetypes_index(
+            self,
+            config_pages_dir=CONFIG_ARCHETYPES_DIR,
+            templates_pages_dir=TEMPLATES_PAGES_DIR,
+            archetypes_dir=PAUPERFORMANCE_ARCHETYPES_DIR_RELATIVE_URL,
+            archetypes_index_template_file=ARCHETYPES_INDEX_TEMPLATE_FILE,
+            archetypes_index_output_file=ARCHETYPES_INDEX_OUTPUT_FILE,
+    ):
+        logger.info(
+            f"Rendering archetype index in {templates_pages_dir} from "
+            f"{archetypes_index_template_file}..."
+        )
+        archetypes = []
+        for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
+            logger.info(f"Processing {archetype_config_file}")
+            values = read_archetype_config(archetype_config_file)
+            archetypes.append({
+                "name": values["name"],
+                "mana": values["mana"],
+                "type": ', '.join(values["type"]),
+            })
+        archetypes.sort(key=lambda a: a['name'])
+        render_template(
+            templates_pages_dir,
+            archetypes_index_template_file,
+            archetypes_index_output_file,
+            {
+                "archetypes": archetypes,
+                "last_update_date": pretty_str(now()),
+                "archetypes_dir": archetypes_dir,
+            }
+        )
+        logger.info(
+            f"Rendered archetypes index to {archetypes_index_output_file}."
+        )
 
     def update_set_index(
             self,

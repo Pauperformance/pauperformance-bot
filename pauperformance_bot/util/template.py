@@ -1,4 +1,5 @@
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
+from urllib.parse import quote
 
 from pauperformance_bot.constants import \
     PAUPERFORMANCE_RESOURCES_IMAGES_MANA_RELATIVE_URL
@@ -20,6 +21,10 @@ def to_github_anchor(name):
     return name.lower().replace(' ', '-').replace('.', '').replace(':', '')
 
 
+def to_url_encoded(name):
+    return quote(name)
+
+
 def render_template(template_dir, template_file, output_file, values):
     env = Environment(
         loader=FileSystemLoader(template_dir),
@@ -31,6 +36,7 @@ def render_template(template_dir, template_file, output_file, values):
         values,
         pretty_str=pretty_str,
         to_github_anchor=to_github_anchor,
+        to_url_encoded=to_url_encoded,
     )
     with open(output_file, "w") as out_f:
         logger.debug(

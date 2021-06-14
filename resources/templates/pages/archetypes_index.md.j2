@@ -1,0 +1,18 @@
+# Archetypes Index
+
+This page contains a curated list of the most important Pauper archetypes.
+Please note some of them may be not present in the meta anymore, e.g. due to a ban.
+
+If you think a relevant archetype is missing or a mistake is present, please let us know: we will be happy to update this page.
+
+Every archetype in the list is linked to its dedicated page, where you will find useful resources.
+
+| Name                   | Dominant mana | Type            |
+| -----------------------| ------------- | --------------- |
+{% for archetype in archetypes -%}
+[{{ archetype.name -}}](../{{ archetypes_dir }}/{{ to_url_encoded(archetype.name) }}.md) | {{ archetype.mana | map('to_archetype_page_mana') | join(' ') }} | {{ "%-15s" % archetype.type }} |
+{% endfor %}
+
+
+*Last updated: {{ last_update_date }}.*
+
