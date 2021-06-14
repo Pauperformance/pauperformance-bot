@@ -127,13 +127,19 @@ class Pauperformance:
             values['frequents'] = self._get_rendered_card_info(frequents)
             values['decks'] = archetype_decks
             archetype_file_name = Path(archetype_config_file).name
+            if archetype_name != archetype_file_name.replace(".ini", ""):
+                logger.warn(
+                    f"Archetype config mismatch: {archetype_name} vs "
+                    f"{archetype_file_name}"
+                )
 
             archetype_output_file = posix_path(
                 pauperformance_archetypes_dir,
                 archetype_file_name.replace('.ini', '.md'),
             )
             logger.info(
-                f"Rendering {archetype_name} in {templates_archetypes_dir} from {archetype_template_file}..."
+                f"Rendering {archetype_name} in {templates_archetypes_dir} "
+                f"from {archetype_template_file}..."
             )
             render_template(
                 templates_archetypes_dir,
@@ -150,7 +156,8 @@ class Pauperformance:
             pauper_pool_output_file=PAUPER_POOL_OUTPUT_FILE,
     ):
         logger.info(
-            f"Rendering pauper pool in {templates_pages_dir} from {pauper_pool_template_file}..."
+            f"Rendering pauper pool in {templates_pages_dir} from "
+            f"{pauper_pool_template_file}..."
         )
         set_index = self.get_set_index()
         card_index = self.get_pauper_cards_incremental_index()
@@ -188,7 +195,25 @@ class Pauperformance:
             player_decks = deckstats.list_pauperformance_decks(player.deckstats_name)
             logger.info(f"Found {len(player_decks)} decks.")
             all_decks += player_decks
-        return sorted(all_decks, reverse=True, key=lambda d: d.p13e_code)
+        all_decks.sort(reverse=True, key=lambda d: d.p13e_code)
+        archetypes = self.get_pauperformance_archetypes()
+        for deck in all_decks:
+            if deck.archetype not in archetypes:
+                logger.warn(
+                    f"Deck {deck.name} by {deck.owner_name} doesn't match any "
+                    f"known archetype."
+                )
+        return all_decks
+
+    @lru_cache(maxsize=1)
+    def get_pauperformance_archetypes(
+            self,
+            config_pages_dir=CONFIG_ARCHETYPES_DIR
+    ):
+        return set(
+            Path(a).name.replace(".ini", "")
+            for a in glob.glob(f"{config_pages_dir}/*.ini")
+        )
 
     @lru_cache(maxsize=1)
     def get_pauper_cards_index(
