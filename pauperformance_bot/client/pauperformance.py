@@ -251,7 +251,7 @@ class Pauperformance:
         incremental_card_index = {}
         existing_card_names = set()
         for p12e_code, cards in card_index.items():
-            logger.info(f"Processing set with p12e_code: {p12e_code}...")
+            logger.debug(f"Processing set with p12e_code: {p12e_code}...")
             new_cards = []
             for card in cards:
                 if card['name'] in existing_card_names:
@@ -259,8 +259,8 @@ class Pauperformance:
                 new_cards.append(card)
                 existing_card_names.add(card['name'])
             incremental_card_index[p12e_code] = new_cards
-            logger.info(f"Found {len(new_cards)} new cards.")
-            logger.info(f"Processed set with p12e_code: {p12e_code}.")
+            logger.debug(f"Found {len(new_cards)} new cards.")
+            logger.debug(f"Processed set with p12e_code: {p12e_code}.")
         return incremental_card_index
 
     def _boldify_sets_with_new_cards(self, set_index):

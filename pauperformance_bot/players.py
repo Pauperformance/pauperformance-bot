@@ -15,7 +15,15 @@ SHIKA93_PLAYER = PauperformancePlayer(
     deckstats_id="78813",
 )
 
+MREVILEYE_PLAYER = PauperformancePlayer(
+    name="MrEvilEye",
+    mtgo_name="MrEvilEye",
+    deckstats_name="MrEvilEye",
+    deckstats_id="72056",
+)
+
 PAUPERFORMANCE_PLAYERS = [
     PAUPERFORMANCE_PLAYER,
     SHIKA93_PLAYER,
+    MREVILEYE_PLAYER,
 ]
