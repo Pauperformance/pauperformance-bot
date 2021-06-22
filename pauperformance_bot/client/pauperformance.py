@@ -123,6 +123,10 @@ class Pauperformance:
                 if deck.archetype == archetype_name
             ]
             staples, frequents = self._analyze_cards_frequency(archetype_decks)
+            if len(archetype_decks) < 2:
+                logger.warn(
+                    f"{archetype_name} doesn't have at least 2 decks to generate staples and frequent cards."
+                )
             values['staples'] = self._get_rendered_card_info(staples)
             values['frequents'] = self._get_rendered_card_info(frequents)
             values['decks'] = archetype_decks
@@ -179,9 +183,13 @@ class Pauperformance:
         rendered_cards = []
         for card in sorted(cards):
             scryfall_card = self.scryfall.get_card_named(card)
+            if "image_uris" not in scryfall_card:  # e.g. Delver of Secrets
+                image_uris = scryfall_card["card_faces"][0]["image_uris"]
+            else:
+                image_uris = scryfall_card["image_uris"]
             rendered_cards.append({
                 'name': card,
-                "image_url": scryfall_card["image_uris"]["normal"],
+                "image_url": image_uris["normal"],
                 "page_url": scryfall_card["scryfall_uri"].replace('?utm_source=api', ''),
             })
         return rendered_cards

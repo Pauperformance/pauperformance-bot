@@ -1,11 +1,12 @@
 import json
 import pickle
-from functools import partial
+from functools import partial, lru_cache
 
 import requests
 
 from pauperformance_bot.constants import SCRYFALL_API_ENDPOINT, \
     SCRYFALL_CARDS_CACHE_DIR
+from pauperformance_bot.util.cache import to_pkl_name
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 from pauperformance_bot.util.request import execute_http_request
@@ -29,19 +30,23 @@ class Scryfall:
             cards_cache_dir=SCRYFALL_CARDS_CACHE_DIR,
     ):
         try:
-            with open(posix_path(cards_cache_dir, f"{exact_card_name}.pkl"), "rb") as cache_f:
+            with open(posix_path(cards_cache_dir, to_pkl_name(exact_card_name)), "rb") as cache_f:
                 card = pickle.load(cache_f)
                 logger.debug(f"Loaded card from cache: {card}")
         except FileNotFoundError:
             logger.debug("No cache found for card.")
-        url = f"{self.endpoint}/cards/named"
-        method = requests.get
-        params = {'exact': exact_card_name}
-        method = partial(method, params=params)
-        response = execute_http_request(method, url)
-        card = json.loads(response.content)
-        with open(posix_path(cards_cache_dir, f"{exact_card_name}.pkl"), 'wb') as cache_f:
-            pickle.dump(card, cache_f)
+            url = f"{self.endpoint}/cards/named"
+            method = requests.get
+            params = {'exact': exact_card_name}
+            method = partial(method, params=params)
+            response = execute_http_request(method, url)
+            card = json.loads(response.content)
+            with open(
+                    posix_path(
+                        cards_cache_dir, to_pkl_name(exact_card_name)
+                    ), 'wb'
+            ) as cache_f:
+                pickle.dump(card, cache_f)
         return card
 
     def search_cards(self, query):
@@ -65,17 +70,8 @@ class Scryfall:
             if exc.response.status_code == 404 and response['code'] == 'not_found':
                 return {}
 
-    def get_legal_lands(self, cards_cache_dir=SCRYFALL_CARDS_CACHE_DIR):
-        cache_key = "all_legal_lands.pkl"
-        try:
-            with open(posix_path(cards_cache_dir, cache_key), "rb") as cache_f:
-                lands = pickle.load(cache_f)
-                logger.debug(f"Loaded lands from cache: {lands}")
-        except FileNotFoundError:
-            logger.debug("No cache found for lands.")
+    @lru_cache(maxsize=1)
+    def get_legal_lands(self):
         query = "type:land legal:pauper"
-        lands = self.search_cards(query)
-        with open(posix_path(cards_cache_dir, cache_key), 'wb') as cache_f:
-            pickle.dump(lands, cache_f)
-        return lands
+        return self.search_cards(query)
 
