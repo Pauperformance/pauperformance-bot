@@ -1,1 +1,3 @@
-* Pool - You can click on each set to get a visual preview of the cards.
+* Pool - Create a dedicated page for each (relevant) set with visual previews of cards
+* Automatically create the 3 cache directories on the first run
+* Mark decks with banned cards
