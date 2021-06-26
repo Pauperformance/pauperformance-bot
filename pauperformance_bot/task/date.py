@@ -2,7 +2,7 @@ from pauperformance_bot.client.pauperformance import Pauperformance
 
 
 def date():
-    usa_date = "2019-03-25"
+    usa_date = "2018-03-30"
     pauperformance = Pauperformance()
     set_index = pauperformance.get_set_index()
     cards_index = pauperformance.get_pauper_cards_incremental_index()
