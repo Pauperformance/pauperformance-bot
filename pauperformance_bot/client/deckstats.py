@@ -69,7 +69,9 @@ class Deckstats:
                 actual_name = deck['name']
                 actual_owner = owner_name
                 if owner_name == PAUPERFORMANCE_PLAYER.deckstats_name:
-                    actual_name, actual_owner = deck['name'].rsplit('.', maxsplit=1)
+                    dot_tokens = deck['name'].split('.')
+                    actual_name = '.'.join(dot_tokens[:2])
+                    actual_owner = '.'.join(dot_tokens[2:])
                 fetched_decks.append(DeckstatsDeck(
                     owner_id=deck['owner_id'],
                     owner_name=actual_owner,
