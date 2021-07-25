@@ -13,10 +13,10 @@ The total number of cards in the Pauper pool is: {{ tot_cards_number }}.
 
 ---
 Table of Contents
-=================
+
 {% for p12e_code in card_index %}
 {%- if card_index[p12e_code] | length > 0 -%}
-* [{{ set_index[p12e_code - 1].name }}](#{{ to_github_anchor(set_index[p12e_code - 1].name + " " + set_index[p12e_code - 1].scryfall_code) }}) (*release: {{ set_index[p12e_code - 1].date }} | p12e_code: {{ p12e_code }}*)
+* [{{ set_index[p12e_code - 1].name }}](#{{ to_github_anchor(set_index[p12e_code - 1].name + " " + set_index[p12e_code - 1].scryfall_code) }}) (*release: {{ set_index[p12e_code - 1].date }} ~ p12e_code: {{ p12e_code }}*)
 {% endif -%}
 {% endfor %}
 ---
@@ -29,8 +29,9 @@ Table of Contents
 <details>
   <summary>Click to see {{ card_index[p12e_code] | length }} new cards</summary>
 {% for card in card_index[p12e_code] %}
-[{{ card.name }}]({{ card.scryfall_uri }})  {% endfor %}
+<a href="{{ card.scryfall_uri }}">{{ card.name }}</a><br/>{% endfor %}
 </details>
+[]()
 
 {% endif -%}
 {% endfor %}

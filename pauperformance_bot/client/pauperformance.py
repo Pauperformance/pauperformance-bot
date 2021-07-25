@@ -13,7 +13,8 @@ from pauperformance_bot.constants import \
     KNOWN_SETS_WITH_NO_PAUPER_CARDS, PAUPER_POOL_TEMPLATE_FILE, \
     PAUPER_POOL_OUTPUT_FILE, SET_INDEX_PAGE_NAME, \
     PAUPER_CARDS_INDEX_CACHE_FILE, ARCHETYPES_INDEX_TEMPLATE_FILE, \
-    ARCHETYPES_INDEX_OUTPUT_FILE, PAUPERFORMANCE_ARCHETYPES_DIR_RELATIVE_URL
+    ARCHETYPES_INDEX_OUTPUT_FILE, PAUPERFORMANCE_ARCHETYPES_DIR_RELATIVE_URL, \
+    PAUPER_POOL_PAGE_NAME
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.util.config import read_config, read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
@@ -100,6 +101,7 @@ class Pauperformance:
             {
                 "index": index,
                 "last_update_date": pretty_str(now()),
+                "pauper_pool_page": PAUPER_POOL_PAGE_NAME.as_html(),
             }
         )
         logger.info(f"Rendered set index to {set_index_output_file}.")
@@ -174,7 +176,7 @@ class Pauperformance:
                 "set_index": set_index,
                 "card_index": card_index,
                 "last_update_date": pretty_str(now()),
-                "set_index_page": SET_INDEX_PAGE_NAME,
+                "set_index_page": SET_INDEX_PAGE_NAME.as_html(),
             }
         )
         logger.info(f"Rendered pauper pool to {pauper_pool_template_file}.")
