@@ -2,6 +2,8 @@ from pathlib import Path
 from pauperformance_bot.util.path import posix_path
 
 # pauperformance-bot constants
+from pauperformance_bot.util.web_page import WebPage
+
 APPLICATION_NAME = "pauperformance-bot"
 PAUPERFORMANCE_BOT_DIR = posix_path(Path.home().as_posix(), ".pauperformance")
 
@@ -36,15 +38,16 @@ SET_INDEX_TEMPLATE_FILE = "set_index.md.j2"
 
 
 # pauperformance public repo
-PAUPERFORMANCE_DIR = posix_path(TOP_DIR.parent.as_posix(), "pauperformance")
+PAUPERFORMANCE_DIR = posix_path(TOP_DIR.parent.as_posix(), "Pauperformance.github.io")
 PAUPERFORMANCE_ARCHETYPES_DIR = posix_path(PAUPERFORMANCE_DIR, "archetypes")
 PAUPERFORMANCE_PAGES_DIR = posix_path(PAUPERFORMANCE_DIR, "pages")
 PAUPERFORMANCE_RESOURCES_DIR = posix_path(PAUPERFORMANCE_DIR, "resources")
-PAUPER_POOL_OUTPUT_FILE = posix_path(PAUPERFORMANCE_PAGES_DIR, "pauper_pool.md")
-ARCHETYPES_INDEX_PAGE_NAME = "archetypes_index.md"
-SET_INDEX_PAGE_NAME = "set_index.md"
-ARCHETYPES_INDEX_OUTPUT_FILE = posix_path(PAUPERFORMANCE_PAGES_DIR, ARCHETYPES_INDEX_PAGE_NAME)
-SET_INDEX_OUTPUT_FILE = posix_path(PAUPERFORMANCE_PAGES_DIR, SET_INDEX_PAGE_NAME)
+PAUPER_POOL_PAGE_NAME = WebPage("pauper_pool")
+PAUPER_POOL_OUTPUT_FILE = posix_path(PAUPERFORMANCE_PAGES_DIR, PAUPER_POOL_PAGE_NAME.as_markdown())
+ARCHETYPES_INDEX_PAGE_NAME = WebPage("archetypes_index")
+SET_INDEX_PAGE_NAME = WebPage("set_index")
+ARCHETYPES_INDEX_OUTPUT_FILE = posix_path(PAUPERFORMANCE_PAGES_DIR, ARCHETYPES_INDEX_PAGE_NAME.as_markdown())
+SET_INDEX_OUTPUT_FILE = posix_path(PAUPERFORMANCE_PAGES_DIR, SET_INDEX_PAGE_NAME.as_markdown())
 
 PAUPERFORMANCE_ARCHETYPES_DIR_RELATIVE_URL = posix_path("archetypes")
 PAUPERFORMANCE_RESOURCES_IMAGES_MANA_RELATIVE_URL = posix_path("resources", "images", "mana")
