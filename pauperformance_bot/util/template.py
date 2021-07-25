@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from urllib.parse import quote
 
@@ -26,6 +29,7 @@ def to_url_encoded(name):
 
 
 def render_template(template_dir, template_file, output_file, values):
+    os.makedirs(Path(output_file).parent.as_posix(), exist_ok=True)
     env = Environment(
         loader=FileSystemLoader(template_dir),
         undefined=StrictUndefined,
