@@ -55,6 +55,7 @@ PAUPERFORMANCE_RESOURCES_IMAGES_MANA_RELATIVE_URL = posix_path("resources", "ima
 # third-party resources
 SCRYFALL_API_ENDPOINT = "https://api.scryfall.com"
 DECKSTATS_API_ENDPOINT = "https://deckstats.net/api.php"
+MTGGOLDFISH_URL = "https://www.mtggoldfish.com"
 
 KNOWN_SETS_WITH_NO_PAUPER_CARDS = [
     3,
