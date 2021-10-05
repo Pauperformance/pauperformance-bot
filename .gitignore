@@ -8,5 +8,6 @@ venv/
 # IDE
 .idea/
 
+pauperformance_bot/secrets.py
 pauperformance_bot/test.py
 resources/cache/

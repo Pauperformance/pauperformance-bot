@@ -3,6 +3,7 @@ from pyquery import PyQuery
 
 from pauperformance_bot.constants import MTGGOLDFISH_URL
 from pauperformance_bot.exceptions import MTGGoldfishException
+from pauperformance_bot.secrets import SHIKA93_MTGGOLDFISH_PASSWORD, SHIKA93_MTGGOLDFISH_USERNAME
 from pauperformance_bot.util.log import get_application_logger
 
 
@@ -85,8 +86,8 @@ class MTGGoldfish:
                       'q=0.8,application/signed-exchange;'
                       'v=b3;'
                       'q=0.9',
-            'accept-encoding': 'gzip, deflate, br',
-            'accept-language': 'en-GB,en;q=0.9,en-US;q=0.8,it;q=0.7,de;q=0.6',
+            # 'accept-encoding': 'gzip, deflate, br',
+            # 'accept-language': 'en-GB,en;q=0.9,en-US;q=0.8,it;q=0.7,de;q=0.6',
         }
         params = {
             # 'utf8': '✓',
@@ -140,9 +141,9 @@ class MTGGoldfish:
 
 
 def main():
-    mtggoldfish = MTGGoldfish('', '')
+    mtggoldfish = MTGGoldfish(SHIKA93_MTGGOLDFISH_USERNAME, SHIKA93_MTGGOLDFISH_PASSWORD)
     mtggoldfish.list_decks()
-    deck_id = mtggoldfish.create_deck('MAIN TEST 3', 'My description', '30 Forest\n30 Swamp', '15 Island')
+    deck_id = mtggoldfish.create_deck('TEST API', 'My fucking description', '30 Forest\n30 Swamp', '15 Island')
     mtggoldfish.list_decks()
     mtggoldfish.delete_deck(deck_id)
     mtggoldfish.list_decks()
