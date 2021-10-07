@@ -33,7 +33,7 @@ class DeckstatsDeck:
         return self.name.rsplit(' ', maxsplit=1)[0]
 
     @property
-    def p13e_code(self):
+    def p12e_code(self):
         return self.name.rsplit(' ', maxsplit=1)[1].split('.')[0]
 
     @property

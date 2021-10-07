@@ -44,6 +44,6 @@ def render_template(template_dir, template_file, output_file, values):
     )
     with open(output_file, "w") as out_f:
         logger.debug(
-            f"Replacing template with rendered file {rendered_file}..."
+            f"Replacing template with rendered file rendered file..."
         )
         out_f.write(rendered_file)
