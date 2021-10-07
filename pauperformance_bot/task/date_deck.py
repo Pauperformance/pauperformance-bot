@@ -3,10 +3,9 @@ from pauperformance_bot.client.academy import Academy
 
 def date_deck(usa_date):
     academy = Academy()
-    set_index = academy.get_set_index()
     cards_index = academy.get_pauper_cards_incremental_index()
     return [
-        s for s in set_index
+        s for s in academy.set_index.values()
         if s['date'] <= usa_date and len(cards_index.get(s['p12e_code'])) > 0
     ][-1]
 

@@ -17,6 +17,7 @@ DECKSTATS_PAUPERFORMANCE_FOLDER = "Pauperformance"
 
 # pauperformance-bot resources
 RESOURCES_DIR = posix_path(TOP_DIR.as_posix(), "resources")
+LAST_SET_INDEX_FILE = posix_path(RESOURCES_DIR, "last_set_index.pkl")
 
 CACHE_DIR = posix_path(RESOURCES_DIR, "cache")
 SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
@@ -58,38 +59,21 @@ DECKSTATS_API_ENDPOINT = "https://deckstats.net/api.php"
 MTGGOLDFISH_URL = "https://www.mtggoldfish.com"
 
 KNOWN_SETS_WITH_NO_PAUPER_CARDS = [
-    3,
-    4,
-    5,
-    8,
-    9,
-    11,
     12,
     14,
     16,
-    19,
-    22,
-    23,
-    25,
-    27,
     28,
     29,
     30,
     32,
-    33,
     36,
     37,
-    39,
     40,
-    42,
     43,
     45,
     46,
     49,
     51,
-    52,
-    53,
-    54,
     55,
     58,
     59,
@@ -98,32 +82,23 @@ KNOWN_SETS_WITH_NO_PAUPER_CARDS = [
     65,
     68,
     69,
-    70,
     71,
     73,
-    74,
     75,
     76,
     77,
     78,
-    79,
     81,
-    82,
     84,
-    85,
-    86,
     88,
     89,
     90,
     91,
     92,
     94,
-    95,
     97,
     98,
-    99,
     101,
-    102,
     103,
     104,
     105,
@@ -498,7 +473,4 @@ KNOWN_SETS_WITH_NO_PAUPER_CARDS = [
     685,
     686,
 ]
-
-SET_INDEX_PATCH = {
-}
 

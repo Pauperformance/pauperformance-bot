@@ -1,5 +1,6 @@
 import glob
 import pickle
+from collections import OrderedDict
 from functools import lru_cache
 from pathlib import Path
 from time import sleep
@@ -14,9 +15,9 @@ from pauperformance_bot.constants import \
     PAUPER_POOL_OUTPUT_FILE, SET_INDEX_PAGE_NAME, \
     PAUPER_CARDS_INDEX_CACHE_FILE, ARCHETYPES_INDEX_TEMPLATE_FILE, \
     ARCHETYPES_INDEX_OUTPUT_FILE, PAUPERFORMANCE_ARCHETYPES_DIR_RELATIVE_URL, \
-    PAUPER_POOL_PAGE_NAME
+    PAUPER_POOL_PAGE_NAME, LAST_SET_INDEX_FILE
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYERS
-from pauperformance_bot.util.config import read_config, read_archetype_config
+from pauperformance_bot.util.config import read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 from pauperformance_bot.util.template import render_template
@@ -29,23 +30,39 @@ class Academy:
     def __init__(self, scryfall=Scryfall(), players=PAUPERFORMANCE_PLAYERS):
         self.scryfall = scryfall
         self.players = players
+        self.set_index = OrderedDict()
 
-    @lru_cache(maxsize=1)
-    def get_set_index(self):
-        logger.info("Building set index...")
-        sets = self.scryfall.get_sets()
-        sorted_sets = sorted(
-            sets['data'], key=lambda s: s['released_at'] + s['code']
+        self._build_set_index()
+
+    def _build_set_index(self, last_set_index_file=LAST_SET_INDEX_FILE):
+        logger.info("Building Scryfall set index...")
+        scryfall_sets = self.scryfall.get_sets()
+        scryfall_sets = sorted(
+            scryfall_sets['data'], key=lambda s: s['released_at'] + s['code']
         )
-        logger.info("Built set index.")
-        return [
-            {
+        logger.info("Built Scryfall set index.")
+
+        logger.info("Building Pauperformance set index...")
+        with open(last_set_index_file, "rb") as index_f:
+            self.set_index = pickle.load(index_f)
+        known_sets = {s['scryfall_code'] for s in self.set_index.values()}
+        p12e_code = max(self.set_index.keys()) + 1
+        for s in scryfall_sets:
+            if s['code'] in known_sets:
+                continue
+            self.set_index[p12e_code] = {
                 "p12e_code": p12e_code,
                 "scryfall_code": s['code'],
                 "name": s['name'],
                 "date": s['released_at'],
-            } for p12e_code, s in enumerate(sorted_sets, start=1)
-        ]
+            }
+            p12e_code += 1
+        logger.info("Built Pauperformance set index.")
+
+        logger.info("Saving Pauperformance set index...")
+        with open(last_set_index_file, 'wb') as index_f:
+            pickle.dump(self.set_index, index_f)
+        logger.info("Saved Pauperformance set index.")
 
     def update_all(self):
         self.update_archetypes_index()
@@ -98,14 +115,13 @@ class Academy:
         logger.info(
             f"Rendering set index in {templates_pages_dir} from {set_index_template_file}..."
         )
-        index = self.get_set_index()
-        index = self._boldify_sets_with_new_cards(index)
+        bolded_set_index = self._boldify_sets_with_new_cards()
         render_template(
             templates_pages_dir,
             set_index_template_file,
             set_index_output_file,
             {
-                "index": index,
+                "index": bolded_set_index,
                 "last_update_date": pretty_str(now()),
                 "pauper_pool_page": PAUPER_POOL_PAGE_NAME.as_html(),
             }
@@ -171,7 +187,6 @@ class Academy:
             f"Rendering pauper pool in {templates_pages_dir} from "
             f"{pauper_pool_template_file}..."
         )
-        set_index = self.get_set_index()
         card_index = self.get_pauper_cards_incremental_index()
         render_template(
             templates_pages_dir,
@@ -179,7 +194,7 @@ class Academy:
             pauper_pool_output_file,
             {
                 "tot_cards_number": sum(len(i) for i in card_index.values()),
-                "set_index": set_index,
+                "set_index": list(self.set_index.values()),
                 "card_index": card_index,
                 "last_update_date": pretty_str(now()),
                 "set_index_page": SET_INDEX_PAGE_NAME.as_html(),
@@ -221,7 +236,6 @@ class Academy:
                 )
         return all_decks
 
-    @lru_cache(maxsize=1)
     def get_pauperformance_archetypes(
             self,
             config_pages_dir=CONFIG_ARCHETYPES_DIR
@@ -235,7 +249,7 @@ class Academy:
     def get_pauper_cards_index(
             self,
             skip_sets=KNOWN_SETS_WITH_NO_PAUPER_CARDS,
-            cards_index_cache_file=PAUPER_CARDS_INDEX_CACHE_FILE
+            cards_index_cache_file=PAUPER_CARDS_INDEX_CACHE_FILE,
     ):
         card_index = {}
         try:
@@ -244,8 +258,7 @@ class Academy:
                 logger.debug(f"Loaded card index from cache: {card_index}")
         except FileNotFoundError:
             logger.debug("No cache found for card index.")
-        set_index = self.get_set_index()
-        for item in set_index:
+        for item in self.set_index.values():
             p12e_code = item['p12e_code']
             if p12e_code in card_index:
                 continue  # cached
@@ -257,17 +270,27 @@ class Academy:
             cards = self.scryfall.search_cards(query)
             card_index[p12e_code] = cards
             sleep(0.3)
+        logger.info(
+            f"Feel free to update the list of known sets with no pauper cards: "
+            f"{[i for i in card_index if len(card_index[i]) == 0]}"
+        )
         with open(cards_index_cache_file, 'wb') as cache_f:
             pickle.dump(card_index, cache_f)
         return card_index
 
-    @lru_cache(maxsize=1)
     def get_pauper_cards_incremental_index(self):
         card_index = self.get_pauper_cards_index()
         incremental_card_index = {}
         existing_card_names = set()
         for p12e_code, cards in card_index.items():
             logger.debug(f"Processing set with p12e_code: {p12e_code}...")
+
+            if 'Promos' in self.set_index[p12e_code]['name'] or \
+                    'Black Border' in self.set_index[p12e_code]['name']:
+                logger.debug(f"Skipping set {self.set_index[p12e_code]['name']}...")
+                incremental_card_index[p12e_code] = []
+                continue
+
             new_cards = []
             for card in cards:
                 if card['name'] in existing_card_names:
@@ -279,10 +302,10 @@ class Academy:
             logger.debug(f"Processed set with p12e_code: {p12e_code}.")
         return incremental_card_index
 
-    def _boldify_sets_with_new_cards(self, set_index):
+    def _boldify_sets_with_new_cards(self):
         card_index = self.get_pauper_cards_incremental_index()
         bolded_index = []
-        for item in set_index:
+        for item in self.set_index.values():
             p12e_code = item['p12e_code']
             if len(card_index[p12e_code]) == 0:
                 bolded_index.append(item)
