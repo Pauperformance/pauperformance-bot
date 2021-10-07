@@ -25,7 +25,7 @@ from pauperformance_bot.util.time import pretty_str, now
 logger = get_application_logger()
 
 
-class Pauperformance:
+class Academy:
     def __init__(self, scryfall=Scryfall(), players=PAUPERFORMANCE_PLAYERS):
         self.scryfall = scryfall
         self.players = players
@@ -46,6 +46,12 @@ class Pauperformance:
                 "date": s['released_at'],
             } for p12e_code, s in enumerate(sorted_sets, start=1)
         ]
+
+    def update_all(self):
+        self.update_archetypes_index()
+        self.update_set_index()
+        self.update_pauper_pool()
+        self.update_archetypes()
 
     def update_archetypes_index(
             self,
@@ -295,11 +301,11 @@ class Pauperformance:
         decks_cards = {}
         all_cards = set()
         for deck in archetype_decks:
-            ownerd_id = str(deck.owner_id)
+            owner_id = str(deck.owner_id)
             deckstats = deckstats_accounts.get(
-                ownerd_id, Deckstats(owner_id=ownerd_id)
+                owner_id, Deckstats(owner_id=owner_id)
             )
-            deckstats_accounts[ownerd_id] = deckstats
+            deckstats_accounts[owner_id] = deckstats
             deck_content = deckstats.get_deck(str(deck.saved_id))
             if len(deck_content['sections']) != 1:
                 logger.error(f"More than one section for deck {deck.saved_id}")
