@@ -1,13 +1,15 @@
 from pauperformance_bot.client.academy import Academy
+from pauperformance_bot.client.pauperformance import Pauperformance
 
 
 def update_academy():
-    academy = Academy()
-    # academy.update_archetypes_index()
-    # academy.update_set_index()
-    # academy.update_pauper_pool()
+    pauperformance = Pauperformance()
+    academy = Academy(pauperformance)
+    academy.update_archetypes_index()
+    academy.update_set_index()
+    academy.update_pauper_pool()
     # academy.update_archetypes()
-    academy.update_all()
+    # academy.update_all()
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@ LOG_FORMAT = (
     "%(levelname)s:%(asctime)s:%(module)s:%(funcName)s:"
     "L%(lineno)d: %(message)s"
 )
-logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
+logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
 logger = logging.getLogger(APPLICATION_NAME)
 os.makedirs(PAUPERFORMANCE_BOT_DIR, exist_ok=True)
 file_handler = logging.FileHandler(DEFAULT_LOGGING_FILE)

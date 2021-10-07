@@ -10,7 +10,7 @@ def read_config(config_file_path):
     config = configparser.ConfigParser()
     config.optionxform = lambda option: option  # preserve case
     config.read(config_file_path)
-    logger.debug(f"Read configuration file: {config}")
+    logger.debug(f"Read configuration file: {config_file_path}")
     return config
 
 
