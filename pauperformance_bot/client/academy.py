@@ -1,15 +1,11 @@
 import glob
 from pathlib import Path
 
-from pauperformance_bot.constants import \
-    SET_INDEX_TEMPLATE_FILE, SET_INDEX_OUTPUT_FILE, TEMPLATES_PAGES_DIR, \
-    CONFIG_ARCHETYPES_DIR, TEMPLATES_ARCHETYPES_DIR, \
-    PAUPERFORMANCE_ARCHETYPES_DIR, ARCHETYPE_TEMPLATE_FILE, \
-    PAUPER_POOL_TEMPLATE_FILE, \
-    PAUPER_POOL_OUTPUT_FILE, SET_INDEX_PAGE_NAME, \
-    ARCHETYPES_INDEX_TEMPLATE_FILE, \
-    ARCHETYPES_INDEX_OUTPUT_FILE, PAUPERFORMANCE_ARCHETYPES_DIR_RELATIVE_URL, \
-    PAUPER_POOL_PAGE_NAME
+from pauperformance_bot.constant.academy import ARCHETYPES_DIR, PAUPER_POOL_PAGE_NAME, \
+    PAUPER_POOL_OUTPUT_FILE, SET_INDEX_PAGE_NAME, ARCHETYPES_INDEX_OUTPUT_FILE, SET_INDEX_OUTPUT_FILE, \
+    ARCHETYPES_DIR_RELATIVE_URL
+from pauperformance_bot.constant.myr import CONFIG_ARCHETYPES_DIR, ARCHETYPE_TEMPLATE_FILE, TEMPLATES_PAGES_DIR, \
+    TEMPLATES_ARCHETYPES_DIR, ARCHETYPES_INDEX_TEMPLATE_FILE, PAUPER_POOL_TEMPLATE_FILE, SET_INDEX_TEMPLATE_FILE
 from pauperformance_bot.util.config import read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
@@ -35,7 +31,7 @@ class Academy:
             self,
             config_pages_dir=CONFIG_ARCHETYPES_DIR,
             templates_pages_dir=TEMPLATES_PAGES_DIR,
-            archetypes_dir=PAUPERFORMANCE_ARCHETYPES_DIR_RELATIVE_URL,
+            archetypes_dir=ARCHETYPES_DIR_RELATIVE_URL,
             archetypes_index_template_file=ARCHETYPES_INDEX_TEMPLATE_FILE,
             archetypes_index_output_file=ARCHETYPES_INDEX_OUTPUT_FILE,
     ):
@@ -94,7 +90,7 @@ class Academy:
             config_pages_dir=CONFIG_ARCHETYPES_DIR,
             templates_archetypes_dir=TEMPLATES_ARCHETYPES_DIR,
             archetype_template_file=ARCHETYPE_TEMPLATE_FILE,
-            pauperformance_archetypes_dir=PAUPERFORMANCE_ARCHETYPES_DIR,
+            pauperformance_archetypes_dir=ARCHETYPES_DIR,
     ):
         logger.info(f"Generating archetypes...")
         all_decks = self.pauperformance.get_decks()

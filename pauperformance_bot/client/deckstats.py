@@ -4,8 +4,8 @@ from functools import partial
 
 import requests
 
-from pauperformance_bot.constants import DECKSTATS_API_ENDPOINT, \
-    DECKSTATS_PAUPERFORMANCE_FOLDER, DECKSTATS_DECKS_CACHE_DIR
+from pauperformance_bot.constant.myr import DECKSTATS_DECKS_CACHE_DIR
+from pauperformance_bot.constant.deckstats import MONITORED_PAUPERFORMANCE_FOLDER, API_ENDPOINT
 from pauperformance_bot.entity.deck.deckstats import DeckstatsDeck
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYER
 from pauperformance_bot.util.log import get_application_logger
@@ -19,7 +19,7 @@ logger = get_application_logger()
 class Deckstats:
     def __init__(
             self,
-            endpoint=DECKSTATS_API_ENDPOINT,
+            endpoint=API_ENDPOINT,
             owner_id=PAUPERFORMANCE_PLAYER.deckstats_id,
     ):
         self.endpoint = endpoint
@@ -87,13 +87,13 @@ class Deckstats:
 
     def list_pauperformance_decks(self, owner_name):
         folders = self.list_user_folders_id()
-        if DECKSTATS_PAUPERFORMANCE_FOLDER not in folders:
+        if MONITORED_PAUPERFORMANCE_FOLDER not in folders:
             return []
         return [
             deck
             for deck in self.list_public_decks_in_folder(
                 owner_name,
-                folders[DECKSTATS_PAUPERFORMANCE_FOLDER]
+                folders[MONITORED_PAUPERFORMANCE_FOLDER]
             )
             if is_valid_p12e_deckstats_name(deck.name)
         ]

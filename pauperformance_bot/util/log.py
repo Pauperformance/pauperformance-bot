@@ -1,11 +1,7 @@
 import logging
 import os
 
-from pauperformance_bot.constants import (
-    APPLICATION_NAME,
-    DEFAULT_LOGGING_FILE,
-    PAUPERFORMANCE_BOT_DIR,
-)
+from pauperformance_bot.constant.myr import APPLICATION_NAME, PAUPERFORMANCE_BOT_DIR, DEFAULT_LOGGING_FILE
 
 LOG_FORMAT = (
     "%(levelname)s:%(asctime)s:%(module)s:%(funcName)s:"

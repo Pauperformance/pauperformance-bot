@@ -2,7 +2,7 @@ import time
 
 from datetime import datetime
 
-from pauperformance_bot.constants import DEFAULT_DATE_FORMAT
+from pauperformance_bot.constant.myr import DEFAULT_DATE_FORMAT
 
 
 def now():

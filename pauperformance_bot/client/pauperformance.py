@@ -5,9 +5,9 @@ from time import sleep
 
 from pauperformance_bot.client.deckstats import Deckstats
 from pauperformance_bot.client.scryfall import Scryfall
-from pauperformance_bot.constants import \
-    CONFIG_ARCHETYPES_DIR, KNOWN_SETS_WITH_NO_PAUPER_CARDS, \
-    PAUPER_CARDS_INDEX_CACHE_FILE, LAST_SET_INDEX_FILE, INCREMENTAL_CARDS_INDEX_SKIP_SETS
+from pauperformance_bot.constant.myr import LAST_SET_INDEX_FILE, PAUPER_CARDS_INDEX_CACHE_FILE, CONFIG_ARCHETYPES_DIR
+from pauperformance_bot.constant.pauperformance import KNOWN_SETS_WITH_NO_PAUPER_CARDS, \
+    INCREMENTAL_CARDS_INDEX_SKIP_SETS
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.util.log import get_application_logger
 
