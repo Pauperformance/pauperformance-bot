@@ -1,0 +1,12 @@
+# {{ name }}
+
+**Description**: {{ description }}
+
+## **Archetypes**
+
+{% for archetype in archetypes -%}
+[{{ archetype.name }}]({{ archetype.url }})  
+{% endfor %}
+
+*Last updated: {{ last_update_date }}.*
+
