@@ -7,7 +7,7 @@ import requests
 from pauperformance_bot.constant.myr import DECKSTATS_DECKS_CACHE_DIR
 from pauperformance_bot.constant.deckstats import MONITORED_PAUPERFORMANCE_FOLDER, API_ENDPOINT
 from pauperformance_bot.entity.deck.deckstats import DeckstatsDeck
-from pauperformance_bot.players import PAUPERFORMANCE_PLAYER
+from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYER
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.naming import is_valid_p12e_deckstats_name
 from pauperformance_bot.util.path import posix_path
