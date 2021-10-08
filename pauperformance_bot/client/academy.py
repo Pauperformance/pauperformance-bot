@@ -1,8 +1,6 @@
 import glob
 from pathlib import Path
 
-from pauperformance_bot.client.deckstats import Deckstats
-from pauperformance_bot.client.pauperformance import get_pauperformance_archetypes
 from pauperformance_bot.constants import \
     SET_INDEX_TEMPLATE_FILE, SET_INDEX_OUTPUT_FILE, TEMPLATES_PAGES_DIR, \
     CONFIG_ARCHETYPES_DIR, TEMPLATES_ARCHETYPES_DIR, \
@@ -150,7 +148,7 @@ class Academy:
             f"Rendering pauper pool in {templates_pages_dir} from "
             f"{pauper_pool_template_file}..."
         )
-        card_index = self.pauperformance.get_pauper_cards_incremental_index()
+        card_index = self.pauperformance.incremental_card_index
         render_template(
             templates_pages_dir,
             pauper_pool_template_file,
@@ -181,7 +179,7 @@ class Academy:
         return rendered_cards
 
     def _boldify_sets_with_new_cards(self):
-        card_index = self.pauperformance.get_pauper_cards_incremental_index()
+        card_index = self.pauperformance.incremental_card_index
         bolded_index = []
         for item in self.set_index.values():
             p12e_code = item['p12e_code']

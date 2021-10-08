@@ -32,9 +32,10 @@ class Scryfall:
         try:
             with open(posix_path(cards_cache_dir, to_pkl_name(exact_card_name)), "rb") as cache_f:
                 card = pickle.load(cache_f)
-                logger.debug(f"Loaded card from cache: {card}")
+                logger.debug(f"Loaded card from cache: {exact_card_name}")
+                # logger.debug(f"Card: {card}")
         except FileNotFoundError:
-            logger.debug("No cache found for card.")
+            logger.debug(f"No cache found for card {exact_card_name}.")
             url = f"{self.endpoint}/cards/named"
             method = requests.get
             params = {'exact': exact_card_name}
