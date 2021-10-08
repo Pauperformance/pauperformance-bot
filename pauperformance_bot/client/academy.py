@@ -99,7 +99,7 @@ class Academy:
             pauperformance_archetypes_dir=ARCHETYPES_DIR,
     ):
         logger.info(f"Generating archetypes...")
-        all_decks = self.pauperformance.get_decks()
+        all_decks = self.pauperformance.get_deckstats_decks()
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
             values = read_archetype_config(archetype_config_file)

@@ -4,19 +4,34 @@ from pauperformance_bot.entity.played_cards import PlayedCard
 class PlayableDeck:
     def __init__(
         self,
-        main,
+        mainboard,
         sideboard,
     ):
-        self.main = main
+        self.mainboard = mainboard
         self.sideboard = sideboard
 
+    @property
+    def mainboard_mtggoldfish(self):
+        return '\n'.join((repr(c) for c in self.mainboard))
+
+    @property
+    def sideboard_mtggoldfish(self):
+        return '\n'.join((repr(c) for c in self.sideboard))
+
+    @property
+    def len_mainboard(self):
+        return sum(c.quantity for c in self.mainboard)
+
+    @property
+    def len_sideboard(self):
+        return sum(c.quantity for c in self.sideboard)
+
     def __str__(self):
-        main = '\n'.join((repr(c) for c in self.main))
-        sideboard = '\n'.join((repr(c) for c in self.sideboard))
-        return f"Main:\n{main}\n\nSideboard:\n{sideboard}"
+        return f"Main ({self.len_mainboard}):\n{self.mainboard_mtggoldfish}\n\n" \
+               f"Sideboard ({self.len_mainboard}):\n{self.sideboard_mtggoldfish}"
 
     def __repr__(self):
-        return ' '.join((repr(c) for c in self.main)) + '|' + ' '.join((repr(c) for c in self.sideboard))
+        return ' '.join((repr(c) for c in self.mainboard)) + '|' + ' '.join((repr(c) for c in self.sideboard))
 
     def __hash__(self):
         return hash(repr(self))

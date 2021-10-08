@@ -1,17 +1,19 @@
-from dropbox import Dropbox
-from pauperformance_bot.credentials import dropbox_access_token, dropbox_app_key, dropbox_app_secret
+from dropbox import Dropbox as OfficialDropbox
+
+from pauperformance_bot.constant.dropbox import MYR_DIR_PATH
+from pauperformance_bot.credentials import DROPBOX_ACCESS_TOKEN, DROPBOX_APP_KEY, DROPBOX_APP_SECRET
 from pauperformance_bot.util.log import get_application_logger
 
 log = get_application_logger()
 
 
-class DropboxService:
+class Dropbox:
 
     def __init__(self):
-        self._service = Dropbox(
-            oauth2_access_token=dropbox_access_token,
-            app_key=dropbox_app_key,
-            app_secret=dropbox_app_secret,
+        self._service = OfficialDropbox(
+            oauth2_access_token=DROPBOX_ACCESS_TOKEN,
+            app_key=DROPBOX_APP_KEY,
+            app_secret=DROPBOX_APP_SECRET,
         )
 
     @property
@@ -28,7 +30,12 @@ class DropboxService:
             return items
         return items + self.list_files(path, results.cursor)
 
-    def create_file(self, name):
+    def create_file(self, name, content=''):
         log.info(f"Storing file {name}...")
-        results = self._service.files_upload(bytes(), name, mute=True)
+        results = self._service.files_upload(content.encode('utf-8'), name, mute=True)
         log.info(f"Stored file {name}: {results}")
+
+
+if __name__ == '__main__':
+    dropbox = Dropbox()
+    print(dropbox.list_files(MYR_DIR_PATH))

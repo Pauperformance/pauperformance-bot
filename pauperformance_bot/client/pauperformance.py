@@ -4,19 +4,31 @@ from pathlib import Path
 from time import sleep
 
 from pauperformance_bot.client.deckstats import Deckstats
+from pauperformance_bot.client.dropbox_ import Dropbox
+from pauperformance_bot.client.mtggoldfish import MTGGoldfish
 from pauperformance_bot.client.scryfall import Scryfall
+from pauperformance_bot.constant.dropbox import DECKSTATS_DECKS_PATH
 from pauperformance_bot.constant.myr import LAST_SET_INDEX_FILE, PAUPER_CARDS_INDEX_CACHE_FILE, CONFIG_ARCHETYPES_DIR
 from pauperformance_bot.constant.pauperformance import KNOWN_SETS_WITH_NO_PAUPER_CARDS, \
     INCREMENTAL_CARDS_INDEX_SKIP_SETS
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.util.log import get_application_logger
+from pauperformance_bot.util.time import pretty_str
 
 logger = get_application_logger()
 
 
 class Pauperformance:
-    def __init__(self, scryfall=Scryfall(), players=PAUPERFORMANCE_PLAYERS):
+    def __init__(
+            self,
+            scryfall=Scryfall(),
+            mtggoldfish=MTGGoldfish(),
+            dropbox=Dropbox(),
+            players=PAUPERFORMANCE_PLAYERS,
+    ):
         self.scryfall = scryfall
+        self.mtggoldfish = mtggoldfish
+        self.dropbox = dropbox
         self.players = players
         self.set_index = self._build_set_index()
         self.card_index = self._build_card_index()
@@ -122,7 +134,7 @@ class Pauperformance:
             )
         return incremental_card_index
 
-    def get_decks(self):
+    def get_deckstats_decks(self):
         all_decks = []
         for player in self.players:
             logger.info(f"Processing player {player.name}...")
@@ -139,6 +151,9 @@ class Pauperformance:
                     f"known archetype."
                 )
         return all_decks
+
+    def get_mtggoldfish_decks(self):
+        return self.mtggoldfish.list_decks()
 
     def get_archetypes(self, config_pages_dir=CONFIG_ARCHETYPES_DIR):
         return set(
@@ -172,3 +187,57 @@ class Pauperformance:
         staples = staples - lands
         frequents = all_cards - staples - lands
         return list(staples), list(frequents)
+
+    def update_mtggoldfish_decks(self):
+        logger.info("Updating MTGGoldfish decks for all users...")
+        for player in self.players:
+            self.update_mtggoldfish_player_decks(player)
+        logger.info("Updated MTGGoldfish decks for all users.")
+
+    def update_mtggoldfish_player_decks(
+            self,
+            player,
+            dropbox_deckstats_path=DECKSTATS_DECKS_PATH,
+    ):
+        logger.info(f"Updating MTGGoldfish decks for {player.name}...")
+        deckstats = Deckstats(owner_id=player.deckstats_id)
+        imported_deckstats_deck = set(
+            file_metadata.path_display.rsplit('/', maxsplit=1)[1].split('>')[0]
+            for file_metadata in self.dropbox.list_files(dropbox_deckstats_path)
+        )
+        players_by_deckstats_id = {int(p.deckstats_id): p for p in self.players}
+        for deckstats_deck in deckstats.list_pauperformance_decks(player.deckstats_name):
+            logger.debug(
+                f"Processing deck '{deckstats_deck.name}' ({deckstats_deck.saved_id}) "
+                f"from {deckstats_deck.owner_name}, "
+                f"uploaded by {players_by_deckstats_id[deckstats_deck.owner_id].name} ({deckstats_deck.owner_id})..."
+            )
+            if str(deckstats_deck.saved_id) in imported_deckstats_deck:
+                logger.debug(
+                    f"Deck {deckstats_deck.saved_id} already stored on Dropbox (and MTGGoldfish). Skipping it."
+                )
+                continue
+            logger.info(f"Storing deck {deckstats_deck.saved_id} on MTGGoldfish...")
+            raw_deck = deckstats.get_deck(deckstats_deck.saved_id)
+            playable_deck = deckstats.to_playable_deck(raw_deck)
+            if playable_deck.len_mainboard != 60:
+                logger.warn(f"Main deck has {playable_deck.len_mainboard} cards.")
+            if playable_deck.len_sideboard != 15:
+                logger.warn(f"Sideboard has {playable_deck.len_mainboard} cards.")
+            description = f"Source: {deckstats_deck.url}\n" \
+                          f"Creation date: {pretty_str(deckstats_deck.added)}"
+            if deckstats_deck.description:
+                description += f"\nDescription: {deckstats_deck.description}"
+            set_entry = self.set_index[int(deckstats_deck.p12e_code)]
+            deck_name = f"{deckstats_deck.name}.{deckstats_deck.owner_name} " \
+                        f"| {set_entry['name']} ({set_entry['scryfall_code']})"
+            mtggoldfish_deck_id = self.mtggoldfish.create_deck(deck_name, description, playable_deck)
+            dropbox_key = f"{dropbox_deckstats_path}/{deckstats_deck.saved_id}>{mtggoldfish_deck_id}>{deck_name}.txt"
+            logger.info(f"Archiving information in Dropbox in file {dropbox_key}...")
+            self.dropbox.create_file(f"{dropbox_key}", str(playable_deck))
+        logger.info(f"Updated MTGGoldfish decks for {player.name}.")
+
+
+if __name__ == '__main__':
+    p12e = Pauperformance()
+    print(p12e.update_mtggoldfish_player_decks(p12e.players[0]))
