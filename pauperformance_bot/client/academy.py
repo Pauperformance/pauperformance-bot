@@ -1,12 +1,14 @@
 import glob
+from collections import defaultdict
 from pathlib import Path
 
 from pauperformance_bot.constant.academy import ARCHETYPES_DIR, PAUPER_POOL_PAGE_NAME, \
     PAUPER_POOL_OUTPUT_FILE, SET_INDEX_PAGE_NAME, ARCHETYPES_INDEX_OUTPUT_FILE, SET_INDEX_OUTPUT_FILE, \
-    ARCHETYPES_DIR_RELATIVE_URL
+    ARCHETYPES_DIR_RELATIVE_URL, FAMILIES_DIR, FAMILIES_DIR_RELATIVE_URL
 from pauperformance_bot.constant.myr import CONFIG_ARCHETYPES_DIR, ARCHETYPE_TEMPLATE_FILE, TEMPLATES_PAGES_DIR, \
-    TEMPLATES_ARCHETYPES_DIR, ARCHETYPES_INDEX_TEMPLATE_FILE, PAUPER_POOL_TEMPLATE_FILE, SET_INDEX_TEMPLATE_FILE
-from pauperformance_bot.util.config import read_archetype_config
+    TEMPLATES_ARCHETYPES_DIR, ARCHETYPES_INDEX_TEMPLATE_FILE, PAUPER_POOL_TEMPLATE_FILE, SET_INDEX_TEMPLATE_FILE, \
+    CONFIG_FAMILIES_DIR, TEMPLATES_FAMILIES_DIR, FAMILY_TEMPLATE_FILE
+from pauperformance_bot.util.config import read_archetype_config, read_family_config
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 from pauperformance_bot.util.template import render_template
@@ -26,12 +28,14 @@ class Academy:
         self.update_set_index()
         self.update_pauper_pool()
         self.update_archetypes()
+        self.update_families()
 
     def update_archetypes_index(
             self,
             config_pages_dir=CONFIG_ARCHETYPES_DIR,
             templates_pages_dir=TEMPLATES_PAGES_DIR,
             archetypes_dir=ARCHETYPES_DIR_RELATIVE_URL,
+            families_dir=FAMILIES_DIR_RELATIVE_URL,
             archetypes_index_template_file=ARCHETYPES_INDEX_TEMPLATE_FILE,
             archetypes_index_output_file=ARCHETYPES_INDEX_OUTPUT_FILE,
     ):
@@ -58,6 +62,7 @@ class Academy:
                 "archetypes": archetypes,
                 "last_update_date": pretty_str(now()),
                 "archetypes_dir": archetypes_dir,
+                "families_dir": families_dir,
             }
         )
         logger.info(
@@ -134,6 +139,59 @@ class Academy:
                 values,
             )
         logger.info(f"Generated archetypes.")
+
+    def update_families(
+            self,
+            config_families_dir=CONFIG_FAMILIES_DIR,
+            config_archetypes_dir=CONFIG_ARCHETYPES_DIR,
+            templates_families_dir=TEMPLATES_FAMILIES_DIR,
+            archetypes_dir=ARCHETYPES_DIR_RELATIVE_URL,
+            family_template_file=FAMILY_TEMPLATE_FILE,
+            pauperformance_families_dir=FAMILIES_DIR,
+    ):
+        logger.info(f"Generating families...")
+        logger.debug(f"Building families-archetypes map...")
+        families_map = defaultdict(list)
+        for archetype_config_file in glob.glob(f"{config_archetypes_dir}/*.ini"):
+            values = read_archetype_config(archetype_config_file)
+            if values['family']:
+                families_map[values['family']].append(values['name'])
+        logger.info(f"Families map: {families_map}")
+
+        for family_name in families_map.keys():
+            family_config_file = posix_path(config_families_dir, f"{family_name}.ini")
+            logger.info(f"Processing {family_config_file}")
+            values = read_family_config(family_config_file)
+            if values['name'] != family_name:
+                raise ValueError()
+            values['archetypes'] = [
+                {
+                    'name': archetype,
+                } for archetype in families_map[family_name]
+            ]
+            values['archetypes_dir'] = archetypes_dir
+            family_file_name = Path(family_config_file).name
+            if family_name != family_file_name.replace(".ini", ""):
+                logger.warn(
+                    f"Family config mismatch: {family_name} vs "
+                    f"{family_file_name}"
+                )
+
+            family_output_file = posix_path(
+                pauperformance_families_dir,
+                family_file_name.replace('.ini', '.md'),
+            )
+            logger.info(
+                f"Rendering {family_name} in {templates_families_dir} "
+                f"from {family_template_file}..."
+            )
+            render_template(
+                templates_families_dir,
+                family_template_file,
+                family_output_file,
+                values,
+            )
+        logger.info(f"Generated family.")
 
     def update_pauper_pool(
             self,

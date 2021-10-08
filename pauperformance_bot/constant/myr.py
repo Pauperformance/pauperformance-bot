@@ -29,11 +29,14 @@ PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(
 
 CONFIG_DIR = posix_path(RESOURCES_DIR, "config")
 CONFIG_ARCHETYPES_DIR = posix_path(CONFIG_DIR, "archetypes")
-ARCHETYPE_TEMPLATE_FILE = "archetype.md.j2"
+CONFIG_FAMILIES_DIR = posix_path(CONFIG_DIR, "families")
 
 TEMPLATES_DIR = posix_path(RESOURCES_DIR, "templates")
-TEMPLATES_PAGES_DIR = posix_path(TEMPLATES_DIR, "pages")
 TEMPLATES_ARCHETYPES_DIR = posix_path(TEMPLATES_DIR, "archetypes")
+ARCHETYPE_TEMPLATE_FILE = "archetype.md.j2"
+TEMPLATES_FAMILIES_DIR = posix_path(TEMPLATES_DIR, "families")
+FAMILY_TEMPLATE_FILE = "family.md.j2"
+TEMPLATES_PAGES_DIR = posix_path(TEMPLATES_DIR, "pages")
 ARCHETYPES_INDEX_TEMPLATE_FILE = "archetypes_index.md.j2"
 PAUPER_POOL_TEMPLATE_FILE = "pauper_pool.md.j2"
 SET_INDEX_TEMPLATE_FILE = "set_index.md.j2"

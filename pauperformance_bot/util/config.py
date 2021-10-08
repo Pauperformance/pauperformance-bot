@@ -26,5 +26,14 @@ def read_archetype_config(config_file_path):
     return values
 
 
+def read_family_config(config_file_path):
+    config = read_config(config_file_path)
+    values = {
+        **config["values"],
+        "last_update_date": pretty_str(now()),
+    }
+    return values
+
+
 def _parse_list_value(raw_value):
     return [value.strip(" ") for value in raw_value.split(",")] if raw_value else []
