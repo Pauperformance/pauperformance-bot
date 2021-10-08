@@ -47,6 +47,7 @@ class Academy:
                 "name": values["name"],
                 "mana": values["mana"],
                 "type": ', '.join(values["type"]),
+                "family": values["family"],
             })
         archetypes.sort(key=lambda a: a['name'])
         render_template(
