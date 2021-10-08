@@ -8,6 +8,9 @@ from pauperformance_bot.constant.myr import DECKSTATS_DECKS_CACHE_DIR
 from pauperformance_bot.constant.deckstats import MONITORED_PAUPERFORMANCE_FOLDER, API_ENDPOINT
 from pauperformance_bot.entity.deck.deckstats import DeckstatsDeck
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYER
+from pauperformance_bot.entity.deck.playable import PlayableDeck
+from pauperformance_bot.entity.played_cards import PlayedCard
+from pauperformance_bot.exceptions import DeckstatsException
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.naming import is_valid_p12e_deckstats_name
 from pauperformance_bot.util.path import posix_path
@@ -19,8 +22,8 @@ logger = get_application_logger()
 class Deckstats:
     def __init__(
             self,
-            endpoint=API_ENDPOINT,
             owner_id=PAUPERFORMANCE_PLAYER.deckstats_id,
+            endpoint=API_ENDPOINT,
     ):
         self.endpoint = endpoint
         self.owner_id = owner_id
@@ -120,3 +123,25 @@ class Deckstats:
             with open(posix_path(decks_cache_dir, f"{deck_id}.pkl"), 'wb') as cache_f:
                 pickle.dump(deck, cache_f)
         return deck
+
+    def to_playable_deck(self, deckstats_deck):
+        logger.info(f"Parsing deckstats deck {deckstats_deck['saved_id']} list...")
+        main_section = next(s for s in deckstats_deck['sections'] if s['name'] == 'Main')
+        playable_main = []
+        for c in main_section['cards']:
+            if not c['valid']:
+                raise DeckstatsException(
+                    f"Invalid entry in deckstats deck {deckstats_deck['saved_id']} (main): {c['amount']} {c['name']}"
+                )
+            playable_main.append(PlayedCard(c['amount'], c['name']))
+        playable_sideboard = []
+        for c in deckstats_deck['sideboard']:
+            if not c['valid']:
+                raise DeckstatsException(
+                    f"Invalid entry in deckstats deck {deckstats_deck['saved_id']} (sideboard): {c['amount']} {c['name']}"
+                )
+            playable_sideboard.append(PlayedCard(c['amount'], c['name']))
+        playable_deck = PlayableDeck(playable_main, playable_sideboard)
+        # logger.debug(f"Parsed deck: {playable_deck}")
+        logger.info(f"Parsed deckstats deck {deckstats_deck['saved_id']} list.")
+        return playable_deck
