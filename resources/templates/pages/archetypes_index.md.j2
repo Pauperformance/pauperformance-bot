@@ -10,7 +10,7 @@ Every archetype in the list is linked to its dedicated page, where you will find
 | Name                   | Dominant mana | Type            | Family          |
 | -----------------------| ------------- | --------------- | --------------- |
 {% for archetype in archetypes -%}
-[{{ archetype.name -}}](../{{ archetypes_dir }}/{{ to_url_encoded(archetype.name) }}.html) | {{ archetype.mana | map('to_archetype_page_mana') | join(' ') }} | {{ "%-15s" % archetype.type }} | {{ "%-12s" % archetype.family }} |
+[{{ archetype.name -}}](../{{ archetypes_dir }}/{{ to_url_encoded(archetype.name) }}.html) | {{ archetype.mana | map('to_archetype_page_mana') | join(' ') }} | {{ "%-15s" % archetype.type }} | [{{ "%-12s" % archetype.family }}](../{{ families_dir }}/{{ to_url_encoded(archetype.family) }}.html) |
 {% endfor %}
 
 
