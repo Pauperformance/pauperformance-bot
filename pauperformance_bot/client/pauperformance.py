@@ -1,6 +1,5 @@
 import glob
 import pickle
-from collections import OrderedDict
 from pathlib import Path
 from time import sleep
 
@@ -123,7 +122,7 @@ class Pauperformance:
             )
         return incremental_card_index
 
-    def get_pauperformance_decks(self):
+    def get_decks(self):
         all_decks = []
         for player in self.players:
             logger.info(f"Processing player {player.name}...")
@@ -132,7 +131,7 @@ class Pauperformance:
             logger.info(f"Found {len(player_decks)} decks.")
             all_decks += player_decks
         all_decks.sort(reverse=True, key=lambda d: d.p12e_code)
-        archetypes = self.get_pauperformance_archetypes()
+        archetypes = self.get_archetypes()
         for deck in all_decks:
             if deck.archetype not in archetypes:
                 logger.warn(
@@ -140,6 +139,12 @@ class Pauperformance:
                     f"known archetype."
                 )
         return all_decks
+
+    def get_archetypes(self, config_pages_dir=CONFIG_ARCHETYPES_DIR):
+        return set(
+            Path(a).name.replace(".ini", "")
+            for a in glob.glob(f"{config_pages_dir}/*.ini")
+        )
 
     def analyze_cards_frequency(self, archetype_decks):
         if len(archetype_decks) < 2:
@@ -167,9 +172,3 @@ class Pauperformance:
         staples = staples - lands
         frequents = all_cards - staples - lands
         return list(staples), list(frequents)
-
-    def get_pauperformance_archetypes(self, config_pages_dir=CONFIG_ARCHETYPES_DIR):
-        return set(
-            Path(a).name.replace(".ini", "")
-            for a in glob.glob(f"{config_pages_dir}/*.ini")
-        )
