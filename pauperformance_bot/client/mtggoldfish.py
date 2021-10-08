@@ -3,7 +3,7 @@ from pyquery import PyQuery
 
 from pauperformance_bot.constants import MTGGOLDFISH_URL
 from pauperformance_bot.exceptions import MTGGoldfishException
-from pauperformance_bot.secrets import SHIKA93_MTGGOLDFISH_PASSWORD, SHIKA93_MTGGOLDFISH_USERNAME
+from pauperformance_bot.credentials import MTGGOLDFISH_SHIKA93_PASSWORD, MTGGOLDFISH_SHIKA93_USERNAME
 from pauperformance_bot.util.log import get_application_logger
 
 
@@ -141,7 +141,7 @@ class MTGGoldfish:
 
 
 def main():
-    mtggoldfish = MTGGoldfish(SHIKA93_MTGGOLDFISH_USERNAME, SHIKA93_MTGGOLDFISH_PASSWORD)
+    mtggoldfish = MTGGoldfish(MTGGOLDFISH_SHIKA93_USERNAME, MTGGOLDFISH_SHIKA93_PASSWORD)
     mtggoldfish.list_decks()
     deck_id = mtggoldfish.create_deck('TEST API', 'My fucking description', '30 Forest\n30 Swamp', '15 Island')
     mtggoldfish.list_decks()

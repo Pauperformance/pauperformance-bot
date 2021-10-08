@@ -58,6 +58,9 @@ SCRYFALL_API_ENDPOINT = "https://api.scryfall.com"
 DECKSTATS_API_ENDPOINT = "https://deckstats.net/api.php"
 MTGGOLDFISH_URL = "https://www.mtggoldfish.com"
 
+SECRETS_UNTRACKED_FILE = "pauperformance_bot.secrets.py"
+DROPBOX_MYR_DIR_PATH = '/dev/pauperformance-bot'
+
 KNOWN_SETS_WITH_NO_PAUPER_CARDS = [
     12,
     14,
