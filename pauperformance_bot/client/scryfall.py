@@ -4,8 +4,8 @@ from functools import partial, lru_cache
 
 import requests
 
-from pauperformance_bot.constants import SCRYFALL_API_ENDPOINT, \
-    SCRYFALL_CARDS_CACHE_DIR
+from pauperformance_bot.constant.myr import SCRYFALL_CARDS_CACHE_DIR
+from pauperformance_bot.constant.scryfall import API_ENDPOINT
 from pauperformance_bot.util.cache import to_pkl_name
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
@@ -15,7 +15,7 @@ logger = get_application_logger()
 
 
 class Scryfall:
-    def __init__(self, endpoint=SCRYFALL_API_ENDPOINT):
+    def __init__(self, endpoint=API_ENDPOINT):
         self.endpoint = endpoint
 
     def get_sets(self):

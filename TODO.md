@@ -3,5 +3,5 @@
 * Mark decks with banned cards
 * https://www.windowscentral.com/how-use-green-screen-obs-and-xsplit
 * Sleep DeckStats requests
-* Credentials from GitHub environemnt (for actions)
+* Credentials from GitHub environment (for actions)
 * 

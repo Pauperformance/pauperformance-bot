@@ -1,7 +1,7 @@
 from requests import session
 from pyquery import PyQuery
 
-from pauperformance_bot.constants import MTGGOLDFISH_URL
+from pauperformance_bot.constant.mtggoldfish import API_ENDPOINT
 from pauperformance_bot.exceptions import MTGGoldfishException
 from pauperformance_bot.credentials import MTGGOLDFISH_SHIKA93_PASSWORD, MTGGOLDFISH_SHIKA93_USERNAME
 from pauperformance_bot.util.log import get_application_logger
@@ -15,7 +15,7 @@ class MTGGoldfish:
             self,
             email,
             password,
-            endpoint=MTGGOLDFISH_URL,
+            endpoint=API_ENDPOINT,
     ):
         self.email = email
         self.password = password
