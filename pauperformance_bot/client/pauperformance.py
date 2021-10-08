@@ -8,7 +8,7 @@ from pauperformance_bot.client.deckstats import Deckstats
 from pauperformance_bot.client.scryfall import Scryfall
 from pauperformance_bot.constants import \
     CONFIG_ARCHETYPES_DIR, KNOWN_SETS_WITH_NO_PAUPER_CARDS, \
-    PAUPER_CARDS_INDEX_CACHE_FILE, LAST_SET_INDEX_FILE
+    PAUPER_CARDS_INDEX_CACHE_FILE, LAST_SET_INDEX_FILE, INCREMENTAL_CARDS_INDEX_SKIP_SETS
 from pauperformance_bot.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.util.log import get_application_logger
 
@@ -19,9 +19,9 @@ class Pauperformance:
     def __init__(self, scryfall=Scryfall(), players=PAUPERFORMANCE_PLAYERS):
         self.scryfall = scryfall
         self.players = players
-        self.set_index = OrderedDict()
-
-        self._build_set_index()
+        self.set_index = self._build_set_index()
+        self.card_index = self._build_card_index()
+        self.incremental_card_index = self._build_incremental_card_index()
 
     def _build_set_index(self, last_set_index_file=LAST_SET_INDEX_FILE):
         logger.info("Building Scryfall set index...")
@@ -33,13 +33,13 @@ class Pauperformance:
 
         logger.info("Building Pauperformance set index...")
         with open(last_set_index_file, "rb") as index_f:
-            self.set_index = pickle.load(index_f)
-        known_sets = {s['scryfall_code'] for s in self.set_index.values()}
-        p12e_code = max(self.set_index.keys()) + 1
+            set_index = pickle.load(index_f)
+        known_sets = {s['scryfall_code'] for s in set_index.values()}
+        p12e_code = max(set_index.keys()) + 1
         for s in scryfall_sets:
             if s['code'] in known_sets:
                 continue
-            self.set_index[p12e_code] = {
+            set_index[p12e_code] = {
                 "p12e_code": p12e_code,
                 "scryfall_code": s['code'],
                 "name": s['name'],
@@ -50,10 +50,11 @@ class Pauperformance:
 
         logger.info("Saving Pauperformance set index...")
         with open(last_set_index_file, 'wb') as index_f:
-            pickle.dump(self.set_index, index_f)
+            pickle.dump(set_index, index_f)
         logger.info("Saved Pauperformance set index.")
+        return set_index
 
-    def get_pauper_cards_index(
+    def _build_card_index(
             self,
             skip_sets=KNOWN_SETS_WITH_NO_PAUPER_CARDS,
             cards_index_cache_file=PAUPER_CARDS_INDEX_CACHE_FILE,
@@ -89,16 +90,22 @@ class Pauperformance:
             pickle.dump(card_index, cache_f)
         return card_index
 
-    def get_pauper_cards_incremental_index(self):
+    def _build_incremental_card_index(
+            self,
+            skip_sets=INCREMENTAL_CARDS_INDEX_SKIP_SETS,
+    ):
         incremental_card_index = {}
         existing_card_names = set()
-        for p12e_code, cards in self.get_pauper_cards_index().items():
+        useless_sets = set()
+        for p12e_code, cards in self.card_index.items():
             logger.debug(f"Processing set with p12e_code: {p12e_code}...")
 
-            if 'Promos' in self.set_index[p12e_code]['name'] or \
+            if p12e_code in skip_sets or \
+                    'Promos' in self.set_index[p12e_code]['name'] or \
                     'Black Border' in self.set_index[p12e_code]['name']:
                 logger.debug(f"Skipping set {self.set_index[p12e_code]['name']}...")
                 incremental_card_index[p12e_code] = []
+                useless_sets.add(p12e_code)
                 continue
 
             new_cards = []
@@ -109,7 +116,11 @@ class Pauperformance:
                 existing_card_names.add(card['name'])
             incremental_card_index[p12e_code] = new_cards
             logger.debug(f"Found {len(new_cards)} new cards.")
-            logger.debug(f"Processed set with p12e_code: {p12e_code}.")
+        to_be_removed_sets = useless_sets - set(INCREMENTAL_CARDS_INDEX_SKIP_SETS)
+        if len(to_be_removed_sets) > 0:
+            logger.warn(
+                f"Please, update the list of known sets to be skipped for the incremental cards index adding: {sorted(list(to_be_removed_sets))}"
+            )
         return incremental_card_index
 
     def get_pauperformance_decks(self):
@@ -121,7 +132,7 @@ class Pauperformance:
             logger.info(f"Found {len(player_decks)} decks.")
             all_decks += player_decks
         all_decks.sort(reverse=True, key=lambda d: d.p12e_code)
-        archetypes = get_pauperformance_archetypes()
+        archetypes = self.get_pauperformance_archetypes()
         for deck in all_decks:
             if deck.archetype not in archetypes:
                 logger.warn(
@@ -157,9 +168,8 @@ class Pauperformance:
         frequents = all_cards - staples - lands
         return list(staples), list(frequents)
 
-
-def get_pauperformance_archetypes(config_pages_dir=CONFIG_ARCHETYPES_DIR):
-    return set(
-        Path(a).name.replace(".ini", "")
-        for a in glob.glob(f"{config_pages_dir}/*.ini")
-    )
+    def get_pauperformance_archetypes(self, config_pages_dir=CONFIG_ARCHETYPES_DIR):
+        return set(
+            Path(a).name.replace(".ini", "")
+            for a in glob.glob(f"{config_pages_dir}/*.ini")
+        )

@@ -5,10 +5,10 @@ from pauperformance_bot.client.pauperformance import Pauperformance
 def update_academy():
     pauperformance = Pauperformance()
     academy = Academy(pauperformance)
-    academy.update_archetypes_index()
-    academy.update_set_index()
-    academy.update_pauper_pool()
-    # academy.update_archetypes()
+    # academy.update_archetypes_index()
+    # academy.update_set_index()
+    # academy.update_pauper_pool()
+    academy.update_archetypes()
     # academy.update_all()
 
 
