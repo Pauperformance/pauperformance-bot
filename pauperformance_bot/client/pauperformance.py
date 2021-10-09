@@ -1,5 +1,6 @@
 import glob
 import pickle
+from datetime import datetime
 from pathlib import Path
 from time import sleep
 
@@ -13,7 +14,7 @@ from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.constant.myr import LAST_SET_INDEX_FILE, PAUPER_CARDS_INDEX_CACHE_FILE, CONFIG_ARCHETYPES_DIR
 from pauperformance_bot.constant.pauperformance import KNOWN_SETS_WITH_NO_PAUPER_CARDS, \
     INCREMENTAL_CARDS_INDEX_SKIP_SETS
-from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS, PAUPERFORMANCE_PLAYER
+from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS, PAUPERFORMANCE_PLAYER, SHIKA93_PLAYER
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import pretty_str
 
@@ -258,7 +259,19 @@ class Pauperformance:
                 )
         logger.info(f"Updated MTGGoldfish decks for {player.name}.")
 
+    def get_set_index_by_date(self, usa_date):
+        logger.debug(f"Getting set index for USA date {usa_date}")
+        return [
+            s for s in self.set_index.values()
+            if s['date'] <= usa_date and len(self.incremental_card_index.get(s['p12e_code'])) > 0
+        ][-1]
+
+    def get_current_set_index(self):
+        return self.get_set_index_by_date(datetime.today().strftime('%Y-%m-%d'))
+
 
 if __name__ == '__main__':
     p12e = Pauperformance()
-    p12e.import_mtggoldfish_decks()
+    p12e.import_mtggoldfish_player_decks(SHIKA93_PLAYER)
+    # p12e.get_current_set_index()
+    # p12e.import_mtggoldfish_decks()

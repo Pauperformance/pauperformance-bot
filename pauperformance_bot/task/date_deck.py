@@ -3,10 +3,7 @@ from pauperformance_bot.client.pauperformance import Pauperformance
 
 def date_deck(usa_date):
     pauperformance = Pauperformance()
-    return [
-        s for s in pauperformance.set_index.values()
-        if s['date'] <= usa_date and len(pauperformance.incremental_card_index.get(s['p12e_code'])) > 0
-    ][-1]
+    return pauperformance.get_set_index_by_date(usa_date)
 
 
 if __name__ == '__main__':
