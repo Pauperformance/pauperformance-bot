@@ -6,12 +6,14 @@ from time import sleep
 from pauperformance_bot.client.deckstats import Deckstats
 from pauperformance_bot.client.dropbox_ import Dropbox
 from pauperformance_bot.client.mtggoldfish import MTGGoldfish
+from pauperformance_bot.client.myr import Myr
 from pauperformance_bot.client.scryfall import Scryfall
 from pauperformance_bot.constant.dropbox import DECKSTATS_DECKS_PATH
+from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.constant.myr import LAST_SET_INDEX_FILE, PAUPER_CARDS_INDEX_CACHE_FILE, CONFIG_ARCHETYPES_DIR
 from pauperformance_bot.constant.pauperformance import KNOWN_SETS_WITH_NO_PAUPER_CARDS, \
     INCREMENTAL_CARDS_INDEX_SKIP_SETS
-from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
+from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS, PAUPERFORMANCE_PLAYER
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import pretty_str
 
@@ -24,11 +26,13 @@ class Pauperformance:
             scryfall=Scryfall(),
             mtggoldfish=MTGGoldfish(),
             dropbox=Dropbox(),
+            myr=Myr(),
             players=PAUPERFORMANCE_PLAYERS,
     ):
         self.scryfall = scryfall
         self.mtggoldfish = mtggoldfish
         self.dropbox = dropbox
+        self.myr = myr
         self.players = players
         self.set_index = self._build_set_index()
         self.card_index = self._build_card_index()
@@ -93,7 +97,7 @@ class Pauperformance:
         useless_sets = set(i for i in card_index if len(card_index[i]) == 0)
         to_be_removed_sets = useless_sets - set(KNOWN_SETS_WITH_NO_PAUPER_CARDS)
         if len(to_be_removed_sets) > 0:
-            logger.warn(
+            logger.warning(
                 f"Please, update the list of known sets with no pauper cards adding: {sorted(list(to_be_removed_sets))}"
             )
 
@@ -129,7 +133,7 @@ class Pauperformance:
             logger.debug(f"Found {len(new_cards)} new cards.")
         to_be_removed_sets = useless_sets - set(INCREMENTAL_CARDS_INDEX_SKIP_SETS)
         if len(to_be_removed_sets) > 0:
-            logger.warn(
+            logger.warning(
                 f"Please, update the list of known sets to be skipped for the incremental cards index adding: {sorted(list(to_be_removed_sets))}"
             )
         return incremental_card_index
@@ -146,7 +150,7 @@ class Pauperformance:
         archetypes = self.get_archetypes()
         for deck in all_decks:
             if deck.archetype not in archetypes:
-                logger.warn(
+                logger.warning(
                     f"Deck {deck.name} by {deck.owner_name} doesn't match any "
                     f"known archetype."
                 )
@@ -188,13 +192,13 @@ class Pauperformance:
         frequents = all_cards - staples - lands
         return list(staples), list(frequents)
 
-    def update_mtggoldfish_decks(self):
+    def import_mtggoldfish_decks(self):
         logger.info("Updating MTGGoldfish decks for all users...")
         for player in self.players:
-            self.update_mtggoldfish_player_decks(player)
+            self.import_mtggoldfish_player_decks(player)
         logger.info("Updated MTGGoldfish decks for all users.")
 
-    def update_mtggoldfish_player_decks(
+    def import_mtggoldfish_player_decks(
             self,
             player,
             dropbox_deckstats_path=DECKSTATS_DECKS_PATH,
@@ -218,12 +222,13 @@ class Pauperformance:
                 )
                 continue
             logger.info(f"Storing deck {deckstats_deck.saved_id} on MTGGoldfish...")
-            raw_deck = deckstats.get_deck(deckstats_deck.saved_id)
+            raw_deck = deckstats.get_deck(deckstats_deck.saved_id, use_cache=False)
             playable_deck = deckstats.to_playable_deck(raw_deck)
             if playable_deck.len_mainboard != 60:
-                logger.warn(f"Main deck has {playable_deck.len_mainboard} cards.")
+                logger.warning(f"Main deck has {playable_deck.len_mainboard} cards.")
             if playable_deck.len_sideboard != 15:
-                logger.warn(f"Sideboard has {playable_deck.len_mainboard} cards.")
+                logger.warning(f"Sideboard has {playable_deck.len_sideboard} cards.")
+            suspicious_list = playable_deck.len_mainboard != 60 or playable_deck.len_sideboard != 15
             description = f"Source: {deckstats_deck.url}\n" \
                           f"Creation date: {pretty_str(deckstats_deck.added)}"
             if deckstats_deck.description:
@@ -235,9 +240,25 @@ class Pauperformance:
             dropbox_key = f"{dropbox_deckstats_path}/{deckstats_deck.saved_id}>{mtggoldfish_deck_id}>{deck_name}.txt"
             logger.info(f"Archiving information in Dropbox in file {dropbox_key}...")
             self.dropbox.create_file(f"{dropbox_key}", str(playable_deck))
+            logger.info(f"Informing player on Telegram...")
+            self.myr.send_message(
+                player,
+                f"📌 Imported deck: {deck_name}.\n\n"
+                f"Source: {deckstats_deck.url}\n\n"
+                f"Destination: {DECK_API_ENDPOINT}/{mtggoldfish_deck_id}",
+            )
+            if suspicious_list:
+                self.myr.send_message(
+                    PAUPERFORMANCE_PLAYER,
+                    f"⚠️ Archived deck with suspicious size "
+                    f"(main: {playable_deck.len_mainboard}, sideboard: {playable_deck.len_sideboard})!\n\n"
+                    f"Imported deck: {deck_name}.\n\n"
+                    f"Source: {deckstats_deck.url}\n\n"
+                    f"Destination: {DECK_API_ENDPOINT}/{mtggoldfish_deck_id}",
+                )
         logger.info(f"Updated MTGGoldfish decks for {player.name}.")
 
 
 if __name__ == '__main__':
     p12e = Pauperformance()
-    print(p12e.update_mtggoldfish_player_decks(p12e.players[0]))
+    p12e.import_mtggoldfish_decks()

@@ -101,27 +101,30 @@ class Deckstats:
             if is_valid_p12e_deckstats_name(deck.name)
         ]
 
-    def get_deck(self, deck_id, decks_cache_dir=DECKSTATS_DECKS_CACHE_DIR):
-        try:
-            with open(posix_path(decks_cache_dir, f"{deck_id}.pkl"), "rb") as cache_f:
-                deck = pickle.load(cache_f)
-                logger.debug(f"Loaded deck from cache: {deck}")
-        except FileNotFoundError:
-            logger.debug("No cache found for deck.")
-            url = self.endpoint
-            method = requests.get
-            params = {
-                'action': 'get_deck',
-                'id_type': 'saved',
-                'owner_id': self.owner_id,
-                'id': deck_id,
-                'response_type': 'json',
-            }
-            method = partial(method, params=params)
-            response = execute_http_request(method, url)
-            deck = json.loads(response.content)
-            with open(posix_path(decks_cache_dir, f"{deck_id}.pkl"), 'wb') as cache_f:
-                pickle.dump(deck, cache_f)
+    def get_deck(self, deck_id, decks_cache_dir=DECKSTATS_DECKS_CACHE_DIR, use_cache=True):
+        if use_cache:
+            try:
+                with open(posix_path(decks_cache_dir, f"{deck_id}.pkl"), "rb") as cache_f:
+                    deck = pickle.load(cache_f)
+                    logger.debug(f"Loaded deck from cache: {deck}")
+                    return deck
+            except FileNotFoundError:
+                pass
+        logger.debug("No cache found for deck.")
+        url = self.endpoint
+        method = requests.get
+        params = {
+            'action': 'get_deck',
+            'id_type': 'saved',
+            'owner_id': self.owner_id,
+            'id': deck_id,
+            'response_type': 'json',
+        }
+        method = partial(method, params=params)
+        response = execute_http_request(method, url)
+        deck = json.loads(response.content)
+        with open(posix_path(decks_cache_dir, f"{deck_id}.pkl"), 'wb') as cache_f:
+            pickle.dump(deck, cache_f)
         return deck
 
     def to_playable_deck(self, deckstats_deck):

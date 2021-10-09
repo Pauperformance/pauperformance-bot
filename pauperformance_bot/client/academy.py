@@ -111,7 +111,7 @@ class Academy:
             ]
             staples, frequents = self.pauperformance.analyze_cards_frequency(archetype_decks)
             if len(archetype_decks) < 2:
-                logger.warn(
+                logger.warning(
                     f"{archetype_name} doesn't have at least 2 decks to generate staples and frequent cards."
                 )
             values['staples'] = self._get_rendered_card_info(staples)
@@ -119,7 +119,7 @@ class Academy:
             values['decks'] = archetype_decks
             archetype_file_name = Path(archetype_config_file).name
             if archetype_name != archetype_file_name.replace(".ini", ""):
-                logger.warn(
+                logger.warning(
                     f"Archetype config mismatch: {archetype_name} vs "
                     f"{archetype_file_name}"
                 )
@@ -172,7 +172,7 @@ class Academy:
             values['archetypes_dir'] = archetypes_dir
             family_file_name = Path(family_config_file).name
             if family_name != family_file_name.replace(".ini", ""):
-                logger.warn(
+                logger.warning(
                     f"Family config mismatch: {family_name} vs "
                     f"{family_file_name}"
                 )

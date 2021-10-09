@@ -1,4 +1,4 @@
-from pauperformance_bot.credentials import TELEGRAM_SHIKA93_ID, TELEGRAM_PAUPERFORMANCE_ID
+from pauperformance_bot.credentials import TELEGRAM_SHIKA93_ID, TELEGRAM_PAUPERFORMANCE_ID, TELEGRAM_MREVILEYE_ID
 from pauperformance_bot.entity.pauperformance_player import PauperformancePlayer
 
 PAUPERFORMANCE_PLAYER = PauperformancePlayer(
@@ -22,7 +22,7 @@ MREVILEYE_PLAYER = PauperformancePlayer(
     mtgo_name="MrEvilEye",
     deckstats_name="MrEvilEye",
     deckstats_id="72056",
-    telegram_id=None,
+    telegram_id=TELEGRAM_MREVILEYE_ID,
 )
 
 PAUPERFORMANCE_PLAYERS = [
