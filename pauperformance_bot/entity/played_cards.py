@@ -1,5 +1,7 @@
 class PlayedCard:
     def __init__(self, quantity, card_name):
+        if isinstance(quantity, str):
+            quantity = int(quantity)
         self.quantity = quantity
         self.card_name = card_name
 

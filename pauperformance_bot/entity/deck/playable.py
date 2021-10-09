@@ -28,7 +28,7 @@ class PlayableDeck:
 
     def __str__(self):
         return f"Main ({self.len_mainboard}):\n{self.mainboard_mtggoldfish}\n\n" \
-               f"Sideboard ({self.len_mainboard}):\n{self.sideboard_mtggoldfish}"
+               f"Sideboard ({self.len_sideboard}):\n{self.sideboard_mtggoldfish}"
 
     def __repr__(self):
         return ' '.join((repr(c) for c in self.mainboard)) + '|' + ' '.join((repr(c) for c in self.sideboard))

@@ -4,7 +4,7 @@
 
 **Dominant mana**: {{ mana | map('to_archetype_page_mana') | join(' ') }}
 
-**Type**: {{ type | map('tagify') | join(', ') }}
+**Type**: {{ type | map('tagify') | join('/') }}
 
 **Description**: {{ description }}
 
@@ -23,7 +23,7 @@
 ## **Decks**
 
 {% for deck in decks -%}
-[{{ deck.name }}.{{ deck.owner_name }}]({{ deck.url }}) | *{{ pretty_str(deck.added) }}* | {{ deck.description }}  
+[{{ deck.p12e_name }}]({{ deck.url }}) | *{{ simple_str(deck.creation_date) }}*
 {% endfor %}
 
 *Last updated: {{ last_update_date }}.*
