@@ -6,7 +6,7 @@ from urllib.parse import quote
 
 from pauperformance_bot.constant.academy import RESOURCES_IMAGES_MANA_RELATIVE_URL
 from pauperformance_bot.util.log import get_application_logger
-from pauperformance_bot.util.time import pretty_str
+from pauperformance_bot.util.time import pretty_str, simple_str
 
 logger = get_application_logger()
 
@@ -38,6 +38,7 @@ def render_template(template_dir, template_file, output_file, values):
     rendered_file = env.get_template(template_file).render(
         values,
         pretty_str=pretty_str,
+        simple_str=simple_str,
         to_github_anchor=to_github_anchor,
         to_url_encoded=to_url_encoded,
     )

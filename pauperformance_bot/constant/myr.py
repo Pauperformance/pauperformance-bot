@@ -12,6 +12,7 @@ SOURCE_DIR = posix_path(TOP_PATH.as_posix(), "pauperformance_bot")
 # logging
 DEFAULT_LOGGING_FILE = posix_path(PAUPERFORMANCE_BOT_DIR, "pauperformance.log")
 DEFAULT_DATE_FORMAT = "%Y-%m-%d, %H:%M:%S"  # allows chronological sorting
+USA_DATE_FORMAT = '%Y-%m-%d'
 
 # resources/
 # | cache/
@@ -21,8 +22,9 @@ DEFAULT_DATE_FORMAT = "%Y-%m-%d, %H:%M:%S"  # allows chronological sorting
 RESOURCES_DIR = posix_path(TOP_PATH.as_posix(), "resources")
 
 CACHE_DIR = posix_path(RESOURCES_DIR, "cache")
-SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
 DECKSTATS_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "deckstats_decks")
+MTGGOLDFISH_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "mtggoldfish_decks")
+SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
 PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(
     CACHE_DIR, "pauper_cards_index.pkl"
 )

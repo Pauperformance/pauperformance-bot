@@ -9,9 +9,9 @@ from pauperformance_bot.client.dropbox_ import Dropbox
 from pauperformance_bot.client.mtggoldfish import MTGGoldfish
 from pauperformance_bot.client.myr import Myr
 from pauperformance_bot.client.scryfall import Scryfall
-from pauperformance_bot.constant.dropbox import DECKSTATS_DECKS_PATH
 from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
-from pauperformance_bot.constant.myr import LAST_SET_INDEX_FILE, PAUPER_CARDS_INDEX_CACHE_FILE, CONFIG_ARCHETYPES_DIR
+from pauperformance_bot.constant.myr import LAST_SET_INDEX_FILE, PAUPER_CARDS_INDEX_CACHE_FILE, CONFIG_ARCHETYPES_DIR, \
+    USA_DATE_FORMAT
 from pauperformance_bot.constant.pauperformance import KNOWN_SETS_WITH_NO_PAUPER_CARDS, \
     INCREMENTAL_CARDS_INDEX_SKIP_SETS
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS, PAUPERFORMANCE_PLAYER, SHIKA93_PLAYER
@@ -139,7 +139,7 @@ class Pauperformance:
             )
         return incremental_card_index
 
-    def get_deckstats_decks(self):
+    def list_deckstats_decks(self):
         all_decks = []
         for player in self.players:
             logger.info(f"Processing player {player.name}...")
@@ -157,7 +157,7 @@ class Pauperformance:
                 )
         return all_decks
 
-    def get_mtggoldfish_decks(self):
+    def list_mtggoldfish_decks(self):
         return self.mtggoldfish.list_decks()
 
     def get_archetypes(self, config_pages_dir=CONFIG_ARCHETYPES_DIR):
@@ -170,21 +170,13 @@ class Pauperformance:
         if len(archetype_decks) < 2:
             return [], []
         lands = set(land['name'] for land in self.scryfall.get_legal_lands())
-        deckstats_accounts = {}
         decks_cards = {}
         all_cards = set()
         for deck in archetype_decks:
-            owner_id = str(deck.owner_id)
-            deckstats = deckstats_accounts.get(
-                owner_id, Deckstats(owner_id=owner_id)
-            )
-            deckstats_accounts[owner_id] = deckstats
-            deck_content = deckstats.get_deck(str(deck.saved_id))
-            if len(deck_content['sections']) != 1:
-                logger.error(f"More than one section for deck {deck.saved_id}")
-                raise ValueError()
-            cards = [c['name'] for c in deck_content['sections'][0]['cards']]
-            decks_cards[deck.saved_id] = cards
+            print(deck)
+            playable_deck = self.mtggoldfish.to_playable_deck(deck)
+            cards = [c.card_name for c in playable_deck.mainboard]
+            decks_cards[deck.deck_id] = cards
             all_cards.update(cards)
         staples = set(all_cards)
         for deck_list in decks_cards.values():
@@ -202,14 +194,10 @@ class Pauperformance:
     def import_mtggoldfish_player_decks(
             self,
             player,
-            dropbox_deckstats_path=DECKSTATS_DECKS_PATH,
     ):
         logger.info(f"Updating MTGGoldfish decks for {player.name}...")
         deckstats = Deckstats(owner_id=player.deckstats_id)
-        imported_deckstats_deck = set(
-            file_metadata.path_display.rsplit('/', maxsplit=1)[1].split('>')[0]
-            for file_metadata in self.dropbox.list_files(dropbox_deckstats_path)
-        )
+        imported_deckstats_deck = self.dropbox.get_imported_deckstats_deck_ids()
         players_by_deckstats_id = {int(p.deckstats_id): p for p in self.players}
         for deckstats_deck in deckstats.list_pauperformance_decks(player.deckstats_name):
             logger.debug(
@@ -238,7 +226,11 @@ class Pauperformance:
             deck_name = f"{deckstats_deck.name}.{deckstats_deck.owner_name} " \
                         f"| {set_entry['name']} ({set_entry['scryfall_code']})"
             mtggoldfish_deck_id = self.mtggoldfish.create_deck(deck_name, description, playable_deck)
-            dropbox_key = f"{dropbox_deckstats_path}/{deckstats_deck.saved_id}>{mtggoldfish_deck_id}>{deck_name}.txt"
+            dropbox_key = self.dropbox.get_imported_deckstats_deck_key(
+                deckstats_deck.saved_id,
+                mtggoldfish_deck_id,
+                deck_name,
+            )
             logger.info(f"Archiving information in Dropbox in file {dropbox_key}...")
             self.dropbox.create_file(f"{dropbox_key}", str(playable_deck))
             logger.info(f"Informing player on Telegram...")
@@ -267,7 +259,7 @@ class Pauperformance:
         ][-1]
 
     def get_current_set_index(self):
-        return self.get_set_index_by_date(datetime.today().strftime('%Y-%m-%d'))
+        return self.get_set_index_by_date(datetime.today().strftime(USA_DATE_FORMAT))
 
 
 if __name__ == '__main__':

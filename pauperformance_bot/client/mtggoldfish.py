@@ -1,14 +1,21 @@
+from datetime import datetime
 from itertools import count
 
-from requests import session
 from pyquery import PyQuery
+from requests import session
+from urllib.request import urlopen
 
+from pauperformance_bot.client.dropbox_ import Dropbox
 from pauperformance_bot.constant.mtggoldfish import API_ENDPOINT
+from pauperformance_bot.constant.myr import USA_DATE_FORMAT, MTGGOLDFISH_DECKS_CACHE_DIR
+from pauperformance_bot.entity.deck.mtggoldfish import ListedMTGGoldfishDeck
+from pauperformance_bot.entity.deck.playable import PlayableDeck
+from pauperformance_bot.entity.played_cards import PlayedCard
 from pauperformance_bot.exceptions import MTGGoldfishException
 from pauperformance_bot.credentials import MTGGOLDFISH_SHIKA93_PASSWORD, MTGGOLDFISH_SHIKA93_USERNAME, \
     MTGGOLDFISH_PAUPERFORMANCE_USERNAME, MTGGOLDFISH_PAUPERFORMANCE_PASSWORD
 from pauperformance_bot.util.log import get_application_logger
-
+from pauperformance_bot.util.path import posix_path
 
 logger = get_application_logger()
 
@@ -19,10 +26,12 @@ class MTGGoldfish:
             email=MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
             password=MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
             endpoint=API_ENDPOINT,
+            dropbox=Dropbox(),  # TODO: remove when list_decks() workaround is not needed
     ):
         self.email = email
         self.password = password
         self.endpoint = endpoint
+        self.dropbox = dropbox
         self.session = session()
         self._login()
 
@@ -81,16 +90,33 @@ class MTGGoldfish:
         logger.info(f"Created deck {name} for {self.email}. Id: {deck_id}")
         return deck_id
 
-    def list_decks(self, filter_name='', format='pauper', visibility='public'):
+    def list_decks(self, filter_name='', format_='pauper', visibility='public'):
         all_decks = []
         for page in count(1):
-            new_decks = self._list_decks_in_page(page, filter_name=filter_name, format=format, visibility=visibility)
+            new_decks = self._list_decks_in_page(page, filter_name=filter_name, format_=format_, visibility=visibility)
             if len(new_decks) == 0:
                 break
             all_decks += new_decks
-        return all_decks
+        logger.warning("Fixing bug in MTGGoldfish pager...")
+        # TODO: remove whenever possible
+        # due to a bug in the pagination mechanism, decks are sometimes returned more than once or not returned at all
+        # first, let's remove duplicates
+        logger.warning(f"Initial number of decks: {len(all_decks)}")
+        all_decks = list(set(all_decks))
+        logger.warning(f"Without duplicates: {len(all_decks)}")
+        # then, grab one-by-one all the missing decks from dropbox
+        dropbox_decks = self.dropbox.get_imported_deckstats_deck_names()
+        mtggoldfish_decks = {d.name for d in all_decks}
+        for missing_deck in dropbox_decks - mtggoldfish_decks:
+            logger.warning(f"Found missing deck: {missing_deck}")
+            missing_deck = self._list_decks_in_page(1, missing_deck)
+            if len(missing_deck) != 1:
+                raise ValueError(f"Unable to find missing deck {missing_deck}")
+            all_decks += missing_deck
+        logger.warning(f"Final number of decks: {len(all_decks)}")
+        return sorted(all_decks, key=lambda d: d.name)
 
-    def _list_decks_in_page(self, page, filter_name='', format='pauper', visibility='public'):
+    def _list_decks_in_page(self, page, filter_name='', format_='pauper', visibility='public'):
         logger.info(f"Listing decks for {self.email} in page {page}...")
         headers = {
             'accept': 'text/html,application/xhtml+xml,application/xml;'
@@ -105,7 +131,7 @@ class MTGGoldfish:
             # 'utf8': '✓',
             # 'panel': '#tab-all',
             'filter_name': filter_name,
-            'filter_format': format,
+            'filter_format': format_,
             'filter_visibility': visibility,  # possible values: '', 'private', 'public'
             'commit': 'Filter',
         }
@@ -121,11 +147,13 @@ class MTGGoldfish:
         decks = []
         for c in pq('table tbody tr').items():
             row = c.text()
-            _, name, _, format, creation_date, visibility, _, _ = row.split('\n')
-            link = next(link.attrib['href'] for link in c('a'))
-            logger.debug(f"Deck {name} has url: {link}")
-            deck_id = link.split('/')[-1]
-            decks.append((name, format, creation_date, visibility, deck_id))
+            _, name, _, format_, creation_date, visibility, _, _ = row.split('\n')
+            creation_date = datetime.strptime(creation_date, USA_DATE_FORMAT)
+            creation_date = 1000 * int(creation_date.timestamp())
+            url = next(link.attrib['href'] for link in c('a'))
+            logger.debug(f"Deck {name} has url: {url}")
+            deck_id = url.split('/')[-1]
+            decks.append(ListedMTGGoldfishDeck(name, format_, creation_date, visibility, deck_id))
         logger.info(f"Found {len(decks)} decks: {decks}")
         logger.info(f"Listed decks for {self.email}.")
         return decks
@@ -151,13 +179,40 @@ class MTGGoldfish:
             raise MTGGoldfishException(f"Failed to delete deck with id {deck_id} for {self.email}")
         logger.info(f"Deleted deck with id {deck_id} for {self.email}.")
 
+    def to_playable_deck(self, listed_mtggoldfish_deck, decks_cache_dir=MTGGOLDFISH_DECKS_CACHE_DIR, use_cache=True):
+        lines = None
+        to_be_cached = True
+        if use_cache:
+            try:
+                with open(posix_path(decks_cache_dir, f"{listed_mtggoldfish_deck.deck_id}.txt"), "r") as cache_f:
+                    lines = [line[:-1] for line in cache_f.readlines()] + ['']  # for consistency with the original file
+                    to_be_cached = False
+            except FileNotFoundError:
+                pass
+        if not lines:
+            content = urlopen(listed_mtggoldfish_deck.download_txt_url).read()
+            lines = content.decode('utf-8').split('\r\n')
+        if to_be_cached:
+            with open(posix_path(decks_cache_dir, f"{listed_mtggoldfish_deck.deck_id}.txt"), "w") as cache_f:
+                cache_f.writelines('\n'.join(lines))
+        separator = lines.index('')
+        maindeck = lines[:separator]
+        sideboard = lines[separator+1:-1]
+        return PlayableDeck(
+            [PlayedCard(*(line.split(' ', maxsplit=1))) for line in maindeck],
+            [PlayedCard(*(line.split(' ', maxsplit=1))) for line in sideboard],
+        )
+
 
 def main():
     # mtggoldfish = MTGGoldfish(MTGGOLDFISH_SHIKA93_USERNAME, MTGGOLDFISH_SHIKA93_PASSWORD)
     mtggoldfish = MTGGoldfish()
     all_decks = mtggoldfish.list_decks()
+    for d in all_decks:
+        if 'Affinity 676.002.MrEvilEye' in d.name:
+            print('Found')
+    all_decks = mtggoldfish.list_decks(filter_name='Affinity 676.002.MrEvilEye')
     print(all_decks)
-    print(len(all_decks))
     # for d in all_decks:
         # mtggoldfish.delete_deck(d[-1])
     # main = [PlayedCard(4, "Island"), PlayedCard(4, "Swamp")]
