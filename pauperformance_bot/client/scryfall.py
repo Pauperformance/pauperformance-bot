@@ -76,3 +76,8 @@ class Scryfall:
         query = "type:land legal:pauper"
         return self.search_cards(query)
 
+    @lru_cache(maxsize=1)
+    def get_banned_cards(self):
+        query = "banned:pauper"
+        return self.search_cards(query)
+

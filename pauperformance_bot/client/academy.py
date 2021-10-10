@@ -100,6 +100,7 @@ class Academy:
     ):
         logger.info(f"Generating archetypes...")
         all_decks = self.pauperformance.list_mtggoldfish_decks()
+        banned_cards = [c['name'] for c in self.scryfall.get_banned_cards()]
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
             values = read_archetype_config(archetype_config_file)
@@ -109,6 +110,11 @@ class Academy:
                 for deck in all_decks
                 if deck.archetype == archetype_name
             ]
+
+            for deck in archetype_decks:
+                playable_deck = self.pauperformance.mtggoldfish.to_playable_deck(deck)
+                deck.legality = '' if playable_deck.is_legal(banned_cards) else 'Ban 🔨'
+
             staples, frequents = self.pauperformance.analyze_cards_frequency(archetype_decks)
             if len(archetype_decks) < 2:
                 logger.warning(
