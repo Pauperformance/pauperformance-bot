@@ -26,6 +26,14 @@ class PlayableDeck:
     def len_sideboard(self):
         return sum(c.quantity for c in self.sideboard)
 
+    def is_legal(self, banned_cards):
+        banned_cards = set(banned_cards)
+        if len({c.card_name for c in self.mainboard} & banned_cards) != 0:
+            return False
+        if len({c.card_name for c in self.sideboard} & banned_cards) != 0:
+            return False
+        return True
+
     def __str__(self):
         return f"Main ({self.len_mainboard}):\n{self.mainboard_mtggoldfish}\n\n" \
                f"Sideboard ({self.len_sideboard}):\n{self.sideboard_mtggoldfish}"

@@ -23,7 +23,7 @@
 ## **Decks**
 
 {% for deck in decks -%}
-[{{ deck.p12e_name }}]({{ deck.url }}) | *{{ simple_str(deck.creation_date) }}*
+[{{ deck.p12e_name }}]({{ deck.url }}) | *{{ simple_str(deck.creation_date) }}* | {{ deck.legality }}
 {% endfor %}
 
 *Last updated: {{ last_update_date }}.*
