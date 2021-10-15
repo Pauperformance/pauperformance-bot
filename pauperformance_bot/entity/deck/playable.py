@@ -12,11 +12,11 @@ class PlayableDeck:
 
     @property
     def mainboard_mtggoldfish(self):
-        return '\n'.join((repr(c) for c in self.mainboard))
+        return "\n".join((repr(c) for c in self.mainboard))
 
     @property
     def sideboard_mtggoldfish(self):
-        return '\n'.join((repr(c) for c in self.sideboard))
+        return "\n".join((repr(c) for c in self.sideboard))
 
     @property
     def len_mainboard(self):
@@ -35,17 +35,23 @@ class PlayableDeck:
         return True
 
     def __str__(self):
-        return f"Main ({self.len_mainboard}):\n{self.mainboard_mtggoldfish}\n\n" \
-               f"Sideboard ({self.len_sideboard}):\n{self.sideboard_mtggoldfish}"
+        return (
+            f"Main ({self.len_mainboard}):\n{self.mainboard_mtggoldfish}\n\n"
+            f"Sideboard ({self.len_sideboard}):\n{self.sideboard_mtggoldfish}"
+        )
 
     def __repr__(self):
-        return ' '.join((repr(c) for c in self.mainboard)) + '|' + ' '.join((repr(c) for c in self.sideboard))
+        return (
+            " ".join((repr(c) for c in self.mainboard))
+            + "|"
+            + " ".join((repr(c) for c in self.sideboard))
+        )
 
     def __hash__(self):
         return hash(repr(self))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main = [PlayedCard(4, "Island"), PlayedCard(4, "Swamp")]
     sideboard = [PlayedCard(4, "Plains"), PlayedCard(4, "Forest")]
     deck = PlayableDeck(main, sideboard)

@@ -1,5 +1,11 @@
-from pauperformance_bot.credentials import TELEGRAM_SHIKA93_ID, TELEGRAM_PAUPERFORMANCE_ID, TELEGRAM_MREVILEYE_ID
-from pauperformance_bot.entity.pauperformance_player import PauperformancePlayer
+from pauperformance_bot.credentials import (
+    TELEGRAM_MREVILEYE_ID,
+    TELEGRAM_PAUPERFORMANCE_ID,
+    TELEGRAM_SHIKA93_ID,
+)
+from pauperformance_bot.entity.pauperformance_player import (
+    PauperformancePlayer,
+)
 
 PAUPERFORMANCE_PLAYER = PauperformancePlayer(
     name="Pauperformance",

@@ -1,3 +1,7 @@
+build/
+dev/
+dist/
+
 # Python
 venv/
 *.py[co]
@@ -8,6 +12,15 @@ venv/
 # IDE
 .idea/
 
+# tox
+.hypothesis/
+.pytest_cache/
+.tox/
+coverage_html/
+.coverage
+coverage.xml
+
+# Myr
 pauperformance_bot/secrets.py
 pauperformance_bot/test.py
 resources/cache/
