@@ -1,0 +1,8 @@
+ddt
+flake8
+pytest
+pytest-xdist
+pytest-cov
+tox
+black
+isort

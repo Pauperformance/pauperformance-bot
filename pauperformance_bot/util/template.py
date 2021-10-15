@@ -1,10 +1,12 @@
 import os
 from pathlib import Path
-
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from urllib.parse import quote
 
-from pauperformance_bot.constant.academy import RESOURCES_IMAGES_MANA_RELATIVE_URL
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
+
+from pauperformance_bot.constant.academy import (
+    RESOURCES_IMAGES_MANA_RELATIVE_URL,
+)
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import pretty_str, simple_str
 
@@ -16,11 +18,14 @@ def tagify(name):
 
 
 def to_archetype_page_mana(mana):
-    return f"<img src=\"../{RESOURCES_IMAGES_MANA_RELATIVE_URL}/{mana}.png\" width=\"25\"/>"
+    return (
+        f'<img src="../{RESOURCES_IMAGES_MANA_RELATIVE_URL}/{mana}.png" '
+        f'width="25"/>'
+    )
 
 
 def to_github_anchor(name):
-    return name.lower().replace(' ', '-').replace('.', '').replace(':', '')
+    return name.lower().replace(" ", "-").replace(".", "").replace(":", "")
 
 
 def to_url_encoded(name):
@@ -33,8 +38,8 @@ def render_template(template_dir, template_file, output_file, values):
         loader=FileSystemLoader(template_dir),
         undefined=StrictUndefined,
     )
-    env.filters['tagify'] = tagify
-    env.filters['to_archetype_page_mana'] = to_archetype_page_mana
+    env.filters["tagify"] = tagify
+    env.filters["to_archetype_page_mana"] = to_archetype_page_mana
     rendered_file = env.get_template(template_file).render(
         values,
         pretty_str=pretty_str,
@@ -43,7 +48,5 @@ def render_template(template_dir, template_file, output_file, values):
         to_url_encoded=to_url_encoded,
     )
     with open(output_file, "w") as out_f:
-        logger.debug(
-            f"Replacing template with rendered file rendered file..."
-        )
+        logger.debug("Replacing template with rendered file rendered file...")
         out_f.write(rendered_file)
