@@ -264,6 +264,10 @@ class Pauperformance:
 
 if __name__ == '__main__':
     p12e = Pauperformance()
-    p12e.import_mtggoldfish_player_decks(SHIKA93_PLAYER)
+    # p12e.import_mtggoldfish_player_decks(SHIKA93_PLAYER)
+    # p12e.import_mtggoldfish_decks()
+    for c in p12e.scryfall.get_banned_cards():
+        print()
+    # banned_cards_names = []
     # p12e.get_current_set_index()
     # p12e.import_mtggoldfish_decks()
