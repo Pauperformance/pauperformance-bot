@@ -1,6 +1,6 @@
 import json
 import pickle
-from functools import partial, lru_cache
+from functools import lru_cache, partial
 
 import requests
 
@@ -25,12 +25,14 @@ class Scryfall:
         return json.loads(response.content)
 
     def get_card_named(
-            self,
-            exact_card_name,
-            cards_cache_dir=SCRYFALL_CARDS_CACHE_DIR,
+        self,
+        exact_card_name,
+        cards_cache_dir=SCRYFALL_CARDS_CACHE_DIR,
     ):
         try:
-            with open(posix_path(cards_cache_dir, to_pkl_name(exact_card_name)), "rb") as cache_f:
+            with open(
+                posix_path(cards_cache_dir, to_pkl_name(exact_card_name)), "rb"
+            ) as cache_f:
                 card = pickle.load(cache_f)
                 logger.debug(f"Loaded card from cache: {exact_card_name}")
                 # logger.debug(f"Card: {card}")
@@ -38,14 +40,12 @@ class Scryfall:
             logger.debug(f"No cache found for card {exact_card_name}.")
             url = f"{self.endpoint}/cards/named"
             method = requests.get
-            params = {'exact': exact_card_name}
+            params = {"exact": exact_card_name}
             method = partial(method, params=params)
             response = execute_http_request(method, url)
             card = json.loads(response.content)
             with open(
-                    posix_path(
-                        cards_cache_dir, to_pkl_name(exact_card_name)
-                    ), 'wb'
+                posix_path(cards_cache_dir, to_pkl_name(exact_card_name)), "wb"
             ) as cache_f:
                 pickle.dump(card, cache_f)
         return card
@@ -53,7 +53,7 @@ class Scryfall:
     def search_cards(self, query):
         url = f"{self.endpoint}/cards/search"
         method = requests.get
-        params = {'q': query}
+        params = {"q": query}
         method = partial(method, params=params)
         has_more = True
         cards = []
@@ -61,14 +61,17 @@ class Scryfall:
             while has_more:
                 response = execute_http_request(method, url)
                 response = json.loads(response.content)
-                cards += response['data']
-                has_more = response['has_more']
+                cards += response["data"]
+                has_more = response["has_more"]
                 if has_more:
-                    url = response['next_page']
+                    url = response["next_page"]
             return cards
         except requests.exceptions.HTTPError as exc:
             response = json.loads(exc.response.content)
-            if exc.response.status_code == 404 and response['code'] == 'not_found':
+            if (
+                exc.response.status_code == 404
+                and response["code"] == "not_found"
+            ):
                 return {}
 
     @lru_cache(maxsize=1)
@@ -80,4 +83,3 @@ class Scryfall:
     def get_banned_cards(self):
         query = "banned:pauper"
         return self.search_cards(query)
-

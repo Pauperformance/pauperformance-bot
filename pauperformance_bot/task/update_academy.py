@@ -13,5 +13,5 @@ def update_academy():
     academy.update_all()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     update_academy()
