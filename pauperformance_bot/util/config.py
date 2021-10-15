@@ -1,7 +1,7 @@
 import configparser
 
 from pauperformance_bot.util.log import get_application_logger
-from pauperformance_bot.util.time import pretty_str, now
+from pauperformance_bot.util.time import now, pretty_str
 
 logger = get_application_logger()
 
@@ -36,4 +36,8 @@ def read_family_config(config_file_path):
 
 
 def _parse_list_value(raw_value):
-    return [value.strip(" ") for value in raw_value.split(",")] if raw_value else []
+    return (
+        [value.strip(" ") for value in raw_value.split(",")]
+        if raw_value
+        else []
+    )
