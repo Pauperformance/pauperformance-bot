@@ -9,8 +9,8 @@ def update_academy():
     # academy.update_families()
     # academy.update_set_index()
     # academy.update_pauper_pool()
-    academy.update_archetypes()
-    # academy.update_all()
+    # academy.update_archetypes()
+    academy.update_all()
 
 
 if __name__ == '__main__':
