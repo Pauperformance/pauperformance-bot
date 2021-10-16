@@ -8,16 +8,15 @@ from pauperformance_bot.cli.builder.utils import (
     add_default_options,
     handle_default_cli_options,
 )
-from pauperformance_bot.cli.group.academy.academy import AcademyGroup
-from pauperformance_bot.cli.group.test.test import TestGroup
+from pauperformance_bot.cli.group import academy, test
 from pauperformance_bot.constant.myr import APPLICATION_NAME
 
 
 class MyrCLI(CLIRunnable):
 
     _cli_tools = [
-        AcademyGroup(),
-        TestGroup(),
+        academy.AcademyGroup(),
+        test.TestGroup(),
     ]
 
     def __init__(self):
