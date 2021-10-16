@@ -42,6 +42,7 @@ TEMPLATES_FAMILIES_DIR = posix_path(TEMPLATES_DIR, "families")
 FAMILY_TEMPLATE_FILE = "family.md.j2"
 TEMPLATES_PAGES_DIR = posix_path(TEMPLATES_DIR, "pages")
 ARCHETYPES_INDEX_TEMPLATE_FILE = "archetypes_index.md.j2"
+DEV_TEMPLATE_FILE = "dev.md.j2"
 PAUPER_POOL_TEMPLATE_FILE = "pauper_pool.md.j2"
 SET_INDEX_TEMPLATE_FILE = "set_index.md.j2"
 
