@@ -10,6 +10,7 @@ def update_academy():
     # academy.update_set_index()
     # academy.update_pauper_pool()
     # academy.update_archetypes()
+    # academy.update_dev()
     academy.update_all()
 
 
