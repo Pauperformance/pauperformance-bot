@@ -1,4 +1,5 @@
 from datetime import datetime
+from functools import wraps
 from itertools import count
 from urllib.request import urlopen
 
@@ -25,6 +26,18 @@ from pauperformance_bot.util.path import posix_path
 logger = get_application_logger()
 
 
+def with_login(func):
+    @wraps(func)
+    def maybe_login(*args, **kwargs):
+        mtggoldfish = args[0]
+        if not mtggoldfish.logged:
+            mtggoldfish.login()
+            mtggoldfish.logged = True
+        return func(*args, **kwargs)
+
+    return maybe_login
+
+
 class MTGGoldfish:
     def __init__(
         self,
@@ -38,9 +51,9 @@ class MTGGoldfish:
         self.endpoint = endpoint
         self.dropbox = dropbox
         self.session = session()
-        self._login()
+        self.logged = False
 
-    def _login(self):
+    def login(self):
         logger.info(f"Logging to MTGGoldfish as {self.email}...")
         payload = {
             "action": "login",
@@ -64,6 +77,7 @@ class MTGGoldfish:
         )
         logger.info(f"Logged to MTGGoldfish as {self.email}.")
 
+    @with_login
     def create_deck(self, name, description, playable_deck, format="pauper"):
         logger.info(f"Creating deck {name} for {self.email}...")
         headers = {
@@ -102,6 +116,7 @@ class MTGGoldfish:
         logger.info(f"Created deck {name} for {self.email}. Id: {deck_id}")
         return deck_id
 
+    @with_login
     def list_decks(
         self, filter_name="", format_="pauper", visibility="public"
     ):
@@ -138,6 +153,7 @@ class MTGGoldfish:
         logger.warning(f"Final number of decks: {len(all_decks)}")
         return sorted(all_decks, key=lambda d: d.name)
 
+    @with_login
     def _list_decks_in_page(
         self, page, filter_name="", format_="pauper", visibility="public"
     ):
@@ -187,6 +203,7 @@ class MTGGoldfish:
         logger.info(f"Listed decks for {self.email}.")
         return decks
 
+    @with_login
     def delete_deck(self, deck_id):
         logger.info(f"Deleting deck with id {deck_id} for {self.email}...")
         header = {
@@ -210,8 +227,8 @@ class MTGGoldfish:
             )
         logger.info(f"Deleted deck with id {deck_id} for {self.email}.")
 
+    @staticmethod
     def to_playable_deck(
-        self,
         listed_mtggoldfish_deck,
         decks_cache_dir=MTGGOLDFISH_DECKS_CACHE_DIR,
         use_cache=True,
