@@ -1,3 +1,0 @@
-include README.md requirements/requirements*.txt tox.ini VERSION
-include tests/*
-include resources/*

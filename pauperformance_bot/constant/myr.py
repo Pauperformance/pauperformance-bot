@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from pauperformance_bot.util.path import posix_path
@@ -7,6 +8,14 @@ PAUPERFORMANCE_BOT_DIR = posix_path(
     Path.home().as_posix(), ".pauperformance"
 )  # for user data
 SECRETS_UNTRACKED_FILE = "pauperformance_bot.secrets.py"
+
+# Myr cache
+CACHE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "cache")
+DECKSTATS_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "deckstats_decks")
+MTGGOLDFISH_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "mtggoldfish_decks")
+SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
+PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(CACHE_DIR, "pauper_cards_index.pkl")
+
 # TOP_PATH must resolve to the top directory (i.e. the cloned repo),
 # for example:
 # /home/you/pauperformance-bot
@@ -19,18 +28,14 @@ DEFAULT_DATE_FORMAT = "%Y-%m-%d, %H:%M:%S"  # allows chronological sorting
 USA_DATE_FORMAT = "%Y-%m-%d"
 
 # resources/
-# | cache/
 # | config/
 # | templates/
 # | last_set_index.pkl
-RESOURCES_DIR = posix_path(TOP_PATH.as_posix(), "resources")
-
-CACHE_DIR = posix_path(RESOURCES_DIR, "cache")
-DECKSTATS_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "deckstats_decks")
-MTGGOLDFISH_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "mtggoldfish_decks")
-SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
-PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(CACHE_DIR, "pauper_cards_index.pkl")
-
+RESOURCES_DIR = os.getenv('VIRTUAL_ENV', None)  # check if running in venv
+if RESOURCES_DIR:
+    RESOURCES_DIR = posix_path(RESOURCES_DIR, "resources")
+else:
+    RESOURCES_DIR = posix_path(TOP_PATH.as_posix(), "resources")
 CONFIG_DIR = posix_path(RESOURCES_DIR, "config")
 CONFIG_ARCHETYPES_DIR = posix_path(CONFIG_DIR, "archetypes")
 CONFIG_FAMILIES_DIR = posix_path(CONFIG_DIR, "families")
