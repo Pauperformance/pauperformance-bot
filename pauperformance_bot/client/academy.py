@@ -6,6 +6,7 @@ from pauperformance_bot.constant.academy import (
     ARCHETYPES_DIR,
     ARCHETYPES_DIR_RELATIVE_URL,
     ARCHETYPES_INDEX_OUTPUT_FILE,
+    DEV_OUTPUT_FILE,
     FAMILIES_DIR,
     FAMILIES_DIR_RELATIVE_URL,
     PAUPER_POOL_OUTPUT_FILE,
@@ -18,6 +19,7 @@ from pauperformance_bot.constant.myr import (
     ARCHETYPES_INDEX_TEMPLATE_FILE,
     CONFIG_ARCHETYPES_DIR,
     CONFIG_FAMILIES_DIR,
+    DEV_TEMPLATE_FILE,
     FAMILY_TEMPLATE_FILE,
     PAUPER_POOL_TEMPLATE_FILE,
     SET_INDEX_TEMPLATE_FILE,
@@ -49,6 +51,7 @@ class Academy:
         self.update_pauper_pool()
         self.update_archetypes()
         self.update_families()
+        self.update_dev()
 
     def update_archetypes_index(
         self,
@@ -82,7 +85,6 @@ class Academy:
             archetypes_index_output_file,
             {
                 "archetypes": archetypes,
-                "last_update_date": pretty_str(now()),
                 "archetypes_dir": archetypes_dir,
                 "families_dir": families_dir,
             },
@@ -108,11 +110,34 @@ class Academy:
             set_index_output_file,
             {
                 "index": bolded_set_index,
-                "last_update_date": pretty_str(now()),
                 "pauper_pool_page": PAUPER_POOL_PAGE_NAME.as_html(),
             },
         )
         logger.info(f"Rendered set index to {set_index_output_file}.")
+
+    def update_pauper_pool(
+        self,
+        templates_pages_dir=TEMPLATES_PAGES_DIR,
+        pauper_pool_template_file=PAUPER_POOL_TEMPLATE_FILE,
+        pauper_pool_output_file=PAUPER_POOL_OUTPUT_FILE,
+    ):
+        logger.info(
+            f"Rendering pauper pool in {templates_pages_dir} from "
+            f"{pauper_pool_template_file}..."
+        )
+        card_index = self.pauperformance.incremental_card_index
+        render_template(
+            templates_pages_dir,
+            pauper_pool_template_file,
+            pauper_pool_output_file,
+            {
+                "tot_cards_number": sum(len(i) for i in card_index.values()),
+                "set_index": list(self.set_index.values()),
+                "card_index": card_index,
+                "set_index_page": SET_INDEX_PAGE_NAME.as_html(),
+            },
+        )
+        logger.info(f"Rendered pauper pool to {pauper_pool_template_file}.")
 
     def update_archetypes(
         self,
@@ -232,30 +257,25 @@ class Academy:
             )
         logger.info("Generated family.")
 
-    def update_pauper_pool(
+    def update_dev(
         self,
         templates_pages_dir=TEMPLATES_PAGES_DIR,
-        pauper_pool_template_file=PAUPER_POOL_TEMPLATE_FILE,
-        pauper_pool_output_file=PAUPER_POOL_OUTPUT_FILE,
+        dev_template_file=DEV_TEMPLATE_FILE,
+        dev_output_file=DEV_OUTPUT_FILE,
     ):
         logger.info(
-            f"Rendering pauper pool in {templates_pages_dir} from "
-            f"{pauper_pool_template_file}..."
+            f"Rendering dev in {templates_pages_dir} from "
+            f"{dev_template_file}..."
         )
-        card_index = self.pauperformance.incremental_card_index
         render_template(
             templates_pages_dir,
-            pauper_pool_template_file,
-            pauper_pool_output_file,
+            dev_template_file,
+            dev_output_file,
             {
-                "tot_cards_number": sum(len(i) for i in card_index.values()),
-                "set_index": list(self.set_index.values()),
-                "card_index": card_index,
                 "last_update_date": pretty_str(now()),
-                "set_index_page": SET_INDEX_PAGE_NAME.as_html(),
             },
         )
-        logger.info(f"Rendered pauper pool to {pauper_pool_template_file}.")
+        logger.info(f"Rendered set index to {dev_output_file}.")
 
     def _get_rendered_card_info(self, cards):
         rendered_cards = []
