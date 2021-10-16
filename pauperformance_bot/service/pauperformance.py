@@ -19,9 +19,7 @@ from pauperformance_bot.constant.players import (
     PAUPERFORMANCE_PLAYER,
     PAUPERFORMANCE_PLAYERS,
 )
-from pauperformance_bot.service.deckstats import Deckstats
-from pauperformance_bot.service.dropbox_ import Dropbox
-from pauperformance_bot.service.mtggoldfish import MTGGoldfish
+from pauperformance_bot.service.mtg.deckstats import Deckstats
 from pauperformance_bot.service.myr import Myr
 from pauperformance_bot.service.scryfall import Scryfall
 from pauperformance_bot.util.log import get_application_logger
@@ -33,15 +31,15 @@ logger = get_application_logger()
 class Pauperformance:
     def __init__(
         self,
+        storage,
+        mtggoldfish,
         scryfall=Scryfall(),
-        mtggoldfish=MTGGoldfish(),
-        dropbox=Dropbox(),
         myr=Myr(),
         players=PAUPERFORMANCE_PLAYERS,
     ):
-        self.scryfall = scryfall
+        self.storage = storage
         self.mtggoldfish = mtggoldfish
-        self.dropbox = dropbox
+        self.scryfall = scryfall
         self.myr = myr
         self.players = players
         self.set_index = self._build_set_index()
@@ -222,7 +220,7 @@ class Pauperformance:
         logger.info(f"Updating MTGGoldfish decks for {player.name}...")
         deckstats = Deckstats(owner_id=player.deckstats_id)
         imported_deckstats_deck = (
-            self.dropbox.get_imported_deckstats_deck_ids()
+            self.storage.list_imported_deckstats_deck_ids()
         )
         players_by_deckstats_id = {
             int(p.deckstats_id): p for p in self.players
@@ -241,7 +239,7 @@ class Pauperformance:
             if str(deckstats_deck.saved_id) in imported_deckstats_deck:
                 logger.debug(
                     f"Deck {deckstats_deck.saved_id} already stored on "
-                    f"Dropbox (and MTGGoldfish). Skipping it."
+                    f"Storage (and MTGGoldfish). Skipping it."
                 )
                 continue
             logger.info(
@@ -277,15 +275,15 @@ class Pauperformance:
             mtggoldfish_deck_id = self.mtggoldfish.create_deck(
                 deck_name, description, playable_deck
             )
-            dropbox_key = self.dropbox.get_imported_deckstats_deck_key(
+            storage_key = self.storage.get_imported_deckstats_deck_key(
                 deckstats_deck.saved_id,
                 mtggoldfish_deck_id,
                 deck_name,
             )
             logger.info(
-                f"Archiving information in Dropbox in file {dropbox_key}..."
+                f"Archiving information on storage in file {storage_key}..."
             )
-            self.dropbox.create_file(f"{dropbox_key}", str(playable_deck))
+            self.storage.create_file(f"{storage_key}", str(playable_deck))
             logger.info("Informing player on Telegram...")
             self.myr.send_message(
                 player,
@@ -318,14 +316,3 @@ class Pauperformance:
         return self.get_set_index_by_date(
             datetime.today().strftime(USA_DATE_FORMAT)
         )
-
-
-if __name__ == "__main__":
-    p12e = Pauperformance()
-    # p12e.import_mtggoldfish_player_decks(SHIKA93_PLAYER)
-    # p12e.import_mtggoldfish_decks()
-    for c in p12e.scryfall.get_banned_cards():
-        print()
-    # banned_cards_names = []
-    # p12e.get_current_set_index()
-    # p12e.import_mtggoldfish_decks()
