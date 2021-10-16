@@ -72,8 +72,8 @@ $ pip install .[dev]   # dev
 ```
 You can verify `pauperformance-bot` is working by running:
 ```
-$ python3 -c "import pauperformance_bot; print(pauperformance_bot.version)"
-0.0.1
+$ myr test hello
+Myr ready to serve you, Milord!
 ```
 
 ### Testing
