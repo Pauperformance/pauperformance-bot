@@ -4,3 +4,4 @@ pyquery
 python-telegram-bot
 requests
 retrying
+argcomplete

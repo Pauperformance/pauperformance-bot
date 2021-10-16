@@ -1,3 +1,5 @@
+import argcomplete
+
 from pauperformance_bot.cli.builder.hookable_parser import HookableParser
 from pauperformance_bot.cli.builder.runnable import CLIRunnable
 from pauperformance_bot.cli.builder.utils import (
@@ -21,6 +23,7 @@ class CLIGroup(CLIRunnable):
             parents=[get_default_parent_parser()],
         )
         self.add_parser_argument(parser)
+        argcomplete.autocomplete(parser)
         return parser
 
     def dispatch_cmd(self, command, *args, **kwargs):
