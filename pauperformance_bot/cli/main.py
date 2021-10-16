@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
+from pauperformance_bot.cli.builder.hookable_parser import HookableParser
+from pauperformance_bot.cli.builder.runnable import CLIRunnable
 from pauperformance_bot.cli.builder.utils import (
     add_default_options,
     handle_default_cli_options,
 )
-from pauperformance_bot.cli.builder.runnable import CLIRunnable
-from pauperformance_bot.cli.builder.hookable_parser import HookableParser
+from pauperformance_bot.cli.group.academy.academy import AcademyGroup
+from pauperformance_bot.cli.group.test.test import TestGroup
 from pauperformance_bot.constant.myr import APPLICATION_NAME
-from pauperformance_bot.cli.group import test_group, academy_group
 
 
 class MyrCLI(CLIRunnable):
 
     _cli_tools = [
-        academy_group.AcademyGroup(),
-        test_group.TestGroup(),
+        AcademyGroup(),
+        TestGroup(),
     ]
 
     def __init__(self):
