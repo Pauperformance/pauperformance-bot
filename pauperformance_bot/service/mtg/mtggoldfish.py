@@ -19,7 +19,6 @@ from pauperformance_bot.entity.deck.mtggoldfish import ListedMTGGoldfishDeck
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.entity.played_cards import PlayedCard
 from pauperformance_bot.exceptions import MTGGoldfishException
-from pauperformance_bot.service.dropbox_ import Dropbox
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 
@@ -29,7 +28,7 @@ logger = get_application_logger()
 def with_login(func):
     @wraps(func)
     def maybe_login(*args, **kwargs):
-        mtggoldfish = args[0]
+        mtggoldfish = args[0]  # "self" is the 1st argument of method calls
         if not mtggoldfish.logged:
             mtggoldfish.login()
             mtggoldfish.logged = True
@@ -41,15 +40,15 @@ def with_login(func):
 class MTGGoldfish:
     def __init__(
         self,
+        storage,  # TODO: remove with list_decks() workaround ASAP
         email=MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
         password=MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
         endpoint=API_ENDPOINT,
-        dropbox=Dropbox(),  # TODO: remove with list_decks() workaround ASAP
     ):
+        self.storage = storage
         self.email = email
         self.password = password
         self.endpoint = endpoint
-        self.dropbox = dropbox
         self.session = session()
         self.logged = False
 
@@ -141,10 +140,10 @@ class MTGGoldfish:
         logger.warning(f"Initial number of decks: {len(all_decks)}")
         all_decks = list(set(all_decks))
         logger.warning(f"Without duplicates: {len(all_decks)}")
-        # then, grab one-by-one all the missing decks from dropbox
-        dropbox_decks = self.dropbox.get_imported_deckstats_deck_names()
+        # then, grab one-by-one all the missing decks from storage
+        storage_decks = self.storage.list_imported_deckstats_deck_names()
         mtggoldfish_decks = {d.name for d in all_decks}
-        for missing_deck in dropbox_decks - mtggoldfish_decks:
+        for missing_deck in storage_decks - mtggoldfish_decks:
             logger.warning(f"Found missing deck: {missing_deck}")
             missing_deck = self._list_decks_in_page(1, missing_deck)
             if len(missing_deck) != 1:
@@ -157,6 +156,7 @@ class MTGGoldfish:
     def _list_decks_in_page(
         self, page, filter_name="", format_="pauper", visibility="public"
     ):
+        # possible filter_visibility values: '', 'private', 'public'
         logger.info(f"Listing decks for {self.email} in page {page}...")
         headers = {
             "accept": "text/html,application/xhtml+xml,application/xml;"
@@ -168,7 +168,6 @@ class MTGGoldfish:
         params = {
             "filter_name": filter_name,
             "filter_format": format_,
-            # possible filter_visibility values: '', 'private', 'public'
             "filter_visibility": visibility,
             "commit": "Filter",
         }
@@ -268,31 +267,3 @@ class MTGGoldfish:
             [PlayedCard(*(line.split(" ", maxsplit=1))) for line in maindeck],
             [PlayedCard(*(line.split(" ", maxsplit=1))) for line in sideboard],
         )
-
-
-def main():
-    # mtggoldfish = MTGGoldfish(MTGGOLDFISH_SHIKA93_USERNAME,
-    # MTGGOLDFISH_SHIKA93_PASSWORD)
-    mtggoldfish = MTGGoldfish()
-    # all_decks = mtggoldfish.list_decks()
-    # for d in all_decks:
-    #     if "Affinity 676.002.MrEvilEye" in d.name:
-    #         print("Found")
-    all_decks = mtggoldfish.list_decks(
-        filter_name="Affinity 676.002.MrEvilEye"
-    )
-    print(all_decks)
-    # for d in all_decks:
-    # mtggoldfish.delete_deck(d[-1])
-    # main = [PlayedCard(4, "Island"), PlayedCard(4, "Swamp")]
-    # sideboard = [PlayedCard(4, "Plains"), PlayedCard(4, "Forest")]
-    # deck = PlayableDeck(main, sideboard)
-    # deck_id = mtggoldfish.create_deck(
-    # 'TEST API', 'My fucking description', deck, '15 Island')
-    # mtggoldfish.list_decks()
-    # mtggoldfish.delete_deck(deck_id)
-    # mtggoldfish.list_decks()
-
-
-if __name__ == "__main__":
-    main()

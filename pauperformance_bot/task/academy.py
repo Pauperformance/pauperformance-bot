@@ -1,9 +1,13 @@
 from pauperformance_bot.service.academy import Academy
+from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
 from pauperformance_bot.service.pauperformance import Pauperformance
+from pauperformance_bot.service.storage.local import Local
 
 
 def academy_update():
-    pauperformance = Pauperformance()
+    storage = Local()
+    mtggoldfish = MTGGoldfish(storage)
+    pauperformance = Pauperformance(storage, mtggoldfish)
     academy = Academy(pauperformance)
     # academy.update_archetypes_index()
     # academy.update_families()
