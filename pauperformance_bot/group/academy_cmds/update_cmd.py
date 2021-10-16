@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from pauperformance_bot.cli.cli_command import CLICommand
+from pauperformance_bot.cli.builder.cli_command import CLICommand
 from pauperformance_bot.constant.cli import (
     ACADEMY_CLI_GROUP,
     UPDATE_ACADEMY_CMD,
