@@ -1,3 +1,3 @@
-from pauperformance_bot.cli import main
+from pauperformance_bot.cli.main import main
 
 main()

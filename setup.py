@@ -51,7 +51,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'myr = pauperformance_bot.cli:main',
+            'myr = pauperformance_bot.cli.main:main',
         ],
     },
     classifiers=[
