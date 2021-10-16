@@ -4,11 +4,6 @@ from datetime import datetime
 from pathlib import Path
 from time import sleep
 
-from pauperformance_bot.service.deckstats import Deckstats
-from pauperformance_bot.service.dropbox_ import Dropbox
-from pauperformance_bot.service.mtggoldfish import MTGGoldfish
-from pauperformance_bot.service.myr import Myr
-from pauperformance_bot.service.scryfall import Scryfall
 from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.constant.myr import (
     CONFIG_ARCHETYPES_DIR,
@@ -24,6 +19,11 @@ from pauperformance_bot.constant.players import (
     PAUPERFORMANCE_PLAYER,
     PAUPERFORMANCE_PLAYERS,
 )
+from pauperformance_bot.service.deckstats import Deckstats
+from pauperformance_bot.service.dropbox_ import Dropbox
+from pauperformance_bot.service.mtggoldfish import MTGGoldfish
+from pauperformance_bot.service.myr import Myr
+from pauperformance_bot.service.scryfall import Scryfall
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import pretty_str
 

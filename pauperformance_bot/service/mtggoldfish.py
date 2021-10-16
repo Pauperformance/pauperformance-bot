@@ -6,7 +6,6 @@ from urllib.request import urlopen
 from pyquery import PyQuery
 from requests import session
 
-from pauperformance_bot.service.dropbox_ import Dropbox
 from pauperformance_bot.constant.mtggoldfish import API_ENDPOINT
 from pauperformance_bot.constant.myr import (
     MTGGOLDFISH_DECKS_CACHE_DIR,
@@ -20,6 +19,7 @@ from pauperformance_bot.entity.deck.mtggoldfish import ListedMTGGoldfishDeck
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.entity.played_cards import PlayedCard
 from pauperformance_bot.exceptions import MTGGoldfishException
+from pauperformance_bot.service.dropbox_ import Dropbox
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 
