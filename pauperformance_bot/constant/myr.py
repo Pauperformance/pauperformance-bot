@@ -31,7 +31,7 @@ USA_DATE_FORMAT = "%Y-%m-%d"
 # | config/
 # | templates/
 # | last_set_index.pkl
-RESOURCES_DIR = os.getenv('VIRTUAL_ENV', None)  # check if running in venv
+RESOURCES_DIR = os.getenv("VIRTUAL_ENV", None)  # check if running in venv
 if RESOURCES_DIR:
     RESOURCES_DIR = posix_path(RESOURCES_DIR, "resources")
 else:
