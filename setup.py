@@ -49,6 +49,11 @@ setup(
     package_data={
         "": ["*.yaml", "*.repo"]
     },
+    entry_points={
+        'console_scripts': [
+            'myr = pauperformance_bot.cli:main',
+        ],
+    },
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
