@@ -1,7 +1,7 @@
 import argparse
 import logging
 
-from pauperformance_bot.cli.builder.cli_options import QuietCLIOption, VerboseCLIOption
+from pauperformance_bot.cli.builder.options import QuietCLIOption, VerboseCLIOption
 from pauperformance_bot.cli.builder.hookable_parser import HookableParser
 from pauperformance_bot.constant.cli import GROUP_CLI_DEST_ID
 from pauperformance_bot.util.log import get_application_logger

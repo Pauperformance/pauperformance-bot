@@ -2,7 +2,7 @@ from pauperformance_bot.cli.builder.utils import (
     get_default_parent_parser,
     handle_default_cli_options,
 )
-from pauperformance_bot.cli.builder.cli_runnable import CLIRunnable
+from pauperformance_bot.cli.builder.runnable import CLIRunnable
 from pauperformance_bot.cli.builder.hookable_parser import HookableParser
 
 
