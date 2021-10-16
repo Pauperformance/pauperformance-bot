@@ -1,5 +1,5 @@
-from pauperformance_bot.client.academy import Academy
-from pauperformance_bot.client.pauperformance import Pauperformance
+from pauperformance_bot.service.academy import Academy
+from pauperformance_bot.service.pauperformance import Pauperformance
 
 
 def academy_update():

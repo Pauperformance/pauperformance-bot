@@ -6,7 +6,7 @@ from urllib.request import urlopen
 from pyquery import PyQuery
 from requests import session
 
-from pauperformance_bot.client.dropbox_ import Dropbox
+from pauperformance_bot.service.dropbox_ import Dropbox
 from pauperformance_bot.constant.mtggoldfish import API_ENDPOINT
 from pauperformance_bot.constant.myr import (
     MTGGOLDFISH_DECKS_CACHE_DIR,
