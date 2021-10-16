@@ -84,25 +84,28 @@ Tests are executed with [tox](https://tox.wiki/):
 $ tox
 ```
 ---
+
 ## Building tools
 
-* [Tool/library/platform](link) - Reason it has been used for
-* [Tool/library/platform](link) - Reason it has been used for
-* ...
+* [Python](https://www.python.org/) - Programming language
+* [GitHub Pages](https://pages.github.com/) - Web host
+* [Jinja](https://jinja.palletsprojects.com/) - Templating engine
+* [Dropbox](https://www.dropbox.com/) - Storage service
+* [Telegram](https://telegram.org/) - Bot
+* [pyquery](https://github.com/gawel/pyquery/) - Web pages parser
 
 ---
 ## Contributing
 
-Any contribution is welcome. Please read [CONTRIBUTING.md](link) for 
-details on how to submit pull requests.
+Any contribution is welcome.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to submit pull requests.
 
 ---
 ## License
 
-This project is licensed under the X license.
+This project is licensed under the GNU General Public License v3 (GPLv3) license.
 Please refer to the [LICENSE.md](LICENSE.md) file for details.
 
 ---
-*This README.md complies with [this project template](
-https://github.com/ShadowTemplate/project-template). Feel free to adopt it
-and reuse it.*
+*This README.md complies with [this project template](https://github.com/ShadowTemplate/project-template).
+Feel free to adopt it and reuse it.*

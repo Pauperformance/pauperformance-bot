@@ -1,5 +1,5 @@
 dropbox
-jinja2
+jinja2<3
 pyquery
 python-telegram-bot
 requests
