@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from pauperformance_bot.cli.builder.cli_group import CLIGroup
+from pauperformance_bot.cli.builder.group import CLIGroup
 from pauperformance_bot.constant.cli import TEST_CLI_GROUP
-from pauperformance_bot.group.test_cmds.hello_cmd import Hello
+from pauperformance_bot.cli.group.test_cmds.hello_cmd import Hello
 
 
 class TestGroup(CLIGroup):

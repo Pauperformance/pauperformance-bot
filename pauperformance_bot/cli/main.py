@@ -3,10 +3,10 @@ from pauperformance_bot.cli.builder.utils import (
     add_default_options,
     handle_default_cli_options,
 )
-from pauperformance_bot.cli.builder.cli_runnable import CLIRunnable
+from pauperformance_bot.cli.builder.runnable import CLIRunnable
 from pauperformance_bot.cli.builder.hookable_parser import HookableParser
 from pauperformance_bot.constant.myr import APPLICATION_NAME
-from pauperformance_bot.group import academy_group, test_group
+from pauperformance_bot.cli.group import test_group, academy_group
 
 
 class MyrCLI(CLIRunnable):

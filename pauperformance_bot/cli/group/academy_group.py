@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from pauperformance_bot.cli.builder.cli_group import CLIGroup
+from pauperformance_bot.cli.builder.group import CLIGroup
 from pauperformance_bot.constant.cli import ACADEMY_CLI_GROUP
-from pauperformance_bot.group.academy_cmds.update_cmd import Update
+from pauperformance_bot.cli.group.academy_cmds.update_cmd import Update
 
 
 class AcademyGroup(CLIGroup):
