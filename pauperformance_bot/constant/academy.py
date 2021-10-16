@@ -14,13 +14,15 @@ FAMILIES_DIR = posix_path(ACADEMY_PATH, "families")
 PAGES_DIR = posix_path(ACADEMY_PATH, "pages")
 RESOURCES_DIR = posix_path(ACADEMY_PATH, "resources")
 
-PAUPER_POOL_PAGE_NAME = WebPage("pauper_pool")
-PAUPER_POOL_OUTPUT_FILE = posix_path(
-    PAGES_DIR, PAUPER_POOL_PAGE_NAME.as_markdown()
-)
 ARCHETYPES_INDEX_PAGE_NAME = WebPage("archetypes_index")
 ARCHETYPES_INDEX_OUTPUT_FILE = posix_path(
     PAGES_DIR, ARCHETYPES_INDEX_PAGE_NAME.as_markdown()
+)
+DEV_PAGE_NAME = WebPage("dev")
+DEV_OUTPUT_FILE = posix_path(PAGES_DIR, DEV_PAGE_NAME.as_markdown())
+PAUPER_POOL_PAGE_NAME = WebPage("pauper_pool")
+PAUPER_POOL_OUTPUT_FILE = posix_path(
+    PAGES_DIR, PAUPER_POOL_PAGE_NAME.as_markdown()
 )
 SET_INDEX_PAGE_NAME = WebPage("set_index")
 SET_INDEX_OUTPUT_FILE = posix_path(

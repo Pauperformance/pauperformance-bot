@@ -13,6 +13,3 @@ Every archetype in the list is linked to its dedicated page, where you will find
 [{{ archetype.name -}}](../{{ archetypes_dir }}/{{ to_url_encoded(archetype.name) }}.html) | {{ archetype.mana | map('to_archetype_page_mana') | join(' ') }} | {{ "%-15s" % archetype.type }} | [{{ "%-12s" % archetype.family }}](../{{ families_dir }}/{{ to_url_encoded(archetype.family) }}.html) |
 {% endfor %}
 
-
-*Last updated: {{ last_update_date }}.*
-
