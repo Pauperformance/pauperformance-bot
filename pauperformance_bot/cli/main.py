@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# PYTHON_ARGCOMPLETE_OK
+import argcomplete
+
 from pauperformance_bot.cli.builder.hookable_parser import HookableParser
 from pauperformance_bot.cli.builder.runnable import CLIRunnable
 from pauperformance_bot.cli.builder.utils import (
@@ -40,6 +43,7 @@ class MyrCLI(CLIRunnable):
             )
             tool.add_parser_argument(sub_parser)
             parser.add_hooks(sub_parser.hooks)
+        argcomplete.autocomplete(parser)
         return parser
 
     def dispatch_cmd(self, tool, *args, **kwargs):
