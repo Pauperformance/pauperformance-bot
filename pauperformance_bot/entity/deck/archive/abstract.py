@@ -1,25 +1,22 @@
-from pauperformance_bot.constant.mtggoldfish import (
-    DECK_API_ENDPOINT,
-    DECK_DOWNLOAD_API_ENDPOINT,
-)
+from abc import ABCMeta, abstractmethod
+
+from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import pretty_str
 
+logger = get_application_logger()
 
-class ListedMTGGoldfishDeck:
+
+class Archive(metaclass=ABCMeta):
     def __init__(
         self,
         name,
-        format_,
         creation_date,
-        visibility,
         deck_id,
     ):
-        # On MTGGoldfish the format of the name is:
+        # The format of the name in the Archive is:
         # Archetype name p12e_code.revision.player | Name of the set (set_code)
         self.name = name
-        self.format_ = format_
         self.creation_date = creation_date
-        self.visibility = visibility
         self.deck_id = deck_id
 
     @property
@@ -45,40 +42,14 @@ class ListedMTGGoldfishDeck:
         return archetype_and_p12e_code.rsplit(" ", maxsplit=1)[1]
 
     @property
-    def url(self):
-        return f"{DECK_API_ENDPOINT}/{self.deck_id}"
-
-    @property
-    def download_txt_url(self):
-        return f"{DECK_DOWNLOAD_API_ENDPOINT}/{self.deck_id}"
-
-    @property
-    def download_tabletop_url(self):
-        return (
-            f"{DECK_DOWNLOAD_API_ENDPOINT}/{self.deck_id}"
-            f"?output=mtggoldfish&amp;type=tabletop"
-        )
-
-    @property
-    def download_arena_url(self):
-        return (
-            f"{DECK_DOWNLOAD_API_ENDPOINT}/{self.deck_id}"
-            f"?output=mtggoldfish&amp;type=arena"
-        )
-
-    @property
-    def download_mtgo_url(self):
-        return (
-            f"{DECK_DOWNLOAD_API_ENDPOINT}/{self.deck_id}"
-            f"?output=mtggoldfish&amp;type=online"
-        )
+    @abstractmethod
+    def url(self):  # TODO: rename to URI
+        pass
 
     def __str__(self):
         return (
             f"name: {self.name}; "
-            f"format: {self.format_}; "
             f"creation_date: {pretty_str(self.creation_date)}; "
-            f"visibility: {self.visibility}; "
             f"deck_id: {self.deck_id}; "
             f"url: {self.url}"
         )

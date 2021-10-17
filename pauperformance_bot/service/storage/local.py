@@ -7,7 +7,7 @@ from pauperformance_bot.entity.played_cards import PlayedCard
 from pauperformance_bot.service.storage.abstract import Storage
 from pauperformance_bot.util.log import get_application_logger
 
-log = get_application_logger()
+logger = get_application_logger()
 
 
 class Local(Storage):
@@ -26,10 +26,10 @@ class Local(Storage):
         return [join(path, f) for f in listdir(path) if isfile(join(path, f))]
 
     def create_file(self, name, content=""):
-        log.info(f"Storing file {name}...")
+        logger.info(f"Storing file {name}...")
         with open(name, "w", encoding="utf-8") as out_f:
             out_f.write(content)
-        log.info(f"Stored file {name}.")
+        logger.info(f"Stored file {name}.")
 
     def list_imported_deckstats_deck_ids(self):
         return set(
@@ -51,6 +51,7 @@ if __name__ == "__main__":
         "4351760",
         "Aristocrats 676.001.MrEvilEye | Modern Horizons 2 (mh2)",
     )
+    print(key)
     main = [PlayedCard(4, "Island"), PlayedCard(4, "Swamp")]
     sideboard = [PlayedCard(4, "Plains"), PlayedCard(4, "Forest")]
     deck = PlayableDeck(main, sideboard)

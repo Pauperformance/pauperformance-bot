@@ -1,5 +1,11 @@
 from abc import ABCMeta, abstractmethod
 
+from pauperformance_bot.constant.myr import (
+    STORAGE_DECKS_SUBDIR,
+    STORAGE_DECKSTATS_DECKS_SUBDIR,
+    STORAGE_MTGGOLDFISH_DECKS_SUBDIR,
+)
+
 
 class Storage(metaclass=ABCMeta):
     @property
@@ -13,16 +19,20 @@ class Storage(metaclass=ABCMeta):
         pass
 
     @property
-    def decks_path(self):
-        return f"{self._root}{self._dir_separator}decks"
+    def decks_path(self, decks_subdir=STORAGE_DECKS_SUBDIR):
+        return f"{self._root}{self._dir_separator}{decks_subdir}"
 
     @property
-    def deckstats_deck_path(self):
-        return f"{self.decks_path}{self._dir_separator}deckstats"
+    def deckstats_deck_path(
+        self, deckstats_subdir=STORAGE_DECKSTATS_DECKS_SUBDIR
+    ):
+        return f"{self.decks_path}{self._dir_separator}{deckstats_subdir}"
 
     @property
-    def mtggoldfish_deck_path(self):
-        return f"{self.decks_path}{self._dir_separator}mtggoldfish"
+    def mtggoldfish_deck_path(
+        self, mtggoldfish_subdir=STORAGE_MTGGOLDFISH_DECKS_SUBDIR
+    ):
+        return f"{self.decks_path}{self._dir_separator}{mtggoldfish_subdir}"
 
     @abstractmethod
     def _list_files(self, path, cursor=None):

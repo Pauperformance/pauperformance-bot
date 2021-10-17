@@ -9,7 +9,7 @@ from pauperformance_bot.credentials import (
 from pauperformance_bot.service.storage.abstract import Storage
 from pauperformance_bot.util.log import get_application_logger
 
-log = get_application_logger()
+logger = get_application_logger()
 
 
 class Dropbox(Storage):
@@ -44,11 +44,11 @@ class Dropbox(Storage):
         return items + self._list_files(path, results.cursor)
 
     def create_file(self, name, content=""):
-        log.info(f"Storing file {name}...")
+        logger.info(f"Storing file {name}...")
         results = self._service.files_upload(
             content.encode("utf-8"), name, mute=True
         )
-        log.info(f"Stored file {name}: {results}")
+        logger.info(f"Stored file {name}: {results}")
 
     def list_imported_deckstats_deck_ids(self):
         return set(
