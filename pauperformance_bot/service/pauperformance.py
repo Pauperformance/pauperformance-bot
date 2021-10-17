@@ -16,8 +16,8 @@ from pauperformance_bot.constant.pauperformance import (
 )
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
-from pauperformance_bot.service.myr import MyrService
 from pauperformance_bot.service.scryfall import ScryfallService
+from pauperformance_bot.service.telegram import TelegramService
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
@@ -29,13 +29,13 @@ class PauperformanceService:
         storage,
         archive,
         scryfall=ScryfallService(),
-        myr=MyrService(),
+        telegram=TelegramService(),
         players=PAUPERFORMANCE_PLAYERS,
     ):
         self.storage = storage
         self.archive = archive
         self.scryfall = scryfall
-        self.myr = myr
+        self.telegram = telegram
         self.players = players
         self.set_index = self._build_set_index()
         self.card_index = self._build_card_index()
@@ -213,7 +213,7 @@ class PauperformanceService:
                 self.storage,
                 players_by_deckstats_id,
                 self.set_index,
-                self.myr,
+                self.telegram,
                 send_notification=send_notification,
             )
         logger.info("Updated Archive decks for all users.")

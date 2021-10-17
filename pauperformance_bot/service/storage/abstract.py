@@ -3,7 +3,6 @@ from abc import ABCMeta, abstractmethod
 from pauperformance_bot.constant.myr import (
     STORAGE_DECKS_SUBDIR,
     STORAGE_DECKSTATS_DECKS_SUBDIR,
-    STORAGE_MTGGOLDFISH_DECKS_SUBDIR,
 )
 
 
@@ -27,12 +26,6 @@ class AbstractStorageService(metaclass=ABCMeta):
         self, deckstats_subdir=STORAGE_DECKSTATS_DECKS_SUBDIR
     ):
         return f"{self.decks_path}{self._dir_separator}{deckstats_subdir}"
-
-    @property
-    def mtggoldfish_deck_path(
-        self, mtggoldfish_subdir=STORAGE_MTGGOLDFISH_DECKS_SUBDIR
-    ):
-        return f"{self.decks_path}{self._dir_separator}{mtggoldfish_subdir}"
 
     @abstractmethod
     def _list_files(self, path, cursor=None):

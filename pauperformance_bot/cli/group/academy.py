@@ -5,7 +5,7 @@ from pauperformance_bot.constant.cli import (
     ACADEMY_CLI_GROUP,
     UPDATE_ACADEMY_CMD,
 )
-from pauperformance_bot.service.mtg.archive.mtggoldfish import (
+from pauperformance_bot.service.archive.mtggoldfish import (
     MTGGoldfishArchiveService,
 )
 from pauperformance_bot.service.pauperformance import PauperformanceService

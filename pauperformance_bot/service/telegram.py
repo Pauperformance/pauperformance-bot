@@ -6,7 +6,7 @@ from pauperformance_bot.util.log import get_application_logger
 logger = get_application_logger()
 
 
-class MyrService:
+class TelegramService:
     def __init__(self, myr_api_token=TELEGRAM_MYR_API_TOKEN):
         self.telegram_bot = telegram.Bot(token=myr_api_token)
 

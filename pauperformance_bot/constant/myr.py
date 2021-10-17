@@ -20,7 +20,10 @@ PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(CACHE_DIR, "pauper_cards_index.pkl")
 STORAGE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "storage")
 STORAGE_DECKS_SUBDIR = "decks"
 STORAGE_DECKSTATS_DECKS_SUBDIR = "deckstats"
-STORAGE_MTGGOLDFISH_DECKS_SUBDIR = "mtggoldfish"
+
+# Local archive
+ARCHIVE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "archive")
+MTGGOLDFISH_ARCHIVE_SUBDIR = "mtggoldfish"
 
 # TOP_PATH must resolve to the top directory (i.e. the cloned repo),
 # for example:

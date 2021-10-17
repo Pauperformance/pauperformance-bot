@@ -25,9 +25,7 @@ from pauperformance_bot.entity.deck.playable import (
     parse_playable_deck_from_lines,
 )
 from pauperformance_bot.exceptions import MTGGoldfishException
-from pauperformance_bot.service.mtg.archive.abstract import (
-    AbstractArchiveService,
-)
+from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 
@@ -159,9 +157,9 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         # returned more than once or not returned at all.
 
         # first, let's remove duplicates
-        logger.warning(f"Initial number of decks: {len(all_decks)}")
+        logger.info(f"Initial number of decks: {len(all_decks)}")
         all_decks = list(set(all_decks))
-        logger.warning(f"Without duplicates: {len(all_decks)}")
+        logger.info(f"Without duplicates: {len(all_decks)}")
         # then, grab one-by-one all the missing decks from storage
         storage_decks = self.storage.list_imported_deckstats_deck_names()
         mtggoldfish_decks = {d.name for d in all_decks}
@@ -171,7 +169,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             if len(missing_deck) != 1:
                 raise ValueError(f"Unable to find missing deck {missing_deck}")
             all_decks += missing_deck
-        logger.warning(f"Final number of decks: {len(all_decks)}")
+        logger.info(f"Final number of decks: {len(all_decks)}")
         return sorted(all_decks, key=lambda d: d.name)
 
     @with_login
