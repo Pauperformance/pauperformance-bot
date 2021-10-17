@@ -4,7 +4,6 @@ from datetime import datetime
 from pathlib import Path
 from time import sleep
 
-from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.constant.myr import (
     CONFIG_ARCHETYPES_DIR,
     LAST_SET_INDEX_FILE,
@@ -15,33 +14,27 @@ from pauperformance_bot.constant.pauperformance import (
     INCREMENTAL_CARDS_INDEX_SKIP_SETS,
     KNOWN_SETS_WITH_NO_PAUPER_CARDS,
 )
-from pauperformance_bot.constant.players import (
-    PAUPERFORMANCE_PLAYER,
-    PAUPERFORMANCE_PLAYERS,
-)
-from pauperformance_bot.service.deckstats import Deckstats
-from pauperformance_bot.service.dropbox_ import Dropbox
-from pauperformance_bot.service.mtggoldfish import MTGGoldfish
-from pauperformance_bot.service.myr import Myr
-from pauperformance_bot.service.scryfall import Scryfall
+from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
+from pauperformance_bot.service.mtg.deckstats import DeckstatsService
+from pauperformance_bot.service.myr import MyrService
+from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.util.log import get_application_logger
-from pauperformance_bot.util.time import pretty_str
 
 logger = get_application_logger()
 
 
-class Pauperformance:
+class PauperformanceService:
     def __init__(
         self,
-        scryfall=Scryfall(),
-        mtggoldfish=MTGGoldfish(),
-        dropbox=Dropbox(),
-        myr=Myr(),
+        storage,
+        archive,
+        scryfall=ScryfallService(),
+        myr=MyrService(),
         players=PAUPERFORMANCE_PLAYERS,
     ):
+        self.storage = storage
+        self.archive = archive
         self.scryfall = scryfall
-        self.mtggoldfish = mtggoldfish
-        self.dropbox = dropbox
         self.myr = myr
         self.players = players
         self.set_index = self._build_set_index()
@@ -165,7 +158,7 @@ class Pauperformance:
         all_decks = []
         for player in self.players:
             logger.info(f"Processing player {player.name}...")
-            deckstats = Deckstats(owner_id=player.deckstats_id)
+            deckstats = DeckstatsService(owner_id=player.deckstats_id)
             player_decks = deckstats.list_pauperformance_decks(
                 player.deckstats_name
             )
@@ -181,10 +174,11 @@ class Pauperformance:
                 )
         return all_decks
 
-    def list_mtggoldfish_decks(self):
-        return self.mtggoldfish.list_decks()
+    def list_archived_decks(self):
+        return self.archive.list_decks()
 
-    def get_archetypes(self, config_pages_dir=CONFIG_ARCHETYPES_DIR):
+    @staticmethod
+    def get_archetypes(config_pages_dir=CONFIG_ARCHETYPES_DIR):
         return set(
             Path(a).name.replace(".ini", "")
             for a in glob.glob(f"{config_pages_dir}/*.ini")
@@ -198,7 +192,7 @@ class Pauperformance:
         all_cards = set()
         for deck in archetype_decks:
             print(deck)
-            playable_deck = self.mtggoldfish.to_playable_deck(deck)
+            playable_deck = self.storage.to_playable_deck(deck)
             cards = [c.card_name for c in playable_deck.mainboard]
             decks_cards[deck.deck_id] = cards
             all_cards.update(cards)
@@ -209,101 +203,21 @@ class Pauperformance:
         frequents = all_cards - staples - lands
         return list(staples), list(frequents)
 
-    def import_mtggoldfish_decks(self):
-        logger.info("Updating MTGGoldfish decks for all users...")
-        for player in self.players:
-            self.import_mtggoldfish_player_decks(player)
-        logger.info("Updated MTGGoldfish decks for all users.")
-
-    def import_mtggoldfish_player_decks(
-        self,
-        player,
-    ):
-        logger.info(f"Updating MTGGoldfish decks for {player.name}...")
-        deckstats = Deckstats(owner_id=player.deckstats_id)
-        imported_deckstats_deck = (
-            self.dropbox.get_imported_deckstats_deck_ids()
-        )
+    def import_decks_from_deckstats(self, send_notification=True):
+        logger.info("Updating Archive decks for all users...")
         players_by_deckstats_id = {
             int(p.deckstats_id): p for p in self.players
         }
-        for deckstats_deck in deckstats.list_pauperformance_decks(
-            player.deckstats_name
-        ):
-            logger.debug(
-                f"Processing deck '{deckstats_deck.name}' "
-                f"({deckstats_deck.saved_id}) "
-                f"from {deckstats_deck.owner_name}, "
-                f"uploaded by "
-                f"{players_by_deckstats_id[deckstats_deck.owner_id].name} "
-                f"({deckstats_deck.owner_id})..."
-            )
-            if str(deckstats_deck.saved_id) in imported_deckstats_deck:
-                logger.debug(
-                    f"Deck {deckstats_deck.saved_id} already stored on "
-                    f"Dropbox (and MTGGoldfish). Skipping it."
-                )
-                continue
-            logger.info(
-                f"Storing deck {deckstats_deck.saved_id} on MTGGoldfish..."
-            )
-            raw_deck = deckstats.get_deck(
-                deckstats_deck.saved_id, use_cache=False
-            )
-            playable_deck = deckstats.to_playable_deck(raw_deck)
-            if playable_deck.len_mainboard != 60:
-                logger.warning(
-                    f"Main deck has {playable_deck.len_mainboard} cards."
-                )
-            if playable_deck.len_sideboard != 15:
-                logger.warning(
-                    f"Sideboard has {playable_deck.len_sideboard} cards."
-                )
-            suspicious_list = (
-                playable_deck.len_mainboard != 60
-                or playable_deck.len_sideboard != 15
-            )
-            description = (
-                f"Source: {deckstats_deck.url}\n"
-                f"Creation date: {pretty_str(deckstats_deck.added)}"
-            )
-            if deckstats_deck.description:
-                description += f"\nDescription: {deckstats_deck.description}"
-            set_entry = self.set_index[int(deckstats_deck.p12e_code)]
-            deck_name = (
-                f"{deckstats_deck.name}.{deckstats_deck.owner_name} "
-                f"| {set_entry['name']} ({set_entry['scryfall_code']})"
-            )
-            mtggoldfish_deck_id = self.mtggoldfish.create_deck(
-                deck_name, description, playable_deck
-            )
-            dropbox_key = self.dropbox.get_imported_deckstats_deck_key(
-                deckstats_deck.saved_id,
-                mtggoldfish_deck_id,
-                deck_name,
-            )
-            logger.info(
-                f"Archiving information in Dropbox in file {dropbox_key}..."
-            )
-            self.dropbox.create_file(f"{dropbox_key}", str(playable_deck))
-            logger.info("Informing player on Telegram...")
-            self.myr.send_message(
+        for player in self.players:
+            self.archive.import_player_decks_from_deckstats(
                 player,
-                f"📌 Imported deck: {deck_name}.\n\n"
-                f"Source: {deckstats_deck.url}\n\n"
-                f"Destination: {DECK_API_ENDPOINT}/{mtggoldfish_deck_id}",
+                self.storage,
+                players_by_deckstats_id,
+                self.set_index,
+                self.myr,
+                send_notification=send_notification,
             )
-            if suspicious_list:
-                self.myr.send_message(
-                    PAUPERFORMANCE_PLAYER,
-                    f"⚠️ Archived deck with suspicious size "
-                    f"(main: {playable_deck.len_mainboard}, "
-                    f"sideboard: {playable_deck.len_sideboard})!\n\n"
-                    f"Imported deck: {deck_name}.\n\n"
-                    f"Source: {deckstats_deck.url}\n\n"
-                    f"Destination: {DECK_API_ENDPOINT}/{mtggoldfish_deck_id}",
-                )
-        logger.info(f"Updated MTGGoldfish decks for {player.name}.")
+        logger.info("Updated Archive decks for all users.")
 
     def get_set_index_by_date(self, usa_date):
         logger.debug(f"Getting set index for USA date {usa_date}")
@@ -318,14 +232,3 @@ class Pauperformance:
         return self.get_set_index_by_date(
             datetime.today().strftime(USA_DATE_FORMAT)
         )
-
-
-if __name__ == "__main__":
-    p12e = Pauperformance()
-    # p12e.import_mtggoldfish_player_decks(SHIKA93_PLAYER)
-    # p12e.import_mtggoldfish_decks()
-    for c in p12e.scryfall.get_banned_cards():
-        print()
-    # banned_cards_names = []
-    # p12e.get_current_set_index()
-    # p12e.import_mtggoldfish_decks()

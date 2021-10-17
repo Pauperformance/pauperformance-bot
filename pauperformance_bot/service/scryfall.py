@@ -14,7 +14,7 @@ from pauperformance_bot.util.request import execute_http_request
 logger = get_application_logger()
 
 
-class Scryfall:
+class ScryfallService:
     def __init__(self, endpoint=API_ENDPOINT):
         self.endpoint = endpoint
 

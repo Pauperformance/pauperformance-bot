@@ -5,13 +5,18 @@ from pauperformance_bot.constant.cli import (
     ACADEMY_CLI_GROUP,
     UPDATE_ACADEMY_CMD,
 )
+from pauperformance_bot.service.mtg.archive.mtggoldfish import (
+    MTGGoldfishArchiveService,
+)
+from pauperformance_bot.service.pauperformance import PauperformanceService
+from pauperformance_bot.service.storage.dropbox_ import DropboxService
 from pauperformance_bot.task.academy import academy_update
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger(ACADEMY_CLI_GROUP)
 
 
-class Update(CLICommand):
+class UpdateCommand(CLICommand):
     def __init__(self):
         super().__init__(
             UPDATE_ACADEMY_CMD,
@@ -21,12 +26,14 @@ class Update(CLICommand):
 
     def dispatch_cmd(self, *args, **kwargs):
         super().dispatch_cmd(*args, **kwargs)
-        academy_update()
+        storage = DropboxService()
+        mtggoldfish = MTGGoldfishArchiveService(storage)
+        academy_update(PauperformanceService(storage, mtggoldfish))
 
 
 class AcademyGroup(CLIGroup):
 
-    _cli_commands = [Update()]
+    _cli_commands = [UpdateCommand()]
 
     def __init__(self):
         super().__init__(ACADEMY_CLI_GROUP, self._cli_commands)

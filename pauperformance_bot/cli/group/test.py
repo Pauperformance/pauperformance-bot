@@ -7,7 +7,7 @@ from pauperformance_bot.util.log import get_application_logger
 logger = get_application_logger(TEST_CLI_GROUP)
 
 
-class Hello(CLICommand):
+class HelloCommand(CLICommand):
     def __init__(self):
         super().__init__(
             HELLO_TEST_CMD,
@@ -22,7 +22,7 @@ class Hello(CLICommand):
 
 class TestGroup(CLIGroup):
 
-    _cli_commands = [Hello()]
+    _cli_commands = [HelloCommand()]
 
     def __init__(self):
         super().__init__(TEST_CLI_GROUP, self._cli_commands)

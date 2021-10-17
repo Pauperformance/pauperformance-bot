@@ -1,13 +1,12 @@
 import telegram
 
-from pauperformance_bot.constant.players import SHIKA93_PLAYER
 from pauperformance_bot.credentials import TELEGRAM_MYR_API_TOKEN
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
 
 
-class Myr:
+class MyrService:
     def __init__(self, myr_api_token=TELEGRAM_MYR_API_TOKEN):
         self.telegram_bot = telegram.Bot(token=myr_api_token)
 
@@ -25,8 +24,3 @@ class Myr:
             disable_web_page_preview=disable_web_page_preview,
         )
         logger.debug(f"Sent message '{message}' to {player.name}.")
-
-
-if __name__ == "__main__":
-    myr = Myr()
-    myr.send_message(SHIKA93_PLAYER, "📌 Test.")

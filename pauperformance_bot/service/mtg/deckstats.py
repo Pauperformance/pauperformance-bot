@@ -22,7 +22,7 @@ from pauperformance_bot.util.request import execute_http_request
 logger = get_application_logger()
 
 
-class Deckstats:
+class DeckstatsService:
     def __init__(
         self,
         owner_id=PAUPERFORMANCE_PLAYER.deckstats_id,
