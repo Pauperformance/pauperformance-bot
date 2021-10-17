@@ -2,10 +2,12 @@ from pauperformance_bot.constant.mtggoldfish import (
     DECK_API_ENDPOINT,
     DECK_DOWNLOAD_API_ENDPOINT,
 )
-from pauperformance_bot.entity.deck.archive.abstract import Archive
+from pauperformance_bot.entity.deck.archive.abstract import (
+    AbstractArchivedDeck,
+)
 
 
-class MTGGoldfishDeck(Archive):
+class MTGGoldfishArchivedDeck(AbstractArchivedDeck):
     def __init__(
         self,
         name,

@@ -59,10 +59,3 @@ def parse_playable_deck_from_lines(lines):
         [PlayedCard(*(line.split(" ", maxsplit=1))) for line in maindeck],
         [PlayedCard(*(line.split(" ", maxsplit=1))) for line in sideboard],
     )
-
-
-if __name__ == "__main__":
-    main = [PlayedCard(4, "Island"), PlayedCard(4, "Swamp")]
-    sideboard = [PlayedCard(4, "Plains"), PlayedCard(4, "Forest")]
-    deck = PlayableDeck(main, sideboard)
-    print(deck)

@@ -15,13 +15,16 @@ from pauperformance_bot.credentials import (
     MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
     MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
 )
-from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishDeck
+from pauperformance_bot.entity.deck.archive.mtggoldfish import (
+    MTGGoldfishArchivedDeck,
+)
 from pauperformance_bot.entity.deck.playable import (
     parse_playable_deck_from_lines,
 )
 from pauperformance_bot.exceptions import MTGGoldfishException
-from pauperformance_bot.service.mtg.archive.abstract import Archive
-from pauperformance_bot.service.storage.dropbox_ import Dropbox
+from pauperformance_bot.service.mtg.archive.abstract import (
+    AbstractArchiveService,
+)
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 
@@ -40,7 +43,7 @@ def with_login(func):
     return maybe_login
 
 
-class MTGGoldfish(Archive):
+class MTGGoldfishArchiveService(AbstractArchiveService):
     def __init__(
         self,
         storage,  # TODO: remove with list_decks() workaround ASAP
@@ -207,7 +210,7 @@ class MTGGoldfish(Archive):
             url = next(link.attrib["href"] for link in c("a"))
             logger.debug(f"Deck {name} has url: {url}")
             deck_id = url.split("/")[-1]
-            decks.append(MTGGoldfishDeck(name, creation_date, deck_id))
+            decks.append(MTGGoldfishArchivedDeck(name, creation_date, deck_id))
         logger.info(f"Found {len(decks)} decks: {decks}")
         logger.info(f"Listed decks for {self.email}.")
         return decks
@@ -266,14 +269,3 @@ class MTGGoldfish(Archive):
             ) as cache_f:
                 cache_f.writelines("\n".join(lines))
         return parse_playable_deck_from_lines(lines)
-
-
-def main():
-    storage = Dropbox()
-    mtgg = MTGGoldfish(storage)
-    decks = mtgg.list_decks()
-    print(decks)
-
-
-if __name__ == "__main__":
-    main()

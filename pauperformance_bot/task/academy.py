@@ -1,18 +1,22 @@
-from pauperformance_bot.service.academy import Academy
-from pauperformance_bot.service.mtg.archive.local import Local as LocalArchive
-from pauperformance_bot.service.pauperformance import Pauperformance
-from pauperformance_bot.service.storage.local import Local as LocalStorage
+from pauperformance_bot.service.academy import AcademyService
+from pauperformance_bot.service.mtg.archive.local import (
+    LocalArchiveService as LocalArchive,
+)
+from pauperformance_bot.service.pauperformance import PauperformanceService
+from pauperformance_bot.service.storage.local import (
+    LocalStorageService as LocalStorage,
+)
 
 
 def academy_update(pauperformance):
-    academy = Academy(pauperformance)
+    academy = AcademyService(pauperformance)
     academy.update_all()
 
 
 def main():
     storage = LocalStorage()
     archive = LocalArchive()
-    pauperformance = Pauperformance(storage, archive)
+    pauperformance = PauperformanceService(storage, archive)
     academy_update(pauperformance)
 
 

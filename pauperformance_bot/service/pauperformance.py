@@ -15,21 +15,21 @@ from pauperformance_bot.constant.pauperformance import (
     KNOWN_SETS_WITH_NO_PAUPER_CARDS,
 )
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
-from pauperformance_bot.service.mtg.deckstats import Deckstats
-from pauperformance_bot.service.myr import Myr
-from pauperformance_bot.service.scryfall import Scryfall
+from pauperformance_bot.service.mtg.deckstats import DeckstatsService
+from pauperformance_bot.service.myr import MyrService
+from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
 
 
-class Pauperformance:
+class PauperformanceService:
     def __init__(
         self,
         storage,
         archive,
-        scryfall=Scryfall(),
-        myr=Myr(),
+        scryfall=ScryfallService(),
+        myr=MyrService(),
         players=PAUPERFORMANCE_PLAYERS,
     ):
         self.storage = storage
@@ -158,7 +158,7 @@ class Pauperformance:
         all_decks = []
         for player in self.players:
             logger.info(f"Processing player {player.name}...")
-            deckstats = Deckstats(owner_id=player.deckstats_id)
+            deckstats = DeckstatsService(owner_id=player.deckstats_id)
             player_decks = deckstats.list_pauperformance_decks(
                 player.deckstats_name
             )
