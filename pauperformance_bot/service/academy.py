@@ -147,7 +147,7 @@ class Academy:
         pauperformance_archetypes_dir=ARCHETYPES_DIR,
     ):
         logger.info("Generating archetypes...")
-        all_decks = self.pauperformance.list_mtggoldfish_decks()
+        all_decks = self.pauperformance.list_archived_decks()
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
