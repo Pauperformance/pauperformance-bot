@@ -6,7 +6,10 @@ from urllib.request import urlopen
 from pyquery import PyQuery
 from requests import session
 
-from pauperformance_bot.constant.mtggoldfish import API_ENDPOINT
+from pauperformance_bot.constant.mtggoldfish import (
+    API_ENDPOINT,
+    DECK_API_ENDPOINT,
+)
 from pauperformance_bot.constant.myr import (
     MTGGOLDFISH_DECKS_CACHE_DIR,
     USA_DATE_FORMAT,
@@ -50,11 +53,13 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         email=MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
         password=MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
         endpoint=API_ENDPOINT,
+        deck_api_endpoint=DECK_API_ENDPOINT,
     ):
         self.storage = storage
         self.email = email
         self.password = password
         self.endpoint = endpoint
+        self.deck_api_endpoint = deck_api_endpoint
         self.session = session()
         self.logged = False
 
@@ -83,7 +88,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         logger.info(f"Logged to MTGGoldfish as {self.email}.")
 
     def get_uri(self, deck_id):
-        return (f"{self.endpoint}/{deck_id}",)
+        return f"{self.deck_api_endpoint}/{deck_id}"
 
     @with_login
     def create_deck(self, name, description, playable_deck):
