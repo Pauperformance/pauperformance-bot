@@ -39,7 +39,7 @@ from pauperformance_bot.util.time import now, pretty_str
 logger = get_application_logger()
 
 
-class Academy:
+class AcademyService:
     def __init__(self, pauperformance):
         self.pauperformance = pauperformance
         self.scryfall = pauperformance.scryfall

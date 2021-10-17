@@ -6,13 +6,13 @@ from pauperformance_bot.credentials import (
     DROPBOX_APP_KEY,
     DROPBOX_APP_SECRET,
 )
-from pauperformance_bot.service.storage.abstract import Storage
+from pauperformance_bot.service.storage.abstract import AbstractStorageService
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
 
 
-class Dropbox(Storage):
+class DropboxService(AbstractStorageService):
     def __init__(self, root_dir=MYR_ROOT_DIR):
         self._root_dir = root_dir
         self._service = OfficialDropbox(

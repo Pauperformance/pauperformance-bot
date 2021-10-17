@@ -9,13 +9,15 @@ from pauperformance_bot.constant.myr import (
     STORAGE_DIR,
     STORAGE_MTGGOLDFISH_DECKS_SUBDIR,
 )
-from pauperformance_bot.entity.deck.archive.local import Local as LocalDeck
+from pauperformance_bot.entity.deck.archive.local import (
+    LocalArchivedDeck as LocalDeck,
+)
 from pauperformance_bot.entity.deck.playable import (
-    PlayableDeck,
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.entity.played_cards import PlayedCard
-from pauperformance_bot.service.mtg.archive.abstract import Archive
+from pauperformance_bot.service.mtg.archive.abstract import (
+    AbstractArchiveService,
+)
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 from pauperformance_bot.util.time import now
@@ -23,7 +25,7 @@ from pauperformance_bot.util.time import now
 logger = get_application_logger()
 
 
-class Local(Archive):
+class LocalArchiveService(AbstractArchiveService):
     def __init__(
         self,
         root_dir=posix_path(
@@ -107,25 +109,3 @@ class Local(Archive):
                 ]
             )
             return deck
-
-
-def main():
-    main = [PlayedCard(4, "Island"), PlayedCard(4, "Swamp")]
-    sideboard = [PlayedCard(4, "Plains"), PlayedCard(4, "Forest")]
-    deck = PlayableDeck(main, sideboard)
-    # print(deck)
-    archive = Local()
-    # new_deck = archive.create_deck(
-    #     "Acid Trip 576.001.AzoriusFlavoredGamerGirlPee | "
-    #     "Ravnica Allegiance (rna)",
-    #     "My description",
-    #     deck,
-    # )
-    # print(new_deck)
-    decks = archive.list_decks()
-    deck = archive.to_playable_deck(decks[0])
-    print(deck)
-
-
-if __name__ == "__main__":
-    main()

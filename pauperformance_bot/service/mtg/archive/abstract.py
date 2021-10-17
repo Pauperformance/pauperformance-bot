@@ -3,14 +3,14 @@ from abc import ABCMeta, abstractmethod
 
 from pauperformance_bot.constant.deckstats import REQUEST_SLEEP_TIMEOUT
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYER
-from pauperformance_bot.service.mtg.deckstats import Deckstats
+from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import pretty_str
 
 logger = get_application_logger()
 
 
-class Archive(metaclass=ABCMeta):
+class AbstractArchiveService(metaclass=ABCMeta):
     @abstractmethod
     def get_uri(self, deck_id):
         pass
@@ -43,7 +43,7 @@ class Archive(metaclass=ABCMeta):
         send_notification=True,
     ):  # TODO: get rid of players_by_deckstats_id
         logger.info(f"Updating archive decks for {player.name}...")
-        deckstats = Deckstats(owner_id=player.deckstats_id)
+        deckstats = DeckstatsService(owner_id=player.deckstats_id)
         imported_deckstats_deck = storage.list_imported_deckstats_deck_ids()
         for deckstats_deck in deckstats.list_pauperformance_decks(
             player.deckstats_name

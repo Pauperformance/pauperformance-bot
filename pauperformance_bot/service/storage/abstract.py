@@ -7,7 +7,7 @@ from pauperformance_bot.constant.myr import (
 )
 
 
-class Storage(metaclass=ABCMeta):
+class AbstractStorageService(metaclass=ABCMeta):
     @property
     @abstractmethod
     def _root(self):

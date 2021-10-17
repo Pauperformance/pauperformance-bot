@@ -6,7 +6,7 @@ from pauperformance_bot.util.time import pretty_str
 logger = get_application_logger()
 
 
-class Archive(metaclass=ABCMeta):
+class AbstractArchivedDeck(metaclass=ABCMeta):
     def __init__(
         self,
         name,
