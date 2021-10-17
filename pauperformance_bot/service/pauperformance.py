@@ -191,8 +191,7 @@ class PauperformanceService:
         decks_cards = {}
         all_cards = set()
         for deck in archetype_decks:
-            print(deck)
-            playable_deck = self.storage.to_playable_deck(deck)
+            playable_deck = self.archive.to_playable_deck(deck)
             cards = [c.card_name for c in playable_deck.mainboard]
             decks_cards[deck.deck_id] = cards
             all_cards.update(cards)
