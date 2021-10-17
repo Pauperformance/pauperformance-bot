@@ -20,7 +20,8 @@ _CACHE_DIR = Path().joinpath(_PAUPERFORMANCE_BOT_DIR, "cache").as_posix()
 _STORAGE_DIR = Path().joinpath(_PAUPERFORMANCE_BOT_DIR, "storage").as_posix()
 _DECKS_PATH = Path().joinpath(_STORAGE_DIR, "decks").as_posix()
 _DECKSTATS_DECKS_PATH = Path().joinpath(_DECKS_PATH, "deckstats").as_posix()
-_MTGGOLDFISH_DECKS_PATH = Path().joinpath(_DECKS_PATH, "mtggoldfish").as_posix()
+_ARCHIVE_DIR = Path().joinpath(_PAUPERFORMANCE_BOT_DIR, "archive").as_posix()
+_MTGGOLDFISH_ARCHIVE_PATH = Path().joinpath(_ARCHIVE_DIR, "mtggoldfish").as_posix()
 
 
 def read_requirements(file_name):
@@ -58,7 +59,8 @@ class PostInstallCommand(install):
         os.makedirs(_STORAGE_DIR, exist_ok=True)
         os.makedirs(_DECKS_PATH, exist_ok=True)
         os.makedirs(_DECKSTATS_DECKS_PATH, exist_ok=True)
-        os.makedirs(_MTGGOLDFISH_DECKS_PATH, exist_ok=True)
+        os.makedirs(_ARCHIVE_DIR, exist_ok=True)
+        os.makedirs(_MTGGOLDFISH_ARCHIVE_PATH, exist_ok=True)
 
 
 setup(

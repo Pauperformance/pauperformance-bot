@@ -1,5 +1,5 @@
 from pauperformance_bot.service.academy import AcademyService
-from pauperformance_bot.service.mtg.archive.local import (
+from pauperformance_bot.service.archive.local import (
     LocalArchiveService as LocalArchive,
 )
 from pauperformance_bot.service.pauperformance import PauperformanceService

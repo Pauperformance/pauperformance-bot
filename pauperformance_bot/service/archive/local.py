@@ -5,9 +5,8 @@ from os import linesep, listdir
 from os.path import isfile, join, sep
 
 from pauperformance_bot.constant.myr import (
-    STORAGE_DECKS_SUBDIR,
-    STORAGE_DIR,
-    STORAGE_MTGGOLDFISH_DECKS_SUBDIR,
+    ARCHIVE_DIR,
+    MTGGOLDFISH_ARCHIVE_SUBDIR,
 )
 from pauperformance_bot.entity.deck.archive.local import (
     LocalArchivedDeck as LocalDeck,
@@ -15,9 +14,7 @@ from pauperformance_bot.entity.deck.archive.local import (
 from pauperformance_bot.entity.deck.playable import (
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.service.mtg.archive.abstract import (
-    AbstractArchiveService,
-)
+from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 from pauperformance_bot.util.time import now
@@ -28,9 +25,7 @@ logger = get_application_logger()
 class LocalArchiveService(AbstractArchiveService):
     def __init__(
         self,
-        root_dir=posix_path(
-            STORAGE_DIR, STORAGE_DECKS_SUBDIR, STORAGE_MTGGOLDFISH_DECKS_SUBDIR
-        ),
+        root_dir=posix_path(ARCHIVE_DIR, MTGGOLDFISH_ARCHIVE_SUBDIR),
     ):
         self._root_dir = root_dir
 
@@ -68,14 +63,14 @@ class LocalArchiveService(AbstractArchiveService):
             logger.debug(f"Processing deck in {file}...")
             with open(file, "r", encoding="utf-8") as in_f:
                 data = json.load(in_f)
-                decks.append(
-                    LocalDeck(
-                        data["name"],
-                        data["creation_date"],
-                        file.rsplit(sep, maxsplit=1)[1],
-                        self._root_dir,
-                    )
+                deck = LocalDeck(
+                    data["name"],
+                    data["creation_date"],
+                    file.rsplit(sep, maxsplit=1)[1],
+                    self._root_dir,
                 )
+                if filter_name in deck.name:
+                    decks.append(deck)
         logger.info(f"Listed files in {self._root_dir}...")
         return decks
 
