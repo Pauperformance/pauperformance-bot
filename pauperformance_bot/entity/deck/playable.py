@@ -51,8 +51,11 @@ class PlayableDeck:
         return hash(repr(self))
 
 
-if __name__ == "__main__":
-    main = [PlayedCard(4, "Island"), PlayedCard(4, "Swamp")]
-    sideboard = [PlayedCard(4, "Plains"), PlayedCard(4, "Forest")]
-    deck = PlayableDeck(main, sideboard)
-    print(deck)
+def parse_playable_deck_from_lines(lines):
+    separator = lines.index("")
+    maindeck = lines[:separator]
+    sideboard = lines[separator + 1 : -1]
+    return PlayableDeck(
+        [PlayedCard(*(line.split(" ", maxsplit=1))) for line in maindeck],
+        [PlayedCard(*(line.split(" ", maxsplit=1))) for line in sideboard],
+    )
