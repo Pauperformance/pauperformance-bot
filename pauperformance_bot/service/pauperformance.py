@@ -17,7 +17,7 @@ from pauperformance_bot.constant.pauperformance import (
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.scryfall import ScryfallService
-from pauperformance_bot.service.telegram import TelegramService
+from pauperformance_bot.service.telegram_ import TelegramService
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
@@ -157,6 +157,12 @@ class PauperformanceService:
     def list_deckstats_decks(self):
         all_decks = []
         for player in self.players:
+            if not player.deckstats_id:
+                logger.info(
+                    f"Skipping player {player.name} with no Deckstats "
+                    f"account..."
+                )
+                continue
             logger.info(f"Processing player {player.name}...")
             deckstats = DeckstatsService(owner_id=player.deckstats_id)
             player_decks = deckstats.list_pauperformance_decks(
@@ -205,9 +211,16 @@ class PauperformanceService:
     def import_decks_from_deckstats(self, send_notification=True):
         logger.info("Updating Archive decks for all users...")
         players_by_deckstats_id = {
-            int(p.deckstats_id): p for p in self.players
+            int(p.deckstats_id): p for p in self.players if p.deckstats_id
         }
         for player in self.players:
+            if not player.deckstats_id:
+                logger.info(
+                    f"Skipping player {player.name} with no Deckstats "
+                    f"account..."
+                )
+                continue
+            logger.info(f"Processing player {player.name}...")
             self.archive.import_player_decks_from_deckstats(
                 player,
                 self.storage,
