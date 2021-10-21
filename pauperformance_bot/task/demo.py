@@ -13,7 +13,7 @@ from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.service.storage.dropbox_ import DropboxService
 from pauperformance_bot.service.storage.local import LocalStorageService
-from pauperformance_bot.service.telegram import TelegramService
+from pauperformance_bot.service.telegram_ import TelegramService
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
@@ -111,6 +111,7 @@ def _demo_academy():
     academy = AcademyService(pauperformance)
     academy.update_dev()
     # academy.update_archetypes()
+    # academy.update_all()
 
 
 def _demo_pauperformance():
