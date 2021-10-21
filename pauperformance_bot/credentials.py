@@ -1,5 +1,5 @@
-import os
 from importlib import import_module
+import os
 
 from pauperformance_bot.constant.myr import SECRETS_UNTRACKED_FILE
 

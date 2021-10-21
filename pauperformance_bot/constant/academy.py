@@ -1,5 +1,5 @@
-from pauperformance_bot.constant.myr import TOP_PATH
 from pauperformance_bot.util.path import posix_path
+from pauperformance_bot.constant.myr import TOP_PATH
 from pauperformance_bot.util.web_page import WebPage
 
 # ACADEMY_PATH must resolve to the top directory of the website
