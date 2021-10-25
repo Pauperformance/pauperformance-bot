@@ -19,6 +19,20 @@ class PlayableDeck:
         return "\n".join((repr(c) for c in self.sideboard))
 
     @property
+    def mainboard_cards_map(self):
+        return {
+            played_card.card_name: played_card.quantity
+            for played_card in self.mainboard
+        }
+
+    @property
+    def sideboard_cards_map(self):
+        return {
+            played_card.card_name: played_card.quantity
+            for played_card in self.sideboard
+        }
+
+    @property
     def len_mainboard(self):
         return sum(c.quantity for c in self.mainboard)
 
@@ -60,8 +74,60 @@ class PlayableDeck:
 def parse_playable_deck_from_lines(lines):
     separator = lines.index("")
     maindeck = lines[:separator]
+    maindeck.sort(key=lambda pc: pc.split(" ", maxsplit=1)[1])
     sideboard = lines[separator + 1 : -1]
+    sideboard.sort(key=lambda pc: pc.split(" ", maxsplit=1)[1])
     return PlayableDeck(
         [PlayedCard(*(line.split(" ", maxsplit=1))) for line in maindeck],
         [PlayedCard(*(line.split(" ", maxsplit=1))) for line in sideboard],
     )
+
+
+def _get_plus_minus_diff(deck1_cards_map, deck2_cards_map):
+    minus_list, plus_list = [], []
+    for card, qty in deck1_cards_map.items():
+        if card not in deck2_cards_map:
+            minus_list.append(f"{qty} {card}")
+        if card in deck2_cards_map:
+            qty2 = deck2_cards_map[card]
+            if qty == qty2:
+                continue
+            elif qty > qty2:
+                minus_list.append(f"{qty - qty2} {card}")
+            else:
+                plus_list.append(f"{qty2 - qty} {card}")
+    for card, qty in deck2_cards_map.items():
+        if card not in deck1_cards_map:
+            plus_list.append(f"{qty} {card}")
+    return minus_list, plus_list
+
+
+def get_decks_diff(deck1, deck2):
+    main_minus_list, main_plus_list = _get_plus_minus_diff(
+        deck1.mainboard_cards_map,
+        deck2.mainboard_cards_map,
+    )
+    side_minus_list, side_plus_list = _get_plus_minus_diff(
+        deck1.sideboard_cards_map,
+        deck2.sideboard_cards_map,
+    )
+    return main_minus_list, main_plus_list, side_minus_list, side_plus_list
+
+
+def print_decks_diff(deck1, deck2):
+    (
+        main_minus_list,
+        main_plus_list,
+        side_minus_list,
+        side_plus_list,
+    ) = get_decks_diff(deck1, deck2)
+    print("MAIN:")
+    for minus in main_minus_list:
+        print(f"-{minus}")
+    for plus in main_plus_list:
+        print(f"+{plus}")
+    print("\nSIDEBOARD:")
+    for minus in side_minus_list:
+        print(f"-{minus}")
+    for plus in side_plus_list:
+        print(f"+{plus}")
