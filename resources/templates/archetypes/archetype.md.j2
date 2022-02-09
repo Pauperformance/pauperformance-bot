@@ -10,15 +10,19 @@
 
 ## **Staples**
 
+<details>
+  <summary>Click here to expand</summary>
 {% for staple in staples -%}
-[<img src="{{ staple.image_url }}" width="300"/>]({{ staple.page_url }})
-{% endfor %}
+  <a href="{{ staple.page_url }}"><img src="{{ staple.image_url }}" width="300"/></a>
+{% endfor %}</details><br/>
 
 ## **Frequent cards**
 
+<details>
+  <summary>Click here to expand</summary>
 {% for frequent in frequents -%}
-[<img src="{{ frequent.image_url }}" width="300"/>]({{ frequent.page_url }})
-{% endfor %}
+  <a href="{{ frequent.page_url }}"><img src="{{ frequent.image_url }}" width="300"/></a>
+{% endfor %}</details><br/>
 
 ## **Decks**
 
