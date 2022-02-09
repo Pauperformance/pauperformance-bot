@@ -1,4 +1,6 @@
+import collections
 import glob
+import json
 import pickle
 from datetime import datetime
 from pathlib import Path
@@ -50,8 +52,15 @@ class PauperformanceService:
         logger.info("Built Scryfall set index.")
 
         logger.info("Building Pauperformance set index...")
-        with open(last_set_index_file, "rb") as index_f:
-            set_index = pickle.load(index_f)
+        with open(last_set_index_file, "r") as index_f:
+            content_str = index_f.read()
+            json_set_index = json.loads(
+                content_str,
+                object_pairs_hook=collections.OrderedDict,
+            )
+        set_index = collections.OrderedDict(
+            {int(k): dict(v) for k, v in json_set_index.items()}
+        )
         known_sets = {s["scryfall_code"] for s in set_index.values()}
         p12e_code = max(set_index.keys()) + 1
         for s in scryfall_sets:
@@ -67,8 +76,8 @@ class PauperformanceService:
         logger.info("Built Pauperformance set index.")
 
         logger.info("Saving Pauperformance set index...")
-        with open(last_set_index_file, "wb") as index_f:
-            pickle.dump(set_index, index_f)
+        with open(last_set_index_file, "w") as index_f:
+            index_f.write(json.dumps(set_index, indent=4))
         logger.info("Saved Pauperformance set index.")
         return set_index
 
