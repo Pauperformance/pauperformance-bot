@@ -8,3 +8,7 @@ class DeckstatsException(ClientException):
 
 class MTGGoldfishException(ClientException):
     pass
+
+
+class UnsupportedLanguage(Exception):
+    pass

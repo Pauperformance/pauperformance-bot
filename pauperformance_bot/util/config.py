@@ -1,4 +1,5 @@
 import configparser
+from itertools import count
 
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import now, pretty_str
@@ -18,12 +19,24 @@ def read_archetype_config(config_file_path):
     config = read_config(config_file_path)
     values = {
         **config["values"],
-        "last_update_date": pretty_str(now()),
     }
     list_fields = ["aliases", "mana", "type"]
     for field in list_fields:
         values[field] = _parse_list_value(config["values"][field])
-    return values
+    resources = []
+    for i in count(1):
+        if f"resource{i}" in config:
+            resources.append(
+                {
+                    **config[f"resource{i}"],
+                }
+            )
+        else:
+            break
+    return {
+        "values": values,
+        "resources": resources,
+    }
 
 
 def read_family_config(config_file_path):

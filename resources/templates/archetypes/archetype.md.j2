@@ -22,7 +22,18 @@
 
 ## **Decks**
 
+| Name | Upload date | Set name | Set date | Legal |
+| -----| ----------- | -------- | -------- | ----- |
 {% for deck in decks -%}
-[{{ deck.p12e_name }}]({{ deck.url }}) | *{{ simple_str(deck.creation_date) }}* | {{ deck.legality }}
+| [{{ deck.p12e_name }}]({{ deck.url }}) | {{ simple_str(deck.creation_date) }} | {{ deck.set_name }} | {{ deck.set_date }} | {{ deck.legality }} |
 {% endfor %}
 
+{% if resources %}
+## **Resources**
+
+| 🗣️ | Name | Author | Date |
+| -- | ---- | ------ | ---- |
+{% for resource in resources -%}
+| {{ resource.language }} | [{{ resource.name }}]({{ resource.url }}) | {{ resource.author }} | {{ "%-12s" % resource.date }} |
+{% endfor %}
+{% endif %}
