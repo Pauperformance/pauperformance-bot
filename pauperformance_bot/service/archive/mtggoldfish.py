@@ -61,16 +61,50 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         self.session = session()
         self.logged = False
 
+    def _get_login_info(self):
+        logger.info("Getting dynamic login info from MTGGoldfish...")
+        response = self.session.get(f"{self.endpoint}")
+        if "_mtg_session" not in response.cookies.get_dict():
+            raise MTGGoldfishException(
+                "Unable to get mtg_session_cookie from MTGGoldfish."
+            )
+        mtg_session_cookie = response.cookies.get_dict()["_mtg_session"]
+        logger.debug(f"Found mtg_session_cookie: {mtg_session_cookie}")
+        for line in response.text.split("\n"):
+            if "authenticity_token" not in line:
+                continue
+            # Multiple authenticity_token token can be found in the page
+            # (facebook, twitter, twitch, etc).
+            # We need the one for the classic login (/auth/identity/callback).
+            if "/auth/identity/callback" not in line:
+                continue
+            logger.debug(f"Extracting authenticity_token from line: {line}")
+            value_token = "value="
+            authenticity_token = line[
+                line.rfind(value_token) + len(value_token) + 1 : -4
+            ]
+            logger.debug(f"Found authenticity_token: {authenticity_token}")
+            return mtg_session_cookie, authenticity_token
+        raise MTGGoldfishException(
+            "Unable to get mtg_session_cookie and authenticity_token from "
+            "MTGGoldfish."
+        )
+
     def login(self):
+        mtg_session_cookie, authenticity_token = self._get_login_info()
         logger.info(f"Logging to MTGGoldfish as {self.email}...")
+        header = {
+            "cookie": f"_mtg_session={mtg_session_cookie}",
+        }
         payload = {
-            "action": "login",
+            "authenticity_token": authenticity_token,
             "auth_key": self.email,
             "password": self.password,
             "commit": "Log In",
         }
         response = self.session.post(
             f"{self.endpoint}/auth/identity/callback",
+            headers=header,
             data=payload,
         )
         if response.status_code != 200:
