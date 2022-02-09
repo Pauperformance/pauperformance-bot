@@ -60,4 +60,4 @@ DEV_TEMPLATE_FILE = "dev.md.j2"
 PAUPER_POOL_TEMPLATE_FILE = "pauper_pool.md.j2"
 SET_INDEX_TEMPLATE_FILE = "set_index.md.j2"
 
-LAST_SET_INDEX_FILE = posix_path(RESOURCES_DIR, "last_set_index.pkl")
+LAST_SET_INDEX_FILE = posix_path(RESOURCES_DIR, "last_set_index.json")
