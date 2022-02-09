@@ -169,8 +169,8 @@ class AcademyService:
                     "✅" if playable_deck.is_legal(banned_cards) else "Ban 🔨"
                 )
                 p12e_set = self.pauperformance.set_index[int(deck.p12e_code)]
-                deck.set_name = p12e_set['name']
-                deck.set_date = p12e_set['date']
+                deck.set_name = p12e_set["name"]
+                deck.set_date = p12e_set["date"]
 
             staples, frequents = self.pauperformance.analyze_cards_frequency(
                 archetype_decks
