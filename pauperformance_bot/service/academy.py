@@ -14,6 +14,7 @@ from pauperformance_bot.constant.academy import (
     SET_INDEX_OUTPUT_FILE,
     SET_INDEX_PAGE_NAME,
 )
+from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.myr import (
     ARCHETYPE_TEMPLATE_FILE,
     ARCHETYPES_INDEX_TEMPLATE_FILE,
@@ -69,7 +70,8 @@ class AcademyService:
         archetypes = []
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
-            values = read_archetype_config(archetype_config_file)
+            config = read_archetype_config(archetype_config_file)
+            values = config["values"]
             archetypes.append(
                 {
                     "name": values["name"],
@@ -151,7 +153,9 @@ class AcademyService:
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
-            values = read_archetype_config(archetype_config_file)
+            config = read_archetype_config(archetype_config_file)
+            values = config["values"]
+            resources = config["resources"]
             archetype_name = values["name"]
             archetype_decks = [
                 deck for deck in all_decks if deck.archetype == archetype_name
@@ -162,8 +166,11 @@ class AcademyService:
                     deck
                 )
                 deck.legality = (
-                    "" if playable_deck.is_legal(banned_cards) else "Ban 🔨"
+                    "✅" if playable_deck.is_legal(banned_cards) else "Ban 🔨"
                 )
+                p12e_set = self.pauperformance.set_index[int(deck.p12e_code)]
+                deck.set_name = p12e_set['name']
+                deck.set_date = p12e_set['date']
 
             staples, frequents = self.pauperformance.analyze_cards_frequency(
                 archetype_decks
@@ -175,7 +182,11 @@ class AcademyService:
                 )
             values["staples"] = self._get_rendered_card_info(staples)
             values["frequents"] = self._get_rendered_card_info(frequents)
-            values["decks"] = archetype_decks
+            values["decks"] = sorted(
+                archetype_decks,
+                key=lambda d: d.p12e_name,
+                reverse=True,
+            )
             archetype_file_name = Path(archetype_config_file).name
             if archetype_name != archetype_file_name.replace(".ini", ""):
                 logger.warning(
@@ -191,11 +202,21 @@ class AcademyService:
                 f"Rendering {archetype_name} in {templates_archetypes_dir} "
                 f"from {archetype_template_file}..."
             )
+            for resource in resources:
+                resource["language"] = get_language_flag(resource["language"])
+            template_values = {
+                **values,
+                "resources": sorted(
+                    resources,
+                    key=lambda r: r["date"],
+                    reverse=True,
+                ),
+            }
             render_template(
                 templates_archetypes_dir,
                 archetype_template_file,
                 archetype_output_file,
-                values,
+                template_values,
             )
         logger.info("Generated archetypes.")
 
@@ -214,7 +235,8 @@ class AcademyService:
         for archetype_config_file in glob.glob(
             f"{config_archetypes_dir}/*.ini"
         ):
-            values = read_archetype_config(archetype_config_file)
+            config = read_archetype_config(archetype_config_file)
+            values = config["values"]
             if values["family"]:
                 families_map[values["family"]].append(values["name"])
         logger.info(f"Families map: {families_map}")
