@@ -4360,5 +4360,11 @@
         "scryfall_code": "unf",
         "name": "Unfinity",
         "date": "2022-12-31"
+    },
+    "728": {
+        "p12e_code": 728,
+        "scryfall_code": "pl22",
+        "name": "Year of the Tiger 2022",
+        "date": "2022-02-25"
     }
 }
