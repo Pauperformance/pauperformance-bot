@@ -19,7 +19,7 @@ The most important of them is keeping the [Pauperformance web site](https://paup
 ---
 ## Getting Started
 
-Make sure `Python 3.7` (or newer) is installed on your machine.
+Make sure `Python 3.8` (or newer) is installed on your machine.
 Instructions to download and install `Python` can be found in the [official page](https://www.python.org/downloads/).  
 You can verify `Python` is working by running:
 ```
