@@ -3,7 +3,7 @@
 This repository hosts `Myr`, the bot required to manage the Pauperformance project.
 
 Myr tirelessly takes care of different tasks.
-The most important of them is keeping the [Pauperformance web site](https://pauperformance.com/) up-to-date.
+The most important of them is keeping the [Academy](https://pauperformance.com/) up-to-date.
 
 ---
 ## Information
