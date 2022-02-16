@@ -12,3 +12,15 @@ class MTGGoldfishException(ClientException):
 
 class UnsupportedLanguage(Exception):
     pass
+
+
+class StorageException(ClientException):
+    pass
+
+
+class StoredFileNotFound(StorageException):
+    pass
+
+
+class PauperformanceException(ClientException):
+    pass

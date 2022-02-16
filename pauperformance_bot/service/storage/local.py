@@ -1,7 +1,8 @@
-from os import listdir
+from os import listdir, remove
 from os.path import isfile, join, sep
 
 from pauperformance_bot.constant.myr import STORAGE_DIR
+from pauperformance_bot.exceptions import StoredFileNotFound
 from pauperformance_bot.service.storage.abstract import AbstractStorageService
 from pauperformance_bot.util.log import get_application_logger
 
@@ -40,3 +41,18 @@ class LocalStorageService(AbstractStorageService):
             self.get_imported_deckstats_deck_name_from_key(file)
             for file in self._list_files(self.deckstats_deck_path)
         )
+
+    def delete_deck_by_name(self, deck_name):
+        logger.info(f"Deleting file containing {deck_name}...")
+        file_path = None
+        for file in self._list_files(self.deckstats_deck_path):
+            if deck_name in file:
+                file_path = file
+                break
+        if file_path is None:
+            raise StoredFileNotFound(
+                f"File not found in storage including {deck_name}"
+            )
+        logger.info(f"Deleting file {file_path}...")
+        remove(file_path)
+        logger.info(f"Deleted file containing {deck_name}.")

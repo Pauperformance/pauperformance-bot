@@ -61,15 +61,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         self.session = session()
         self.logged = False
 
-    def _get_login_info(self):
-        logger.info("Getting dynamic login info from MTGGoldfish...")
-        response = self.session.get(f"{self.endpoint}")
-        if "_mtg_session" not in response.cookies.get_dict():
-            raise MTGGoldfishException(
-                "Unable to get mtg_session_cookie from MTGGoldfish."
-            )
-        mtg_session_cookie = response.cookies.get_dict()["_mtg_session"]
-        logger.debug(f"Found mtg_session_cookie: {mtg_session_cookie}")
+    def _parse_login_authenticity_token(self, response):
         for line in response.text.split("\n"):
             if "authenticity_token" not in line:
                 continue
@@ -84,10 +76,37 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
                 line.rfind(value_token) + len(value_token) + 1 : -4
             ]
             logger.debug(f"Found authenticity_token: {authenticity_token}")
-            return mtg_session_cookie, authenticity_token
+            return authenticity_token
         raise MTGGoldfishException(
-            "Unable to get mtg_session_cookie and authenticity_token from "
-            "MTGGoldfish."
+            "Unable to get authenticity_token from MTGGoldfish."
+        )
+
+    def _parse_meta_authenticity_token(self, response):
+        for line in response.text.split("\n"):
+            if "meta" not in line or "csrf-token" not in line:
+                continue
+            logger.debug(f"Extracting authenticity_token from line: {line}")
+            content_token = "content="
+            authenticity_token = line[
+                line.rfind(content_token) + len(content_token) + 1 : -4
+            ]
+            logger.debug(f"Found authenticity_token: {authenticity_token}")
+            return authenticity_token
+        raise MTGGoldfishException(
+            "Unable to get authenticity_token from MTGGoldfish."
+        )
+
+    def _get_login_info(self):
+        logger.info("Getting dynamic login info from MTGGoldfish...")
+        response = self.session.get(f"{self.endpoint}")
+        if "_mtg_session" not in response.cookies.get_dict():
+            raise MTGGoldfishException(
+                "Unable to get mtg_session_cookie from MTGGoldfish."
+            )
+        mtg_session_cookie = response.cookies.get_dict()["_mtg_session"]
+        logger.debug(f"Found mtg_session_cookie: {mtg_session_cookie}")
+        return mtg_session_cookie, self._parse_login_authenticity_token(
+            response
         )
 
     def login(self):
@@ -130,7 +149,11 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
 
     def _create_deck(self, name, description, playable_deck, format_):
         logger.info(f"Creating deck {name} for {self.email}...")
+        # we need to perform a dummy request to parse the authenticity_token
+        response = self.session.get(f"{self.endpoint}/decks/new")
+        authenticity_token = self._parse_meta_authenticity_token(response)
         headers = {
+            "cookie": f"_mtg_session={self.session.cookies['_mtg_session']}",
             "accept": "text/html,application/xhtml+xml,application/xml;"
             "q=0.9,image/avif,image/webp,image/apng,*/*;"
             "q=0.8,application/signed-exchange;"
@@ -139,6 +162,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         }
         payload = {
             "utf8": "✓",
+            "authenticity_token": authenticity_token,
             "deck_input[name]": name,
             "deck_input[description]": description,
             "deck_input[format]": format_,
@@ -255,7 +279,28 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
     @with_login
     def delete_deck(self, deck_id):
         logger.info(f"Deleting deck with id {deck_id} for {self.email}...")
+        # we need to perform a dummy request to parse the authenticity_token
+        headers = {
+            "accept": "text/html,application/xhtml+xml,application/xml;"
+            "q=0.9,image/avif,image/webp,image/apng,*/*;"
+            "q=0.8,application/signed-exchange;"
+            "v=b3;"
+            "q=0.9",
+        }
+        params = {
+            "filter_name": "",
+            "filter_format": "pauper",
+            "filter_visibility": "public",
+            "commit": "Filter",
+        }
+        response = self.session.get(
+            f"{self.endpoint}/decks",
+            headers=headers,
+            params=params,
+        )
+        authenticity_token = self._parse_meta_authenticity_token(response)
         header = {
+            "cookie": f"_mtg_session={self.session.cookies['_mtg_session']}",
             "accept": "text/html,application/xhtml+xml,application/xml;"
             "q=0.9,image/avif,image/webp,image/apng,*/*;"
             "q=0.8,application/signed-exchange;"
@@ -263,6 +308,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             "q=0.9",
         }
         payload = {
+            "authenticity_token": authenticity_token,
             "_method": "delete",
         }
         response = self.session.post(

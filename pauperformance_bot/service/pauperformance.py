@@ -17,6 +17,7 @@ from pauperformance_bot.constant.pauperformance import (
     KNOWN_SETS_WITH_NO_PAUPER_CARDS,
 )
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
+from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.service.telegram_ import TelegramService
@@ -253,3 +254,24 @@ class PauperformanceService:
         return self.get_set_index_by_date(
             datetime.today().strftime(USA_DATE_FORMAT)
         )
+
+    def delete_deck(self, deck_name):
+        # a deck needs to be deleted both from the archive and from the storage
+        archived_deck_id = None
+        for deck in self.list_archived_decks():
+            if deck.p12e_name != deck_name:
+                continue
+            archived_deck_id = deck.deck_id
+            break
+        if archived_deck_id is None:
+            raise PauperformanceException(
+                f"Unable to find archived deck with name {deck_name}"
+            )
+        # remove from archive
+        logger.debug(f"Deleting archived deck with id {archived_deck_id}...")
+        self.archive.delete_deck(archived_deck_id)
+        logger.debug(f"Deleted archived deck with id {archived_deck_id}.")
+        # remove from storage
+        logger.debug(f"Deleting stored deck with name {deck_name}...")
+        self.storage.delete_deck_by_name(deck_name)
+        logger.debug(f"Deleted stored deck with name {deck_name}.")

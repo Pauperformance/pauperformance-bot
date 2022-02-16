@@ -43,6 +43,10 @@ class AbstractStorageService(metaclass=ABCMeta):
     def list_imported_deckstats_deck_names(self):
         pass
 
+    @abstractmethod
+    def delete_deck_by_name(self, deck_name):
+        pass
+
     def get_imported_deckstats_deck_key(
         self,
         deckstats_deck_saved_id,
