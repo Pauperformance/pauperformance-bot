@@ -4366,5 +4366,17 @@
         "scryfall_code": "pl22",
         "name": "Year of the Tiger 2022",
         "date": "2022-02-25"
+    },
+    "729": {
+        "p12e_code": 729,
+        "scryfall_code": "svow",
+        "name": "Innistrad: Crimson Vow Substitute Cards",
+        "date": "2021-11-19"
+    },
+    "730": {
+        "p12e_code": 730,
+        "scryfall_code": "pneo",
+        "name": "Kamigawa: Neon Dynasty Promos",
+        "date": "2022-02-18"
     }
 }

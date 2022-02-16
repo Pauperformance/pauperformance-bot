@@ -6,6 +6,7 @@ from pauperformance_bot.credentials import (
     DROPBOX_APP_KEY,
     DROPBOX_APP_SECRET,
 )
+from pauperformance_bot.exceptions import StoredFileNotFound
 from pauperformance_bot.service.storage.abstract import AbstractStorageService
 from pauperformance_bot.util.log import get_application_logger
 
@@ -61,3 +62,18 @@ class DropboxService(AbstractStorageService):
             self.get_imported_deckstats_deck_name_from_key(file.path_display)
             for file in self._list_files(self.deckstats_deck_path)
         )
+
+    def delete_deck_by_name(self, deck_name):
+        logger.info(f"Deleting file containing {deck_name}...")
+        file_path = None
+        for file in self._list_files(self.deckstats_deck_path):
+            if deck_name in file.name:
+                file_path = file.path_display
+                break
+        if file_path is None:
+            raise StoredFileNotFound(
+                f"File not found in storage including {deck_name}"
+            )
+        logger.info(f"Deleting file {file_path}...")
+        self._service.files_delete_v2(file_path)
+        logger.info(f"Deleted file containing {deck_name}.")
