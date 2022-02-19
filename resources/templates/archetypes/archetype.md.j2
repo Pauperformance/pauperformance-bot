@@ -25,12 +25,20 @@
   <a href="{{ frequent.page_url }}"><img src="{{ frequent.image_url }}" width="300"/></a>
 {% endfor %}</details><br/>
 
-## **Decks**
+## **Reference decks**
 
-| Name | Upload date | Set name | Set date | Legal |
-| -----| ----------- | -------- | -------- | ----- |
+| Name | Set name | Set date | Upload date | Legal |
+| -----| -------- | -------- | ----------- | ----- |
+{% for reference in references -%}
+| [{{ reference.p12e_name }}]({{ reference.url }}) | {{ reference.set_name }} | {{ reference.set_date }} | {{ simple_str(reference.creation_date) }} | {{ reference.legality }} |
+{% endfor %}
+
+## **All decks**
+
+| Name | Set name | Set date | Upload date | Legal |
+| -----| -------- | -------- | ----------- | ----- |
 {% for deck in decks -%}
-| [{{ deck.p12e_name }}]({{ deck.url }}) | {{ simple_str(deck.creation_date) }} | {{ deck.set_name }} | {{ deck.set_date }} | {{ deck.legality }} |
+| [{{ deck.p12e_name }}]({{ deck.url }}) | {{ deck.set_name }} | {{ deck.set_date }} | {{ simple_str(deck.creation_date) }} | {{ deck.legality }} |
 {% endfor %}
 
 {% if resources %}
