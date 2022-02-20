@@ -9,6 +9,7 @@
 
 **Description**: {{ description }}
 
+{% if staples %}
 ## **Staples**
 
 <details>
@@ -16,7 +17,9 @@
 {% for staple in staples -%}
   <a href="{{ staple.page_url }}"><img src="{{ staple.image_url }}" width="300"/></a>
 {% endfor %}</details><br/>
+{% endif %}
 
+{% if frequents %}
 ## **Frequent cards**
 
 <details>
@@ -24,14 +27,27 @@
 {% for frequent in frequents -%}
   <a href="{{ frequent.page_url }}"><img src="{{ frequent.image_url }}" width="300"/></a>
 {% endfor %}</details><br/>
+{% endif %}
 
-## **Decks**
+{% if references %}
+## **Reference decks**
 
-| Name | Upload date | Set name | Set date | Legal |
-| -----| ----------- | -------- | -------- | ----- |
-{% for deck in decks -%}
-| [{{ deck.p12e_name }}]({{ deck.url }}) | {{ simple_str(deck.creation_date) }} | {{ deck.set_name }} | {{ deck.set_date }} | {{ deck.legality }} |
+| Name | Set name | Set date | Legal |
+| -----| -------- | -------- | ----- |
+{% for reference in references -%}
+| [{{ reference.p12e_name }}]({{ reference.url }}) | {{ reference.set_name }} | {{ reference.set_date }} | {{ reference.legality }} |
 {% endfor %}
+{% endif %}
+
+{% if decks %}
+## **Other decks**
+
+| Name | Set name | Set date | Legal |
+| -----| -------- | -------- | ----- |
+{% for deck in decks -%}
+| [{{ deck.p12e_name }}]({{ deck.url }}) | {{ deck.set_name }} | {{ deck.set_date }} | {{ deck.legality }} |
+{% endfor %}
+{% endif %}
 
 {% if resources %}
 ## **Resources**

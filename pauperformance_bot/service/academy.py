@@ -182,11 +182,19 @@ class AcademyService:
                 )
             values["staples"] = self._get_rendered_card_info(staples)
             values["frequents"] = self._get_rendered_card_info(frequents)
-            values["decks"] = sorted(
+            sorted_decks = sorted(
                 archetype_decks,
                 key=lambda d: d.p12e_name,
                 reverse=True,
             )
+            references = set(config["references"].values())
+            values["decks"] = []
+            values["references"] = []
+            for deck in sorted_decks:
+                if deck.p12e_name in references:
+                    values["references"].append(deck)
+                else:
+                    values["decks"].append(deck)
             archetype_file_name = Path(archetype_config_file).name
             if archetype_name != archetype_file_name.replace(".ini", ""):
                 logger.warning(
