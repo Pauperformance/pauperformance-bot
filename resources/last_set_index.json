@@ -4378,5 +4378,29 @@
         "scryfall_code": "pneo",
         "name": "Kamigawa: Neon Dynasty Promos",
         "date": "2022-02-18"
+    },
+    "731": {
+        "p12e_code": 731,
+        "scryfall_code": "skhm",
+        "name": "Kaldheim Substitute Cards",
+        "date": "2021-02-05"
+    },
+    "732": {
+        "p12e_code": 732,
+        "scryfall_code": "sstx",
+        "name": "Strixhaven: School of Mages Substitute Cards",
+        "date": "2021-04-23"
+    },
+    "733": {
+        "p12e_code": 733,
+        "scryfall_code": "mvow",
+        "name": "Innistrad: Crimson Vow Minigames",
+        "date": "2021-11-19"
+    },
+    "734": {
+        "p12e_code": 734,
+        "scryfall_code": "phed",
+        "name": "Heads I Win, Tails You Lose",
+        "date": "2022-04-22"
     }
 }
