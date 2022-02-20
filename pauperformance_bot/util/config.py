@@ -1,6 +1,7 @@
 import configparser
 from itertools import count
 
+from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import now, pretty_str
 
@@ -17,12 +18,22 @@ def read_config(config_file_path):
 
 def read_archetype_config(config_file_path):
     config = read_config(config_file_path)
+    # read values
     values = {
         **config["values"],
     }
     list_fields = ["aliases", "mana", "type"]
     for field in list_fields:
         values[field] = _parse_list_value(config["values"][field])
+    # read references
+    references = {**config["references"]}
+    # quick integrity check
+    for key, value in references.items():
+        if key not in value:
+            raise PauperformanceException(
+                f"p12e code: {key} does not match value for deck {value}."
+            )
+    # read resources
     resources = []
     for i in count(1):
         if f"resource{i}" in config:
@@ -35,6 +46,7 @@ def read_archetype_config(config_file_path):
             break
     return {
         "values": values,
+        "references": references,
         "resources": resources,
     }
 
