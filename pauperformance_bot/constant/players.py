@@ -9,6 +9,7 @@ from pauperformance_bot.credentials import (
 from pauperformance_bot.entity.pauperformance_player import (
     PauperformancePlayer,
 )
+from pauperformance_bot.secrets import TELEGRAM_CHUMPBLOCCKAMI_ID
 
 PAUPERFORMANCE_PLAYER = PauperformancePlayer(
     name="Pauperformance",
@@ -58,6 +59,14 @@ RIKXVIS_PLAYER = PauperformancePlayer(
     telegram_id=TELEGRAM_RIKXVIS_ID,
 )
 
+CHUMPBLOCCKAMI_PLAYER = PauperformancePlayer(
+    name="chumpblocckami",
+    mtgo_name="chumpblocckami",
+    deckstats_name=None,
+    deckstats_id=None,
+    telegram_id=TELEGRAM_CHUMPBLOCCKAMI_ID,
+)
+
 PAUPERFORMANCE_PLAYERS = [
     PAUPERFORMANCE_PLAYER,
     SHIKA93_PLAYER,
@@ -65,4 +74,5 @@ PAUPERFORMANCE_PLAYERS = [
     MIKEOSCAR_PLAYER,
     THRABEN27_PLAYER,
     RIKXVIS_PLAYER,
+    CHUMPBLOCCKAMI_PLAYER,
 ]
