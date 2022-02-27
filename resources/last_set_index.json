@@ -4402,5 +4402,11 @@
         "scryfall_code": "phed",
         "name": "Heads I Win, Tails You Lose",
         "date": "2022-04-22"
+    },
+    "735": {
+        "p12e_code": 735,
+        "scryfall_code": "snc",
+        "name": "Streets of New Capenna",
+        "date": "2022-04-29"
     }
 }
