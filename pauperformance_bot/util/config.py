@@ -1,6 +1,7 @@
 import configparser
 from itertools import count
 
+from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import now, pretty_str
@@ -34,16 +35,7 @@ def read_archetype_config(config_file_path):
                 f"p12e code: {key} does not match value for deck {value}."
             )
     # read resources
-    resources = []
-    for i in count(1):
-        if f"resource{i}" in config:
-            resources.append(
-                {
-                    **config[f"resource{i}"],
-                }
-            )
-        else:
-            break
+    resources = _read_sequential_resources(config)
     return {
         "values": values,
         "references": references,
@@ -58,6 +50,37 @@ def read_family_config(config_file_path):
         "last_update_date": pretty_str(now()),
     }
     return values
+
+
+def read_newspauper_config(config_file_path):
+    config = read_config(config_file_path)
+    return {
+        "resources": _read_sequential_resources(config),
+    }
+
+
+def _read_sequential_resources(config):
+    resources = []
+    for i in count(1):
+        if f"resource{i}" in config:
+            resources.append(
+                {
+                    **config[f"resource{i}"],
+                }
+            )
+        else:
+            break
+    return _format_and_sort_resources(resources)
+
+
+def _format_and_sort_resources(resources):
+    for resource in resources:
+        resource["language"] = get_language_flag(resource["language"])
+    return sorted(
+        resources,
+        key=lambda r: r["date"],
+        reverse=True,
+    )
 
 
 def _parse_list_value(raw_value):
