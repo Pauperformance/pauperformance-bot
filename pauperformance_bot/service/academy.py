@@ -9,19 +9,22 @@ from pauperformance_bot.constant.academy import (
     DEV_OUTPUT_FILE,
     FAMILIES_DIR,
     FAMILIES_DIR_RELATIVE_URL,
+    HOME_OUTPUT_FILE,
     PAUPER_POOL_OUTPUT_FILE,
     PAUPER_POOL_PAGE_NAME,
     SET_INDEX_OUTPUT_FILE,
     SET_INDEX_PAGE_NAME,
 )
-from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.myr import (
     ARCHETYPE_TEMPLATE_FILE,
     ARCHETYPES_INDEX_TEMPLATE_FILE,
     CONFIG_ARCHETYPES_DIR,
+    CONFIG_DIR,
     CONFIG_FAMILIES_DIR,
+    CONFIG_NEWSPAUPER_FILE,
     DEV_TEMPLATE_FILE,
     FAMILY_TEMPLATE_FILE,
+    HOME_TEMPLATE_FILE,
     PAUPER_POOL_TEMPLATE_FILE,
     SET_INDEX_TEMPLATE_FILE,
     TEMPLATES_ARCHETYPES_DIR,
@@ -31,6 +34,7 @@ from pauperformance_bot.constant.myr import (
 from pauperformance_bot.util.config import (
     read_archetype_config,
     read_family_config,
+    read_newspauper_config,
 )
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
@@ -47,12 +51,37 @@ class AcademyService:
         self.set_index = pauperformance.set_index
 
     def update_all(self):
+        self.update_home()
         self.update_archetypes_index()
         self.update_set_index()
         self.update_pauper_pool()
         self.update_archetypes()
         self.update_families()
         self.update_dev()
+
+    def update_home(
+        self,
+        config_dir=CONFIG_DIR,
+        templates_pages_dir=TEMPLATES_PAGES_DIR,
+        newspauper_file=CONFIG_NEWSPAUPER_FILE,
+        home_template_file=HOME_TEMPLATE_FILE,
+        home_output_file=HOME_OUTPUT_FILE,
+    ):
+        logger.info(
+            f"Rendering home in {templates_pages_dir} from "
+            f"{home_template_file}..."
+        )
+        config = read_newspauper_config(
+            posix_path(config_dir, newspauper_file)
+        )
+        resources = config["resources"]
+        render_template(
+            templates_pages_dir,
+            home_template_file,
+            home_output_file,
+            {"resources": resources},
+        )
+        logger.info(f"Rendered home to {home_output_file}.")
 
     def update_archetypes_index(
         self,
@@ -210,16 +239,7 @@ class AcademyService:
                 f"Rendering {archetype_name} in {templates_archetypes_dir} "
                 f"from {archetype_template_file}..."
             )
-            for resource in resources:
-                resource["language"] = get_language_flag(resource["language"])
-            template_values = {
-                **values,
-                "resources": sorted(
-                    resources,
-                    key=lambda r: r["date"],
-                    reverse=True,
-                ),
-            }
+            template_values = {**values, "resources": resources}
             render_template(
                 templates_archetypes_dir,
                 archetype_template_file,
@@ -305,7 +325,7 @@ class AcademyService:
                 "last_update_date": pretty_str(now()),
             },
         )
-        logger.info(f"Rendered set index to {dev_output_file}.")
+        logger.info(f"Rendered dev to {dev_output_file}.")
 
     def _get_rendered_card_info(self, cards):
         rendered_cards = []

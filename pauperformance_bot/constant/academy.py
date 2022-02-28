@@ -9,6 +9,9 @@ ACADEMY_PATH = posix_path(
     TOP_PATH.parent.as_posix(), "Pauperformance.github.io"
 )
 
+HOME_PAGE_NAME = WebPage("index")
+HOME_OUTPUT_FILE = posix_path(ACADEMY_PATH, HOME_PAGE_NAME.as_markdown())
+
 ARCHETYPES_DIR = posix_path(ACADEMY_PATH, "archetypes")
 FAMILIES_DIR = posix_path(ACADEMY_PATH, "families")
 PAGES_DIR = posix_path(ACADEMY_PATH, "pages")
