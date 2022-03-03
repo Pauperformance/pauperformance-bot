@@ -49,6 +49,16 @@
 {% endfor %}
 {% endif %}
 
+{% if videos %}
+## **Videos**
+
+| 🗣️ | 📺 | Deck | Author | Date |
+| -- | -- | ---- | ------ | ---- |
+{% for video in videos -%}
+| {{ video.language }} | <i class="fa-brands fa-twitch"></i> | [{{ video.deck_name }}]({{ video.url }}) | {{ video.creator }} | {{ "%-12s" % video.date }} |
+{% endfor %}
+{% endif %}
+
 {% if resources %}
 ## **Resources**
 

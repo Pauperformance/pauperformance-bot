@@ -1,9 +1,11 @@
+import json
 import time
 from abc import ABCMeta, abstractmethod
 
 from pauperformance_bot.constant.deckstats import REQUEST_SLEEP_TIMEOUT
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYER
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
+from pauperformance_bot.service.twitch import get_deck_name_from_twitch_video
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import pretty_str
 
@@ -125,3 +127,71 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     f"Destination: {self.get_uri(new_deck_id)}",
                 )
         logger.info(f"Updated Archive decks for {player.name}.")
+
+    def archive_player_videos_from_twitch(
+        self,
+        player,
+        videos,
+        storage,
+        myr,
+        warning_player=PAUPERFORMANCE_PLAYER,
+        send_notification=True,
+    ):
+        imported_twitch_videos = storage.list_imported_twitch_videos_ids()
+        logger.info(f"Updating Archive videos for {player.name}...")
+        for video in videos:
+            logger.debug(
+                f"Processing video '{video.title}' "
+                f"({video.video_id}) "
+                f"from {video.user_login_name}, "
+                f"published on {video.published_at}, "
+                f"url: {video.url}..."
+            )
+            if video.viewable != "public":
+                myr.send_message(
+                    warning_player,
+                    f"⚠️ Skipped {video.viewable} Twitch video. "
+                    f"'{video.title}' "
+                    f"({video.video_id}) "
+                    f"from {video.user_login_name}, "
+                    f"published on {video.published_at}, "
+                    f"url: {video.url}...",
+                )
+                continue
+
+            if video.video_id in imported_twitch_videos:
+                logger.debug(
+                    f"Video {video.video_id} already stored on "
+                    f"Storage. Skipping it."
+                )
+                continue
+            deck_name = get_deck_name_from_twitch_video(video)
+            if not deck_name:
+                logger.debug(
+                    f"Unable to find deck name for video {video.url}. "
+                    f"Skipping it..."
+                )
+                continue
+            storage_key = storage.get_imported_twitch_video_key(
+                video.video_id,
+                video.user_display_name,
+                video.language,
+                video.published_at.split("T")[0],
+                deck_name,
+            )
+            logger.info(
+                f"Archiving information on storage in file {storage_key}..."
+            )
+            storage.create_file(
+                f"{storage_key}",
+                json.dumps(vars(video), indent=4),
+            )
+            if send_notification:
+                logger.info("Informing player on Telegram...")
+                myr.send_message(
+                    player,
+                    f"📌 Imported video: {video.title}.\n\n"
+                    f"Source: {video.url}\n\n"
+                    f"Deck: {deck_name}",
+                )
+        logger.info(f"Updated Archive videos for {player.name}.")

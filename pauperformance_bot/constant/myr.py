@@ -20,6 +20,8 @@ PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(CACHE_DIR, "pauper_cards_index.pkl")
 STORAGE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "storage")
 STORAGE_DECKS_SUBDIR = "decks"
 STORAGE_DECKSTATS_DECKS_SUBDIR = "deckstats"
+STORAGE_VIDEOS_SUBDIR = "videos"
+STORAGE_TWITCH_VIDEOS_SUBDIR = "twitch"
 
 # Local archive
 ARCHIVE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "archive")
@@ -35,6 +37,8 @@ SOURCE_DIR = posix_path(TOP_PATH.as_posix(), "pauperformance_bot")
 DEFAULT_LOGGING_FILE = posix_path(PAUPERFORMANCE_BOT_DIR, "pauperformance.log")
 DEFAULT_DATE_FORMAT = "%Y-%m-%d, %H:%M:%S"  # allows chronological sorting
 USA_DATE_FORMAT = "%Y-%m-%d"
+
+VIDEO_DECK_TAG = "Pauperformance: "
 
 # resources/
 # | config/
