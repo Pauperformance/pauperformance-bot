@@ -15,6 +15,7 @@ from pauperformance_bot.constant.academy import (
     SET_INDEX_OUTPUT_FILE,
     SET_INDEX_PAGE_NAME,
 )
+from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.myr import (
     ARCHETYPE_TEMPLATE_FILE,
     ARCHETYPES_INDEX_TEMPLATE_FILE,
@@ -31,6 +32,7 @@ from pauperformance_bot.constant.myr import (
     TEMPLATES_FAMILIES_DIR,
     TEMPLATES_PAGES_DIR,
 )
+from pauperformance_bot.constant.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.util.config import (
     read_archetype_config,
     read_family_config,
@@ -180,6 +182,7 @@ class AcademyService:
         logger.info("Generating archetypes...")
         all_decks = self.pauperformance.list_archived_decks()
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
+        videos = self.pauperformance.list_twitch_videos()
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
             config = read_archetype_config(archetype_config_file)
@@ -239,7 +242,22 @@ class AcademyService:
                 f"Rendering {archetype_name} in {templates_archetypes_dir} "
                 f"from {archetype_template_file}..."
             )
-            template_values = {**values, "resources": resources}
+            archetype_videos = [
+                {
+                    "language": get_language_flag(video.language),
+                    "deck_name": video.deck_name,
+                    "url": f"{TWITCH_VIDEO_URL}/{video.video_id}",
+                    "creator": video.user_name,
+                    "date": video.published_at,
+                }
+                for video in videos
+                if video.deck_name.startswith(archetype_name)
+            ]
+            template_values = {
+                **values,
+                "videos": archetype_videos,
+                "resources": resources,
+            }
             render_template(
                 templates_archetypes_dir,
                 archetype_template_file,

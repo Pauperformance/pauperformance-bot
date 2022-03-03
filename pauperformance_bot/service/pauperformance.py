@@ -17,10 +17,12 @@ from pauperformance_bot.constant.pauperformance import (
     KNOWN_SETS_WITH_NO_PAUPER_CARDS,
 )
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
+from pauperformance_bot.entity.academy_video import AcademyVideo
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.service.telegram_ import TelegramService
+from pauperformance_bot.service.twitch import TwitchService
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
@@ -33,12 +35,14 @@ class PauperformanceService:
         archive,
         scryfall=ScryfallService(),
         telegram=TelegramService(),
+        twitch=TwitchService(),
         players=PAUPERFORMANCE_PLAYERS,
     ):
         self.storage = storage
         self.archive = archive
         self.scryfall = scryfall
         self.telegram = telegram
+        self.twitch = twitch
         self.players = players
         self.set_index = self._build_set_index()
         self.card_index = self._build_card_index()
@@ -241,6 +245,36 @@ class PauperformanceService:
             )
         logger.info("Updated Archive decks for all users.")
 
+    def import_players_videos_from_twitch(self, send_notification=True):
+        logger.info("Updating Twitch videos for all users...")
+        for player in self.players:
+            if not player.twitch_login_name:
+                logger.info(
+                    f"Skipping player {player.name} with no Twitch account..."
+                )
+            else:
+                self.import_player_videos_from_twitch(
+                    player,
+                    send_notification=send_notification,
+                )
+        logger.info("Updated Twitch videos for all users.")
+
+    def import_player_videos_from_twitch(self, player, send_notification=True):
+        logger.info(
+            f"Processing videos from Twitch user {player.twitch_login_name}..."
+        )
+        twitch_user = self.twitch.get_user(player.twitch_login_name)
+        self.archive.archive_player_videos_from_twitch(
+            player,
+            self.twitch.get_user_videos(twitch_user.user_id),
+            self.storage,
+            self.telegram,
+            send_notification=send_notification,
+        )
+        logger.info(
+            f"Processed videos from Twitch user {player.twitch_login_name}."
+        )
+
     def get_set_index_by_date(self, usa_date):
         logger.debug(f"Getting set index for USA date {usa_date}")
         return [
@@ -275,3 +309,20 @@ class PauperformanceService:
         logger.debug(f"Deleting stored deck with name {deck_name}...")
         self.storage.delete_deck_by_name(deck_name)
         logger.debug(f"Deleted stored deck with name {deck_name}.")
+
+    def list_twitch_videos(self):
+        logger.debug("Retrieving stored Twitch videos...")
+        academy_videos = []
+        for video in self.storage.list_imported_twitch_videos():
+            video_id, user_name, language, date, deck = video.split(">")
+            academy_videos.append(
+                AcademyVideo(
+                    video_id,
+                    user_name,
+                    language,
+                    date,
+                    deck,
+                )
+            )
+        logger.debug("Retrieved stored Twitch videos.")
+        return academy_videos

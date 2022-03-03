@@ -63,6 +63,18 @@ class DropboxService(AbstractStorageService):
             for file in self._list_files(self.deckstats_deck_path)
         )
 
+    def list_imported_twitch_videos(self):
+        return set(
+            self.get_imported_twitch_video(file.path_display)
+            for file in self._list_files(self.twitch_video_path)
+        )
+
+    def list_imported_twitch_videos_ids(self):
+        return set(
+            self.get_imported_twitch_video_id_from_key(file.path_display)
+            for file in self._list_files(self.twitch_video_path)
+        )
+
     def delete_deck_by_name(self, deck_name):
         logger.info(f"Deleting file containing {deck_name}...")
         file_path = None
