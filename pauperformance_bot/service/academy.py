@@ -77,11 +77,18 @@ class AcademyService:
             posix_path(config_dir, newspauper_file)
         )
         resources = config["resources"]
+        current_set = self.pauperformance.get_current_set_index()
         render_template(
             templates_pages_dir,
             home_template_file,
             home_output_file,
-            {"resources": resources},
+            {
+                "p12e_code": current_set["p12e_code"],
+                "set_name": f"{current_set['name']} "
+                f"({current_set['scryfall_code']}), "
+                f"released on {current_set['date']}",
+                "resources": resources,
+            },
         )
         logger.info(f"Rendered home to {home_output_file}.")
 
