@@ -1,0 +1,31 @@
+# This workflow will update the Academy every 10 minutes
+
+name: Academy update
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+
+jobs:
+  academy-update:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Clone Myr repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Clone Academy repository
+      uses: actions/checkout@v2
+      with:
+        repository: 'https://github.com/Pauperformance/Pauperformance.github.io.git'
+
+    - name: Explore
+      run: |
+        ls
+        echo ${{ secrets.FOO_TEST }}
