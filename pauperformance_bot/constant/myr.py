@@ -22,6 +22,7 @@ STORAGE_DECKS_SUBDIR = "decks"
 STORAGE_DECKSTATS_DECKS_SUBDIR = "deckstats"
 STORAGE_VIDEOS_SUBDIR = "videos"
 STORAGE_TWITCH_VIDEOS_SUBDIR = "twitch"
+STORAGE_YOUTUBE_VIDEOS_SUBDIR = "youtube"
 
 # Local archive
 ARCHIVE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "archive")
@@ -39,6 +40,7 @@ DEFAULT_DATE_FORMAT = "%Y-%m-%d, %H:%M:%S"  # allows chronological sorting
 USA_DATE_FORMAT = "%Y-%m-%d"
 
 VIDEO_DECK_TAG = "Pauperformance: "
+VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 
 # resources/
 # | config/
