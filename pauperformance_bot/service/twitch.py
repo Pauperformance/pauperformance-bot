@@ -1,7 +1,6 @@
 from twitchAPI import TimePeriod
 from twitchAPI.twitch import Twitch
 
-from pauperformance_bot.constant.myr import VIDEO_DECK_TAG
 from pauperformance_bot.credentials import (
     TWITCH_APP_CLIENT_ID,
     TWITCH_APP_CLIENT_SECRET,
@@ -64,20 +63,3 @@ class TwitchService:
                 period=TimePeriod.MONTH,
             )["data"]
         ]
-
-
-def get_deck_name_from_twitch_video(video: TwitchVideo):
-    logger.debug(f"Getting deck name for video {video.video_id}")
-    return _parse_deck_name_from_description(video)
-
-
-def _parse_deck_name_from_description(video: TwitchVideo):
-    deck_name = None
-    for line in video.description.split("\n"):
-        line = line.strip()
-        if line.lower().startswith(VIDEO_DECK_TAG.lower()):
-            logger.debug(f"Extracting deck name from line:\n{line}")
-            deck_name = line[len(VIDEO_DECK_TAG) :]
-            logger.debug(f"Pairing video {video.video_id} to deck {deck_name}")
-            break
-    return deck_name

@@ -1,4 +1,7 @@
-class TwitchVideo:
+from pauperformance_bot.entity.indexable_video import IndexableVideo
+
+
+class TwitchVideo(IndexableVideo):
     def __init__(
         self,
         video_id,
@@ -15,13 +18,13 @@ class TwitchVideo:
         language,
         duration,
     ):
+        super().__init__(description)
         self.video_id = video_id
         self.stream_id = stream_id
         self.user_id = user_id
         self.user_login_name = user_login_name
         self.user_display_name = user_display_name
         self.title = title
-        self.description = description
         self.created_at = created_at
         self.published_at = published_at
         self.url = url
