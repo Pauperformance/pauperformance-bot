@@ -54,6 +54,18 @@ class LocalStorageService(AbstractStorageService):
             for file in self._list_files(self.twitch_video_path)
         )
 
+    def list_imported_youtube_videos(self):
+        return set(
+            self.get_imported_youtube_video(file)
+            for file in self._list_files(self.youtube_video_path)
+        )
+
+    def list_imported_youtube_videos_ids(self):
+        return set(
+            self.get_imported_youtube_video_id_from_key(file)
+            for file in self._list_files(self.youtube_video_path)
+        )
+
     def delete_deck_by_name(self, deck_name):
         logger.info(f"Deleting file containing {deck_name}...")
         file_path = None

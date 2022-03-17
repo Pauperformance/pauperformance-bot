@@ -18,6 +18,8 @@ PAUPERFORMANCE_PLAYER = PauperformancePlayer(
     deckstats_id="181430",
     telegram_id=TELEGRAM_PAUPERFORMANCE_ID,
     twitch_login_name="Pauperformance",
+    youtube_channel_id="UCDUiIskNnmuJ3XJ1SdQqs0A",
+    default_youtube_language="en",
 )
 
 SHIKA93_PLAYER = PauperformancePlayer(
@@ -27,6 +29,8 @@ SHIKA93_PLAYER = PauperformancePlayer(
     deckstats_id="78813",
     telegram_id=TELEGRAM_SHIKA93_ID,
     twitch_login_name=None,
+    youtube_channel_id=None,
+    default_youtube_language="en",
 )
 
 MREVILEYE_PLAYER = PauperformancePlayer(
@@ -36,6 +40,8 @@ MREVILEYE_PLAYER = PauperformancePlayer(
     deckstats_id="72056",
     telegram_id=TELEGRAM_MREVILEYE_ID,
     twitch_login_name=None,
+    youtube_channel_id=None,
+    default_youtube_language="en",
 )
 
 MIKEOSCAR_PLAYER = PauperformancePlayer(
@@ -45,6 +51,8 @@ MIKEOSCAR_PLAYER = PauperformancePlayer(
     deckstats_id=None,
     telegram_id=TELEGRAM_MIKEOSCAR_ID,
     twitch_login_name=None,
+    youtube_channel_id=None,
+    default_youtube_language="en",
 )
 
 THRABEN27_PLAYER = PauperformancePlayer(
@@ -54,6 +62,8 @@ THRABEN27_PLAYER = PauperformancePlayer(
     deckstats_id=None,
     telegram_id=TELEGRAM_THRABEN27_ID,
     twitch_login_name=None,
+    youtube_channel_id=None,
+    default_youtube_language="en",
 )
 
 RIKXVIS_PLAYER = PauperformancePlayer(
@@ -63,6 +73,8 @@ RIKXVIS_PLAYER = PauperformancePlayer(
     deckstats_id=None,
     telegram_id=TELEGRAM_RIKXVIS_ID,
     twitch_login_name=None,
+    youtube_channel_id=None,
+    default_youtube_language="en",
 )
 
 CHUMPBLOCCKAMI_PLAYER = PauperformancePlayer(
@@ -72,6 +84,8 @@ CHUMPBLOCCKAMI_PLAYER = PauperformancePlayer(
     deckstats_id=None,
     telegram_id=TELEGRAM_CHUMPBLOCCKAMI_ID,
     twitch_login_name=None,
+    youtube_channel_id=None,
+    default_youtube_language="en",
 )
 
 PAUPERFORMANCE_PLAYERS = [

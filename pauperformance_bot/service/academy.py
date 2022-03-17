@@ -32,7 +32,6 @@ from pauperformance_bot.constant.myr import (
     TEMPLATES_FAMILIES_DIR,
     TEMPLATES_PAGES_DIR,
 )
-from pauperformance_bot.constant.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.util.config import (
     read_archetype_config,
     read_family_config,
@@ -189,7 +188,7 @@ class AcademyService:
         logger.info("Generating archetypes...")
         all_decks = self.pauperformance.list_archived_decks()
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
-        videos = self.pauperformance.list_twitch_videos()
+        videos = self.pauperformance.list_videos()
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
             config = read_archetype_config(archetype_config_file)
@@ -253,9 +252,10 @@ class AcademyService:
                 {
                     "language": get_language_flag(video.language),
                     "deck_name": video.deck_name,
-                    "url": f"{TWITCH_VIDEO_URL}/{video.video_id}",
+                    "url": f"{video.url}",
                     "creator": video.user_name,
                     "date": video.published_at,
+                    "fa_icon": video.fa_icon,
                 }
                 for video in videos
                 if video.deck_name.startswith(archetype_name)
