@@ -23,7 +23,7 @@ jobs:
     - name: Clone Academy repository
       uses: actions/checkout@v2
       with:
-        repository: 'https://github.com/Pauperformance/Pauperformance.github.io.git'
+        repository: 'Pauperformance/Pauperformance.github.io.git'
 
     - name: Explore
       run: |
