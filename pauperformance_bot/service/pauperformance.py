@@ -17,12 +17,15 @@ from pauperformance_bot.constant.pauperformance import (
     KNOWN_SETS_WITH_NO_PAUPER_CARDS,
 )
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
+from pauperformance_bot.constant.twitch import TWITCH_VIDEO_URL
+from pauperformance_bot.constant.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.entity.academy_video import AcademyVideo
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.service.telegram_ import TelegramService
 from pauperformance_bot.service.twitch import TwitchService
+from pauperformance_bot.service.youtube import YouTubeService
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
@@ -36,6 +39,7 @@ class PauperformanceService:
         scryfall=ScryfallService(),
         telegram=TelegramService(),
         twitch=TwitchService(),
+        youtube=YouTubeService(),
         players=PAUPERFORMANCE_PLAYERS,
     ):
         self.storage = storage
@@ -43,6 +47,7 @@ class PauperformanceService:
         self.scryfall = scryfall
         self.telegram = telegram
         self.twitch = twitch
+        self.youtube = youtube
         self.players = players
         self.set_index = self._build_set_index()
         self.card_index = self._build_card_index()
@@ -275,6 +280,41 @@ class PauperformanceService:
             f"Processed videos from Twitch user {player.twitch_login_name}."
         )
 
+    def import_players_videos_from_youtube(self, send_notification=True):
+        logger.info("Updating YouTube videos for all users...")
+        for player in self.players:
+            if not player.youtube_channel_id:
+                logger.info(
+                    f"Skipping player {player.name} with no YouTube account..."
+                )
+            else:
+                self.import_player_videos_from_youtube(
+                    player,
+                    send_notification=send_notification,
+                )
+        logger.info("Updated YouTube videos for all users.")
+
+    def import_player_videos_from_youtube(
+        self, player, send_notification=True
+    ):
+        logger.info(
+            f"Processing videos from YouTube user "
+            f"{player.youtube_channel_id}..."
+        )
+        self.archive.archive_player_videos_from_youtube(
+            player,
+            self.youtube.get_channel_videos(
+                player.youtube_channel_id,
+                player.default_youtube_language,
+            ),
+            self.storage,
+            self.telegram,
+            send_notification=send_notification,
+        )
+        logger.info(
+            f"Processed videos from YouTube user {player.youtube_channel_id}."
+        )
+
     def get_set_index_by_date(self, usa_date):
         logger.debug(f"Getting set index for USA date {usa_date}")
         return [
@@ -310,7 +350,7 @@ class PauperformanceService:
         self.storage.delete_deck_by_name(deck_name)
         logger.debug(f"Deleted stored deck with name {deck_name}.")
 
-    def list_twitch_videos(self):
+    def _list_twitch_videos(self):
         logger.debug("Retrieving stored Twitch videos...")
         academy_videos = []
         for video in self.storage.list_imported_twitch_videos():
@@ -322,7 +362,31 @@ class PauperformanceService:
                     language,
                     date,
                     deck,
+                    f"{TWITCH_VIDEO_URL}{video_id}",
+                    "twitch",
                 )
             )
         logger.debug("Retrieved stored Twitch videos.")
         return academy_videos
+
+    def _list_youtube_videos(self):
+        logger.debug("Retrieving stored YouTube videos...")
+        academy_videos = []
+        for video in self.storage.list_imported_youtube_videos():
+            video_id, user_name, language, date, deck = video.split(">")
+            academy_videos.append(
+                AcademyVideo(
+                    video_id,
+                    user_name,
+                    language,
+                    date,
+                    deck,
+                    f"{YOUTUBE_VIDEO_URL}{video_id}",
+                    "youtube",
+                )
+            )
+        logger.debug("Retrieved stored YouTube videos.")
+        return academy_videos
+
+    def list_videos(self):
+        return self._list_twitch_videos() + self._list_youtube_videos()

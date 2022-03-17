@@ -30,12 +30,6 @@ isort==5.10.1
     # via -r requirements/requirements-test.in
 mccabe==0.6.1
     # via flake8
-mypy-extensions==0.4.3
-    # via black
-packaging==21.3
-    # via
-    #   pytest
-    #   tox
 pathspec==0.9.0
     # via black
 platformdirs==2.5.1
@@ -55,9 +49,7 @@ pycodestyle==2.8.0
     # via flake8
 pyflakes==2.4.0
     # via flake8
-pyparsing==3.0.7
-    # via packaging
-pytest==7.0.1
+pytest==7.1.0
     # via
     #   -r requirements/requirements-test.in
     #   pytest-cov
@@ -78,7 +70,7 @@ tomli==2.0.1
     #   pytest
 tox==3.24.5
     # via -r requirements/requirements-test.in
-virtualenv==20.13.2
+virtualenv==20.13.3
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:

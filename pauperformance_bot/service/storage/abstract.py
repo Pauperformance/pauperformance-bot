@@ -5,6 +5,7 @@ from pauperformance_bot.constant.myr import (
     STORAGE_DECKSTATS_DECKS_SUBDIR,
     STORAGE_TWITCH_VIDEOS_SUBDIR,
     STORAGE_VIDEOS_SUBDIR,
+    STORAGE_YOUTUBE_VIDEOS_SUBDIR,
 )
 
 
@@ -37,6 +38,10 @@ class AbstractStorageService(metaclass=ABCMeta):
     def twitch_video_path(self, twitch_subdir=STORAGE_TWITCH_VIDEOS_SUBDIR):
         return f"{self.videos_path}{self._dir_separator}{twitch_subdir}"
 
+    @property
+    def youtube_video_path(self, youtube_subdir=STORAGE_YOUTUBE_VIDEOS_SUBDIR):
+        return f"{self.videos_path}{self._dir_separator}{youtube_subdir}"
+
     @abstractmethod
     def _list_files(self, path, cursor=None):
         pass
@@ -59,6 +64,14 @@ class AbstractStorageService(metaclass=ABCMeta):
 
     @abstractmethod
     def list_imported_twitch_videos_ids(self):
+        pass
+
+    @abstractmethod
+    def list_imported_youtube_videos(self):
+        pass
+
+    @abstractmethod
+    def list_imported_youtube_videos_ids(self):
         pass
 
     @abstractmethod
@@ -97,6 +110,24 @@ class AbstractStorageService(metaclass=ABCMeta):
             f"{deck_name}.txt"
         )
 
+    def get_imported_youtube_video_key(
+        self,
+        video_id,
+        channel_title,
+        language,
+        date,
+        deck_name,
+    ):
+        return (
+            f"{self.youtube_video_path}"
+            f"{self._dir_separator}"
+            f"{video_id}>"
+            f"{channel_title}>"
+            f"{language}>"
+            f"{date}>"
+            f"{deck_name}.txt"
+        )
+
     @staticmethod
     def get_imported_deckstats_deck_id_from_key(key):
         return key.rsplit("/", maxsplit=1)[1].split(">")[0]
@@ -111,4 +142,12 @@ class AbstractStorageService(metaclass=ABCMeta):
 
     @staticmethod
     def get_imported_twitch_video(key):
+        return key.rsplit("/", maxsplit=1)[1][:-4]  # drop .txt
+
+    @staticmethod
+    def get_imported_youtube_video_id_from_key(key):
+        return key.rsplit("/", maxsplit=1)[1].split(">")[0]
+
+    @staticmethod
+    def get_imported_youtube_video(key):
         return key.rsplit("/", maxsplit=1)[1][:-4]  # drop .txt
