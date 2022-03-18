@@ -70,3 +70,5 @@ jobs:
         pwd
         date
         myr academy update
+        cd academy
+        git status
