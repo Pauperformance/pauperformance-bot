@@ -42,8 +42,6 @@ jobs:
         repository: 'Pauperformance/Pauperformance.github.io.git'
         ref: 'master'
         path: './academy'
-        persist-credentials: false
-        fetch-depth: 0
 
     - name: Get current date
       id: date
