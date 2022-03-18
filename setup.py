@@ -13,13 +13,25 @@ _REQUIREMENTS_DIR = "requirements"
 _RESOURCES_DIR = "resources"
 _README_FILE = "README.md"
 _VERSION_FILE = "VERSION"
+
 _PAUPERFORMANCE_BOT_DIR = Path().joinpath(
     Path.home().as_posix(), ".pauperformance"
 ).as_posix()
+
 _CACHE_DIR = Path().joinpath(_PAUPERFORMANCE_BOT_DIR, "cache").as_posix()
+_DECKSTATS_DECKS_CACHE_DIR = Path().joinpath(_CACHE_DIR, "deckstats_decks").as_posix()
+_MTGGOLDFISH_DECKS_CACHE_DIR = Path().joinpath(_CACHE_DIR, "mtggoldfish_decks").as_posix()
+_SCRYFALL_CARDS_CACHE_DIR = Path().joinpath(_CACHE_DIR, "scryfall_cards").as_posix()
+
 _STORAGE_DIR = Path().joinpath(_PAUPERFORMANCE_BOT_DIR, "storage").as_posix()
+_STORAGE_DECKS_SUBDIR = Path().joinpath(_STORAGE_DIR, "decks").as_posix()
+_STORAGE_DECKSTATS_DECKS_SUBDIR = Path().joinpath(_STORAGE_DECKS_SUBDIR, "deckstats").as_posix()
+_STORAGE_VIDEOS_SUBDIR = Path().joinpath(_STORAGE_DIR, "videos").as_posix()
+_STORAGE_TWITCH_VIDEOS_SUBDIR = Path().joinpath(_STORAGE_VIDEOS_SUBDIR, "twitch").as_posix()
+_STORAGE_YOUTUBE_VIDEOS_SUBDIR = Path().joinpath(_STORAGE_VIDEOS_SUBDIR, "youtube").as_posix()
 _DECKS_PATH = Path().joinpath(_STORAGE_DIR, "decks").as_posix()
 _DECKSTATS_DECKS_PATH = Path().joinpath(_DECKS_PATH, "deckstats").as_posix()
+
 _ARCHIVE_DIR = Path().joinpath(_PAUPERFORMANCE_BOT_DIR, "archive").as_posix()
 _MTGGOLDFISH_ARCHIVE_PATH = Path().joinpath(_ARCHIVE_DIR, "mtggoldfish").as_posix()
 
@@ -56,7 +68,15 @@ class PostInstallCommand(install):
         install.run(self)
         os.makedirs(_PAUPERFORMANCE_BOT_DIR, exist_ok=True)
         os.makedirs(_CACHE_DIR, exist_ok=True)
+        os.makedirs(_DECKSTATS_DECKS_CACHE_DIR, exist_ok=True)
+        os.makedirs(_MTGGOLDFISH_DECKS_CACHE_DIR, exist_ok=True)
+        os.makedirs(_SCRYFALL_CARDS_CACHE_DIR, exist_ok=True)
         os.makedirs(_STORAGE_DIR, exist_ok=True)
+        os.makedirs(_STORAGE_DECKS_SUBDIR, exist_ok=True)
+        os.makedirs(_STORAGE_DECKSTATS_DECKS_SUBDIR, exist_ok=True)
+        os.makedirs(_STORAGE_VIDEOS_SUBDIR, exist_ok=True)
+        os.makedirs(_STORAGE_TWITCH_VIDEOS_SUBDIR, exist_ok=True)
+        os.makedirs(_STORAGE_YOUTUBE_VIDEOS_SUBDIR, exist_ok=True)
         os.makedirs(_DECKS_PATH, exist_ok=True)
         os.makedirs(_DECKSTATS_DECKS_PATH, exist_ok=True)
         os.makedirs(_ARCHIVE_DIR, exist_ok=True)

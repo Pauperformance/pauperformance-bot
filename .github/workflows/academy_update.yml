@@ -68,5 +68,4 @@ jobs:
         pwd
         date
         myr --help
-        ls /opt/hostedtoolcache/Python/3.8.12/x64/lib/python3.8/site-packages/resources/
         myr academy update
