@@ -46,6 +46,10 @@ VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 # | config/
 # | templates/
 # | last_set_index.pkl
+
+print("ENV")
+print(os.environ)
+
 RESOURCES_DIR = os.getenv("VIRTUAL_ENV", None)  # check if running in venv
 if RESOURCES_DIR:
     RESOURCES_DIR = posix_path(RESOURCES_DIR, "resources")
