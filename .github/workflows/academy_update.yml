@@ -83,6 +83,8 @@ jobs:
         git status
         git --no-pager diff
         git add .
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "ShadowTemplate@users.noreply.github.com"
         git commit -S -m "Myr update: ${{ steps.date.outputs.today }}"
 
     - name: Push changes
