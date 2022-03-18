@@ -88,8 +88,9 @@ jobs:
         cd academy
         git status
         git --no-pager diff
-        git config user.name "GitHub Actions"
-        git config user.email "ShadowTemplate@users.noreply.github.com"
+        git config --local user.name "GitHub Actions"
+        git config --local user.email "ShadowTemplate@users.noreply.github.com"
         git add .
         git commit -S -m "Myr update: ${{ steps.date.outputs.today }}"
+        git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
         git push
