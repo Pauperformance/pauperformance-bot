@@ -72,3 +72,4 @@ jobs:
         myr academy update
         cd academy
         git status
+        git --no-pager diff
