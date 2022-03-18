@@ -257,7 +257,11 @@ class AcademyService:
                     "date": video.published_at,
                     "fa_icon": video.fa_icon,
                 }
-                for video in videos
+                for video in sorted(
+                    videos,
+                    key=lambda v: v.published_at + v.deck_name,
+                    reverse=True,
+                )
                 if video.deck_name.startswith(archetype_name)
             ]
             template_values = {
