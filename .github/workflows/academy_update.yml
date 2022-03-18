@@ -31,10 +31,6 @@ jobs:
     - name: Make dir
       run: |
         mkdir academy
-        ls
-        date
-        ls ..
-        date
 
     - name: Clone Academy repository
       uses: actions/checkout@v2
@@ -72,12 +68,12 @@ jobs:
 
         ACADEMY_PATH: './academy'
       run: |
-        ls
-        date
-        ls academy
-        date
+#        ls
+#        date
+#        ls academy
+#        date
         pwd
-        date
+#        date
         myr academy update
         cd academy
         git status

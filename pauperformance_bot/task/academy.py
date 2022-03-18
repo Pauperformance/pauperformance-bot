@@ -16,10 +16,9 @@ from pauperformance_bot.service.storage.dropbox_ import DropboxService
 
 def academy_update(pauperformance):
     # import new content
-    # TODO: re-enable
-    # pauperformance.import_players_videos_from_twitch(send_notification=True)
-    # pauperformance.import_players_videos_from_youtube(send_notification=True)
-    # pauperformance.import_decks_from_deckstats(send_notification=True)
+    pauperformance.import_players_videos_from_twitch(send_notification=True)
+    pauperformance.import_players_videos_from_youtube(send_notification=True)
+    pauperformance.import_decks_from_deckstats(send_notification=True)
 
     # update Academy
     academy = AcademyService(pauperformance)
