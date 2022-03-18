@@ -40,7 +40,7 @@ from pauperformance_bot.util.config import (
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 from pauperformance_bot.util.template import render_template
-from pauperformance_bot.util.time import now, pretty_str
+from pauperformance_bot.util.time import now_utc, pretty_str
 
 logger = get_application_logger()
 
@@ -351,7 +351,7 @@ class AcademyService:
             dev_template_file,
             dev_output_file,
             {
-                "last_update_date": pretty_str(now()),
+                "last_update_date": pretty_str(now_utc()),
             },
         )
         logger.info(f"Rendered dev to {dev_output_file}.")

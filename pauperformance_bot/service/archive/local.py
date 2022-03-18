@@ -17,7 +17,7 @@ from pauperformance_bot.entity.deck.playable import (
 from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
-from pauperformance_bot.util.time import now
+from pauperformance_bot.util.time import now_utc
 
 logger = get_application_logger()
 
@@ -44,7 +44,7 @@ class LocalArchiveService(AbstractArchiveService):
         with open(output_file, "w", encoding="utf-8") as out_f:
             data = {
                 "name": name,
-                "creation_date": now(),
+                "creation_date": now_utc(),
                 "description": description,
                 "playable_deck": str(playable_deck),
             }

@@ -4,7 +4,6 @@ from itertools import count
 from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.util.log import get_application_logger
-from pauperformance_bot.util.time import now, pretty_str
 
 logger = get_application_logger()
 
@@ -47,7 +46,6 @@ def read_family_config(config_file_path):
     config = read_config(config_file_path)
     values = {
         **config["values"],
-        "last_update_date": pretty_str(now()),
     }
     return values
 
