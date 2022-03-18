@@ -60,6 +60,8 @@ jobs:
         TWITCH_APP_CLIENT_ID: ${{ secrets.TWITCH_APP_CLIENT_ID }}
         TWITCH_APP_CLIENT_SECRET: ${{ secrets.TWITCH_APP_CLIENT_SECRET }}
         YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+
+        ACADEMY_PATH: './academy'
       run: |
         ls
         date
@@ -67,5 +69,4 @@ jobs:
         date
         pwd
         date
-        myr --help
         myr academy update
