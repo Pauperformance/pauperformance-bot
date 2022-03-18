@@ -310,7 +310,7 @@ class AcademyService:
                 {
                     "name": archetype,
                 }
-                for archetype in families_map[family_name]
+                for archetype in sorted(families_map[family_name])
             ]
             values["archetypes_dir"] = archetypes_dir
             family_file_name = Path(family_config_file).name
