@@ -1,7 +1,9 @@
 import collections
 import glob
 import json
+import os
 import pickle
+import tarfile
 from datetime import datetime
 from pathlib import Path
 from time import sleep
@@ -97,12 +99,17 @@ class PauperformanceService:
         cards_index_cache_file=PAUPER_CARDS_INDEX_CACHE_FILE,
     ):
         card_index = {}
+        extracted_file = cards_index_cache_file.rstrip(".tgz")
         try:
-            with open(cards_index_cache_file, "rb") as cache_f:
+            logger.debug(
+                f"Trying to load card index from cache: "
+                f"{cards_index_cache_file}"
+            )
+            with tarfile.open(cards_index_cache_file, "r:gz") as tar:
+                tar.extractall(path=os.path.dirname(cards_index_cache_file))
+            with open(extracted_file, "rb") as cache_f:
                 card_index = pickle.load(cache_f)
-                logger.debug(
-                    f"Loaded card index from cache: {cards_index_cache_file}"
-                )
+                logger.debug(f"Loaded card index from cache: {extracted_file}")
         except FileNotFoundError:
             logger.debug("No cache found for card index.")
 
@@ -128,8 +135,17 @@ class PauperformanceService:
                 f"adding: {sorted(list(to_be_removed_sets))}"
             )
 
-        with open(cards_index_cache_file, "wb") as cache_f:
+        logger.debug(f"Updating cache file {extracted_file}...")
+        with open(extracted_file, "wb") as cache_f:
             pickle.dump(card_index, cache_f)
+        logger.debug(f"Updated cache file {extracted_file}.")
+        logger.debug(f"Archiving cache file {cards_index_cache_file}...")
+        with tarfile.open(cards_index_cache_file, "w:gz") as tar:
+            tar.add(
+                extracted_file,
+                arcname=os.path.basename(extracted_file),
+            )
+        logger.debug(f"Archived cache file {cards_index_cache_file}.")
         return card_index
 
     def _build_incremental_card_index(

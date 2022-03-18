@@ -1,0 +1,25 @@
+1 Anarchist
+4 Balustrade Spy
+4 Cabal Ritual
+4 Conjurer's Bauble
+4 Dark Ritual
+2 Dimir House Guard
+1 Forest
+4 Gitaxian Probe
+1 Haunting Misery
+4 Land Grant
+4 Lotus Petal
+4 Manamorphose
+2 Morgue Theft
+4 Simian Spirit Guide
+4 Songs of the Damned
+4 Street Wraith
+4 Tinder Wall
+4 Wild Cantor
+1 Wirewood Guardian
+
+4 Duress
+2 Flaring Pain
+3 Ingot Chewer
+4 Red Elemental Blast
+2 Reverent Silence

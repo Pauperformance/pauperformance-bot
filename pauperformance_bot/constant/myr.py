@@ -10,13 +10,6 @@ PAUPERFORMANCE_BOT_DIR = posix_path(
 )  # for user data
 SECRETS_UNTRACKED_FILE = "pauperformance_bot.secrets.py"
 
-# Myr cache
-CACHE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "cache")
-DECKSTATS_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "deckstats_decks")
-MTGGOLDFISH_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "mtggoldfish_decks")
-SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
-PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(CACHE_DIR, "pauper_cards_index.pkl")
-
 # Local storage
 STORAGE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "storage")
 STORAGE_DECKS_SUBDIR = "decks"
@@ -44,6 +37,7 @@ VIDEO_DECK_TAG = "Pauperformance: "
 VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 
 # resources/
+# | cache/
 # | config/
 # | templates/
 # | last_set_index.pkl
@@ -56,6 +50,16 @@ elif "VIRTUAL_ENV" in os.environ:  # running in venv
     RESOURCES_DIR = posix_path(os.getenv("VIRTUAL_ENV"), "resources")
 else:
     RESOURCES_DIR = posix_path(TOP_PATH.as_posix(), "resources")
+
+CACHE_DIR = posix_path(RESOURCES_DIR, "cache")
+DECKSTATS_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "deckstats_decks")
+MTGGOLDFISH_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "mtggoldfish_decks")
+SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
+PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(
+    CACHE_DIR,
+    "pauper_cards_index.pkl.tgz",
+)
+
 CONFIG_DIR = posix_path(RESOURCES_DIR, "config")
 CONFIG_ARCHETYPES_DIR = posix_path(CONFIG_DIR, "archetypes")
 CONFIG_FAMILIES_DIR = posix_path(CONFIG_DIR, "families")

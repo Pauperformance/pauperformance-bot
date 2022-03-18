@@ -1,0 +1,30 @@
+1 Abrade
+2 Archaeomancer
+1 Ardent Elementalist
+1 Ash Barrens
+4 Cleansing Wildfire
+4 Counterspell
+1 Crimson Fleet Commodore
+3 Ephemerate
+3 Fire/Ice
+4 Galvanic Blast
+2 Late to Dinner
+4 Mulldrifter
+4 Preordain
+2 Razortide Bridge
+4 Rustvale Bridge
+3 Sea Gate Oracle
+2 Seat of the Synod
+4 Silverbluff Bridge
+5 Snow-Covered Island
+1 Snow-Covered Mountain
+2 Snow-Covered Plains
+1 Soul of Migration
+2 Stonehorn Dignitary
+
+3 Blue Elemental Blast
+3 Dawnbringer Cleric
+3 Dust to Dust
+1 Fiery Cannonade
+4 Pyroblast
+1 Tormod's Crypt

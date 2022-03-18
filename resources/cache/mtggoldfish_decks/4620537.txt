@@ -1,0 +1,33 @@
+1 Abrade
+2 Annoyed Altisaur
+4 Boarding Party
+1 Bojuka Bog
+2 Cast Down
+3 Chainer's Edict
+4 Cleansing Wildfire
+2 Crimson Fleet Commodore
+3 Darkmoss Bridge
+2 Drossforge Bridge
+3 Forest
+4 Galvanic Blast
+2 Great Furnace
+4 Lightning Bolt
+3 Llanowar Visionary
+3 Mountain
+1 Owlbear
+2 Penumbra Spider
+1 Pulse of Murasa
+4 Sarulf's Packmate
+4 Slagwoods Bridge
+1 Swamp
+2 Terminate
+2 Tree of Tales
+
+2 Ancient Grudge
+2 Duress
+3 Fiery Cannonade
+1 Gorilla Shaman
+1 Multani's Decree
+2 Pyroblast
+1 Relic of Progenitus
+3 Weather the Storm
