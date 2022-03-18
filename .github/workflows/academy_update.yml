@@ -82,8 +82,6 @@ jobs:
         cd academy
         git status
         git --no-pager diff
-        git config --local user.name "GitHub Actions"
-        git config --local user.email "ShadowTemplate@users.noreply.github.com"
         git add .
         git commit -S -m "Myr update: ${{ steps.date.outputs.today }}"
 
