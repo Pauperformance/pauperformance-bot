@@ -20,10 +20,18 @@ jobs:
       with:
         python-version: '3.8'
 
+    - name: Make dir
+      run: |
+        mkdir academy
+        ls
+        ls ..
+
     - name: Clone Academy repository
       uses: actions/checkout@v2
       with:
         repository: 'Pauperformance/Pauperformance.github.io.git'
+        ref: 'master'
+        path: './academy'
 
     - name: Explore
       run: |
