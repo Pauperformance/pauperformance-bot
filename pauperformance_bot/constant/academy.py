@@ -1,3 +1,5 @@
+import os
+
 from pauperformance_bot.constant.myr import TOP_PATH
 from pauperformance_bot.util.path import posix_path
 from pauperformance_bot.util.web_page import WebPage
@@ -5,8 +7,9 @@ from pauperformance_bot.util.web_page import WebPage
 # ACADEMY_PATH must resolve to the top directory of the website
 # (i.e. the cloned twin repo), for example:
 # /home/you/Pauperformance.github.io
-ACADEMY_PATH = posix_path(
-    TOP_PATH.parent.as_posix(), "Pauperformance.github.io"
+ACADEMY_PATH = os.getenv(
+    "ACADEMY_PATH",
+    posix_path(TOP_PATH.parent.as_posix(), "Pauperformance.github.io"),
 )
 
 HOME_PAGE_NAME = WebPage("index")
