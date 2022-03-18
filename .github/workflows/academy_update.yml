@@ -41,6 +41,8 @@ jobs:
         path: './academy'
 
     - name: Explore
+      env:
+        FOO_TEST: ${{ secrets.FOO_TEST }}
       run: |
         ls
         echo ${{ secrets.FOO_TEST }}
