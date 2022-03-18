@@ -4426,5 +4426,11 @@
         "scryfall_code": "yneo",
         "name": "Alchemy: Kamigawa",
         "date": "2022-03-17"
+    },
+    "739": {
+        "p12e_code": 739,
+        "scryfall_code": "ymid",
+        "name": "Alchemy: Innistrad",
+        "date": "2021-12-09"
     }
 }

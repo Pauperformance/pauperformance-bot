@@ -1,0 +1,30 @@
+4 Brainstorm
+3 Daze
+4 Delver of Secrets
+1 Dispel
+4 Evolving Wilds
+3 Gitaxian Probe
+1 Gush
+4 Lightning Bolt
+3 Memory Lapse
+4 Nimble Mongoose
+2 Ponder
+1 Remove Soul
+2 Skred
+3 Snow-Covered Forest
+5 Snow-Covered Island
+2 Snow-Covered Mountain
+4 Terramorphic Expanse
+3 Thought Scour
+3 Vapor Snag
+4 Werebear
+
+1 Ancient Grudge
+2 Aura Flux
+2 Electrickery
+2 Gorilla Shaman
+2 Hydroblast
+1 Natural State
+2 Pyroblast
+1 Stormbound Geist
+2 Tangle

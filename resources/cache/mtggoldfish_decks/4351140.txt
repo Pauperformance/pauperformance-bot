@@ -1,0 +1,23 @@
+1 Fireblast
+2 Forgotten Cave
+4 Foundry Street Denizen
+4 Goblin Arsonist
+4 Goblin Bushwhacker
+4 Goblin Cohort
+4 Goblin Grenade
+4 Goblin Instigator
+1 Goblin Lookout
+4 Goblin Sledder
+2 Goblin War Strike
+4 Lightning Bolt
+2 Mogg Raider
+4 Mogg War Marshal
+15 Mountain
+1 Sparksmith
+
+3 Echoing Ruin
+3 Electrickery
+2 Gorilla Shaman
+3 Smash to Smithereens
+2 Sylvok Lifestaff
+2 Tormod's Crypt

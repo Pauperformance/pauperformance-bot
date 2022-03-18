@@ -1,0 +1,26 @@
+4 Ancient Spring
+2 Brainspoil
+3 Burnt Offering
+3 Careful Study
+4 Chromatic Sphere
+4 Chromatic Star
+3 Dark Ritual
+4 Energy Tap
+1 Epicure of Blood
+3 Gurmag Angler
+1 Lotus Petal
+4 Manamorphose
+4 Preordain
+4 Rush of Knowledge
+4 Saprazzan Skerry
+4 Shambling Attendants
+4 Street Wraith
+3 Sulfur Vent
+1 Weather the Storm
+
+3 Dispel
+3 Duress
+4 Khalni Garden
+3 Red Elemental Blast
+1 Scattershot
+1 Sulfur Vent

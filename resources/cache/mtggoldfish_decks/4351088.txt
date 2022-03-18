@@ -1,0 +1,29 @@
+1 Ancient Den
+2 Aven Riftwatcher
+3 Azorius Chancery
+1 Bonesplitter
+4 Brainstorm
+4 Counterspell
+1 Flayer Husk
+5 Island
+4 Journey to Nowhere
+4 Legion Conquistador
+5 Plains
+4 Ponder
+2 Sea Gate Oracle
+1 Seat of the Synod
+4 Squadron Hawk
+1 Sylvok Lifestaff
+4 Thraben Inspector
+5 Tranquil Cove
+2 Trinket Mage
+3 Wormfang Drake
+
+1 Circle of Protection: Blue
+1 Circle of Protection: Green
+1 Circle of Protection: Red
+2 Dust to Dust
+3 Negate
+2 Relic of Progenitus
+4 Sunlance
+1 Viridian Longbow
