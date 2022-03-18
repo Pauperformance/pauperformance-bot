@@ -1,4 +1,5 @@
 from pauperformance_bot.credentials import (
+    TELEGRAM_CHUMPBLOCCKAMI_ID,
     TELEGRAM_MIKEOSCAR_ID,
     TELEGRAM_MREVILEYE_ID,
     TELEGRAM_PAUPERFORMANCE_ID,
@@ -9,7 +10,6 @@ from pauperformance_bot.credentials import (
 from pauperformance_bot.entity.pauperformance_player import (
     PauperformancePlayer,
 )
-from pauperformance_bot.secrets import TELEGRAM_CHUMPBLOCCKAMI_ID
 
 PAUPERFORMANCE_PLAYER = PauperformancePlayer(
     name="Pauperformance",
