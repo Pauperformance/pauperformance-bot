@@ -14,6 +14,9 @@ jobs:
     steps:
     - name: Clone Myr repository
       uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+        fetch-depth: 0
 
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
@@ -39,6 +42,8 @@ jobs:
         repository: 'Pauperformance/Pauperformance.github.io.git'
         ref: 'master'
         path: './academy'
+        persist-credentials: false
+        fetch-depth: 0
 
     - name: Get current date
       id: date
@@ -92,4 +97,4 @@ jobs:
         git config --local user.email "ShadowTemplate@users.noreply.github.com"
         git add .
         git commit -S -m "Myr update: ${{ steps.date.outputs.today }}"
-        git push
+        git push origin master
