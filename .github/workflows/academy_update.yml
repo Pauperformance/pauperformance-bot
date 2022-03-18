@@ -51,7 +51,7 @@ jobs:
         git-committer-email: "ShadowTemplate@users.noreply.github.com"
         git-user-signingkey: true
         git-commit-gpgsign: true
-        git_config_global: true
+        git-config-global: true
         gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
         passphrase: ${{ secrets.PASSPHRASE }}
 
@@ -88,6 +88,8 @@ jobs:
         cd academy
         git status
         git --no-pager diff
+        git config user.name "GitHub Actions"
+        git config user.email "ShadowTemplate@users.noreply.github.com"
         git add .
         git commit -S -m "Myr update: ${{ steps.date.outputs.today }}"
         git push
