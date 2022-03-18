@@ -1,4 +1,5 @@
 import os
+from distutils.util import strtobool
 from pathlib import Path
 
 from pauperformance_bot.util.path import posix_path
@@ -47,12 +48,12 @@ VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 # | templates/
 # | last_set_index.pkl
 
-print("ENV")
-print(os.environ)
-
-RESOURCES_DIR = os.getenv("VIRTUAL_ENV", None)  # check if running in venv
-if RESOURCES_DIR:
-    RESOURCES_DIR = posix_path(RESOURCES_DIR, "resources")
+if "pythonLocation" in os.environ and strtobool(
+    os.environ.get("GITHUB_ACTIONS", "false")
+):  # running in GitHub
+    RESOURCES_DIR = posix_path(os.getenv("pythonLocation"), "resources")
+elif "VIRTUAL_ENV" in os.environ:  # running in venv
+    RESOURCES_DIR = posix_path(os.getenv("VIRTUAL_ENV"), "resources")
 else:
     RESOURCES_DIR = posix_path(TOP_PATH.as_posix(), "resources")
 CONFIG_DIR = posix_path(RESOURCES_DIR, "config")
