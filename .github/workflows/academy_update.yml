@@ -20,6 +20,11 @@ jobs:
       with:
         python-version: '3.8'
 
+    - name: Install pauperformance-bot
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install .
+
     - name: Make dir
       run: |
         mkdir academy
@@ -27,7 +32,6 @@ jobs:
         date
         ls ..
         date
-        ls academy
 
     - name: Clone Academy repository
       uses: actions/checkout@v2
@@ -42,4 +46,7 @@ jobs:
         echo ${{ secrets.FOO_TEST }}
         date
         ls academy
-        
+        date
+        pwd
+        date
+        myr --help
