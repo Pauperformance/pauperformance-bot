@@ -40,6 +40,20 @@ jobs:
         ref: 'master'
         path: './academy'
 
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=today::$(date +'%Y-%m-%d, %H:%M:%S')"
+
+    - name: Import GPG key
+      uses: crazy-max/ghaction-import-gpg@v3
+      with:
+        git-committer-name: "GitHub Actions"
+        git-committer-email: "ShadowTemplate@users.noreply.github.com"
+        git-user-signingkey: true
+        git-commit-gpgsign: true
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+
     - name: Explore
       env:
         DROPBOX_ACCESS_TOKEN: ${{ secrets.DROPBOX_ACCESS_TOKEN }}
@@ -73,3 +87,6 @@ jobs:
         cd academy
         git status
         git --no-pager diff
+        git add .
+        git commit -S -m "Myr update: ${{ steps.date.outputs.today }}"
+        git push
