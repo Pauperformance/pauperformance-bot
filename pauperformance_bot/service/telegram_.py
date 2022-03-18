@@ -1,3 +1,4 @@
+import os
 import telegram
 
 from pauperformance_bot.credentials import TELEGRAM_MYR_API_TOKEN
@@ -8,6 +9,10 @@ logger = get_application_logger()
 
 class TelegramService:
     def __init__(self, myr_api_token=TELEGRAM_MYR_API_TOKEN):
+        if myr_api_token is None:  # TODO
+            print("NONE TOKEN")
+            print(os.environ["FOO_TEST"])
+            print("DISPLAYED?")
         self.telegram_bot = telegram.Bot(token=myr_api_token)
 
     def send_message(self, player, message, disable_web_page_preview=True):
