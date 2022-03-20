@@ -51,14 +51,15 @@ class AcademyService:
         self.scryfall = pauperformance.scryfall
         self.set_index = pauperformance.set_index
 
-    def update_all(self):
+    def update_all(self, update_dev=True):
         self.update_home()
         self.update_archetypes_index()
         self.update_set_index()
         self.update_pauper_pool()
         self.update_archetypes()
         self.update_families()
-        self.update_dev()
+        if update_dev:
+            self.update_dev()
 
     def update_home(
         self,
