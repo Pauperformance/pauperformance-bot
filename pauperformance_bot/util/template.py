@@ -20,7 +20,7 @@ def tagify(name):
 def to_archetype_page_mana(mana):
     return (
         f'<img src="../{RESOURCES_IMAGES_MANA_RELATIVE_URL}/{mana}.png" '
-        f'width="25"/>'
+        f'class="dominant-mana-icon"/>'
     )
 
 
