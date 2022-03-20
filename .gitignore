@@ -22,3 +22,4 @@ coverage.xml
 
 # Myr
 pauperformance_bot/secrets.py
+pauperformance_bot/task/devel.py
