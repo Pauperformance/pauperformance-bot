@@ -46,7 +46,7 @@ class DeckstatsService:
         response = execute_http_request(method, url)
         response = json.loads(response.content)
         folders = {"<root>": "0"}
-        for subfolder in response["folder"]["subfolders"]:
+        for subfolder in response["folder"].get("subfolders", []):
             folders[subfolder["name"]] = str(subfolder["id"])
         return folders
 
