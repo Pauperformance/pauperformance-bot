@@ -24,3 +24,6 @@ class TelegramService:
             disable_web_page_preview=disable_web_page_preview,
         )
         logger.debug(f"Sent message '{message}' to {player.name}.")
+
+    def get_updates(self):
+        return self.telegram_bot.get_updates()
