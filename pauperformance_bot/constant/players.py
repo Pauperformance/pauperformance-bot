@@ -5,7 +5,8 @@ from pauperformance_bot.credentials import (
     TELEGRAM_PAUPERFORMANCE_ID,
     TELEGRAM_RIKXVIS_ID,
     TELEGRAM_SHIKA93_ID,
-    TELEGRAM_THRABEN27_ID, TELEGRAM_TARMOGOYF_ITA_ID,
+    TELEGRAM_TARMOGOYF_ITA_ID,
+    TELEGRAM_THRABEN27_ID,
 )
 from pauperformance_bot.entity.pauperformance_player import (
     PauperformancePlayer,
@@ -94,8 +95,8 @@ PAUPERGANDA_PLAYER = PauperformancePlayer(
     deckstats_name=None,
     deckstats_id=None,
     telegram_id=None,
-    twitch_login_name='pauperganda',
-    youtube_channel_id='UCqJ0E420KX9_3lFNJjDoKDA',
+    twitch_login_name="pauperganda",
+    youtube_channel_id="UCqJ0E420KX9_3lFNJjDoKDA",
     default_youtube_language="en",
 )
 
@@ -105,8 +106,8 @@ TARMOGOYF_ITA_PLAYER = PauperformancePlayer(
     deckstats_name=None,
     deckstats_id=None,
     telegram_id=TELEGRAM_TARMOGOYF_ITA_ID,
-    twitch_login_name='lega_pauper_online',
-    youtube_channel_id='UCAERb1O0w07LQ2ORO-N6V_Q',
+    twitch_login_name="lega_pauper_online",
+    youtube_channel_id="UCAERb1O0w07LQ2ORO-N6V_Q",
     default_youtube_language="it",
 )
 
@@ -119,4 +120,5 @@ PAUPERFORMANCE_PLAYERS = [
     RIKXVIS_PLAYER,
     CHUMPBLOCCKAMI_PLAYER,
     TARMOGOYF_ITA_PLAYER,
+    PAUPERGANDA_PLAYER,
 ]
