@@ -67,6 +67,6 @@
 | 🗣️ | Name | Author | Date |
 | -- | ---- | ------ | ---- |
 {% for resource in resources -%}
-| {{ resource.language }} | [{{ resource.name }}]({{ resource.url }}) | {{ resource.author }} | {{ "%-12s" % resource.date }} |
+| {{ resource.language }} | <a target="_blank" href="{{ resource.url }}">{{ resource.name }}</a> | {{ resource.author }} | {{ "%-12s" % resource.date }} |
 {% endfor %}
 {% endif %}
