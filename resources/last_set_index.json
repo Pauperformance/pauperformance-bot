@@ -4432,5 +4432,11 @@
         "scryfall_code": "ymid",
         "name": "Alchemy: Innistrad",
         "date": "2021-12-09"
+    },
+    "740": {
+        "p12e_code": 740,
+        "scryfall_code": "clb",
+        "name": "Commander Legends: Battle for Baldur's Gate",
+        "date": "2022-06-10"
     }
 }
