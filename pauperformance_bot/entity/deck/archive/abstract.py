@@ -42,6 +42,11 @@ class AbstractArchivedDeck(metaclass=ABCMeta):
         return archetype_and_p12e_code.rsplit(" ", maxsplit=1)[1]
 
     @property
+    def revision(self):
+        p12e_name, friendly_name = self.name.split(" | ")
+        return p12e_name.split(".")[1]
+
+    @property
     @abstractmethod
     def url(self):  # TODO: rename to URI
         pass

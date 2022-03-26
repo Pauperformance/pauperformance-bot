@@ -1,4 +1,6 @@
 from pauperformance_bot.credentials import (
+    DISCORD_USER_MREVILEYE_ID,
+    DISCORD_USER_SHIKA93_ID,
     TELEGRAM_CHUMPBLOCCKAMI_ID,
     TELEGRAM_MIKEOSCAR_ID,
     TELEGRAM_MREVILEYE_ID,
@@ -21,6 +23,7 @@ PAUPERFORMANCE_PLAYER = PauperformancePlayer(
     twitch_login_name="Pauperformance",
     youtube_channel_id="UCDUiIskNnmuJ3XJ1SdQqs0A",
     default_youtube_language="en",
+    discord_id=None,
 )
 
 SHIKA93_PLAYER = PauperformancePlayer(
@@ -32,6 +35,7 @@ SHIKA93_PLAYER = PauperformancePlayer(
     twitch_login_name=None,
     youtube_channel_id=None,
     default_youtube_language="en",
+    discord_id=DISCORD_USER_SHIKA93_ID,
 )
 
 MREVILEYE_PLAYER = PauperformancePlayer(
@@ -43,6 +47,7 @@ MREVILEYE_PLAYER = PauperformancePlayer(
     twitch_login_name=None,
     youtube_channel_id=None,
     default_youtube_language="en",
+    discord_id=DISCORD_USER_MREVILEYE_ID,
 )
 
 MIKEOSCAR_PLAYER = PauperformancePlayer(
@@ -54,6 +59,7 @@ MIKEOSCAR_PLAYER = PauperformancePlayer(
     twitch_login_name=None,
     youtube_channel_id=None,
     default_youtube_language="en",
+    discord_id=None,
 )
 
 THRABEN27_PLAYER = PauperformancePlayer(
@@ -65,6 +71,7 @@ THRABEN27_PLAYER = PauperformancePlayer(
     twitch_login_name=None,
     youtube_channel_id=None,
     default_youtube_language="en",
+    discord_id=None,
 )
 
 RIKXVIS_PLAYER = PauperformancePlayer(
@@ -76,6 +83,7 @@ RIKXVIS_PLAYER = PauperformancePlayer(
     twitch_login_name=None,
     youtube_channel_id=None,
     default_youtube_language="en",
+    discord_id=None,
 )
 
 CHUMPBLOCCKAMI_PLAYER = PauperformancePlayer(
@@ -87,6 +95,7 @@ CHUMPBLOCCKAMI_PLAYER = PauperformancePlayer(
     twitch_login_name=None,
     youtube_channel_id=None,
     default_youtube_language="en",
+    discord_id=None,
 )
 
 PAUPERGANDA_PLAYER = PauperformancePlayer(
@@ -98,6 +107,7 @@ PAUPERGANDA_PLAYER = PauperformancePlayer(
     twitch_login_name="pauperganda",
     youtube_channel_id="UCqJ0E420KX9_3lFNJjDoKDA",
     default_youtube_language="en",
+    discord_id=None,
 )
 
 TARMOGOYF_ITA_PLAYER = PauperformancePlayer(
@@ -109,6 +119,7 @@ TARMOGOYF_ITA_PLAYER = PauperformancePlayer(
     twitch_login_name="lega_pauper_online",
     youtube_channel_id="UCAERb1O0w07LQ2ORO-N6V_Q",
     default_youtube_language="it",
+    discord_id=None,
 )
 
 PAUPERFORMANCE_PLAYERS = [

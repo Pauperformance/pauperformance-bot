@@ -9,6 +9,7 @@ class PauperformancePlayer:
         twitch_login_name,
         youtube_channel_id,
         default_youtube_language,
+        discord_id,
     ):
         self.name = name
         self.mtgo_name = mtgo_name
@@ -18,3 +19,4 @@ class PauperformancePlayer:
         self.twitch_login_name = twitch_login_name
         self.youtube_channel_id = youtube_channel_id
         self.default_youtube_language = default_youtube_language
+        self.discord_id = discord_id
