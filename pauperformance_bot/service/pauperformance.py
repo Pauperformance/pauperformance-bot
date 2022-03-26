@@ -23,8 +23,10 @@ from pauperformance_bot.constant.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.entity.academy_video import AcademyVideo
 from pauperformance_bot.exceptions import PauperformanceException
+from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.scryfall import ScryfallService
+from pauperformance_bot.service.storage.abstract import AbstractStorageService
 from pauperformance_bot.service.telegram_ import TelegramService
 from pauperformance_bot.service.twitch import TwitchService
 from pauperformance_bot.service.youtube import YouTubeService
@@ -44,8 +46,8 @@ class PauperformanceService:
         youtube=YouTubeService(),
         players=PAUPERFORMANCE_PLAYERS,
     ):
-        self.storage = storage
-        self.archive = archive
+        self.storage: AbstractStorageService = storage
+        self.archive: AbstractArchiveService = archive
         self.scryfall = scryfall
         self.telegram = telegram
         self.twitch = twitch
