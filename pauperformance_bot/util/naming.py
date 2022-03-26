@@ -6,5 +6,5 @@ def is_valid_p12e_deckstats_name(deck_name):
     deck_id = tokens[1]
     if deck_id.count(".") != 1:
         return False
-    p13e_code, deck_number = deck_id.split(".")
-    return len(p13e_code) == len(deck_number) == 3
+    p12e_code, deck_number = deck_id.split(".")
+    return len(p12e_code) == len(deck_number) == 3

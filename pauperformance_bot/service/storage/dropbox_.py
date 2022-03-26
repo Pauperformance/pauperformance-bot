@@ -63,6 +63,18 @@ class DropboxService(AbstractStorageService):
             for file in self._list_files(self.deckstats_deck_path)
         )
 
+    def list_imported_mtggoldfish_deck_ids(self):
+        return set(
+            self.get_imported_mtggoldfish_deck_id_from_key(file.path_display)
+            for file in self._list_files(self.mtggoldfish_deck_path)
+        )
+
+    def list_imported_mtggoldfish_deck_names(self):
+        return set(
+            self.get_imported_mtggoldfish_deck_name_from_key(file.path_display)
+            for file in self._list_files(self.mtggoldfish_deck_path)
+        )
+
     def list_imported_twitch_videos(self):
         return set(
             self.get_imported_twitch_video(file.path_display)

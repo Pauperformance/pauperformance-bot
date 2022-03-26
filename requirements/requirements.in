@@ -9,3 +9,5 @@ scipy
 MarkupSafe==2.0.1  # v2.1.0 has removed soft_unicode, required by markupsafe, required by jinja2
 twitchAPI
 python-youtube
+discord.py[voice]
+beautifulsoup4
