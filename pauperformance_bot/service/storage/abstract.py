@@ -3,6 +3,7 @@ from abc import ABCMeta, abstractmethod
 from pauperformance_bot.constant.myr import (
     STORAGE_DECKS_SUBDIR,
     STORAGE_DECKSTATS_DECKS_SUBDIR,
+    STORAGE_MTGGOLDFISH_DECKS_SUBDIR,
     STORAGE_TWITCH_VIDEOS_SUBDIR,
     STORAGE_VIDEOS_SUBDIR,
     STORAGE_YOUTUBE_VIDEOS_SUBDIR,
@@ -27,6 +28,12 @@ class AbstractStorageService(metaclass=ABCMeta):
     @property
     def deckstats_deck_path(
         self, deckstats_subdir=STORAGE_DECKSTATS_DECKS_SUBDIR
+    ):
+        return f"{self.decks_path}{self._dir_separator}{deckstats_subdir}"
+
+    @property
+    def mtggoldfish_deck_path(
+        self, deckstats_subdir=STORAGE_MTGGOLDFISH_DECKS_SUBDIR
     ):
         return f"{self.decks_path}{self._dir_separator}{deckstats_subdir}"
 
@@ -56,6 +63,14 @@ class AbstractStorageService(metaclass=ABCMeta):
 
     @abstractmethod
     def list_imported_deckstats_deck_names(self):
+        pass
+
+    @abstractmethod
+    def list_imported_mtggoldfish_deck_ids(self):
+        pass
+
+    @abstractmethod
+    def list_imported_mtggoldfish_deck_names(self):
         pass
 
     @abstractmethod
@@ -89,6 +104,20 @@ class AbstractStorageService(metaclass=ABCMeta):
             f"{self._dir_separator}"
             f"{deckstats_deck_saved_id}>"
             f"{mtggoldfish_deck_id}>"
+            f"{deck_name}.txt"
+        )
+
+    def get_imported_mtggoldfish_deck_key(
+        self,
+        mtggoldfish_original_deck_id,
+        mtggoldfish_archived_deck_id,
+        deck_name,
+    ):
+        return (
+            f"{self.mtggoldfish_deck_path}"
+            f"{self._dir_separator}"
+            f"{mtggoldfish_original_deck_id}>"
+            f"{mtggoldfish_archived_deck_id}>"
             f"{deck_name}.txt"
         )
 
@@ -134,6 +163,14 @@ class AbstractStorageService(metaclass=ABCMeta):
 
     @staticmethod
     def get_imported_deckstats_deck_name_from_key(key):
+        return key.rsplit("/", maxsplit=1)[1].split(">")[2][:-4]  # drop .txt
+
+    @staticmethod
+    def get_imported_mtggoldfish_deck_id_from_key(key):
+        return key.rsplit("/", maxsplit=1)[1].split(">")[0]
+
+    @staticmethod
+    def get_imported_mtggoldfish_deck_name_from_key(key):
         return key.rsplit("/", maxsplit=1)[1].split(">")[2][:-4]  # drop .txt
 
     @staticmethod
