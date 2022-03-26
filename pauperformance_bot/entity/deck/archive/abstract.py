@@ -43,7 +43,7 @@ class AbstractArchivedDeck(metaclass=ABCMeta):
 
     @property
     def revision(self):
-        p12e_name, friendly_name = self.name.split(" | ")
+        p12e_name, _ = self.name.split(" | ")
         return p12e_name.split(".")[1]
 
     @property

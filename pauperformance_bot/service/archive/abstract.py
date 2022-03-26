@@ -8,10 +8,10 @@ from bs4 import BeautifulSoup
 
 from pauperformance_bot.constant.deckstats import REQUEST_SLEEP_TIMEOUT
 from pauperformance_bot.constant.discord import (
-    MYR_REACTION_KO,
-    MYR_REACTION_OK,
-    MYR_REACTION_SEEN,
-    MYR_REACTION_WARNING,
+    DISCORD_MYR_REACTION_KO,
+    DISCORD_MYR_REACTION_OK,
+    DISCORD_MYR_REACTION_SEEN,
+    DISCORD_MYR_REACTION_WARNING,
 )
 from pauperformance_bot.constant.mtggoldfish import (
     MTGGOLDFISH_DECK_DATE_TEXT,
@@ -315,9 +315,9 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 f"Storage (and Archive). Skipping it."
             )
             await discord_message.remove_reaction(
-                MYR_REACTION_SEEN, discord.user
+                DISCORD_MYR_REACTION_SEEN, discord.user
             )
-            await discord_message.add_reaction(MYR_REACTION_OK)
+            await discord_message.add_reaction(DISCORD_MYR_REACTION_OK)
             return
 
         logger.debug(f"Deck id: {original_deck_id}")
@@ -349,9 +349,9 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 logger.warning(message)
                 await log_channel.send(message)
                 await discord_message.remove_reaction(
-                    MYR_REACTION_SEEN, discord.user
+                    DISCORD_MYR_REACTION_SEEN, discord.user
                 )
-                await discord_message.add_reaction(MYR_REACTION_KO)
+                await discord_message.add_reaction(DISCORD_MYR_REACTION_KO)
                 return
             soup = BeautifulSoup(title_line, features="lxml")
             title_line = soup.get_text()[: -len(" Deck")]
@@ -410,12 +410,13 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
         if tentative_deck.archetype not in all_archetypes:
             message = (
-                f"{MYR_REACTION_KO} Archetype {tentative_deck.archetype} for "
+                f"{DISCORD_MYR_REACTION_KO} Archetype "
+                f"{tentative_deck.archetype} for "
                 f"deck <{url}> is not among those valid ("
                 f"<https://pauperformance.com/pages/archetypes_index.html>).\n"
                 f"You can either delete the message from #import-deck or "
                 f"rename the archetype to a valid one.\n"
-                f"Please note archetpyes have to be manually created by "
+                f"Please note archetypes have to be manually created by "
                 f"admins. "
                 f"If you think an archetype is missing, please let us know!\n"
                 f"I will try to reimport the deck later."
@@ -425,9 +426,9 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 await author.send(message)
             await log_channel.send(message)
             await discord_message.remove_reaction(
-                MYR_REACTION_SEEN, discord.user
+                DISCORD_MYR_REACTION_SEEN, discord.user
             )
-            await discord_message.add_reaction(MYR_REACTION_KO)
+            await discord_message.add_reaction(DISCORD_MYR_REACTION_KO)
             return
 
         deck_group = [d for d in all_decks if d.p12e_name == p12e_name]
@@ -443,9 +444,9 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 await author.send(message)
             await log_channel.send(message)
             await discord_message.remove_reaction(
-                MYR_REACTION_SEEN, discord.user
+                DISCORD_MYR_REACTION_SEEN, discord.user
             )
-            await discord_message.add_reaction(MYR_REACTION_KO)
+            await discord_message.add_reaction(DISCORD_MYR_REACTION_KO)
             return
 
         logger.debug(
@@ -499,11 +500,15 @@ class AbstractArchiveService(metaclass=ABCMeta):
             logger.info("Informing player on Discord...")
             await author.send(message)
         await log_channel.send(message)
-        await discord_message.remove_reaction(MYR_REACTION_SEEN, discord.user)
+        await discord_message.remove_reaction(
+            DISCORD_MYR_REACTION_SEEN, discord.user
+        )
         # if the deck name was initially wrong but was later renamed and fixed,
-        # there may be a MYR_REACTION_KO to remove
-        await discord_message.remove_reaction(MYR_REACTION_KO, discord.user)
-        await discord_message.add_reaction(MYR_REACTION_OK)
+        # there may be a DISCORD_MYR_REACTION_KO to remove
+        await discord_message.remove_reaction(
+            DISCORD_MYR_REACTION_KO, discord.user
+        )
+        await discord_message.add_reaction(DISCORD_MYR_REACTION_OK)
         if suspicious_list:
             message = (
                 f"⚠️ Archived deck with suspicious size "
@@ -515,7 +520,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
             )
             await author.send(message)
             await log_channel.send(message)
-            await discord_message.add_reaction(MYR_REACTION_WARNING)
+            await discord_message.add_reaction(DISCORD_MYR_REACTION_WARNING)
         logger.info(
             f"Imported into archive decks from url {url} for "
             f"player {player.name}."
