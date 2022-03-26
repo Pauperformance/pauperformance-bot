@@ -33,9 +33,9 @@ class AbstractStorageService(metaclass=ABCMeta):
 
     @property
     def mtggoldfish_deck_path(
-        self, deckstats_subdir=STORAGE_MTGGOLDFISH_DECKS_SUBDIR
+        self, mtggoldfish_subdir=STORAGE_MTGGOLDFISH_DECKS_SUBDIR
     ):
-        return f"{self.decks_path}{self._dir_separator}{deckstats_subdir}"
+        return f"{self.decks_path}{self._dir_separator}{mtggoldfish_subdir}"
 
     @property
     def videos_path(self, videos_subdir=STORAGE_VIDEOS_SUBDIR):

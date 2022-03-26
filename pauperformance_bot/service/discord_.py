@@ -1,11 +1,11 @@
 import discord
 
 from pauperformance_bot.constant.discord import (
-    MAX_HISTORY_LIMIT,
-    MYR_REACTION_KO,
-    MYR_REACTION_OK,
-    MYR_REACTION_SEEN,
-    MYR_REACTION_WARNING,
+    DISCORD_MAX_HISTORY_LIMIT,
+    DISCORD_MYR_REACTION_KO,
+    DISCORD_MYR_REACTION_OK,
+    DISCORD_MYR_REACTION_SEEN,
+    DISCORD_MYR_REACTION_WARNING,
 )
 from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
@@ -44,41 +44,19 @@ class DiscordService(discord.Client):
 
     async def on_ready(self):
         logger.info(f"Logged on Discord as {self.user}.")
-        # await self.report_new_users()
         await self._import_new_decks()
-        # await self._clean_emoji()
-        # await self.list_channels_in_guild()
         self.loop.stop()
-
-    # async def report_new_users(self):
-    #     logger.info(f'Reporting new users from channel
-    #     {self.welcome_channel_id}...')
-    #     channel = self.get_channel(self.welcome_channel_id)
-    #     print(channel.members)
-    #     messages = await channel.history(limit=MAX_HISTORY_LIMIT).flatten()
-    #     for m in messages:
-    #         print(m.content)
-    #         if m.author.name == 'MEE6' and m.content.startswith('Hey <@'):
-    #             new_user_id = int(m.content[
-    #                               m.content.index('@') + 1:
-    #                               m.content.index('>')
-    #                               ])
-    #
-    #             # print(f"New user: {new_user_id}")
-    #             user = self.get_user(new_user_id)
-    #             if user:
-    #                 print(f"{user.display_name} ({new_user_id})")
-    #     logger.info(
-    #     f'Reported new users from channel {self.welcome_channel_id}.')
 
     async def _clean_emoji(self):
         channel = self.get_channel(self.import_deck_channel_id)
-        messages = await channel.history(limit=MAX_HISTORY_LIMIT).flatten()
-        for message in messages:
-            await message.remove_reaction(MYR_REACTION_SEEN, self.user)
-            await message.remove_reaction(MYR_REACTION_OK, self.user)
-            await message.remove_reaction(MYR_REACTION_KO, self.user)
-            await message.remove_reaction(MYR_REACTION_WARNING, self.user)
+        messages = await channel.history(
+            limit=DISCORD_MAX_HISTORY_LIMIT
+        ).flatten()
+        for m in messages:
+            await m.remove_reaction(DISCORD_MYR_REACTION_SEEN, self.user)
+            await m.remove_reaction(DISCORD_MYR_REACTION_OK, self.user)
+            await m.remove_reaction(DISCORD_MYR_REACTION_KO, self.user)
+            await m.remove_reaction(DISCORD_MYR_REACTION_WARNING, self.user)
 
     async def _import_new_decks(self):
         logger.info(
@@ -88,7 +66,7 @@ class DiscordService(discord.Client):
         import_deck_channel = self.get_channel(self.import_deck_channel_id)
         myr_log_channel = self.get_channel(self.myr_log_channel_id)
         messages = await import_deck_channel.history(
-            limit=MAX_HISTORY_LIMIT
+            limit=DISCORD_MAX_HISTORY_LIMIT
         ).flatten()
         for message in messages:
             await self._process_import_deck_message(message, myr_log_channel)
@@ -102,14 +80,14 @@ class DiscordService(discord.Client):
             f"({message.author.name})..."
         )
         logger.info(f"Discord message {message.id}: {message.content}")
-        await message.add_reaction(MYR_REACTION_SEEN)
+        await message.add_reaction(DISCORD_MYR_REACTION_SEEN)
         if message.content.strip().startswith(DECK_API_ENDPOINT):
             logger.info("Detected MTGGoldfish deck.")
             await self._try_import_mtggoldfish_deck(message, log_channel)
         else:
             logger.info("Unrecognized deck format. Skipping it.")
-            await message.remove_reaction(MYR_REACTION_SEEN, self.user)
-            await message.add_reaction(MYR_REACTION_KO)
+            await message.remove_reaction(DISCORD_MYR_REACTION_SEEN, self.user)
+            await message.add_reaction(DISCORD_MYR_REACTION_KO)
         logger.debug(
             f"Processed message {message.id} by {message.author.id} "
             f"({message.author.name})."
@@ -132,8 +110,8 @@ class DiscordService(discord.Client):
             )
             logger.warning(log_message)
             await log_channel.send(log_message)
-            await message.remove_reaction(MYR_REACTION_SEEN, self.user)
-            await message.add_reaction(MYR_REACTION_KO)
+            await message.remove_reaction(DISCORD_MYR_REACTION_SEEN, self.user)
+            await message.add_reaction(DISCORD_MYR_REACTION_KO)
             return
         player = candidates[0]
         logger.debug(f"Detected owner: {player.name}")
