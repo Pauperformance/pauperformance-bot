@@ -1,6 +1,11 @@
+import requests
 from dropbox import Dropbox as OfficialDropbox
 
-from pauperformance_bot.constant.dropbox import MYR_ROOT_DIR
+from pauperformance_bot.constant.dropbox import (
+    AUTHORIZATION_WEBSITE_URL,
+    MYR_ROOT_DIR,
+    TOKEN_API_ENDPOINT,
+)
 from pauperformance_bot.credentials import (
     DROPBOX_ACCESS_TOKEN,
     DROPBOX_APP_KEY,
@@ -14,12 +19,20 @@ logger = get_application_logger()
 
 
 class DropboxService(AbstractStorageService):
-    def __init__(self, root_dir=MYR_ROOT_DIR):
+    def __init__(
+        self,
+        root_dir=MYR_ROOT_DIR,
+        oauth2_access_token=DROPBOX_ACCESS_TOKEN,
+        app_key=DROPBOX_APP_KEY,
+        app_secret=DROPBOX_APP_SECRET,
+    ):
         self._root_dir = root_dir
+        self.app_key = app_key
+        self.app_secret = app_secret
         self._service = OfficialDropbox(
-            oauth2_access_token=DROPBOX_ACCESS_TOKEN,
-            app_key=DROPBOX_APP_KEY,
-            app_secret=DROPBOX_APP_SECRET,
+            oauth2_access_token=oauth2_access_token,
+            app_key=app_key,
+            app_secret=app_secret,
         )
 
     @property
@@ -113,3 +126,25 @@ class DropboxService(AbstractStorageService):
         logger.info(f"Deleting file {file_path}...")
         self._service.files_delete_v2(file_path)
         logger.info(f"Deleted file containing {deck_name}.")
+
+    def _get_auth_token_interactively(
+        self,
+        auth_url=AUTHORIZATION_WEBSITE_URL,
+        token_api_endpoint=TOKEN_API_ENDPOINT,
+    ):
+        authorization_url = (
+            f"{auth_url}?client_id={self.app_key}&response_type=code"
+        )
+        # send the user to the authorization URL
+        print(authorization_url)
+        # get the authorization code from the user:
+        authorization_code = input("Enter the code:\n")
+        # exchange the authorization code for an access token
+        params = {
+            "code": authorization_code,
+            "grant_type": "authorization_code",
+            "client_id": self.app_key,
+            "client_secret": self.app_secret,
+        }
+        response = requests.post(token_api_endpoint, data=params)
+        print(response.text)
