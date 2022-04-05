@@ -18,7 +18,7 @@ def get_credential(credential_key):
     )
 
 
-DROPBOX_ACCESS_TOKEN = get_credential("DROPBOX_ACCESS_TOKEN")
+DROPBOX_REFRESH_TOKEN = get_credential("DROPBOX_REFRESH_TOKEN")
 DROPBOX_APP_KEY = get_credential("DROPBOX_APP_KEY")
 DROPBOX_APP_SECRET = get_credential("DROPBOX_APP_SECRET")
 
