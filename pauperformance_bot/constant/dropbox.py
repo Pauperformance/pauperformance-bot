@@ -1,5 +1,1 @@
-WEBSITE_URL = "https://www.dropbox.com"
-AUTHORIZATION_WEBSITE_URL = f"{WEBSITE_URL}/oauth2/authorize"
-API_ENDPOINT = "https://api.dropboxapi.com"
-TOKEN_API_ENDPOINT = f"{API_ENDPOINT}/oauth2/token"
 MYR_ROOT_DIR = "/dev/pauperformance-bot"

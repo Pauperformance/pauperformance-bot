@@ -1,15 +1,11 @@
-import requests
 from dropbox import Dropbox as OfficialDropbox
+from dropbox import DropboxOAuth2FlowNoRedirect
 
-from pauperformance_bot.constant.dropbox import (
-    AUTHORIZATION_WEBSITE_URL,
-    MYR_ROOT_DIR,
-    TOKEN_API_ENDPOINT,
-)
+from pauperformance_bot.constant.dropbox import MYR_ROOT_DIR
 from pauperformance_bot.credentials import (
-    DROPBOX_ACCESS_TOKEN,
     DROPBOX_APP_KEY,
     DROPBOX_APP_SECRET,
+    DROPBOX_REFRESH_TOKEN,
 )
 from pauperformance_bot.exceptions import StoredFileNotFound
 from pauperformance_bot.service.storage.abstract import AbstractStorageService
@@ -22,7 +18,7 @@ class DropboxService(AbstractStorageService):
     def __init__(
         self,
         root_dir=MYR_ROOT_DIR,
-        oauth2_access_token=DROPBOX_ACCESS_TOKEN,
+        refresh_token=DROPBOX_REFRESH_TOKEN,
         app_key=DROPBOX_APP_KEY,
         app_secret=DROPBOX_APP_SECRET,
     ):
@@ -30,7 +26,7 @@ class DropboxService(AbstractStorageService):
         self.app_key = app_key
         self.app_secret = app_secret
         self._service = OfficialDropbox(
-            oauth2_access_token=oauth2_access_token,
+            oauth2_refresh_token=refresh_token,
             app_key=app_key,
             app_secret=app_secret,
         )
@@ -127,24 +123,19 @@ class DropboxService(AbstractStorageService):
         self._service.files_delete_v2(file_path)
         logger.info(f"Deleted file containing {deck_name}.")
 
-    def _get_auth_token_interactively(
-        self,
-        auth_url=AUTHORIZATION_WEBSITE_URL,
-        token_api_endpoint=TOKEN_API_ENDPOINT,
-    ):
-        authorization_url = (
-            f"{auth_url}?client_id={self.app_key}&response_type=code"
+    def _oauth_interactive_flow(self):
+        auth_flow = DropboxOAuth2FlowNoRedirect(
+            self.app_key, use_pkce=True, token_access_type="offline"
         )
-        # send the user to the authorization URL
-        print(authorization_url)
-        # get the authorization code from the user:
-        authorization_code = input("Enter the code:\n")
-        # exchange the authorization code for an access token
-        params = {
-            "code": authorization_code,
-            "grant_type": "authorization_code",
-            "client_id": self.app_key,
-            "client_secret": self.app_secret,
-        }
-        response = requests.post(token_api_endpoint, data=params)
-        print(response.text)
+        authorize_url = auth_flow.start()
+        print("1. Go to: " + authorize_url)
+        print('2. Click "Allow" (you might have to log in first).')
+        print("3. Copy the authorization code.")
+        auth_code = input("Enter the authorization code here: ").strip()
+        oauth_result = auth_flow.finish(auth_code)
+        with OfficialDropbox(
+            oauth2_refresh_token=oauth_result.refresh_token,
+            app_key=self.app_key,
+        ) as service:
+            service.users_get_current_account()
+            print("Successfully set up client!")
