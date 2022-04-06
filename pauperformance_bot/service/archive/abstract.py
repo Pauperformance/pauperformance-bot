@@ -19,16 +19,14 @@ from pauperformance_bot.constant.mtggoldfish import (
     MTGGOLDFISH_EVENT_LINE_TEXT,
 )
 from pauperformance_bot.constant.myr import USA_DATE_FORMAT
-from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYER
+from pauperformance_bot.constant.phds import PAUPERFORMANCE
 from pauperformance_bot.entity.deck.archive.mtggoldfish import (
     MTGGoldfishArchivedDeck,
 )
 from pauperformance_bot.entity.deck.playable import (
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.entity.pauperformance_player import (
-    PauperformancePlayer,
-)
+from pauperformance_bot.entity.phd import PhD
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.naming import is_valid_p12e_deckstats_name
@@ -66,7 +64,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
         players_by_deckstats_id,
         set_index,
         myr,
-        warning_player=PAUPERFORMANCE_PLAYER,
+        warning_player=PAUPERFORMANCE,
         send_notification=True,
     ):  # TODO: get rid of players_by_deckstats_id
         logger.info(f"Updating archive decks for {player.name}...")
@@ -159,7 +157,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
         videos,
         storage,
         myr,
-        warning_player=PAUPERFORMANCE_PLAYER,
+        warning_player=PAUPERFORMANCE,
         send_notification=True,
     ):
         imported_twitch_videos = storage.list_imported_twitch_videos_ids()
@@ -226,7 +224,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
         videos,
         storage,
         myr,
-        warning_player=PAUPERFORMANCE_PLAYER,
+        warning_player=PAUPERFORMANCE,
         send_notification=True,
     ):
         imported_youtube_videos = storage.list_imported_youtube_videos_ids()
@@ -290,7 +288,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
     async def import_player_deck_from_mtggoldfish(
         self,
         url,
-        player: PauperformancePlayer,
+        player: PhD,
         discord,
         discord_message,
         log_channel,
