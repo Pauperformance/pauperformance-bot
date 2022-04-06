@@ -2,6 +2,7 @@ from pauperformance_bot.service.academy import AcademyService
 from pauperformance_bot.service.archive.mtggoldfish import (
     MTGGoldfishArchiveService,
 )
+from pauperformance_bot.service.discord_ import DiscordService
 from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.service.storage.dropbox_ import DropboxService
 
@@ -22,6 +23,8 @@ def main():
     archive = MTGGoldfishArchiveService(storage)
     pauperformance = PauperformanceService(storage, archive)
     academy_update(pauperformance)
+    discord = DiscordService(pauperformance)
+    discord.import_decks()
 
 
 if __name__ == "__main__":

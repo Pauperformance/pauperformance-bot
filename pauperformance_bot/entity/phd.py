@@ -1,4 +1,4 @@
-class PauperformancePlayer:
+class PhD:
     def __init__(
         self,
         name,

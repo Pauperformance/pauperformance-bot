@@ -18,7 +18,7 @@ from pauperformance_bot.constant.pauperformance import (
     INCREMENTAL_CARDS_INDEX_SKIP_SETS,
     KNOWN_SETS_WITH_NO_PAUPER_CARDS,
 )
-from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
+from pauperformance_bot.constant.phds import PAUPERFORMANCE_PHDS
 from pauperformance_bot.constant.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.entity.academy_video import AcademyVideo
@@ -44,7 +44,7 @@ class PauperformanceService:
         telegram=TelegramService(),
         twitch=TwitchService(),
         youtube=YouTubeService(),
-        players=PAUPERFORMANCE_PLAYERS,
+        players=PAUPERFORMANCE_PHDS,
     ):
         self.storage: AbstractStorageService = storage
         self.archive: AbstractArchiveService = archive

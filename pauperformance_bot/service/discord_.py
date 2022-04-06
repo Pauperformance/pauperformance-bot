@@ -1,6 +1,9 @@
 import discord
 
 from pauperformance_bot.constant.discord import (
+    DISCORD_CHANNEL_IMPORT_DECK_ID,
+    DISCORD_CHANNEL_MYR_LOG_ID,
+    DISCORD_CHANNEL_WELCOME_ID,
     DISCORD_MAX_HISTORY_LIMIT,
     DISCORD_MYR_REACTION_KO,
     DISCORD_MYR_REACTION_OK,
@@ -8,13 +11,8 @@ from pauperformance_bot.constant.discord import (
     DISCORD_MYR_REACTION_WARNING,
 )
 from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
-from pauperformance_bot.constant.players import PAUPERFORMANCE_PLAYERS
-from pauperformance_bot.credentials import (
-    DISCORD_BOT_TOKEN,
-    DISCORD_CHANNEL_IMPORT_DECK_ID,
-    DISCORD_CHANNEL_MYR_LOG_ID,
-    DISCORD_CHANNEL_WELCOME_ID,
-)
+from pauperformance_bot.constant.phds import PAUPERFORMANCE_PHDS
+from pauperformance_bot.credentials import DISCORD_BOT_TOKEN
 from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.util.log import get_application_logger
 
@@ -99,9 +97,7 @@ class DiscordService(discord.Client):
             url = url[: url.index("#")]
         logger.debug(f"Polished URL: {url}")
         candidates = [
-            p
-            for p in PAUPERFORMANCE_PLAYERS
-            if p.discord_id == message.author.id
+            p for p in PAUPERFORMANCE_PHDS if p.discord_id == message.author.id
         ]
         if len(candidates) != 1:
             log_message = (

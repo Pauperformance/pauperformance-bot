@@ -4438,5 +4438,11 @@
         "scryfall_code": "clb",
         "name": "Commander Legends: Battle for Baldur's Gate",
         "date": "2022-06-10"
+    },
+    "741": {
+        "p12e_code": 741,
+        "scryfall_code": "ncc",
+        "name": "New Capenna Commander",
+        "date": "2022-04-29"
     }
 }
