@@ -4444,5 +4444,17 @@
         "scryfall_code": "ncc",
         "name": "New Capenna Commander",
         "date": "2022-04-29"
+    },
+    "742": {
+        "p12e_code": 742,
+        "scryfall_code": "gdy",
+        "name": "Game Day Promos",
+        "date": "2022-04-08"
+    },
+    "743": {
+        "p12e_code": 743,
+        "scryfall_code": "tsnc",
+        "name": "Streets of New Capenna Tokens",
+        "date": "2022-04-10"
     }
 }
