@@ -4456,5 +4456,17 @@
         "scryfall_code": "tsnc",
         "name": "Streets of New Capenna Tokens",
         "date": "2022-04-10"
+    },
+    "744": {
+        "p12e_code": 744,
+        "scryfall_code": "tncc",
+        "name": "New Capenna Commander Tokens",
+        "date": "2022-04-20"
+    },
+    "745": {
+        "p12e_code": 745,
+        "scryfall_code": "asnc",
+        "name": "New Capenna Art Series",
+        "date": "2022-04-29"
     }
 }
