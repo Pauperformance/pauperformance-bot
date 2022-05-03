@@ -366,8 +366,8 @@ class AcademyService:
             else:
                 image_uris = scryfall_card["image_uris"]
             image_url = image_uris["normal"]
-            if '?' in image_url:
-                image_url = image_url[:image_url.index('?')]
+            if "?" in image_url:
+                image_url = image_url[: image_url.index("?")]
             rendered_cards.append(
                 {
                     "name": card,
