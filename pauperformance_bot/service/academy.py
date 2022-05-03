@@ -365,10 +365,13 @@ class AcademyService:
                 image_uris = scryfall_card["card_faces"][0]["image_uris"]
             else:
                 image_uris = scryfall_card["image_uris"]
+            image_url = image_uris["normal"]
+            if '?' in image_url:
+                image_url = image_url[:image_url.index('?')]
             rendered_cards.append(
                 {
                     "name": card,
-                    "image_url": image_uris["normal"],
+                    "image_url": image_url,
                     "page_url": scryfall_card["scryfall_uri"].replace(
                         "?utm_source=api", ""
                     ),
