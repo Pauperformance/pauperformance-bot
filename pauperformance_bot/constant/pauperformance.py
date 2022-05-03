@@ -450,7 +450,6 @@ KNOWN_SETS_WITH_NO_PAUPER_CARDS = [
     731,
     732,
     733,
-    735,
     736,
     737,
     738,
