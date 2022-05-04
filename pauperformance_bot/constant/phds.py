@@ -69,10 +69,23 @@ TARMOGOYF_ITA = PhD(
     discord_id=None,
 )
 
+HEISEN01 = PhD(
+    name="Heisen01",
+    mtgo_name="Heisen01",
+    deckstats_name=None,
+    deckstats_id=None,
+    telegram_id=None,
+    twitch_login_name="heisen01_",
+    youtube_channel_id="UC1jO4Ge4jmlvaImhze5ldaw",
+    default_youtube_language="it",
+    discord_id=None,
+)
+
 PAUPERFORMANCE_PHDS = [
     PAUPERFORMANCE,
     SHIKA93,
     MREVILEYE,
     PAUPERGANDA,
     TARMOGOYF_ITA,
+    HEISEN01,
 ]

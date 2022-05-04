@@ -18,7 +18,7 @@ Feel free to follow us on [Twitch](https://www.twitch.tv/pauperformance), [YouTu
 **If you are a content creator, you can join the Pauperformance network and autonomously contribute to the Academy with original content.
 Please, read the [PhD Guidelines](./pages/phd_guidelines.html).**
 
-Two PhDs have already joined the Academy: [PAUPERGANDA](./phds/PAUPERGANDA.html) and [tarmogoyf_ita](./phds/tarmogoyf_ita.html)! 🎉
+3 PhDs have already joined the Academy: [PAUPERGANDA](./phds/PAUPERGANDA.html), [tarmogoyf_ita](./phds/tarmogoyf_ita.html) and [Heisen01](./phds/Heisen01.html)! 🎉
 
 ---
 
