@@ -8,9 +8,23 @@ If you think a relevant archetype is missing or a mistake is present, please let
 
 Every archetype in the list is linked to its dedicated page, where you will find useful resources.
 
-| Name                   | Dominant mana | Type            | Family          |
-| -----------------------| ------------- | --------------- | --------------- |
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Dominant mana</th>
+<th>Type</th>
+<th>Family</th>
+</tr>
+</thead>
+<tbody>
 {% for archetype in archetypes -%}
-[{{ archetype.name -}}](../{{ archetypes_dir }}/{{ to_url_encoded(archetype.name) }}.html) | {{ archetype.mana | map('to_archetype_page_mana') | join(' ') }} | {{ "%-15s" % archetype.type }} | [{{ "%-12s" % archetype.family }}](../{{ families_dir }}/{{ to_url_encoded(archetype.family) }}.html) |
+<tr>
+<td><a href="../{{ archetypes_dir }}/{{ to_url_encoded(archetype.name) }}.html">{{ archetype.name -}}</a></td>
+<td>{{ archetype.mana | map('to_archetype_page_mana') | join(' ') }}</td>
+<td>{{ "%-15s" % archetype.type }}</td>
+<td><a href="../{{ families_dir }}/{{ to_url_encoded(archetype.family) }}.html">{{ "%-12s" % archetype.family }}</a></td>
+</tr>
 {% endfor %}
-
+</tbody>
+</table>
