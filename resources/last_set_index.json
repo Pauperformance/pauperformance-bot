@@ -4468,5 +4468,11 @@
         "scryfall_code": "asnc",
         "name": "New Capenna Art Series",
         "date": "2022-04-29"
+    },
+    "746": {
+        "p12e_code": 746,
+        "scryfall_code": "psnc",
+        "name": "Streets of New Capenna Promos",
+        "date": "2022-04-30"
     }
 }
