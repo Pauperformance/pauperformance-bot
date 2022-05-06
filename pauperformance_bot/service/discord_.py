@@ -42,6 +42,7 @@ class DiscordService(discord.Client):
 
     async def on_ready(self):
         logger.info(f"Logged on Discord as {self.user}.")
+        # await self._list_members()
         await self._import_new_decks()
         self.loop.stop()
 
@@ -55,6 +56,17 @@ class DiscordService(discord.Client):
             await m.remove_reaction(DISCORD_MYR_REACTION_OK, self.user)
             await m.remove_reaction(DISCORD_MYR_REACTION_KO, self.user)
             await m.remove_reaction(DISCORD_MYR_REACTION_WARNING, self.user)
+
+    async def _list_members(self):
+        welcome_channel = self.get_channel(self.welcome_channel_id)
+        messages = await welcome_channel.history(
+            limit=DISCORD_MAX_HISTORY_LIMIT
+        ).flatten()
+        users = {}
+        for message in messages:
+            users[message.author.display_name] = message.author.id
+        logger.info(f"Discord users: {users}")
+        return users
 
     async def _import_new_decks(self):
         logger.info(
