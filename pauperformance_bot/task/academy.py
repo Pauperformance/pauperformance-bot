@@ -22,9 +22,9 @@ def main():
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)
     pauperformance = PauperformanceService(storage, archive)
-    academy_update(pauperformance)
     discord = DiscordService(pauperformance)
     discord.import_decks()
+    academy_update(pauperformance)
 
 
 if __name__ == "__main__":

@@ -398,6 +398,8 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     f"{p12e_name} "
                     f"{set_id['p12e_code']}.{revision}.{player.name}"
                 )
+            else:
+                p12e_name = f"{p12e_name}.{player.name}"
         logger.debug(f"Performing integrity checks on deck {p12e_name}...")
         creation_date = now_utc()
         tentative_deck = MTGGoldfishArchivedDeck(
