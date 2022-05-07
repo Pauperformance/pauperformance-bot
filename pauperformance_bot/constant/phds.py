@@ -15,7 +15,7 @@ PAUPERFORMANCE = PhD(
     twitch_login_name="Pauperformance",
     youtube_channel_id="UCDUiIskNnmuJ3XJ1SdQqs0A",
     default_youtube_language="en",
-    discord_id=None,
+    discord_id=DISCORD_USER_SHIKA93_ID,
 )
 
 SHIKA93 = PhD(
