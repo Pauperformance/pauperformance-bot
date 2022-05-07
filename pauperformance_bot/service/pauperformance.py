@@ -27,7 +27,6 @@ from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.service.storage.abstract import AbstractStorageService
-from pauperformance_bot.service.telegram_ import TelegramService
 from pauperformance_bot.service.twitch import TwitchService
 from pauperformance_bot.service.youtube import YouTubeService
 from pauperformance_bot.util.log import get_application_logger
@@ -41,7 +40,6 @@ class PauperformanceService:
         storage,
         archive,
         scryfall=ScryfallService(),
-        telegram=TelegramService(),
         twitch=TwitchService(),
         youtube=YouTubeService(),
         players=PAUPERFORMANCE_PHDS,
@@ -49,7 +47,6 @@ class PauperformanceService:
         self.storage: AbstractStorageService = storage
         self.archive: AbstractArchiveService = archive
         self.scryfall = scryfall
-        self.telegram = telegram
         self.twitch = twitch
         self.youtube = youtube
         self.players = players
@@ -244,94 +241,6 @@ class PauperformanceService:
         staples = staples - lands
         frequents = all_cards - staples - lands
         return list(staples), list(frequents)
-
-    def import_decks_from_deckstats(self, send_notification=True):
-        logger.info("Updating Archive decks for all users...")
-        players_by_deckstats_id = {
-            int(p.deckstats_id): p for p in self.players if p.deckstats_id
-        }
-        for player in self.players:
-            if not player.deckstats_id:
-                logger.info(
-                    f"Skipping player {player.name} with no Deckstats "
-                    f"account..."
-                )
-                continue
-            logger.info(f"Processing player {player.name}...")
-            self.archive.import_player_decks_from_deckstats(
-                player,
-                self.storage,
-                players_by_deckstats_id,
-                self.set_index,
-                self.telegram,
-                send_notification=send_notification,
-            )
-        logger.info("Updated Archive decks for all users.")
-
-    def import_players_videos_from_twitch(self, send_notification=True):
-        logger.info("Updating Twitch videos for all users...")
-        for player in self.players:
-            if not player.twitch_login_name:
-                logger.info(
-                    f"Skipping player {player.name} with no Twitch account..."
-                )
-            else:
-                self.import_player_videos_from_twitch(
-                    player,
-                    send_notification=send_notification,
-                )
-        logger.info("Updated Twitch videos for all users.")
-
-    def import_player_videos_from_twitch(self, player, send_notification=True):
-        logger.info(
-            f"Processing videos from Twitch user {player.twitch_login_name}..."
-        )
-        twitch_user = self.twitch.get_user(player.twitch_login_name)
-        self.archive.archive_player_videos_from_twitch(
-            player,
-            self.twitch.get_user_videos(twitch_user.user_id),
-            self.storage,
-            self.telegram,
-            send_notification=send_notification,
-        )
-        logger.info(
-            f"Processed videos from Twitch user {player.twitch_login_name}."
-        )
-
-    def import_players_videos_from_youtube(self, send_notification=True):
-        logger.info("Updating YouTube videos for all users...")
-        for player in self.players:
-            if not player.youtube_channel_id:
-                logger.info(
-                    f"Skipping player {player.name} with no YouTube account..."
-                )
-            else:
-                self.import_player_videos_from_youtube(
-                    player,
-                    send_notification=send_notification,
-                )
-        logger.info("Updated YouTube videos for all users.")
-
-    def import_player_videos_from_youtube(
-        self, player, send_notification=True
-    ):
-        logger.info(
-            f"Processing videos from YouTube user "
-            f"{player.youtube_channel_id}..."
-        )
-        self.archive.archive_player_videos_from_youtube(
-            player,
-            self.youtube.get_channel_videos(
-                player.youtube_channel_id,
-                player.default_youtube_language,
-            ),
-            self.storage,
-            self.telegram,
-            send_notification=send_notification,
-        )
-        logger.info(
-            f"Processed videos from YouTube user {player.youtube_channel_id}."
-        )
 
     def get_set_index_by_date(self, usa_date):
         logger.debug(f"Getting set index for USA date {usa_date}")
