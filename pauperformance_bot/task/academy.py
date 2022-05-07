@@ -1,17 +1,34 @@
+import asyncio
+
 from pauperformance_bot.service.academy import AcademyService
 from pauperformance_bot.service.archive.mtggoldfish import (
     MTGGoldfishArchiveService,
 )
-from pauperformance_bot.service.discord_ import DiscordService
-from pauperformance_bot.service.pauperformance import PauperformanceService
+from pauperformance_bot.service.async_pauperformance import (
+    AsyncPauperformanceService,
+)
+from pauperformance_bot.service.discord_.async_discord_service import (
+    AsyncDiscordService,
+)
 from pauperformance_bot.service.storage.dropbox_ import DropboxService
 
 
-def academy_update(pauperformance):
+async def async_academy_update():
+    storage = DropboxService()
+    archive = MTGGoldfishArchiveService(storage)
+    discord = AsyncDiscordService()
+    pauperformance = AsyncPauperformanceService(storage, archive, discord)
+    await pauperformance.discord.wait_until_ready()
+
     # import new content
-    pauperformance.import_players_videos_from_twitch(send_notification=True)
-    pauperformance.import_players_videos_from_youtube(send_notification=True)
-    pauperformance.import_decks_from_deckstats(send_notification=True)
+    await pauperformance.import_players_videos_from_twitch(
+        send_notification=True
+    )
+    await pauperformance.import_players_videos_from_youtube(
+        send_notification=True
+    )
+    await pauperformance.import_decks_from_deckstats(send_notification=True)
+    await pauperformance.import_decks_from_discord(send_notification=True)
 
     # update pages
     academy = AcademyService(pauperformance)
@@ -19,12 +36,11 @@ def academy_update(pauperformance):
 
 
 def main():
-    storage = DropboxService()
-    archive = MTGGoldfishArchiveService(storage)
-    pauperformance = PauperformanceService(storage, archive)
-    discord = DiscordService(pauperformance)
-    discord.import_decks()
-    academy_update(pauperformance)
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(async_academy_update())
+    finally:
+        loop.close()
 
 
 if __name__ == "__main__":
