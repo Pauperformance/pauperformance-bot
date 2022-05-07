@@ -54,16 +54,16 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def to_playable_deck(listed_deck, decks_cache_dir, use_cache=True):
+    def to_playable_deck(listed_deck, decks_cache_dir=None, use_cache=True):
         pass
 
-    def import_player_decks_from_deckstats(
+    async def import_player_decks_from_deckstats(
         self,
         player,
         storage,
         players_by_deckstats_id,
         set_index,
-        myr,
+        discord,
         warning_player=PAUPERFORMANCE,
         send_notification=True,
     ):  # TODO: get rid of players_by_deckstats_id
@@ -132,16 +132,16 @@ class AbstractArchiveService(metaclass=ABCMeta):
             )
             storage.create_file(f"{storage_key}", str(playable_deck))
             if send_notification:
-                logger.info("Informing player on Telegram...")
-                myr.send_message(
-                    player,
+                logger.info("Informing player on Discord...")
+                await discord.send_user_message(
+                    player.discord_id,
                     f"📌 Imported deck: {deck_name}.\n\n"
                     f"Source: {deckstats_deck.url}\n\n"
                     f"Destination: {self.get_uri(new_deck_id)}",
                 )
             if suspicious_list:
-                myr.send_message(
-                    warning_player,
+                await discord.send_user_message(
+                    warning_player.discord_id,
                     f"⚠️ Archived deck with suspicious size "
                     f"(main: {playable_deck.len_mainboard}, "
                     f"sideboard: {playable_deck.len_sideboard})!\n\n"
@@ -151,17 +151,17 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 )
         logger.info(f"Updated Archive decks for {player.name}.")
 
-    def archive_player_videos_from_twitch(
+    async def archive_player_videos_from_twitch(
         self,
         player,
         videos,
         storage,
-        myr,
+        discord,
         warning_player=PAUPERFORMANCE,
         send_notification=True,
     ):
-        imported_twitch_videos = storage.list_imported_twitch_videos_ids()
         logger.info(f"Updating Archive videos for {player.name}...")
+        imported_twitch_videos = storage.list_imported_twitch_videos_ids()
         for video in videos:
             logger.debug(
                 f"Processing video '{video.title}' "
@@ -171,8 +171,8 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 f"url: {video.url}..."
             )
             if video.viewable != "public":
-                myr.send_message(
-                    warning_player,
+                await discord.send_user_message(
+                    warning_player.discord_id,
                     f"⚠️ Skipped {video.viewable} Twitch video. "
                     f"'{video.title}' "
                     f"({video.video_id}) "
@@ -209,26 +209,26 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 json.dumps(vars(video), indent=4),
             )
             if send_notification:
-                logger.info("Informing player on Telegram...")
-                myr.send_message(
-                    player,
+                logger.info("Informing player on Discord...")
+                await discord.send_user_message(
+                    player.discord_id,
                     f"📌 Imported video: {video.title}.\n\n"
                     f"Source: {video.url}\n\n"
                     f"Deck: {video.deck_name}",
                 )
         logger.info(f"Updated Archive videos for {player.name}.")
 
-    def archive_player_videos_from_youtube(
+    async def archive_player_videos_from_youtube(
         self,
         player,
         videos,
         storage,
-        myr,
+        discord,
         warning_player=PAUPERFORMANCE,
         send_notification=True,
     ):
-        imported_youtube_videos = storage.list_imported_youtube_videos_ids()
         logger.info(f"Updating Archive videos for {player.name}...")
+        imported_youtube_videos = storage.list_imported_youtube_videos_ids()
         for video in videos:
             logger.debug(
                 f"Processing video '{video.title}' "
@@ -238,8 +238,8 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 f"url: {video.url}..."
             )
             if video.privacy_status != "public":
-                myr.send_message(
-                    warning_player,
+                await discord.send_user_message(
+                    warning_player.discord_id,
                     f"⚠️ Skipped {video.privacy_status} YouTube video. "
                     f"'{video.title}' "
                     f"({video.content_video_id}) "
@@ -276,9 +276,9 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 json.dumps(vars(video), indent=4),
             )
             if send_notification:
-                logger.info("Informing player on Telegram...")
-                myr.send_message(
-                    player,
+                logger.info("Informing player on Discord...")
+                await discord.send_user_message(
+                    player.discord_id,
                     f"📌 Imported video: {video.title}.\n\n"
                     f"Source: {video.url}\n\n"
                     f"Deck: {video.deck_name}",
@@ -289,14 +289,13 @@ class AbstractArchiveService(metaclass=ABCMeta):
         self,
         url,
         player: PhD,
-        discord,
+        pauperformance,
         discord_message,
-        log_channel,
         p12e_name=None,
         send_notification=True,
     ):
         author = discord_message.author
-        pauperformance = discord.pauperformance
+        discord = pauperformance.discord
         storage = pauperformance.storage
         logger.info(
             f"Importing into archive decks from url {url} for player "
@@ -345,7 +344,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     f"({date_line}) for url <{url}>. Skipping it."
                 )
                 logger.warning(message)
-                await log_channel.send(message)
+                await discord.send_log_message(message)
                 await discord_message.remove_reaction(
                     DISCORD_MYR_REACTION_SEEN, discord.user
                 )
@@ -424,7 +423,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
             logger.warning(message)
             if send_notification:
                 await author.send(message)
-            await log_channel.send(message)
+            await discord.send_log_message(message)
             await discord_message.remove_reaction(
                 DISCORD_MYR_REACTION_SEEN, discord.user
             )
@@ -442,7 +441,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
             logger.warning(message)
             if send_notification:
                 await author.send(message)
-            await log_channel.send(message)
+            await discord.send_log_message(message)
             await discord_message.remove_reaction(
                 DISCORD_MYR_REACTION_SEEN, discord.user
             )
@@ -499,7 +498,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
         if send_notification:
             logger.info("Informing player on Discord...")
             await author.send(message)
-        await log_channel.send(message)
+        await discord.send_log_message(message)
         await discord_message.remove_reaction(
             DISCORD_MYR_REACTION_SEEN, discord.user
         )
@@ -519,7 +518,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 f"Destination: <{self.get_uri(new_deck_id)}>"
             )
             await author.send(message)
-            await log_channel.send(message)
+            await discord.send_log_message(message)
             await discord_message.add_reaction(DISCORD_MYR_REACTION_WARNING)
         logger.info(
             f"Imported into archive decks from url {url} for "
