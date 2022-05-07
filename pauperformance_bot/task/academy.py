@@ -17,7 +17,7 @@ async def async_academy_update():
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)
     discord = AsyncDiscordService()
-    pauperformance = AsyncPauperformanceService(storage, archive, discord)
+    pauperformance = AsyncPauperformanceService(discord, storage, archive)
     await pauperformance.discord.wait_until_ready()
 
     # import new content
