@@ -173,19 +173,7 @@ class AsyncPauperformanceService(PauperformanceService):
         candidates = [
             p for p in PAUPERFORMANCE_PHDS if p.discord_id == message.author.id
         ]
-        if len(candidates) != 1:
-            log_message = (
-                f"Unable to unambiguously determine deck owner "
-                f"for <{url}>. Candidates are: {candidates}."
-            )
-            logger.warning(log_message)
-            await self.discord.send_log_message(log_message)
-            await message.remove_reaction(
-                DISCORD_MYR_REACTION_SEEN, self.discord.user
-            )
-            await message.add_reaction(DISCORD_MYR_REACTION_KO)
-            return
-        player = candidates[0]
+        player = candidates[-1]
         logger.debug(f"Detected owner: {player.name}")
         await self.archive.import_player_deck_from_mtggoldfish(
             url,
