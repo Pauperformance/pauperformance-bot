@@ -11,7 +11,7 @@ This website aims to be the online encyclopedia for Pauper, collecting and organ
 The Academy is currently under construction, and you can contribute to its development.
 Please, read the [FAQs](./pages/faq.html) to learn more about this project and its (long) roadmap.
 
-Feel free to follow us on [Twitch](https://www.twitch.tv/pauperformance), [YouTube](https://www.youtube.com/channel/UCDUiIskNnmuJ3XJ1SdQqs0A), [Instagram](https://www.instagram.com/pauperformance/), [Discord](https://discord.gg/fYQbpjjkQ3), [Telegram](https://telegram.me/pauperformance), or [Twitter](https://twitter.com/pauperformance) for updates.
+Feel free to follow us on [Twitch](https://www.twitch.tv/pauperformance), [YouTube](https://www.youtube.com/channel/UCDUiIskNnmuJ3XJ1SdQqs0A), [Instagram](https://www.instagram.com/pauperformance/), or [Discord](https://discord.gg/fYQbpjjkQ3) for updates.
 
 ---
 
