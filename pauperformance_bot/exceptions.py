@@ -10,6 +10,10 @@ class MTGGoldfishException(ClientException):
     pass
 
 
+class WizardsException(ClientException):
+    pass
+
+
 class UnsupportedLanguage(Exception):
     pass
 
