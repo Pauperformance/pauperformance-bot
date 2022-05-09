@@ -4474,5 +4474,11 @@
         "scryfall_code": "psnc",
         "name": "Streets of New Capenna Promos",
         "date": "2022-04-30"
+    },
+    "747": {
+        "p12e_code": 747,
+        "scryfall_code": "pncc",
+        "name": "New Capenna Commander Promos",
+        "date": "2022-04-09"
     }
 }

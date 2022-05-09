@@ -10,6 +10,7 @@ from time import sleep
 
 from pauperformance_bot.constant.myr import (
     CONFIG_ARCHETYPES_DIR,
+    CONFIG_FAMILIES_DIR,
     LAST_SET_INDEX_FILE,
     PAUPER_CARDS_INDEX_CACHE_FILE,
     USA_DATE_FORMAT,
@@ -29,6 +30,7 @@ from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.service.storage.abstract import AbstractStorageService
 from pauperformance_bot.service.twitch import TwitchService
 from pauperformance_bot.service.youtube import YouTubeService
+from pauperformance_bot.util.config import read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
@@ -224,6 +226,13 @@ class PauperformanceService:
             for a in glob.glob(f"{config_pages_dir}/*.ini")
         )
 
+    @staticmethod
+    def get_families(config_pages_dir=CONFIG_FAMILIES_DIR):
+        return set(
+            Path(a).name.replace(".ini", "")
+            for a in glob.glob(f"{config_pages_dir}/*.ini")
+        )
+
     def analyze_cards_frequency(self, archetype_decks):
         if len(archetype_decks) < 2:
             return [], []
@@ -317,3 +326,20 @@ class PauperformanceService:
 
     def list_videos(self):
         return self._list_twitch_videos() + self._list_youtube_videos()
+
+    def print_stats(
+        self,
+        archetypes_config_dir=CONFIG_ARCHETYPES_DIR,
+    ):
+        print(f"PhDs: {len(PAUPERFORMANCE_PHDS) - 1}")
+        print(f"Archetypes: {len(self.get_archetypes())}")
+        print(f"Families: {len(self.get_families())}")
+        resources = 0
+        for archetype_config_file in glob.glob(
+            f"{archetypes_config_dir}/*.ini"
+        ):
+            config = read_archetype_config(archetype_config_file)
+            resources += len(config["resources"])
+        print(f"Resources: {resources}")
+        print(f"Decks: {len(self.list_archived_decks())}")
+        print(f"Videos: {len(self.list_videos())}")
