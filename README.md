@@ -91,7 +91,6 @@ $ tox
 * [GitHub Pages](https://pages.github.com/) - Web host
 * [Jinja](https://jinja.palletsprojects.com/) - Templating engine
 * [Dropbox](https://www.dropbox.com/) - Storage service
-* [Telegram](https://telegram.org/) - Bot
 * [pyquery](https://github.com/gawel/pyquery/) - Web pages parser
 
 ---
