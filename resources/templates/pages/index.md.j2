@@ -8,7 +8,7 @@ Hello Pauper player, and welcome to the **Academy**!
 
 This website aims to be the online encyclopedia for Pauper, collecting and organising resources for players with different skill levels.
 
-The Academy is currently under construction, and you can contribute to its development.
+The Academy is currently under construction, and you can contribute to its development to earn a well-deserved spot in our [Contributors](./pages/faq.html) hall of fame.
 Please, read the [FAQs](./pages/faq.html) to learn more about this project and its (long) roadmap.
 
 Feel free to follow us on [Twitch](https://www.twitch.tv/pauperformance), [YouTube](https://www.youtube.com/channel/UCDUiIskNnmuJ3XJ1SdQqs0A), [Instagram](https://www.instagram.com/pauperformance/), or [Discord](https://discord.gg/fYQbpjjkQ3) for updates.
