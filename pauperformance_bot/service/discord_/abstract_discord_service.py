@@ -33,3 +33,6 @@ class AbstractDiscordService(discord.Client, ABC):
     async def send_user_message(self, user_id, message):
         user = await self.fetch_user(user_id)
         await user.send(message)
+
+    def list_roles(self, guild_id):
+        return self.get_guild(guild_id).roles
