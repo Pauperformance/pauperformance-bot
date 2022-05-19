@@ -54,7 +54,7 @@ with open(os.path.join(_HERE, _VERSION_FILE)) as f:
 def read_resources(resources_dir):
     resources = []
     for root, _, files in os.walk(resources_dir):
-        resources.append((f"{root}/", [f"{root}/{file}" for file in files]))
+        resources.append((root, [os.path.join(root, file) for file in files]))
     return resources
 
 
@@ -88,10 +88,10 @@ setup(
     long_description_content_type="text/markdown",
     python_requires=">=3.7",
     packages=find_packages(exclude=["tests"]),
-    install_requires=read_requirements(f"{_REQUIREMENTS_DIR}/requirements.txt"),
+    install_requires=read_requirements(os.path.join(_REQUIREMENTS_DIR, "requirements.txt")),
     extras_require={
-        "test": read_requirements(f"{_REQUIREMENTS_DIR}/requirements-test.txt"),
-        "dev": read_requirements(f"{_REQUIREMENTS_DIR}/requirements-dev.txt"),
+        "test": read_requirements(os.path.join(_REQUIREMENTS_DIR, "requirements-test.txt")),
+        "dev": read_requirements(os.path.join(_REQUIREMENTS_DIR, "requirements-dev.txt")),
     },
     data_files=read_resources(_RESOURCES_DIR),
     include_package_data=True,
