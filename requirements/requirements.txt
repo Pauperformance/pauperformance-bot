@@ -33,7 +33,7 @@ cssselect==1.1.0
     # via pyquery
 dataclasses-json==0.5.7
     # via python-youtube
-discord-py==1.7.3
+discord.py==1.7.3
     # via -r requirements/requirements.in
 dropbox==11.31.0
     # via -r requirements/requirements.in
