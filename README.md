@@ -19,18 +19,18 @@ The most important of them is keeping the [Academy](https://pauperformance.com/)
 ---
 ## Getting Started
 
-Make sure `Python 3.8` (or newer) is installed on your machine.
+Make sure `Python 3.9` (or newer) is installed on your machine.
 Instructions to download and install `Python` can be found in the [official page](https://www.python.org/downloads/).  
 You can verify `Python` is working by running:
 ```
 $ python3 --version
-Python 3.8.10
+Python 3.9.12
 ```
 Additionally, install [pip](https://pip.pypa.io/en/stable/installation/) and [venv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) modules.  
 You can verify `pip` is working by running:
 ```
 $ pip --version
-pip 20.0.2 from /usr/lib/python3/dist-packages/pip (python 3.8)
+pip 20.0.2 from /usr/lib/python3/dist-packages/pip (python 3.9)
 ```
 
 Make sure `git` is also installed on your machine.
