@@ -40,8 +40,6 @@ def read_requirements(file_name):
             if not line or line.startswith("#") or line.startswith("    #") \
                     or line.startswith("-r"):
                 continue
-            if 'discord-py' in line:  # pip-compile does not preserve name
-                line.replace('discord-py', 'discord.py')
             reqs.append(line)
     return reqs
 
@@ -88,7 +86,7 @@ setup(
     description="Myr",
     long_description=readme,
     long_description_content_type="text/markdown",
-    python_requires=">=3.9",
+    python_requires=">=3.8",
     packages=find_packages(exclude=["tests"]),
     install_requires=read_requirements(f"{_REQUIREMENTS_DIR}/requirements.txt"),
     extras_require={
@@ -111,7 +109,7 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.8",
         "Topic :: Software Development :: Libraries",
         # "Typing :: Typed",
     ],
