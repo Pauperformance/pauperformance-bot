@@ -134,16 +134,12 @@ class DeckstatsService:
         method = partial(method, params=params)
         response = execute_http_request(method, url)
         deck = json.loads(response.content)
-        with open(
-            posix_path(decks_cache_dir, f"{deck_id}.pkl"), "wb"
-        ) as cache_f:
+        with open(posix_path(decks_cache_dir, f"{deck_id}.pkl"), "wb") as cache_f:
             pickle.dump(deck, cache_f)
         return deck
 
     def to_playable_deck(self, deckstats_deck):
-        logger.info(
-            f"Parsing deckstats deck {deckstats_deck['saved_id']} list..."
-        )
+        logger.info(f"Parsing deckstats deck {deckstats_deck['saved_id']} list...")
         main_section = next(
             s for s in deckstats_deck["sections"] if s["name"] == "Main"
         )
@@ -167,7 +163,5 @@ class DeckstatsService:
             playable_sideboard.append(PlayedCard(c["amount"], c["name"]))
         playable_deck = PlayableDeck(playable_main, playable_sideboard)
         # logger.debug(f"Parsed deck: {playable_deck}")
-        logger.info(
-            f"Parsed deckstats deck {deckstats_deck['saved_id']} list."
-        )
+        logger.info(f"Parsed deckstats deck {deckstats_deck['saved_id']} list.")
         return playable_deck

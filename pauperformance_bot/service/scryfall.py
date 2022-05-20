@@ -68,10 +68,7 @@ class ScryfallService:
             return cards
         except requests.exceptions.HTTPError as exc:
             response = json.loads(exc.response.content)
-            if (
-                exc.response.status_code == 404
-                and response["code"] == "not_found"
-            ):
+            if exc.response.status_code == 404 and response["code"] == "not_found":
                 return {}
 
     @lru_cache(maxsize=1)

@@ -4,9 +4,7 @@ from urllib.parse import quote
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from pauperformance_bot.constant.academy import (
-    RESOURCES_IMAGES_MANA_RELATIVE_URL,
-)
+from pauperformance_bot.constant.academy import RESOURCES_IMAGES_MANA_RELATIVE_URL
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import pretty_str, simple_str
 

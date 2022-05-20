@@ -4,16 +4,9 @@ import uuid
 from os import linesep, listdir
 from os.path import isfile, join, sep
 
-from pauperformance_bot.constant.myr import (
-    ARCHIVE_DIR,
-    MTGGOLDFISH_ARCHIVE_SUBDIR,
-)
-from pauperformance_bot.entity.deck.archive.local import (
-    LocalArchivedDeck as LocalDeck,
-)
-from pauperformance_bot.entity.deck.playable import (
-    parse_playable_deck_from_lines,
-)
+from pauperformance_bot.constant.myr import ARCHIVE_DIR, MTGGOLDFISH_ARCHIVE_SUBDIR
+from pauperformance_bot.entity.deck.archive.local import LocalArchivedDeck as LocalDeck
+from pauperformance_bot.entity.deck.playable import parse_playable_deck_from_lines
 from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
@@ -81,9 +74,7 @@ class LocalArchiveService(AbstractArchiveService):
         logger.info(f"Deleted deck {file_name}.")
 
     @staticmethod
-    def to_playable_deck(
-        listed_deck, decks_cache_dir="USELESS!", use_cache=False
-    ):
+    def to_playable_deck(listed_deck, decks_cache_dir="USELESS!", use_cache=False):
         if use_cache:
             logger.info("Ignoring cache on local Archive...")
         file = listed_deck.url

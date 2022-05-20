@@ -48,11 +48,7 @@ class DeckstatsDeck:
         try:
             raw_description = str(next(description_div.items()))
             raw_description = next(
-                (
-                    line
-                    for line in raw_description.split("\n")
-                    if "</p>" in line
-                )
+                (line for line in raw_description.split("\n") if "</p>" in line)
             )
             return re.sub("<[^<]+?>", "", raw_description).rstrip()
         except StopIteration:  # no description

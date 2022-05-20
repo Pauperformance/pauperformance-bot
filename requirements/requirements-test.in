@@ -8,3 +8,11 @@ pytest-cov
 tox
 black
 isort
+mypy
+types-requests
+types-backports
+types-cachetools
+types-pytz
+types-setuptools
+types-ujson
+pylint

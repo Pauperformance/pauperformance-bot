@@ -7,7 +7,7 @@
 #
 aiohttp==3.7.4.post0
     # via
-    #   discord.py
+    #   discord-py
     #   twitchapi
 apscheduler==3.6.3
     # via python-telegram-bot
@@ -17,15 +17,15 @@ async-timeout==3.0.1
     # via aiohttp
 attrs==21.4.0
     # via aiohttp
-backports.zoneinfo==0.2.1
+backports-zoneinfo==0.2.1
     # via
     #   pytz-deprecation-shim
     #   tzlocal
-beautifulsoup4==4.10.0
+beautifulsoup4==4.11.1
     # via -r requirements/requirements.in
 cachetools==4.2.2
     # via python-telegram-bot
-certifi==2021.10.8
+certifi==2022.5.18.1
     # via
     #   python-telegram-bot
     #   requests
@@ -39,9 +39,9 @@ cssselect==1.1.0
     # via pyquery
 dataclasses-json==0.5.7
     # via python-youtube
-discord.py[voice]==1.7.3
+discord-py[voice]==1.7.3
     # via -r requirements/requirements.in
-dropbox==11.28.0
+dropbox==11.31.0
     # via -r requirements/requirements.in
 idna==3.3
     # via
@@ -80,8 +80,8 @@ ply==3.11
 pycparser==2.21
     # via cffi
 pynacl==1.4.0
-    # via discord.py
-pyparsing==3.0.7
+    # via discord-py
+pyparsing==3.0.9
     # via packaging
 pyquery==1.4.3
     # via -r requirements/requirements.in
@@ -108,7 +108,7 @@ requests-oauthlib==1.3.1
     # via python-youtube
 retrying==1.3.3
     # via -r requirements/requirements.in
-scipy==1.8.0
+scipy==1.8.1
     # via -r requirements/requirements.in
 six==1.16.0
     # via
@@ -119,7 +119,7 @@ six==1.16.0
     #   python-dateutil
     #   retrying
     #   stone
-soupsieve==2.3.1
+soupsieve==2.3.2.post1
     # via beautifulsoup4
 stone==3.3.1
     # via dropbox
@@ -127,7 +127,7 @@ tornado==6.1
     # via python-telegram-bot
 twitchapi==2.5.3
     # via -r requirements/requirements.in
-typing-extensions==4.1.1
+typing-extensions==4.2.0
     # via
     #   aiohttp
     #   twitchapi
@@ -136,11 +136,11 @@ typing-inspect==0.7.1
     # via dataclasses-json
 tzdata==2022.1
     # via pytz-deprecation-shim
-tzlocal==4.1
+tzlocal==4.2
     # via apscheduler
 urllib3==1.26.9
     # via requests
-websockets==10.2
+websockets==10.3
     # via twitchapi
 yarl==1.7.2
     # via aiohttp
