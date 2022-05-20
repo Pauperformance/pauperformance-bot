@@ -6,10 +6,10 @@ from pauperformance_bot.util.web_page import WebPage
 
 # ACADEMY_PATH must resolve to the top directory of the website
 # (i.e. the cloned twin repo), for example:
-# /home/you/Pauperformance.github.io
+# /home/you/pauperformance.github.io
 ACADEMY_PATH = os.getenv(
     "ACADEMY_PATH",
-    posix_path(TOP_PATH.parent.as_posix(), "Pauperformance.github.io"),
+    posix_path(TOP_PATH.parent.as_posix(), "pauperformance.github.io"),
 )
 
 HOME_PAGE_NAME = WebPage("index")
