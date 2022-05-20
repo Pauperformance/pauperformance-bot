@@ -40,6 +40,8 @@ def read_requirements(file_name):
             if not line or line.startswith("#") or line.startswith("    #") \
                     or line.startswith("-r"):
                 continue
+            if 'discord-py' in line:  # pip-compile does not preserve name
+                line.replace('discord-py', 'discord.py')
             reqs.append(line)
     return reqs
 
