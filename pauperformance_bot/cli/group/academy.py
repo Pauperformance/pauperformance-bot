@@ -12,7 +12,7 @@ class UpdateCommand(CLICommand):
     def __init__(self):
         super().__init__(
             UPDATE_ACADEMY_CMD,
-            "Update Pauperformance web site.",
+            "Update Academy web site.",
             [],
         )
 
