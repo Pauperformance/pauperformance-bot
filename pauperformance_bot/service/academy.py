@@ -374,3 +374,9 @@ class AcademyService:
             else:
                 bolded_index.append({k: f"**{v}**" for k, v in item.items()})
         return bolded_index
+
+    def export_all(self):
+        self.export_phds()
+
+    def export_phds(self):
+        pass
