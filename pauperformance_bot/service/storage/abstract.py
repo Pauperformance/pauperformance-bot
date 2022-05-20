@@ -26,9 +26,7 @@ class AbstractStorageService(metaclass=ABCMeta):
         return f"{self._root}{self._dir_separator}{decks_subdir}"
 
     @property
-    def deckstats_deck_path(
-        self, deckstats_subdir=STORAGE_DECKSTATS_DECKS_SUBDIR
-    ):
+    def deckstats_deck_path(self, deckstats_subdir=STORAGE_DECKSTATS_DECKS_SUBDIR):
         return f"{self.decks_path}{self._dir_separator}{deckstats_subdir}"
 
     @property

@@ -2,9 +2,7 @@ from pauperformance_bot.constant.mtggoldfish import (
     DECK_API_ENDPOINT,
     DECK_DOWNLOAD_API_ENDPOINT,
 )
-from pauperformance_bot.entity.deck.archive.abstract import (
-    AbstractArchivedDeck,
-)
+from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 
 
 class MTGGoldfishArchivedDeck(AbstractArchivedDeck):
