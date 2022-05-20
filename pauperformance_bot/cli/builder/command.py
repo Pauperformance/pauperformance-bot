@@ -1,6 +1,7 @@
+from argparse import ArgumentParser
+
 import argcomplete
 
-from pauperformance_bot.cli.builder.hookable_parser import HookableParser
 from pauperformance_bot.cli.builder.runnable import CLIRunnable
 from pauperformance_bot.cli.builder.utils import (
     get_default_parent_parser,
@@ -10,9 +11,6 @@ from pauperformance_bot.cli.builder.utils import (
 
 class CLICommand(CLIRunnable):
     def __init__(self, name, description, options):
-        # command name must be unique in the entire application (not only
-        # within the same group) to allow proper wildcard expansion (hooks on
-        # the parser are placed on its name)
         super().__init__(name)
         self.description = description
         self.options = options
@@ -22,7 +20,7 @@ class CLICommand(CLIRunnable):
             option.add_to_parser(tool_parser, self.name)
 
     def get_cli_parser(self):
-        parser = HookableParser(
+        parser = ArgumentParser(
             description=self.description, parents=[get_default_parent_parser()]
         )
         self.add_parser_argument(parser)
