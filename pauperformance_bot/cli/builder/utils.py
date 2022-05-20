@@ -1,7 +1,6 @@
 import argparse
 import logging
 
-from pauperformance_bot.cli.builder.hookable_parser import HookableParser
 from pauperformance_bot.cli.builder.options import QuietCLIOption, VerboseCLIOption
 from pauperformance_bot.constant.cli import GROUP_CLI_DEST_ID
 from pauperformance_bot.util.log import get_application_logger
@@ -36,7 +35,6 @@ def build_commands_sub_parser(tool_parser, cli_commands):
     tools_sub_parser = tool_parser.add_subparsers(
         dest=GROUP_CLI_DEST_ID,
         description=description,
-        parser_class=HookableParser,
     )
     tools_sub_parser.required = True
 
@@ -47,4 +45,3 @@ def build_commands_sub_parser(tool_parser, cli_commands):
             description=group_command.description,
         )
         group_command.add_parser_argument(group_sub_parser)
-        tool_parser.add_hooks(group_sub_parser.hooks)
