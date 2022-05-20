@@ -8,8 +8,7 @@ from pauperformance_bot.constant.myr import (
 )
 
 LOG_FORMAT = (
-    "%(levelname)s:%(asctime)s:%(module)s:%(funcName)s:"
-    "L%(lineno)d: %(message)s"
+    "%(levelname)s:%(asctime)s:%(module)s:%(funcName)s:" "L%(lineno)d: %(message)s"
 )
 logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
 logger = logging.getLogger(APPLICATION_NAME)

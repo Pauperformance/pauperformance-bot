@@ -46,9 +46,7 @@ class AsyncDiscordService(AbstractDiscordService):
 
     async def wait_until_ready(self):
         await super().wait_until_ready()
-        logger.info(
-            f"Retrieving log channel (id: {self.myr_log_channel_id})..."
-        )
+        logger.info(f"Retrieving log channel (id: {self.myr_log_channel_id})...")
         self.log_channel = self.get_channel(self.myr_log_channel_id)
         logger.info("Retrieved log channel.")
 
@@ -57,9 +55,7 @@ class AsyncDiscordService(AbstractDiscordService):
 
     async def _clean_my_emoji(self, channel_id):
         channel = self.get_channel(channel_id)
-        messages = await channel.history(
-            limit=DISCORD_MAX_HISTORY_LIMIT
-        ).flatten()
+        messages = await channel.history(limit=DISCORD_MAX_HISTORY_LIMIT).flatten()
         for m in messages:
             await m.remove_reaction(DISCORD_MYR_REACTION_SEEN, self.user)
             await m.remove_reaction(DISCORD_MYR_REACTION_OK, self.user)

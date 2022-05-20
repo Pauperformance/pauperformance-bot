@@ -6,24 +6,14 @@ from urllib.request import urlopen
 from pyquery import PyQuery
 from requests import session
 
-from pauperformance_bot.constant.mtggoldfish import (
-    API_ENDPOINT,
-    DECK_API_ENDPOINT,
-)
-from pauperformance_bot.constant.myr import (
-    MTGGOLDFISH_DECKS_CACHE_DIR,
-    USA_DATE_FORMAT,
-)
+from pauperformance_bot.constant.mtggoldfish import API_ENDPOINT, DECK_API_ENDPOINT
+from pauperformance_bot.constant.myr import MTGGOLDFISH_DECKS_CACHE_DIR, USA_DATE_FORMAT
 from pauperformance_bot.credentials import (
     MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
     MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
 )
-from pauperformance_bot.entity.deck.archive.mtggoldfish import (
-    MTGGoldfishArchivedDeck,
-)
-from pauperformance_bot.entity.deck.playable import (
-    parse_playable_deck_from_lines,
-)
+from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
+from pauperformance_bot.entity.deck.playable import parse_playable_deck_from_lines
 from pauperformance_bot.exceptions import MTGGoldfishException
 from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.util.log import get_application_logger
@@ -77,9 +67,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             ]
             logger.debug(f"Found authenticity_token: {authenticity_token}")
             return authenticity_token
-        raise MTGGoldfishException(
-            "Unable to get authenticity_token from MTGGoldfish."
-        )
+        raise MTGGoldfishException("Unable to get authenticity_token from MTGGoldfish.")
 
     def _parse_meta_authenticity_token(self, response):
         for line in response.text.split("\n"):
@@ -92,9 +80,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             ]
             logger.debug(f"Found authenticity_token: {authenticity_token}")
             return authenticity_token
-        raise MTGGoldfishException(
-            "Unable to get authenticity_token from MTGGoldfish."
-        )
+        raise MTGGoldfishException("Unable to get authenticity_token from MTGGoldfish.")
 
     def _get_login_info(self):
         logger.info("Getting dynamic login info from MTGGoldfish...")
@@ -105,9 +91,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             )
         mtg_session_cookie = response.cookies.get_dict()["_mtg_session"]
         logger.debug(f"Found mtg_session_cookie: {mtg_session_cookie}")
-        return mtg_session_cookie, self._parse_login_authenticity_token(
-            response
-        )
+        return mtg_session_cookie, self._parse_login_authenticity_token(response)
 
     def login(self):
         mtg_session_cookie, authenticity_token = self._get_login_info()
@@ -130,8 +114,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             raise MTGGoldfishException(f"Failed to login for {self.email}")
         logger.debug(f"Header Set-Cookie: {response.headers['Set-Cookie']}")
         logger.debug(
-            f"Session cookie: "
-            f"_mtg_session={self.session.cookies['_mtg_session']}"
+            f"Session cookie: " f"_mtg_session={self.session.cookies['_mtg_session']}"
         )
         logger.debug(
             f"Response cookie: _mtg_session={response.cookies['_mtg_session']}"
@@ -143,9 +126,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
 
     @with_login
     def create_deck(self, name, description, playable_deck):
-        return self._create_deck(
-            name, description, playable_deck, format_="pauper"
-        )
+        return self._create_deck(name, description, playable_deck, format_="pauper")
 
     def _create_deck(self, name, description, playable_deck, format_):
         logger.info(f"Creating deck {name} for {self.email}...")
@@ -183,9 +164,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             data=payload,
         )
         if response.status_code != 200:
-            raise MTGGoldfishException(
-                f"Failed to create deck {name} for {self.email}"
-            )
+            raise MTGGoldfishException(f"Failed to create deck {name} for {self.email}")
         deck_id = response.request.url.split("/")[-1]
         logger.info(f"Created deck {name} for {self.email}. Id: {deck_id}")
         return deck_id
@@ -255,17 +234,13 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             params=params,
         )
         if response.status_code != 200:
-            raise MTGGoldfishException(
-                f"Failed to list decks for {self.email}"
-            )
+            raise MTGGoldfishException(f"Failed to list decks for {self.email}")
         logger.debug(f"Parsing page with decks for {self.email}...")
         pq = PyQuery(response.content)
         decks = []
         for c in pq("table tbody tr").items():
             row = c.text()
-            _, name, _, format_, creation_date, visibility, _, _ = row.split(
-                "\n"
-            )
+            _, name, _, format_, creation_date, visibility, _, _ = row.split("\n")
             creation_date = datetime.strptime(creation_date, USA_DATE_FORMAT)
             creation_date = 1000 * int(creation_date.timestamp())
             url = next(link.attrib["href"] for link in c("a"))

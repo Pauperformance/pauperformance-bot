@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 from pauperformance_bot.cli.builder.command import CLICommand
 from pauperformance_bot.cli.builder.group import CLIGroup
-from pauperformance_bot.constant.cli import (
-    ACADEMY_CLI_GROUP,
-    UPDATE_ACADEMY_CMD,
-)
+from pauperformance_bot.constant.cli import ACADEMY_CLI_GROUP, UPDATE_ACADEMY_CMD
 from pauperformance_bot.task.academy import main
 from pauperformance_bot.util.log import get_application_logger
 

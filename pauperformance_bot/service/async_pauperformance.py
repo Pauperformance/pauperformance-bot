@@ -39,8 +39,7 @@ class AsyncPauperformanceService(PauperformanceService):
         for player in self.players:
             if not player.deckstats_id:
                 logger.info(
-                    f"Skipping player {player.name} with no Deckstats "
-                    f"account..."
+                    f"Skipping player {player.name} with no Deckstats " f"account..."
                 )
                 continue
             logger.info(f"Processing player {player.name}...")
@@ -58,9 +57,7 @@ class AsyncPauperformanceService(PauperformanceService):
         logger.info("Updating Twitch videos for all users...")
         for player in self.players:
             if not player.twitch_login_name:
-                logger.info(
-                    f"Skipping player {player.name} with no Twitch account..."
-                )
+                logger.info(f"Skipping player {player.name} with no Twitch account...")
             else:
                 await self.import_player_videos_from_twitch(
                     player,
@@ -68,12 +65,8 @@ class AsyncPauperformanceService(PauperformanceService):
                 )
         logger.info("Updated Twitch videos for all users.")
 
-    async def import_player_videos_from_twitch(
-        self, player, send_notification=True
-    ):
-        logger.info(
-            f"Processing videos from Twitch user {player.twitch_login_name}..."
-        )
+    async def import_player_videos_from_twitch(self, player, send_notification=True):
+        logger.info(f"Processing videos from Twitch user {player.twitch_login_name}...")
         twitch_user = self.twitch.get_user(player.twitch_login_name)
         await self.archive.archive_player_videos_from_twitch(
             player,
@@ -82,17 +75,13 @@ class AsyncPauperformanceService(PauperformanceService):
             self.discord,
             send_notification=send_notification,
         )
-        logger.info(
-            f"Processed videos from Twitch user {player.twitch_login_name}."
-        )
+        logger.info(f"Processed videos from Twitch user {player.twitch_login_name}.")
 
     async def import_players_videos_from_youtube(self, send_notification=True):
         logger.info("Updating YouTube videos for all users...")
         for player in self.players:
             if not player.youtube_channel_id:
-                logger.info(
-                    f"Skipping player {player.name} with no YouTube account..."
-                )
+                logger.info(f"Skipping player {player.name} with no YouTube account...")
             else:
                 await self.import_player_videos_from_youtube(
                     player,
@@ -100,12 +89,9 @@ class AsyncPauperformanceService(PauperformanceService):
                 )
         logger.info("Updated YouTube videos for all users.")
 
-    async def import_player_videos_from_youtube(
-        self, player, send_notification=True
-    ):
+    async def import_player_videos_from_youtube(self, player, send_notification=True):
         logger.info(
-            f"Processing videos from YouTube user "
-            f"{player.youtube_channel_id}..."
+            f"Processing videos from YouTube user " f"{player.youtube_channel_id}..."
         )
         await self.archive.archive_player_videos_from_youtube(
             player,
@@ -117,30 +103,20 @@ class AsyncPauperformanceService(PauperformanceService):
             self.discord,
             send_notification=send_notification,
         )
-        logger.info(
-            f"Processed videos from YouTube user {player.youtube_channel_id}."
-        )
+        logger.info(f"Processed videos from YouTube user {player.youtube_channel_id}.")
 
     async def import_decks_from_discord(self, send_notification=True):
         import_deck_channel_id = self.discord.import_deck_channel_id
-        logger.info(
-            f"Importing new decks from channel {import_deck_channel_id}..."
-        )
+        logger.info(f"Importing new decks from channel {import_deck_channel_id}...")
         import_deck_channel = self.discord.get_channel(import_deck_channel_id)
         messages = await import_deck_channel.history(
             limit=DISCORD_MAX_HISTORY_LIMIT
         ).flatten()
         for message in messages:
-            await self._process_discord_import_deck_message(
-                message, send_notification
-            )
-        logger.info(
-            f"Imported new decks from channel {import_deck_channel_id}."
-        )
+            await self._process_discord_import_deck_message(message, send_notification)
+        logger.info(f"Imported new decks from channel {import_deck_channel_id}.")
 
-    async def _process_discord_import_deck_message(
-        self, message, send_notification
-    ):
+    async def _process_discord_import_deck_message(self, message, send_notification):
         logger.debug(
             f"Processing message {message.id} by {message.author.id} "
             f"({message.author.name})..."
@@ -154,9 +130,7 @@ class AsyncPauperformanceService(PauperformanceService):
             )
         else:
             logger.info("Unrecognized deck format. Skipping it.")
-            await message.remove_reaction(
-                DISCORD_MYR_REACTION_SEEN, self.discord.user
-            )
+            await message.remove_reaction(DISCORD_MYR_REACTION_SEEN, self.discord.user)
             await message.add_reaction(DISCORD_MYR_REACTION_KO)
         logger.debug(
             f"Processed message {message.id} by {message.author.id} "

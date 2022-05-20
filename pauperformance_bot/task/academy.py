@@ -1,12 +1,8 @@
 import asyncio
 
 from pauperformance_bot.service.academy import AcademyService
-from pauperformance_bot.service.archive.mtggoldfish import (
-    MTGGoldfishArchiveService,
-)
-from pauperformance_bot.service.async_pauperformance import (
-    AsyncPauperformanceService,
-)
+from pauperformance_bot.service.archive.mtggoldfish import MTGGoldfishArchiveService
+from pauperformance_bot.service.async_pauperformance import AsyncPauperformanceService
 from pauperformance_bot.service.discord_.async_discord_service import (
     AsyncDiscordService,
 )
@@ -21,12 +17,8 @@ async def async_academy_update():
     await pauperformance.discord.wait_until_ready()
 
     # import new content
-    await pauperformance.import_players_videos_from_twitch(
-        send_notification=True
-    )
-    await pauperformance.import_players_videos_from_youtube(
-        send_notification=True
-    )
+    await pauperformance.import_players_videos_from_twitch(send_notification=True)
+    await pauperformance.import_players_videos_from_youtube(send_notification=True)
     await pauperformance.import_decks_from_deckstats(send_notification=True)
     await pauperformance.import_decks_from_discord(send_notification=True)
 

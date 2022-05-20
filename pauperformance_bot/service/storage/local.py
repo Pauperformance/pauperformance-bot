@@ -86,9 +86,7 @@ class LocalStorageService(AbstractStorageService):
                 file_path = file
                 break
         if file_path is None:
-            raise StoredFileNotFound(
-                f"File not found in storage including {deck_name}"
-            )
+            raise StoredFileNotFound(f"File not found in storage including {deck_name}")
         logger.info(f"Deleting file {file_path}...")
         remove(file_path)
         logger.info(f"Deleted file containing {deck_name}.")

@@ -20,12 +20,8 @@ from pauperformance_bot.constant.mtggoldfish import (
 )
 from pauperformance_bot.constant.myr import USA_DATE_FORMAT
 from pauperformance_bot.constant.phds import PAUPERFORMANCE
-from pauperformance_bot.entity.deck.archive.mtggoldfish import (
-    MTGGoldfishArchivedDeck,
-)
-from pauperformance_bot.entity.deck.playable import (
-    parse_playable_deck_from_lines,
-)
+from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
+from pauperformance_bot.entity.deck.playable import parse_playable_deck_from_lines
 from pauperformance_bot.entity.phd import PhD
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.util.log import get_application_logger
@@ -87,26 +83,17 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     f"Storage (and Archive). Skipping it."
                 )
                 continue
-            logger.info(
-                f"Storing deck {deckstats_deck.saved_id} in Archive..."
-            )
-            raw_deck = deckstats.get_deck(
-                deckstats_deck.saved_id, use_cache=False
-            )
+            logger.info(f"Storing deck {deckstats_deck.saved_id} in Archive...")
+            raw_deck = deckstats.get_deck(deckstats_deck.saved_id, use_cache=False)
             # sleep to avoid HTTPError: 429 Client Error: Too Many Requests
             time.sleep(REQUEST_SLEEP_TIMEOUT)
             playable_deck = deckstats.to_playable_deck(raw_deck)
             if playable_deck.len_mainboard != 60:
-                logger.warning(
-                    f"Main deck has {playable_deck.len_mainboard} cards."
-                )
+                logger.warning(f"Main deck has {playable_deck.len_mainboard} cards.")
             if playable_deck.len_sideboard != 15:
-                logger.warning(
-                    f"Sideboard has {playable_deck.len_sideboard} cards."
-                )
+                logger.warning(f"Sideboard has {playable_deck.len_sideboard} cards.")
             suspicious_list = (
-                playable_deck.len_mainboard != 60
-                or playable_deck.len_sideboard != 15
+                playable_deck.len_mainboard != 60 or playable_deck.len_sideboard != 15
             )
             description = (
                 f"Source: {deckstats_deck.url}\n"
@@ -119,17 +106,13 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 f"{deckstats_deck.name}.{deckstats_deck.owner_name} "
                 f"| {set_entry['name']} ({set_entry['scryfall_code']})"
             )
-            new_deck_id = self.create_deck(
-                deck_name, description, playable_deck
-            )
+            new_deck_id = self.create_deck(deck_name, description, playable_deck)
             storage_key = storage.get_imported_deckstats_deck_key(
                 deckstats_deck.saved_id,
                 new_deck_id,
                 deck_name,
             )
-            logger.info(
-                f"Archiving information on storage in file {storage_key}..."
-            )
+            logger.info(f"Archiving information on storage in file {storage_key}...")
             storage.create_file(f"{storage_key}", str(playable_deck))
             if send_notification:
                 logger.info("Informing player on Discord...")
@@ -201,9 +184,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 video.published_at.split("T")[0],
                 video.deck_name,
             )
-            logger.info(
-                f"Archiving information on storage in file {storage_key}..."
-            )
+            logger.info(f"Archiving information on storage in file {storage_key}...")
             storage.create_file(
                 f"{storage_key}",
                 json.dumps(vars(video), indent=4),
@@ -268,9 +249,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 video.published_at.split("T")[0],
                 video.deck_name,
             )
-            logger.info(
-                f"Archiving information on storage in file {storage_key}..."
-            )
+            logger.info(f"Archiving information on storage in file {storage_key}...")
             storage.create_file(
                 f"{storage_key}",
                 json.dumps(vars(video), indent=4),
@@ -301,9 +280,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
             f"Importing into archive decks from url {url} for player "
             f"{player.name}..."
         )
-        imported_mtggoldfish_decks = (
-            storage.list_imported_mtggoldfish_deck_ids()
-        )
+        imported_mtggoldfish_decks = storage.list_imported_mtggoldfish_deck_ids()
         original_deck_id = url.rsplit("/")[-1]
 
         if original_deck_id in imported_mtggoldfish_decks:
@@ -369,9 +346,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 logger.debug(f"{pretty_str(ms)}")
                 usa_date = dt.strftime(USA_DATE_FORMAT)
                 set_id = pauperformance.get_set_index_by_date(usa_date)
-                logger.debug(
-                    f"Computed set_id: {set_id} (from date {usa_date})."
-                )
+                logger.debug(f"Computed set_id: {set_id} (from date {usa_date}).")
                 # assume p12e_name == archetype_name
                 # search for all decks by player with same archetype and set_id
                 deck_group = [
@@ -382,8 +357,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     and deck.owner_name == player.name
                 ]
                 logger.debug(
-                    f"Found player decks with same archetype and set: "
-                    f"{deck_group}."
+                    f"Found player decks with same archetype and set: " f"{deck_group}."
                 )
                 logger.debug("Computing revision...")
                 if len(deck_group) == 0:
@@ -394,8 +368,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     revision = str(revision).zfill(3)
                 logger.debug(f"Computed revision: {revision}.")
                 p12e_name = (
-                    f"{p12e_name} "
-                    f"{set_id['p12e_code']}.{revision}.{player.name}"
+                    f"{p12e_name} " f"{set_id['p12e_code']}.{revision}.{player.name}"
                 )
             else:
                 p12e_name = f"{p12e_name}.{player.name}"
@@ -458,27 +431,19 @@ class AbstractArchiveService(metaclass=ABCMeta):
         lines = content.decode("utf-8").split("\r\n")
         playable_deck = parse_playable_deck_from_lines(lines)
         if playable_deck.len_mainboard != 60:
-            logger.warning(
-                f"Main deck has {playable_deck.len_mainboard} cards."
-            )
+            logger.warning(f"Main deck has {playable_deck.len_mainboard} cards.")
         if playable_deck.len_sideboard != 15:
-            logger.warning(
-                f"Sideboard has {playable_deck.len_sideboard} cards."
-            )
+            logger.warning(f"Sideboard has {playable_deck.len_sideboard} cards.")
         suspicious_list = (
-            playable_deck.len_mainboard != 60
-            or playable_deck.len_sideboard != 15
+            playable_deck.len_mainboard != 60 or playable_deck.len_sideboard != 15
         )
-        description = (
-            f"Source: {url}\n" f"Creation date: {pretty_str(creation_date)}"
-        )
+        description = f"Source: {url}\n" f"Creation date: {pretty_str(creation_date)}"
         if event:
             description += f"\n{event}"
         set_index = pauperformance.set_index
         set_entry = set_index[int(tentative_deck.p12e_code)]
         deck_name = (
-            f"{p12e_name} "
-            f"| {set_entry['name']} ({set_entry['scryfall_code']})"
+            f"{p12e_name} " f"| {set_entry['name']} ({set_entry['scryfall_code']})"
         )
         new_deck_id = self.create_deck(deck_name, description, playable_deck)
         storage_key = storage.get_imported_mtggoldfish_deck_key(
@@ -486,9 +451,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
             new_deck_id,
             deck_name,
         )
-        logger.info(
-            f"Archiving information on storage in file {storage_key}..."
-        )
+        logger.info(f"Archiving information on storage in file {storage_key}...")
         storage.create_file(f"{storage_key}", str(playable_deck))
         message = (
             f"📌 Imported deck: {deck_name}.\n\n"
@@ -499,14 +462,10 @@ class AbstractArchiveService(metaclass=ABCMeta):
             logger.info("Informing player on Discord...")
             await author.send(message)
         await discord.send_log_message(message)
-        await discord_message.remove_reaction(
-            DISCORD_MYR_REACTION_SEEN, discord.user
-        )
+        await discord_message.remove_reaction(DISCORD_MYR_REACTION_SEEN, discord.user)
         # if the deck name was initially wrong but was later renamed and fixed,
         # there may be a DISCORD_MYR_REACTION_KO to remove
-        await discord_message.remove_reaction(
-            DISCORD_MYR_REACTION_KO, discord.user
-        )
+        await discord_message.remove_reaction(DISCORD_MYR_REACTION_KO, discord.user)
         await discord_message.add_reaction(DISCORD_MYR_REACTION_OK)
         if suspicious_list:
             message = (
@@ -521,6 +480,5 @@ class AbstractArchiveService(metaclass=ABCMeta):
             await discord.send_log_message(message)
             await discord_message.add_reaction(DISCORD_MYR_REACTION_WARNING)
         logger.info(
-            f"Imported into archive decks from url {url} for "
-            f"player {player.name}."
+            f"Imported into archive decks from url {url} for " f"player {player.name}."
         )
