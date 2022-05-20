@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # PYTHON_ARGCOMPLETE_OK
+from argparse import ArgumentParser
+
 import argcomplete
 
-from pauperformance_bot.cli.builder.hookable_parser import HookableParser
 from pauperformance_bot.cli.builder.runnable import CLIRunnable
 from pauperformance_bot.cli.builder.utils import (
     add_default_options,
@@ -23,16 +24,14 @@ class MyrCLI(CLIRunnable):
         super().__init__(APPLICATION_NAME)
 
     def get_cli_parser(self):
-        parser = HookableParser(description="A collection of Myr tasks")
+        parser = ArgumentParser(description="A collection of Myr tasks")
         add_default_options(parser)
 
         description = (
             "Type 'tool-name -h' to show its help message (e.g. "
             "'{} -h)'".format(next(iter(MyrCLI._cli_tools)).name)
         )
-        tools_parser = parser.add_subparsers(
-            dest="tool", description=description, parser_class=HookableParser
-        )
+        tools_parser = parser.add_subparsers(dest="tool", description=description)
         tools_parser.required = True
 
         for tool in MyrCLI._cli_tools:
@@ -41,7 +40,6 @@ class MyrCLI(CLIRunnable):
                 tool.name, help=description.lower(), description=description
             )
             tool.add_parser_argument(sub_parser)
-            parser.add_hooks(sub_parser.hooks)
         argcomplete.autocomplete(parser)
         return parser
 

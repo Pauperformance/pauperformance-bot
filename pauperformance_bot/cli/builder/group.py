@@ -1,6 +1,7 @@
+from argparse import ArgumentParser
+
 import argcomplete
 
-from pauperformance_bot.cli.builder.hookable_parser import HookableParser
 from pauperformance_bot.cli.builder.runnable import CLIRunnable
 from pauperformance_bot.cli.builder.utils import (
     build_commands_sub_parser,
@@ -18,7 +19,7 @@ class CLIGroup(CLIRunnable):
         build_commands_sub_parser(tool_parser, self.cli_commands)
 
     def get_cli_parser(self):
-        parser = HookableParser(
+        parser = ArgumentParser(
             description="A collection of {}-related tools.".format(self.name),
             parents=[get_default_parent_parser()],
         )
