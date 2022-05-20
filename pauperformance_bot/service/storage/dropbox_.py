@@ -55,9 +55,7 @@ class DropboxService(AbstractStorageService):
 
     def create_file(self, name, content=""):
         logger.info(f"Storing file {name}...")
-        results = self._service.files_upload(
-            content.encode("utf-8"), name, mute=True
-        )
+        results = self._service.files_upload(content.encode("utf-8"), name, mute=True)
         logger.info(f"Stored file {name}: {results}")
 
     def list_imported_deckstats_deck_ids(self):
@@ -116,9 +114,7 @@ class DropboxService(AbstractStorageService):
                 file_path = file.path_display
                 break
         if file_path is None:
-            raise StoredFileNotFound(
-                f"File not found in storage including {deck_name}"
-            )
+            raise StoredFileNotFound(f"File not found in storage including {deck_name}")
         logger.info(f"Deleting file {file_path}...")
         self._service.files_delete_v2(file_path)
         logger.info(f"Deleted file containing {deck_name}.")

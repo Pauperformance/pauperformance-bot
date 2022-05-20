@@ -28,7 +28,5 @@ class CLIGroup(CLIRunnable):
 
     def dispatch_cmd(self, command, *args, **kwargs):
         handle_default_cli_options(*args, **kwargs)
-        dispatcher = next(
-            filter(lambda c: c.name == command, self.cli_commands)
-        )
+        dispatcher = next(filter(lambda c: c.name == command, self.cli_commands))
         dispatcher.dispatch_cmd(*args, **kwargs)

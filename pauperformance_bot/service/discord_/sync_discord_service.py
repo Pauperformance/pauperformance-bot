@@ -40,9 +40,7 @@ class AbstractSyncDiscordService(AbstractDiscordService, ABC):
 
     async def on_ready(self):
         logger.info(f"Logged on Discord as {self.user}.")
-        logger.info(
-            f"Retrieving log channel (id: {self.myr_log_channel_id})..."
-        )
+        logger.info(f"Retrieving log channel (id: {self.myr_log_channel_id})...")
         self.log_channel = self.get_channel(self.myr_log_channel_id)
         logger.info("Retrieved log channel.")
         self.result = await self._task()

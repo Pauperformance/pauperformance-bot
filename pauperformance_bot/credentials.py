@@ -13,9 +13,7 @@ def _get_credential_from_secrets(credential_key):
 
 
 def get_credential(credential_key):
-    return os.environ.get(
-        credential_key, _get_credential_from_secrets(credential_key)
-    )
+    return os.environ.get(credential_key, _get_credential_from_secrets(credential_key))
 
 
 DROPBOX_REFRESH_TOKEN = get_credential("DROPBOX_REFRESH_TOKEN")

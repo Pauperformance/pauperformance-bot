@@ -82,8 +82,4 @@ def _format_and_sort_resources(resources):
 
 
 def _parse_list_value(raw_value):
-    return (
-        [value.strip(" ") for value in raw_value.split(",")]
-        if raw_value
-        else []
-    )
+    return [value.strip(" ") for value in raw_value.split(",")] if raw_value else []

@@ -1,8 +1,6 @@
 from os.path import sep
 
-from pauperformance_bot.entity.deck.archive.abstract import (
-    AbstractArchivedDeck,
-)
+from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()

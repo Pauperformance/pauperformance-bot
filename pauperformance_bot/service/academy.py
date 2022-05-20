@@ -70,12 +70,9 @@ class AcademyService:
         home_output_file=HOME_OUTPUT_FILE,
     ):
         logger.info(
-            f"Rendering home in {templates_pages_dir} from "
-            f"{home_template_file}..."
+            f"Rendering home in {templates_pages_dir} from " f"{home_template_file}..."
         )
-        config = read_newspauper_config(
-            posix_path(config_dir, newspauper_file)
-        )
+        config = read_newspauper_config(posix_path(config_dir, newspauper_file))
         resources = config["resources"]
         current_set = self.pauperformance.get_current_set_index()
         render_template(
@@ -129,9 +126,7 @@ class AcademyService:
                 "families_dir": families_dir,
             },
         )
-        logger.info(
-            f"Rendered archetypes index to {archetypes_index_output_file}."
-        )
+        logger.info(f"Rendered archetypes index to {archetypes_index_output_file}.")
 
     def update_set_index(
         self,
@@ -201,12 +196,8 @@ class AcademyService:
             ]
 
             for deck in archetype_decks:
-                playable_deck = self.pauperformance.archive.to_playable_deck(
-                    deck
-                )
-                deck.legality = (
-                    "✅" if playable_deck.is_legal(banned_cards) else "Ban 🔨"
-                )
+                playable_deck = self.pauperformance.archive.to_playable_deck(deck)
+                deck.legality = "✅" if playable_deck.is_legal(banned_cards) else "Ban 🔨"
                 p12e_set = self.pauperformance.set_index[int(deck.p12e_code)]
                 deck.set_name = p12e_set["name"]
                 deck.set_date = p12e_set["date"]
@@ -290,9 +281,7 @@ class AcademyService:
         logger.info("Generating families...")
         logger.debug("Building families-archetypes map...")
         families_map = defaultdict(list)
-        for archetype_config_file in glob.glob(
-            f"{config_archetypes_dir}/*.ini"
-        ):
+        for archetype_config_file in glob.glob(f"{config_archetypes_dir}/*.ini"):
             config = read_archetype_config(archetype_config_file)
             values = config["values"]
             if values["family"]:
@@ -300,9 +289,7 @@ class AcademyService:
         logger.info(f"Families map: {families_map}")
 
         for family_name in families_map.keys():
-            family_config_file = posix_path(
-                config_families_dir, f"{family_name}.ini"
-            )
+            family_config_file = posix_path(config_families_dir, f"{family_name}.ini")
             logger.info(f"Processing {family_config_file}")
             values = read_family_config(family_config_file)
             if values["name"] != family_name:
@@ -317,8 +304,7 @@ class AcademyService:
             family_file_name = Path(family_config_file).name
             if family_name != family_file_name.replace(".ini", ""):
                 logger.warning(
-                    f"Family config mismatch: {family_name} vs "
-                    f"{family_file_name}"
+                    f"Family config mismatch: {family_name} vs " f"{family_file_name}"
                 )
 
             family_output_file = posix_path(
@@ -344,8 +330,7 @@ class AcademyService:
         dev_output_file=DEV_OUTPUT_FILE,
     ):
         logger.info(
-            f"Rendering dev in {templates_pages_dir} from "
-            f"{dev_template_file}..."
+            f"Rendering dev in {templates_pages_dir} from " f"{dev_template_file}..."
         )
         render_template(
             templates_pages_dir,

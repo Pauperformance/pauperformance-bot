@@ -13,12 +13,14 @@ venv/
 .idea/
 
 # tox
+.mypy_cache/
 .hypothesis/
 .pytest_cache/
 .tox/
 coverage_html/
 .coverage
 coverage.xml
+mypy_result.xml
 
 # Myr
 pauperformance_bot/secrets.py

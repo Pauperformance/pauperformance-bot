@@ -27,13 +27,9 @@ ARCHETYPES_INDEX_OUTPUT_FILE = posix_path(
 DEV_PAGE_NAME = WebPage("dev")
 DEV_OUTPUT_FILE = posix_path(PAGES_DIR, DEV_PAGE_NAME.as_markdown())
 PAUPER_POOL_PAGE_NAME = WebPage("pauper_pool")
-PAUPER_POOL_OUTPUT_FILE = posix_path(
-    PAGES_DIR, PAUPER_POOL_PAGE_NAME.as_markdown()
-)
+PAUPER_POOL_OUTPUT_FILE = posix_path(PAGES_DIR, PAUPER_POOL_PAGE_NAME.as_markdown())
 SET_INDEX_PAGE_NAME = WebPage("set_index")
-SET_INDEX_OUTPUT_FILE = posix_path(
-    PAGES_DIR, SET_INDEX_PAGE_NAME.as_markdown()
-)
+SET_INDEX_OUTPUT_FILE = posix_path(PAGES_DIR, SET_INDEX_PAGE_NAME.as_markdown())
 
 ARCHETYPES_DIR_RELATIVE_URL = posix_path("archetypes")
 FAMILIES_DIR_RELATIVE_URL = posix_path("families")

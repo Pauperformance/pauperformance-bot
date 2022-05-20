@@ -103,8 +103,7 @@ class PauperformanceService:
         extracted_file = cards_index_cache_file.rstrip(".tgz")
         try:
             logger.debug(
-                f"Trying to load card index from cache: "
-                f"{cards_index_cache_file}"
+                f"Trying to load card index from cache: " f"{cards_index_cache_file}"
             )
             with tarfile.open(cards_index_cache_file, "r:gz") as tar:
                 tar.extractall(path=os.path.dirname(cards_index_cache_file))
@@ -127,9 +126,7 @@ class PauperformanceService:
             card_index[p12e_code] = cards
             sleep(0.3)
         useless_sets = set(i for i in card_index if len(card_index[i]) == 0)
-        to_be_removed_sets = useless_sets - set(
-            KNOWN_SETS_WITH_NO_PAUPER_CARDS
-        )
+        to_be_removed_sets = useless_sets - set(KNOWN_SETS_WITH_NO_PAUPER_CARDS)
         if len(to_be_removed_sets) > 0:
             logger.warning(
                 f"Please, update the list of known sets with no pauper cards "
@@ -164,9 +161,7 @@ class PauperformanceService:
                 or "Promos" in self.set_index[p12e_code]["name"]
                 or "Black Border" in self.set_index[p12e_code]["name"]
             ):
-                logger.debug(
-                    f"Skipping set {self.set_index[p12e_code]['name']}..."
-                )
+                logger.debug(f"Skipping set {self.set_index[p12e_code]['name']}...")
                 incremental_card_index[p12e_code] = []
                 useless_sets.add(p12e_code)
                 continue
@@ -179,9 +174,7 @@ class PauperformanceService:
                 existing_card_names.add(card["name"])
             incremental_card_index[p12e_code] = new_cards
             logger.debug(f"Found {len(new_cards)} new cards.")
-        to_be_removed_sets = useless_sets - set(
-            INCREMENTAL_CARDS_INDEX_SKIP_SETS
-        )
+        to_be_removed_sets = useless_sets - set(INCREMENTAL_CARDS_INDEX_SKIP_SETS)
         if len(to_be_removed_sets) > 0:
             logger.warning(
                 f"Please, update the list of known sets to be skipped for the "
@@ -195,15 +188,12 @@ class PauperformanceService:
         for player in self.players:
             if not player.deckstats_id:
                 logger.info(
-                    f"Skipping player {player.name} with no Deckstats "
-                    f"account..."
+                    f"Skipping player {player.name} with no Deckstats " f"account..."
                 )
                 continue
             logger.info(f"Processing player {player.name}...")
             deckstats = DeckstatsService(owner_id=player.deckstats_id)
-            player_decks = deckstats.list_pauperformance_decks(
-                player.deckstats_name
-            )
+            player_decks = deckstats.list_pauperformance_decks(player.deckstats_name)
             logger.info(f"Found {len(player_decks)} decks.")
             all_decks += player_decks
         all_decks.sort(reverse=True, key=lambda d: d.p12e_code)
@@ -261,9 +251,7 @@ class PauperformanceService:
         ][-1]
 
     def get_current_set_index(self):
-        return self.get_set_index_by_date(
-            datetime.today().strftime(USA_DATE_FORMAT)
-        )
+        return self.get_set_index_by_date(datetime.today().strftime(USA_DATE_FORMAT))
 
     def delete_deck(self, deck_name):
         # a deck needs to be deleted both from the archive and from the storage
@@ -335,9 +323,7 @@ class PauperformanceService:
         print(f"Archetypes: {len(self.get_archetypes())}")
         print(f"Families: {len(self.get_families())}")
         resources = 0
-        for archetype_config_file in glob.glob(
-            f"{archetypes_config_dir}/*.ini"
-        ):
+        for archetype_config_file in glob.glob(f"{archetypes_config_dir}/*.ini"):
             config = read_archetype_config(archetype_config_file)
             resources += len(config["resources"])
         print(f"Resources: {resources}")

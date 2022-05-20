@@ -4,13 +4,8 @@ from typing import List
 import requests
 from pyquery import PyQuery
 
-from pauperformance_bot.constant.wizards import (
-    PAUPER_CHALLENGE_TOURNAMENT_CLASSES,
-)
-from pauperformance_bot.entity.mtgo_standings import (
-    MTGOStandingMatch,
-    MTGOStandings,
-)
+from pauperformance_bot.constant.wizards import PAUPER_CHALLENGE_TOURNAMENT_CLASSES
+from pauperformance_bot.entity.mtgo_standings import MTGOStandingMatch, MTGOStandings
 from pauperformance_bot.exceptions import WizardsException
 from pauperformance_bot.util.log import get_application_logger
 
