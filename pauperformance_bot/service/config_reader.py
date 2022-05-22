@@ -6,6 +6,7 @@ from pauperformance_bot.constant.phds import PAUPERFORMANCE
 from pauperformance_bot.entity.api.phd_sheet import PhDSheet
 from pauperformance_bot.entity.phd import PhD
 from pauperformance_bot.service.scryfall import ScryfallService
+from pauperformance_bot.util.config import read_archetype_config
 from pauperformance_bot.util.entities import auto_repr, auto_str
 from pauperformance_bot.util.log import get_application_logger
 
@@ -155,3 +156,24 @@ class ConfigReader:
         )
         logger.info(f"Read PhD {phd}.")
         return phd
+
+    def list_archetypes(self):
+        config_dir = self.myr_file_system.RESOURCES_CONFIG_ARCHETYPES_DIR
+        logger.info(f"Reading archetypes from {config_dir}...")
+        archetypes = [
+            self.get_archetype(config_file)
+            for config_file in glob.glob(f"{config_dir}/*.ini")
+        ]
+        logger.info(f"Read {len(archetypes)} archetypes from {config_dir}.")
+        return archetypes
+
+    def get_archetype(self, config_file_path: str):
+        # TODO: create a proper Archetype class and use it.
+        # TODO: ideally merge read_archetype_config with _read_config_file
+        config = read_archetype_config(config_file_path)
+        logger.debug(f"We should now parse this {config}...")
+        # values = config["values"]
+        # resources = config["resources"]
+        # archetype_name = values["name"]
+        # references = config["references"]
+        return None  # return Archetype()

@@ -35,6 +35,7 @@ from pauperformance_bot.constant.myr import (
     TEMPLATES_PAGES_DIR,
 )
 from pauperformance_bot.service.config_reader import ConfigReader
+from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.util.config import (
     read_archetype_config,
     read_family_config,
@@ -49,11 +50,16 @@ logger = get_application_logger()
 
 
 class AcademyService:
-    def __init__(self, pauperformance):
-        self.pauperformance = pauperformance
+    def __init__(
+        self,
+        pauperformance: PauperformanceService,
+        academy_fs: AcademyFileSystem = ACADEMY_FILE_SYSTEM,
+    ):
+        self.pauperformance: PauperformanceService = pauperformance
         self.scryfall = pauperformance.scryfall
         self.set_index = pauperformance.set_index
         self.config_reader: ConfigReader = pauperformance.config_reader
+        self.academy_fs: AcademyFileSystem = academy_fs
 
     def update_all(self, update_dev=True):
         self.update_home()
@@ -379,15 +385,15 @@ class AcademyService:
                 bolded_index.append({k: f"**{v}**" for k, v in item.items()})
         return bolded_index
 
-    def export_all(self, academy_fs: AcademyFileSystem = ACADEMY_FILE_SYSTEM):
-        self.export_phd_sheets(academy_fs)
+    def export_all(self):
+        self.export_phd_sheets()
 
-    def export_phd_sheets(self, academy_fs: AcademyFileSystem = ACADEMY_FILE_SYSTEM):
+    def export_phd_sheets(self):
         for phd_sheet in self.config_reader.list_phd_sheets(
             scryfall_service=self.scryfall
         ):
             safe_dump_json_to_file(
-                academy_fs.ASSETS_DATA_PHD_DIR,
+                self.academy_fs.ASSETS_DATA_PHD_DIR,
                 f"{phd_sheet.name}.json",
                 phd_sheet,
             )
