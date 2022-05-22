@@ -117,13 +117,13 @@ class ConfigReader:
         config_dir = self.myr_file_system.RESOURCES_CONFIG_PHDS_DIR
         logger.info(f"Reading PhDs from {config_dir}...")
         phds: list[PhD] = [PAUPERFORMANCE] + [
-            self.get_phds(config_file)
+            self.get_phd(config_file)
             for config_file in glob.glob(f"{config_dir}/*.ini")
         ]
         logger.info(f"Read {len(phds)} PhDs from {config_dir}.")
         return phds
 
-    def get_phds(
+    def get_phd(
         self,
         config_file_path: str,
     ) -> PhD:
