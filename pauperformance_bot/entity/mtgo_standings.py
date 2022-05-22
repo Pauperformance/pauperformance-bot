@@ -1,3 +1,7 @@
+from pauperformance_bot.util.entities import auto_repr
+
+
+@auto_repr
 class MTGOStandingMatch:
     def __init__(
         self,
@@ -19,13 +23,11 @@ class MTGOStandingMatch:
             f"{self.player2} ({self.player2_ranking}) ({self.match_score}))"
         )
 
-    def __repr__(self):
-        return str(self)
-
-    def __hash__(self):
-        return hash(str(self))
+    def __hash__(self) -> int:
+        return hash(repr(self))
 
 
+@auto_repr
 class MTGOStandings:
     def __init__(self, quarterfinals, semifinals, finals):
         self.quarterfinals = quarterfinals
@@ -39,8 +41,5 @@ class MTGOStandings:
             f"Finals: {self.finals}"
         )
 
-    def __repr__(self):
-        return str(self)
-
-    def __hash__(self):
-        return hash(str(self))
+    def __hash__(self) -> int:
+        return hash(repr(self))
