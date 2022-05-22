@@ -1,19 +1,27 @@
 import configparser
 import glob
 
-from pauperformance_bot.constant.myr import CONFIG_PHDS_DIR
+from pauperformance_bot.constant.myr import MyrFileSystem
+from pauperformance_bot.constant.phds import PAUPERFORMANCE
 from pauperformance_bot.entity.api.phd_sheet import PhDSheet
+from pauperformance_bot.entity.phd import PhD
 from pauperformance_bot.service.scryfall import ScryfallService
+from pauperformance_bot.util.entities import auto_repr, auto_str
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
 
 
+@auto_repr
+@auto_str
 class ConfigReader:
+    def __init__(self, myr_file_system: MyrFileSystem = MyrFileSystem()):
+        self.myr_file_system: MyrFileSystem = myr_file_system
+
     @staticmethod
     def _read_config_file(config_file_path):
         logger.debug(f"Reading configuration file {config_file_path}...")
-        config = configparser.ConfigParser()
+        config = configparser.ConfigParser(allow_no_value=True)
         config.optionxform = lambda option: option  # preserve case
         config.read(config_file_path)
         logger.debug(f"Read configuration file {config_file_path}.")
@@ -21,9 +29,9 @@ class ConfigReader:
 
     def list_phd_sheets(
         self,
-        config_dir: str = CONFIG_PHDS_DIR,
         scryfall_service: ScryfallService = ScryfallService(),
     ) -> list[PhDSheet]:
+        config_dir = self.myr_file_system.RESOURCES_CONFIG_PHDS_DIR
         logger.info(f"Reading PhD sheets from {config_dir}...")
         phd_sheets: list[PhDSheet] = [
             self.get_phd_sheet(config_file, scryfall_service)
@@ -102,3 +110,48 @@ class ConfigReader:
         )
         logger.info(f"Read PhD sheet {phd_sheet}.")
         return phd_sheet
+
+    def list_phds(
+        self,
+    ) -> list[PhD]:
+        config_dir = self.myr_file_system.RESOURCES_CONFIG_PHDS_DIR
+        logger.info(f"Reading PhDs from {config_dir}...")
+        phds: list[PhD] = [PAUPERFORMANCE] + [
+            self.get_phds(config_file)
+            for config_file in glob.glob(f"{config_dir}/*.ini")
+        ]
+        logger.info(f"Read {len(phds)} PhDs from {config_dir}.")
+        return phds
+
+    def get_phds(
+        self,
+        config_file_path: str,
+    ) -> PhD:
+        config = self._read_config_file(config_file_path)
+        values = config["values"]
+        dev = config["dev"]
+
+        twitch_login_name = (
+            url.rsplit("/", maxsplit=1)[-1]
+            if (url := values["twitch_channel_url"])
+            else None
+        )
+        youtube_channel_id = (
+            url.rsplit("/", maxsplit=1)[-1]
+            if (url := values["youtube_channel_url"])
+            else None
+        )
+        discord_id = int(discord_id) if (discord_id := dev["discord_id"]) else None
+
+        phd: PhD = PhD(
+            name=values["name"],
+            mtgo_name=values["mtgo_name"],
+            twitch_login_name=twitch_login_name,
+            youtube_channel_id=youtube_channel_id,
+            default_youtube_language=dev["default_youtube_language"],
+            discord_id=discord_id,
+            deckstats_name=dev["deckstats_name"],
+            deckstats_id=dev["deckstats_id"],
+        )
+        logger.info(f"Read PhD {phd}.")
+        return phd
