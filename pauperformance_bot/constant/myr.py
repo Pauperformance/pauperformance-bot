@@ -80,3 +80,27 @@ PAUPER_POOL_TEMPLATE_FILE = "pauper_pool.md.j2"
 SET_INDEX_TEMPLATE_FILE = "set_index.md.j2"
 
 LAST_SET_INDEX_FILE = posix_path(RESOURCES_DIR, "last_set_index.json")
+
+
+class MyrFileSystem:
+    def __init__(self, root_dir: str = TOP_PATH.as_posix()):
+        self.ROOT_DIR: str = root_dir
+
+        self.SOURCE_DIR: str = posix_path(self.ROOT_DIR, "pauperformance_bot")
+
+        self.RESOURCES_DIR: str = posix_path(self.ROOT_DIR, "resources")
+        self.RESOURCES_CACHE_DIR: str = posix_path(self.RESOURCES_DIR, "cache")
+
+        self.RESOURCES_CONFIG_DIR: str = posix_path(self.RESOURCES_DIR, "config")
+        self.RESOURCES_CONFIG_ARCHETYPES_DIR: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "archetypes"
+        )
+        self.RESOURCES_CONFIG_FAMILIES_DIR: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "families"
+        )
+        self.RESOURCES_CONFIG_PHDS_DIR: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "phds"
+        )
+
+
+MYR_FILE_SYSTEM = MyrFileSystem()

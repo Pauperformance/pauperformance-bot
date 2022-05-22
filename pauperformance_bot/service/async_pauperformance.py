@@ -4,7 +4,6 @@ from pauperformance_bot.constant.discord import (
     DISCORD_MYR_REACTION_SEEN,
 )
 from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
-from pauperformance_bot.constant.phds import PAUPERFORMANCE_PHDS
 from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.discord_.async_discord_service import (
     AsyncDiscordService,
@@ -28,10 +27,14 @@ class AsyncPauperformanceService(PauperformanceService):
         twitch=TwitchService(),
         youtube=YouTubeService(),
         config_reader=ConfigReader(),
-        players=PAUPERFORMANCE_PHDS,
     ):
         super().__init__(
-            storage, archive, scryfall, twitch, youtube, config_reader, players
+            storage,
+            archive,
+            scryfall,
+            twitch,
+            youtube,
+            config_reader,
         )
         self.discord: AsyncDiscordService = discord
 
@@ -148,9 +151,7 @@ class AsyncPauperformanceService(PauperformanceService):
         if "#" in url:
             url = url[: url.index("#")]
         logger.debug(f"Polished URL: {url}")
-        candidates = [
-            p for p in PAUPERFORMANCE_PHDS if p.discord_id == message.author.id
-        ]
+        candidates = [p for p in self.players if p.discord_id == message.author.id]
         player = candidates[-1]
         logger.debug(f"Detected owner: {player.name}")
         await self.archive.import_player_deck_from_mtggoldfish(
