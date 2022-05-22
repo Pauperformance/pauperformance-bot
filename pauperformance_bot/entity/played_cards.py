@@ -1,3 +1,7 @@
+from pauperformance_bot.util.entities import auto_repr
+
+
+@auto_repr
 class PlayedCard:
     def __init__(self, quantity, card_name):
         if isinstance(quantity, str):
@@ -8,8 +12,5 @@ class PlayedCard:
     def __str__(self):
         return f"{self.quantity} {self.card_name}"
 
-    def __repr__(self):
-        return str(self)
-
-    def __hash__(self):
-        return hash(str(self))
+    def __hash__(self) -> int:
+        return hash(repr(self))
