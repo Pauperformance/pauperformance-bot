@@ -1,3 +1,8 @@
+from pauperformance_bot.util.entities import auto_repr, auto_str
+
+
+@auto_repr
+@auto_str
 class TwitchUser:
     def __init__(self, user_id, login_name, display_name, description):
         self.user_id = user_id
@@ -5,15 +10,5 @@ class TwitchUser:
         self.display_name = display_name
         self.description = description
 
-    def __str__(self):
-        return (
-            f"{self.login_name} ({self.display_name}). "
-            f"Id: {self.user_id}. "
-            f"Description: {self.description}"
-        )
-
-    def __repr__(self):
-        return str(self)
-
-    def __hash__(self):
-        return hash(str(self))
+    def __hash__(self) -> int:
+        return hash(self.user_id)
