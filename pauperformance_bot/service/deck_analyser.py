@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from scipy import spatial
 
 from pauperformance_bot.entity.deck.playable import PlayableDeck
@@ -41,3 +43,7 @@ def get_similarity(deck1: PlayableDeck, deck2: PlayableDeck) -> float:
     sim = sim_main * sim_side
     logger.debug(f"Computed similarity between decks: {sim}.")
     return sim
+
+
+def classify_deck(deck: PlayableDeck, archetypes_list) -> Tuple[str, float]:
+    return "", 0  # TODO: compute similarity with each latest reference list

@@ -65,7 +65,7 @@ class PlayableDeck:
         return hash(repr(self))
 
 
-def parse_playable_deck_from_lines(lines):
+def parse_playable_deck_from_lines(lines) -> PlayableDeck:
     separator = lines.index("")
     maindeck = lines[:separator]
     maindeck.sort(key=lambda pc: pc.split(" ", maxsplit=1)[1])
