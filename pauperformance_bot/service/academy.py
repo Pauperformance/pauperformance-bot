@@ -3,6 +3,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from pauperformance_bot.constant.academy import (
+    ACADEMY_FILE_SYSTEM,
     ARCHETYPES_DIR,
     ARCHETYPES_DIR_RELATIVE_URL,
     ARCHETYPES_INDEX_OUTPUT_FILE,
@@ -14,6 +15,7 @@ from pauperformance_bot.constant.academy import (
     PAUPER_POOL_PAGE_NAME,
     SET_INDEX_OUTPUT_FILE,
     SET_INDEX_PAGE_NAME,
+    AcademyFileSystem,
 )
 from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.myr import (
@@ -32,13 +34,14 @@ from pauperformance_bot.constant.myr import (
     TEMPLATES_FAMILIES_DIR,
     TEMPLATES_PAGES_DIR,
 )
+from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.util.config import (
     read_archetype_config,
     read_family_config,
     read_newspauper_config,
 )
 from pauperformance_bot.util.log import get_application_logger
-from pauperformance_bot.util.path import posix_path
+from pauperformance_bot.util.path import posix_path, safe_dump_json_to_file
 from pauperformance_bot.util.template import render_template
 from pauperformance_bot.util.time import now_utc, pretty_str
 
@@ -50,6 +53,7 @@ class AcademyService:
         self.pauperformance = pauperformance
         self.scryfall = pauperformance.scryfall
         self.set_index = pauperformance.set_index
+        self.config_reader: ConfigReader = pauperformance.config_reader
 
     def update_all(self, update_dev=True):
         self.update_home()
@@ -374,3 +378,16 @@ class AcademyService:
             else:
                 bolded_index.append({k: f"**{v}**" for k, v in item.items()})
         return bolded_index
+
+    def export_all(self, academy_fs: AcademyFileSystem = ACADEMY_FILE_SYSTEM):
+        self.export_phd_sheets(academy_fs)
+
+    def export_phd_sheets(self, academy_fs: AcademyFileSystem = ACADEMY_FILE_SYSTEM):
+        for phd_sheet in self.config_reader.list_phd_sheets(
+            scryfall_service=self.scryfall
+        ):
+            safe_dump_json_to_file(
+                academy_fs.ASSETS_DATA_PHD_DIR,
+                f"{phd_sheet.name}.json",
+                phd_sheet,
+            )

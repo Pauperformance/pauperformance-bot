@@ -5,6 +5,7 @@ from pauperformance_bot.constant.discord import (
 )
 from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.constant.phds import PAUPERFORMANCE_PHDS
+from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.discord_.async_discord_service import (
     AsyncDiscordService,
 )
@@ -26,9 +27,12 @@ class AsyncPauperformanceService(PauperformanceService):
         scryfall=ScryfallService(),
         twitch=TwitchService(),
         youtube=YouTubeService(),
+        config_reader=ConfigReader(),
         players=PAUPERFORMANCE_PHDS,
     ):
-        super().__init__(storage, archive, scryfall, twitch, youtube, players)
+        super().__init__(
+            storage, archive, scryfall, twitch, youtube, config_reader, players
+        )
         self.discord: AsyncDiscordService = discord
 
     async def import_decks_from_deckstats(self, send_notification=True):
