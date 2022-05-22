@@ -19,7 +19,6 @@ from pauperformance_bot.constant.pauperformance import (
     INCREMENTAL_CARDS_INDEX_SKIP_SETS,
     KNOWN_SETS_WITH_NO_PAUPER_CARDS,
 )
-from pauperformance_bot.constant.phds import PAUPERFORMANCE_PHDS
 from pauperformance_bot.constant.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.entity.academy_video import AcademyVideo
@@ -46,7 +45,6 @@ class PauperformanceService:
         twitch=TwitchService(),
         youtube=YouTubeService(),
         config_reader=ConfigReader(),
-        players=PAUPERFORMANCE_PHDS,
     ):
         self.storage: AbstractStorageService = storage
         self.archive: AbstractArchiveService = archive
@@ -54,7 +52,7 @@ class PauperformanceService:
         self.twitch = twitch
         self.youtube = youtube
         self.config_reader = config_reader
-        self.players = players
+        self.players = config_reader.list_phds()
         self.set_index = self._build_set_index()
         self.card_index = self._build_card_index()
         self.incremental_card_index = self._build_incremental_card_index()
@@ -322,7 +320,7 @@ class PauperformanceService:
         self,
         archetypes_config_dir=CONFIG_ARCHETYPES_DIR,
     ):
-        print(f"PhDs: {len(PAUPERFORMANCE_PHDS) - 1}")
+        print(f"PhDs: {len(self.players) - 1}")
         print(f"Archetypes: {len(self.get_archetypes())}")
         print(f"Families: {len(self.get_families())}")
         resources = 0
