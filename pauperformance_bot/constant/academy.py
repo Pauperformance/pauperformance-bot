@@ -34,3 +34,14 @@ SET_INDEX_OUTPUT_FILE = posix_path(PAGES_DIR, SET_INDEX_PAGE_NAME.as_markdown())
 ARCHETYPES_DIR_RELATIVE_URL = posix_path("archetypes")
 FAMILIES_DIR_RELATIVE_URL = posix_path("families")
 RESOURCES_IMAGES_MANA_RELATIVE_URL = posix_path("resources", "images", "mana")
+
+
+class AcademyFileSystem:
+    def __init__(self, root_dir=ACADEMY_PATH):
+        self.ROOT_DIR: str = root_dir
+        self.ASSETS_DIR: str = posix_path(self.ROOT_DIR, "assets")
+        self.ASSETS_DATA_DIR: str = posix_path(self.ASSETS_DIR, "data")
+        self.ASSETS_DATA_PHD_DIR: str = posix_path(self.ASSETS_DATA_DIR, "phd")
+
+
+ACADEMY_FILE_SYSTEM = AcademyFileSystem()

@@ -25,6 +25,7 @@ from pauperformance_bot.constant.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.entity.academy_video import AcademyVideo
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.archive.abstract import AbstractArchiveService
+from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.service.storage.abstract import AbstractStorageService
@@ -44,6 +45,7 @@ class PauperformanceService:
         scryfall=ScryfallService(),
         twitch=TwitchService(),
         youtube=YouTubeService(),
+        config_reader=ConfigReader(),
         players=PAUPERFORMANCE_PHDS,
     ):
         self.storage: AbstractStorageService = storage
@@ -51,6 +53,7 @@ class PauperformanceService:
         self.scryfall = scryfall
         self.twitch = twitch
         self.youtube = youtube
+        self.config_reader = config_reader
         self.players = players
         self.set_index = self._build_set_index()
         self.card_index = self._build_card_index()

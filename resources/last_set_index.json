@@ -4480,5 +4480,59 @@
         "scryfall_code": "pncc",
         "name": "New Capenna Commander Promos",
         "date": "2022-04-09"
+    },
+    "748": {
+        "p12e_code": 748,
+        "scryfall_code": "tclb",
+        "name": "Battle for Baldur's Gate Tokens",
+        "date": "2022-06-10"
+    },
+    "749": {
+        "p12e_code": 749,
+        "scryfall_code": "plg22",
+        "name": "Love Your LGS 2022",
+        "date": "2022-07-01"
+    },
+    "750": {
+        "p12e_code": 750,
+        "scryfall_code": "2x2",
+        "name": "Double Masters 2022",
+        "date": "2022-07-08"
+    },
+    "751": {
+        "p12e_code": 751,
+        "scryfall_code": "sch",
+        "name": "Store Championships 2022",
+        "date": "2022-07-09"
+    },
+    "752": {
+        "p12e_code": 752,
+        "scryfall_code": "40k",
+        "name": "Warhammer 40,000",
+        "date": "2022-08-12"
+    },
+    "753": {
+        "p12e_code": 753,
+        "scryfall_code": "t40k",
+        "name": "Warhammer 40,000 Tokens",
+        "date": "2022-08-12"
+    },
+    "754": {
+        "p12e_code": 754,
+        "scryfall_code": "dmc",
+        "name": "Dominaria United Commander",
+        "date": "2022-09-09"
+    },
+    "755": {
+        "p12e_code": 755,
+        "scryfall_code": "dmu",
+        "name": "Dominaria United",
+        "date": "2022-09-09"
+    },
+    "756": {
+        "p12e_code": 756,
+        "scryfall_code": "bro",
+        "name": "The Brothers' War",
+        "date": "2022-11-18"
     }
 }
