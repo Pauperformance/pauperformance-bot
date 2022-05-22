@@ -28,3 +28,11 @@ class StoredFileNotFound(StorageException):
 
 class PauperformanceException(ClientException):
     pass
+
+
+class ScryfallException(ClientException):
+    pass
+
+
+class CardNotFoundException(ScryfallException):
+    pass
