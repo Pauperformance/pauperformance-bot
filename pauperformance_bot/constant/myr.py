@@ -64,6 +64,7 @@ PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(
 CONFIG_DIR = posix_path(RESOURCES_DIR, "config")
 CONFIG_ARCHETYPES_DIR = posix_path(CONFIG_DIR, "archetypes")
 CONFIG_FAMILIES_DIR = posix_path(CONFIG_DIR, "families")
+CONFIG_PHDS_DIR = posix_path(CONFIG_DIR, "phds")
 CONFIG_NEWSPAUPER_FILE = "newspauper.ini"
 
 TEMPLATES_DIR = posix_path(RESOURCES_DIR, "templates")

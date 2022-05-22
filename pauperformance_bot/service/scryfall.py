@@ -1,11 +1,13 @@
 import json
 import pickle
+import urllib.parse
 from functools import lru_cache, partial
 
 import requests
 
 from pauperformance_bot.constant.myr import SCRYFALL_CARDS_CACHE_DIR
-from pauperformance_bot.constant.scryfall import API_ENDPOINT
+from pauperformance_bot.constant.scryfall import API_ENDPOINT, WEBSITE_URL
+from pauperformance_bot.exceptions import CardNotFoundException
 from pauperformance_bot.util.cache import to_pkl_name
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
@@ -15,7 +17,8 @@ logger = get_application_logger()
 
 
 class ScryfallService:
-    def __init__(self, endpoint=API_ENDPOINT):
+    def __init__(self, website_url=WEBSITE_URL, endpoint=API_ENDPOINT):
+        self.website_url = website_url
         self.endpoint = endpoint
 
     def get_sets(self):
@@ -36,19 +39,28 @@ class ScryfallService:
                 card = pickle.load(cache_f)
                 logger.debug(f"Loaded card from cache: {exact_card_name}")
                 # logger.debug(f"Card: {card}")
+                return card
         except FileNotFoundError:
             logger.debug(f"No cache found for card {exact_card_name}.")
             url = f"{self.endpoint}/cards/named"
             method = requests.get
             params = {"exact": exact_card_name}
             method = partial(method, params=params)
-            response = execute_http_request(method, url)
-            card = json.loads(response.content)
-            with open(
-                posix_path(cards_cache_dir, to_pkl_name(exact_card_name)), "wb"
-            ) as cache_f:
-                pickle.dump(card, cache_f)
-        return card
+            try:
+                response = execute_http_request(method, url)
+                card = json.loads(response.content)
+                with open(
+                    posix_path(cards_cache_dir, to_pkl_name(exact_card_name)), "wb"
+                ) as cache_f:
+                    pickle.dump(card, cache_f)
+                return card
+            except requests.exceptions.HTTPError as exc:
+                if exc.response.status_code == 404:
+                    message = f"Absent card in Scryfall: {exact_card_name}."
+                    logger.error(message)
+                    raise CardNotFoundException(message)
+                else:
+                    raise
 
     def search_cards(self, query):
         url = f"{self.endpoint}/cards/search"
@@ -80,3 +92,18 @@ class ScryfallService:
     def get_banned_cards(self):
         query = "banned:pauper"
         return self.search_cards(query)
+
+    def get_artist_gallery_search_url(self, artist_name: str):
+        query = f"a:'{artist_name}'"
+        encoded_query = urllib.parse.quote(query)
+        query_params = "&".join(("unique=art", "as=grid", "order=name"))
+        return f"{self.website_url}/search?q={encoded_query}&{query_params}"
+
+    def get_card_from_url(self, card_url: str):
+        logger.debug(f"Retrieving card from url: {card_url}...")
+        # make an educated guess on the card name from the URL
+        card_name = card_url.split("/")[-1].replace("-", " ")
+        logger.debug(f"Trying card with name: {card_name}...")
+        card = self.get_card_named(card_name)
+        logger.debug(f"Retrieved card from url: {card_url}.")
+        return card
