@@ -261,7 +261,7 @@ class AcademyService:
                 }
                 for video in sorted(
                     videos,
-                    key=lambda v: v.published_at + v.deck_name,
+                    key=lambda v: v.published_at + v.deck_name + v.url,
                     reverse=True,
                 )
                 if video.deck_name.startswith(archetype_name)
