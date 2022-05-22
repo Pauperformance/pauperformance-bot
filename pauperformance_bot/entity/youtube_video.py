@@ -1,6 +1,9 @@
 from pauperformance_bot.entity.indexable_video import IndexableVideo
+from pauperformance_bot.util.entities import auto_repr, auto_str
 
 
+@auto_repr
+@auto_str
 class YouTubeVideo(IndexableVideo):
     def __init__(
         self,
@@ -34,26 +37,5 @@ class YouTubeVideo(IndexableVideo):
         self.url = url
         self.language = language
 
-    def __str__(self):
-        return (
-            f"video_id: {self.video_id}\n"
-            f"etag: {self.etag}\n"
-            f"content_video_id: {self.content_video_id}\n"
-            f"published_at: {self.published_at}\n"
-            f"channel_id: {self.channel_id}\n"
-            f"channel_title: {self.channel_title}\n"
-            f"description: {self.description}\n"
-            f"playlist_id: {self.playlist_id}\n"
-            f"position: {self.position}\n"
-            f"created_at: {self.created_at}\n"
-            f"title: {self.title}\n"
-            f"privacy_status: {self.privacy_status}\n"
-            f"url: {self.url}\n"
-            f"language: {self.language}\n"
-        )
-
-    def __repr__(self):
-        return str(self)
-
-    def __hash__(self):
-        return hash(str(self))
+    def __hash__(self) -> int:
+        return hash(self.video_id)

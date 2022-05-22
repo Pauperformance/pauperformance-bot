@@ -1,6 +1,9 @@
 from pauperformance_bot.entity.indexable_video import IndexableVideo
+from pauperformance_bot.util.entities import auto_repr, auto_str
 
 
+@auto_repr
+@auto_str
 class TwitchVideo(IndexableVideo):
     def __init__(
         self,
@@ -32,25 +35,5 @@ class TwitchVideo(IndexableVideo):
         self.language = language
         self.duration = duration
 
-    def __str__(self):
-        return (
-            f"video_id: {self.video_id}\n"
-            f"stream_id: {self.stream_id}\n"
-            f"user_id: {self.user_id}\n"
-            f"user_login_name: {self.user_login_name}\n"
-            f"user_display_name: {self.user_display_name}\n"
-            f"title: {self.title}\n"
-            f"description: {self.description}\n"
-            f"created_at: {self.created_at}\n"
-            f"published_at: {self.published_at}\n"
-            f"url: {self.url}\n"
-            f"viewable: {self.viewable}\n"
-            f"language: {self.language}\n"
-            f"duration: {self.duration}\n"
-        )
-
-    def __repr__(self):
-        return str(self)
-
-    def __hash__(self):
-        return hash(str(self))
+    def __hash__(self) -> int:
+        return hash(self.video_id)

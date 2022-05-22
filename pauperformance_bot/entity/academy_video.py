@@ -1,3 +1,8 @@
+from pauperformance_bot.util.entities import auto_repr, auto_str
+
+
+@auto_repr
+@auto_str
 class AcademyVideo:
     def __init__(
         self,
@@ -17,19 +22,5 @@ class AcademyVideo:
         self.url = url
         self.fa_icon = fa_icon
 
-    def __str__(self):
-        return (
-            f"video_id: {self.video_id}\n"
-            f"user_name: {self.user_name}\n"
-            f"language: {self.language}\n"
-            f"published_at: {self.published_at}\n"
-            f"deck_name: {self.deck_name}\n"
-            f"url: {self.url}\n"
-            f"fa_icon: {self.fa_icon}\n"
-        )
-
-    def __repr__(self):
-        return str(self)
-
-    def __hash__(self):
-        return hash(str(self))
+    def __hash__(self) -> int:
+        return hash(self.video_id)
