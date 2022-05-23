@@ -4,19 +4,19 @@ from pauperformance_bot.entity.played_cards import PlayedCard
 class PlayableDeck:
     def __init__(
         self,
-        mainboard,
-        sideboard,
+        mainboard: list[PlayedCard],
+        sideboard: list[PlayedCard],
     ):
-        self.mainboard = mainboard
-        self.sideboard = sideboard
+        self.mainboard: list[PlayedCard] = mainboard
+        self.sideboard: list[PlayedCard] = sideboard
 
     @property
     def mainboard_mtggoldfish(self):
-        return "\n".join((repr(c) for c in self.mainboard))
+        return "\n".join((f"{c.quantity} {c.card_name}" for c in self.mainboard))
 
     @property
     def sideboard_mtggoldfish(self):
-        return "\n".join((repr(c) for c in self.sideboard))
+        return "\n".join((f"{c.quantity} {c.card_name}" for c in self.sideboard))
 
     @property
     def mainboard_cards_map(self):
