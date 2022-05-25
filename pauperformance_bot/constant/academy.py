@@ -41,6 +41,9 @@ class AcademyFileSystem:
         self.ROOT_DIR: str = root_dir
         self.ASSETS_DIR: str = posix_path(self.ROOT_DIR, "assets")
         self.ASSETS_DATA_DIR: str = posix_path(self.ASSETS_DIR, "data")
+        self.ASSETS_DATA_ARCHETYPE_DIR: str = posix_path(
+            self.ASSETS_DATA_DIR, "archetype"
+        )
         self.ASSETS_DATA_PHD_DIR: str = posix_path(self.ASSETS_DATA_DIR, "phd")
 
 

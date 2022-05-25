@@ -34,6 +34,13 @@ from pauperformance_bot.constant.myr import (
     TEMPLATES_FAMILIES_DIR,
     TEMPLATES_PAGES_DIR,
 )
+from pauperformance_bot.entity.api.archetype import (
+    Archetype,
+    ArchetypeCard,
+    DiscordResource,
+    Resource,
+    SideboardResource,
+)
 from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.util.config import (
@@ -386,6 +393,7 @@ class AcademyService:
         return bolded_index
 
     def export_all(self):
+        self.export_archetypes()
         self.export_phd_sheets()
 
     def export_phd_sheets(self):
@@ -397,3 +405,87 @@ class AcademyService:
                 f"{phd_sheet.name}.json",
                 phd_sheet,
             )
+
+    def export_archetypes(self):
+        self._tmp_export_synthetic_archetypes()
+
+    def _tmp_export_synthetic_archetypes(self):
+        cards = [
+            ArchetypeCard(
+                name="Burning-Tree Emissary",
+                link="https://scryfall.com/card/dds/55/burning-tree-emissary",
+                preview="https://c1.scryfall.com/file/scryfall-cards/normal/front/"
+                "2/2/22e3e874-a0ec-4459-b78d-abef6b9232b9.jpg",
+            ),
+            ArchetypeCard(
+                name="Hunger of the Howlpack",
+                link="https://scryfall.com/card/cns/168/hunger-of-the-howlpack",
+                preview="https://c1.scryfall.com/file/scryfall-cards/normal/front/"
+                "2/3/23676697-2b84-4e9f-9e38-4fd58085a698.jpg",
+            ),
+            ArchetypeCard(
+                name="Nest Invader",
+                link="https://scryfall.com/card/pca/69/nest-invader",
+                preview="https://c1.scryfall.com/file/scryfall-cards/normal/front/"
+                "3/0/3085f5b1-d2e3-4dd4-8263-024b2b5da4b4.jpg",
+            ),
+        ]
+        archetype: Archetype = Archetype(
+            name="Stompy",
+            aliases=["MonoG Aggro"],
+            family=None,
+            dominant_mana=["G"],
+            game_type=["Aggro"],
+            description="Stompy is a fast and solid aggro deck, and the most popular of"
+            " this type in the format."
+            "It takes advantage of cheap and strong creatures, sometimes wi"
+            "th [evasion or pseudo-evasion abilities](https://mtg.fandom.co"
+            "m/wiki/Evasion_ability), to immediately put pressure on the bo"
+            "ard."
+            "Several efficient pump spells helps Stompy quickly reducing th"
+            "e opponent's life total, allowing players to consistently win "
+            "games in the fist few turns."
+            "Since 2019, the addition of [Savage Swipe](https://scryfall.co"
+            "m/card/mh1/178/savage-swipe) from Modern Horizons (mh1) has pr"
+            "ovided the deck with a powerful option for clearing out blocke"
+            "rs while also applying additional pressure.",
+            staples=cards,
+            frequent=cards,
+            reference_decks=[
+                "Stompy 722.001.tarmogoyf_ita",
+                "Stompy 696.001.Ixidor29",
+            ],
+            resource_sideboard=SideboardResource(
+                link="https://docs.google.com/spreadsheets/d/1iBnopoHW5EspnWOvCDVm28eTI"
+                "581RljyJoJgAZJOhXQ/edit?usp=sharing",
+            ),
+            resources_discord=[
+                DiscordResource(
+                    name="Pauper Stompy Discord",
+                    link="https://discord.gg/RzTmb76qjJ",
+                    language="eng",
+                )
+            ],
+            resources=[
+                Resource(
+                    name="Pauper Stompy Deck Guide",
+                    link="https://strategy.channelfireball.com/all-strategy/mtg/channel"
+                    "magic-articles/pauper-stompy-deck-guide/",
+                    language="eng",
+                    author="Alex Ullman",
+                    date="2020-08-27",
+                ),
+                Resource(
+                    name="[PAUPER PRIMER] Mono Green",
+                    link="http://www.metagame.it/forum/viewtopic.php?f=187&t=10786",
+                    language="ita",
+                    author="Mr Pain",
+                    date="2013-12-24",
+                ),
+            ],
+        )
+        safe_dump_json_to_file(
+            self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR,
+            f"{archetype.name}.json",
+            archetype,
+        )
