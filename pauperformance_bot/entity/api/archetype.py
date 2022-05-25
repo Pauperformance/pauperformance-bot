@@ -1,10 +1,78 @@
 from typing import Optional
 
-from pauperformance_bot.entity.api.archetype.archetype_card import ArchetypeCard
-from pauperformance_bot.entity.api.archetype.discord_resource import DiscordResource
-from pauperformance_bot.entity.api.archetype.resource import Resource
-from pauperformance_bot.entity.api.archetype.sideboard_resource import SideboardResource
 from pauperformance_bot.util.entities import auto_repr, auto_str
+
+
+@auto_repr
+@auto_str
+class ArchetypeCard:
+    def __init__(
+        self,
+        *,
+        name: str,
+        link: str,
+        preview: str,
+    ):
+        self.name: str = name
+        self.link: str = link
+        self.preview: str = preview
+
+    def __hash__(self):
+        return hash(self.name)
+
+
+@auto_repr
+@auto_str
+class SideboardResource:
+    def __init__(
+        self,
+        *,
+        link: str,
+    ):
+        self.link: str = link
+
+    def __hash__(self):
+        return hash(self.link)
+
+
+@auto_repr
+@auto_str
+class DiscordResource:
+    def __init__(
+        self,
+        *,
+        name: str,
+        link: str,
+        language: str,
+    ):
+        self.name: str = name
+        self.link: str = link
+        self.language: str = language
+
+    def __hash__(self):
+        return hash(self.link)
+
+
+@auto_repr
+@auto_str
+class Resource:
+    def __init__(
+        self,
+        *,
+        name: str,
+        link: str,
+        language: str,
+        author: str,
+        date: str,
+    ):
+        self.name: str = name
+        self.link: str = link
+        self.language: str = language
+        self.author: str = author
+        self.date: str = date
+
+    def __hash__(self):
+        return hash(self.link)
 
 
 @auto_repr
@@ -21,8 +89,9 @@ class Archetype:
         description: str,
         staples: list[ArchetypeCard],
         frequent: list[ArchetypeCard],
+        reference_decks: list[str],
         resource_sideboard: Optional[SideboardResource],
-        resource_discord: Optional[DiscordResource],
+        resources_discord: list[DiscordResource],
         resources: list[Resource],
     ):
         self.name: str = name
@@ -33,8 +102,9 @@ class Archetype:
         self.description: str = description
         self.staples: list[ArchetypeCard] = staples
         self.frequent: list[ArchetypeCard] = frequent
+        self.reference_decks: list[str] = reference_decks
         self.resource_sideboard: Optional[SideboardResource] = resource_sideboard
-        self.resource_discord: Optional[DiscordResource] = resource_discord
+        self.resources_discord: list[DiscordResource] = resources_discord
         self.resources: list[Resource] = resources
 
     def __hash__(self):
