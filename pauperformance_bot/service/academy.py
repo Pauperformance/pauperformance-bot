@@ -41,6 +41,7 @@ from pauperformance_bot.entity.api.archetype import (
     Resource,
     SideboardResource,
 )
+from pauperformance_bot.entity.api.video import Video
 from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.util.config import (
@@ -395,6 +396,7 @@ class AcademyService:
     def export_all(self):
         self.export_archetypes()
         self.export_phd_sheets()
+        self.export_videos()
 
     def export_phd_sheets(self):
         for phd_sheet in self.config_reader.list_phd_sheets(
@@ -408,6 +410,9 @@ class AcademyService:
 
     def export_archetypes(self):
         self._tmp_export_synthetic_archetypes()
+
+    def export_videos(self):
+        self._tmp_export_synthetic_videos()
 
     def _tmp_export_synthetic_archetypes(self):
         cards = [
@@ -488,4 +493,40 @@ class AcademyService:
             self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR,
             f"{archetype.name}.json",
             archetype,
+        )
+
+    def _tmp_export_synthetic_videos(self):
+        phd_sheets = self.config_reader.list_phd_sheets(scryfall_service=self.scryfall)
+        pauperformance = next(phd for phd in phd_sheets if phd.name == "Shika93")
+        video: Video = Video(
+            name="🇬🇧 MTGO League - Stompy 722.002.tarmogoyf_ita | Kamigawa: Neon Dynast"
+            "y (neo)",
+            link="https://www.youtube.com/watch?v=wtRXWDfLZK8",
+            language="eng",
+            phd_name=pauperformance.name,
+            date="2022-04-07",
+            archetype="Stompy",
+            video_id="wtRXWDfLZK8",
+            deck_name="Stompy 722.002.tarmogoyf_ita",
+        )
+        safe_dump_json_to_file(
+            posix_path(self.academy_fs.ASSETS_DATA_VIDEO_DIR, video.archetype),
+            f"{video.video_id}.json",
+            video,
+        )
+        heisen01 = next(phd for phd in phd_sheets if phd.name.startswith("Heisen"))
+        video: Video = Video(
+            name="Testare Jeskai in Preparazione al Geddon Appena Passato!",
+            link="https://www.youtube.com/watch?v=mk18LScEIdI",
+            language="ita",
+            phd_name=heisen01.name,
+            date="2022-04-04",
+            archetype="Jeskai Ephemerate",
+            video_id="mk18LScEIdI",
+            deck_name=None,
+        )
+        safe_dump_json_to_file(
+            posix_path(self.academy_fs.ASSETS_DATA_VIDEO_DIR, video.archetype),
+            f"{video.video_id}.json",
+            video,
         )
