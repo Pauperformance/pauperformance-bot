@@ -45,6 +45,7 @@ class AcademyFileSystem:
             self.ASSETS_DATA_DIR, "archetype"
         )
         self.ASSETS_DATA_PHD_DIR: str = posix_path(self.ASSETS_DATA_DIR, "phd")
+        self.ASSETS_DATA_VIDEO_DIR: str = posix_path(self.ASSETS_DATA_DIR, "video")
 
 
 ACADEMY_FILE_SYSTEM = AcademyFileSystem()
