@@ -3,7 +3,7 @@ import glob
 
 from pauperformance_bot.constant.myr import MyrFileSystem
 from pauperformance_bot.constant.phds import PAUPERFORMANCE
-from pauperformance_bot.entity.api.phd_sheet import PhDSheet
+from pauperformance_bot.entity.api.phd import PhDSheet
 from pauperformance_bot.entity.phd import PhD
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.util.config import read_archetype_config
@@ -56,8 +56,8 @@ class ConfigReader:
                 "?", maxsplit=1
             )[0]
         else:
-            favorite_pauper_card_name = ""
-            favorite_pauper_card_image_url = ""
+            favorite_pauper_card_name = None
+            favorite_pauper_card_image_url = None
 
         if card_url := values["favorite_flavor_text_url"]:
             card = scryfall_service.get_card_from_url(card_url)
@@ -67,9 +67,9 @@ class ConfigReader:
             )[0]
             favorite_flavor_text_lines = card["flavor_text"]
         else:
-            favorite_flavor_text_name = ""
-            favorite_flavor_text_image_url = ""
-            favorite_flavor_text_lines = ""
+            favorite_flavor_text_name = None
+            favorite_flavor_text_image_url = None
+            favorite_flavor_text_lines = None
 
         if card_url := values["favorite_artwork_url"]:
             card = scryfall_service.get_card_from_url(card_url)
@@ -78,13 +78,13 @@ class ConfigReader:
                 "?", maxsplit=1
             )[0]
         else:
-            favorite_artwork_name = ""
-            favorite_artwork_image_url = ""
+            favorite_artwork_name = None
+            favorite_artwork_image_url = None
 
         favorite_artist_gallery_url = (
             scryfall_service.get_artist_gallery_search_url(artist_name)
             if (artist_name := values["favorite_artist_name"])
-            else ""
+            else None
         )
 
         phd_sheet: PhDSheet = PhDSheet(
