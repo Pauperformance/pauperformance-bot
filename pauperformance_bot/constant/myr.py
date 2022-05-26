@@ -107,6 +107,9 @@ class MyrFileSystem:
         self.RESOURCES_CONFIG_PHDS_DIR: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "phds"
         )
+        self.RESOURCES_CONFIG_NEWSPAUPER: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "newspauper.ini"
+        )
 
 
 MYR_FILE_SYSTEM = MyrFileSystem()

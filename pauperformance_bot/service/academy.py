@@ -42,6 +42,7 @@ from pauperformance_bot.entity.api.archetype import (
     SideboardResource,
 )
 from pauperformance_bot.entity.api.deck import Deck
+from pauperformance_bot.entity.api.miscellanea import Newspauper
 from pauperformance_bot.entity.api.video import Video
 from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance import PauperformanceService
@@ -397,6 +398,7 @@ class AcademyService:
     def export_all(self):
         self.export_archetypes()
         self.export_decks()
+        self.export_miscellanea()
         self.export_phd_sheets()
         self.export_videos()
 
@@ -415,6 +417,17 @@ class AcademyService:
 
     def export_decks(self):
         self._tmp_export_synthetic_decks()
+
+    def export_miscellanea(self):
+        self.export_newspauper()
+
+    def export_newspauper(self):
+        newspauper: Newspauper = self.config_reader.get_newspauper()
+        safe_dump_json_to_file(
+            self.academy_fs.ASSETS_DATA_DIR,
+            "newspauper.json",
+            newspauper,
+        )
 
     def export_videos(self):
         self._tmp_export_synthetic_videos()
