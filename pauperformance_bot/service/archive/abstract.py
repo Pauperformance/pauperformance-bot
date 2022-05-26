@@ -218,6 +218,14 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 f"published on {video.published_at}, "
                 f"url: {video.url}..."
             )
+
+            if video.content_video_id in imported_youtube_videos:
+                logger.debug(
+                    f"Video {video.content_video_id} already stored on "
+                    f"Storage. Skipping it."
+                )
+                continue
+
             if video.privacy_status != "public":
                 await discord.send_user_message(
                     warning_player.discord_id,
@@ -230,12 +238,6 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 )
                 continue
 
-            if video.content_video_id in imported_youtube_videos:
-                logger.debug(
-                    f"Video {video.content_video_id} already stored on "
-                    f"Storage. Skipping it."
-                )
-                continue
             if not video.deck_name:
                 logger.debug(
                     f"Unable to find deck name for video {video.url}. "

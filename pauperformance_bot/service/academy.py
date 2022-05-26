@@ -260,22 +260,25 @@ class AcademyService:
                 f"Rendering {archetype_name} in {templates_archetypes_dir} "
                 f"from {archetype_template_file}..."
             )
-            archetype_videos = [
-                {
-                    "language": get_language_flag(video.language),
-                    "deck_name": video.deck_name,
-                    "url": f"{video.url}",
-                    "creator": video.user_name,
-                    "date": video.published_at,
-                    "fa_icon": video.fa_icon,
-                }
-                for video in sorted(
-                    videos,
-                    key=lambda v: v.published_at + v.deck_name + v.url,
-                    reverse=True,
-                )
-                if video.deck_name.startswith(archetype_name)
-            ]
+            archetype_videos = []
+            for video in sorted(
+                videos,
+                key=lambda v: v.published_at + v.deck_name + v.url,
+                reverse=True,
+            ):
+                if video.deck_name.startswith(archetype_name) or any(
+                    video.deck_name.startswith(alias) for alias in values["aliases"]
+                ):
+                    archetype_videos.append(
+                        {
+                            "language": get_language_flag(video.language),
+                            "deck_name": video.deck_name,
+                            "url": f"{video.url}",
+                            "creator": video.user_name,
+                            "date": video.published_at,
+                            "fa_icon": video.fa_icon,
+                        }
+                    )
             template_values = {
                 **values,
                 "videos": archetype_videos,
