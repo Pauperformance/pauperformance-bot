@@ -47,7 +47,7 @@ VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 # if "pythonLocation" in os.environ and strtobool(
 #     os.environ.get("GITHUB_ACTIONS", "false")
 # ):  # running in GitHub
-#     RESOURCES_DIR = posix_path(os.getenv("pythonLocation"), "resources")
+#     RESOURCES_DIR = posix_path(os.getenv("pythonLocation"), "SOME/THING/")
 
 if "VIRTUAL_ENV" in os.environ:  # running in venv
     RESOURCES_DIR = posix_path(os.getenv("VIRTUAL_ENV"), "resources")
@@ -85,12 +85,16 @@ LAST_SET_INDEX_FILE = posix_path(RESOURCES_DIR, "last_set_index.json")
 
 
 class MyrFileSystem:
-    def __init__(self, root_dir: str = TOP_PATH.as_posix()):
+    def __init__(
+        self,
+        root_dir: str = TOP_PATH.as_posix(),
+        resources_dir: str = RESOURCES_DIR,
+    ):
         self.ROOT_DIR: str = root_dir
 
         self.SOURCE_DIR: str = posix_path(self.ROOT_DIR, "pauperformance_bot")
 
-        self.RESOURCES_DIR: str = posix_path(self.ROOT_DIR, "resources")
+        self.RESOURCES_DIR: str = resources_dir
         self.RESOURCES_CACHE_DIR: str = posix_path(self.RESOURCES_DIR, "cache")
 
         self.RESOURCES_CONFIG_DIR: str = posix_path(self.RESOURCES_DIR, "config")
