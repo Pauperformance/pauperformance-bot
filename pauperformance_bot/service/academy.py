@@ -406,6 +406,7 @@ class AcademyService:
         self.export_videos()
 
     def export_phd_sheets(self):
+        logger.info(f"Exporting phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}...")
         for phd_sheet in self.config_reader.list_phd_sheets(
             scryfall_service=self.scryfall
         ):
@@ -414,6 +415,7 @@ class AcademyService:
                 f"{phd_sheet.name}.json",
                 phd_sheet,
             )
+        logger.info(f"Exported phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}.")
 
     def export_archetypes(self):
         self._tmp_export_synthetic_archetypes()
@@ -425,17 +427,22 @@ class AcademyService:
         self.export_newspauper()
 
     def export_newspauper(self):
+        logger.info(f"Exporting newspauper to {self.academy_fs.ASSETS_DATA_DIR}...")
         newspauper: Newspauper = self.config_reader.get_newspauper()
         safe_dump_json_to_file(
             self.academy_fs.ASSETS_DATA_DIR,
             "newspauper.json",
             newspauper,
         )
+        logger.info(f"Exported newspauper to {self.academy_fs.ASSETS_DATA_DIR}.")
 
     def export_videos(self):
         self._tmp_export_synthetic_videos()
 
     def _tmp_export_synthetic_archetypes(self):
+        logger.info(
+            f"Exporting archetypes to {self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR}..."
+        )
         cards = [
             ArchetypeCard(
                 name="Burning-Tree Emissary",
@@ -515,8 +522,12 @@ class AcademyService:
             f"{archetype.name}.json",
             archetype,
         )
+        logger.info(
+            f"Exported archetypes to {self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR}."
+        )
 
     def _tmp_export_synthetic_decks(self):
+        logger.info(f"Exporting decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}...")
         decks: list[Deck] = []
         deck: Deck = Deck(
             name="Stompy 722.001.tarmogoyf_ita",
@@ -551,8 +562,10 @@ class AcademyService:
                 f"{deck.name}.json",
                 deck,
             )
+        logger.info(f"Exported decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}.")
 
     def _tmp_export_synthetic_videos(self):
+        logger.info(f"Exporting videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}...")
         phd_sheets = self.config_reader.list_phd_sheets(scryfall_service=self.scryfall)
         pauperformance = next(phd for phd in phd_sheets if phd.name == "Shika93")
         video: Video = Video(
@@ -587,3 +600,4 @@ class AcademyService:
             f"{video.video_id}.json",
             video,
         )
+        logger.info(f"Exported videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}.")
