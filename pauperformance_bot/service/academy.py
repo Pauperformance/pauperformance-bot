@@ -41,6 +41,7 @@ from pauperformance_bot.entity.api.archetype import (
     Resource,
     SideboardResource,
 )
+from pauperformance_bot.entity.api.deck import Deck
 from pauperformance_bot.entity.api.video import Video
 from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance import PauperformanceService
@@ -395,6 +396,7 @@ class AcademyService:
 
     def export_all(self):
         self.export_archetypes()
+        self.export_decks()
         self.export_phd_sheets()
         self.export_videos()
 
@@ -410,6 +412,9 @@ class AcademyService:
 
     def export_archetypes(self):
         self._tmp_export_synthetic_archetypes()
+
+    def export_decks(self):
+        self._tmp_export_synthetic_decks()
 
     def export_videos(self):
         self._tmp_export_synthetic_videos()
@@ -494,6 +499,42 @@ class AcademyService:
             f"{archetype.name}.json",
             archetype,
         )
+
+    def _tmp_export_synthetic_decks(self):
+        decks: list[Deck] = []
+        deck: Deck = Deck(
+            name="Stompy 722.001.tarmogoyf_ita",
+            url="https://www.mtggoldfish.com/deck/4680163",
+            archetype="Stompy",
+            set_name="Kamigawa: Neon Dynasty",
+            set_date="2022-02-18",
+            legal=True,
+        )
+        decks.append(deck)
+        deck: Deck = Deck(
+            name="Stompy 696.001.Ixidor29",
+            url="https://www.mtggoldfish.com/deck/4624367",
+            archetype="Stompy",
+            set_name="	Innistrad: Midnight Hunt",
+            set_date="2021-09-24",
+            legal=True,
+        )
+        decks.append(deck)
+        deck: Deck = Deck(
+            name="Stompy 722.002.tarmogoyf_ita",
+            url="https://www.mtggoldfish.com/deck/4706455",
+            archetype="Stompy",
+            set_name="Kamigawa: Neon Dynasty",
+            set_date="2022-02-18",
+            legal=True,
+        )
+        decks.append(deck)
+        for deck in decks:
+            safe_dump_json_to_file(
+                posix_path(self.academy_fs.ASSETS_DATA_DECK_DIR, deck.archetype),
+                f"{deck.name}.json",
+                deck,
+            )
 
     def _tmp_export_synthetic_videos(self):
         phd_sheets = self.config_reader.list_phd_sheets(scryfall_service=self.scryfall)
