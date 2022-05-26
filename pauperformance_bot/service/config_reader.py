@@ -3,10 +3,12 @@ import glob
 
 from pauperformance_bot.constant.myr import MyrFileSystem
 from pauperformance_bot.constant.phds import PAUPERFORMANCE
+from pauperformance_bot.entity.api.archetype import Resource
+from pauperformance_bot.entity.api.miscellanea import Newspauper
 from pauperformance_bot.entity.api.phd import PhDSheet
 from pauperformance_bot.entity.phd import PhD
 from pauperformance_bot.service.scryfall import ScryfallService
-from pauperformance_bot.util.config import read_archetype_config
+from pauperformance_bot.util.config import read_archetype_config, read_newspauper_config
 from pauperformance_bot.util.entities import auto_repr, auto_str
 from pauperformance_bot.util.log import get_application_logger
 
@@ -177,3 +179,24 @@ class ConfigReader:
         # archetype_name = values["name"]
         # references = config["references"]
         return None  # return Archetype()
+
+    def get_newspauper(self) -> Newspauper:
+        config_file_path = self.myr_file_system.RESOURCES_CONFIG_NEWSPAUPER
+        logger.info(f"Reading Newspauper from {config_file_path}...")
+        config = read_newspauper_config(config_file_path)
+        news: list[Resource] = [
+            Resource(
+                name=resource["name"],
+                link=resource["url"],
+                language=resource["language"],
+                author=resource["author"],
+                date=resource["date"],
+            )
+            for resource in config["resources"]
+        ]
+        newspauper: Newspauper = Newspauper(
+            news=news,
+        )
+        logger.debug(f"Newspauper: {newspauper}")
+        logger.info(f"Read Newspauper from {config_file_path}.")
+        return newspauper
