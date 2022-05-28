@@ -178,7 +178,7 @@ class ConfigReader:
         # resources = config["resources"]
         # archetype_name = values["name"]
         # references = config["references"]
-        return None  # return Archetype()
+        return config  # return Archetype()
 
     def get_newspauper(self) -> Newspauper:
         config_file_path = self.myr_file_system.RESOURCES_CONFIG_NEWSPAUPER
