@@ -1,4 +1,5 @@
-from pauperformance_bot.service.academy import AcademyService
+from pauperformance_bot.service.academy.academy import AcademyService
+from pauperformance_bot.service.academy.data_exporter import AcademyDataExporter
 from pauperformance_bot.service.archive.mtggoldfish import MTGGoldfishArchiveService
 from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.service.storage.dropbox_ import DropboxService
@@ -11,7 +12,8 @@ def academy_update():
 
     # update pages
     academy = AcademyService(pauperformance)
-    academy.export_all()
+    exporter = AcademyDataExporter(academy)
+    exporter.export_all()
 
 
 def main():
