@@ -1,6 +1,6 @@
 import asyncio
 
-from pauperformance_bot.service.academy import AcademyService
+from pauperformance_bot.service.academy.academy import AcademyService
 from pauperformance_bot.service.archive.mtggoldfish import MTGGoldfishArchiveService
 from pauperformance_bot.service.async_pauperformance import AsyncPauperformanceService
 from pauperformance_bot.service.discord_.async_discord_service import (
