@@ -437,7 +437,7 @@ class AcademyService:
         logger.info(f"Exported newspauper to {self.academy_fs.ASSETS_DATA_DIR}.")
 
     def export_videos(self):
-        self.export_twitch_videos()  # TODO
+        # self.export_twitch_videos()  # TODO
         self.export_youtube_videos()
 
     def export_youtube_videos(self):
