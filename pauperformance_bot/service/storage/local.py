@@ -1,3 +1,4 @@
+import json
 from os import listdir, remove
 from os.path import isfile, join, sep
 
@@ -29,6 +30,13 @@ class LocalStorageService(AbstractStorageService):
         with open(name, "w", encoding="utf-8") as out_f:
             out_f.write(content)
         logger.info(f"Stored file {name}.")
+
+    def get_file(self, name):
+        logger.info(f"Reading file {name}...")
+        with open(name, "r") as in_f:
+            content = in_f.read()
+        logger.info(f"Read file {name}.")
+        return json.loads(content)
 
     def list_imported_deckstats_deck_ids(self):
         return set(
