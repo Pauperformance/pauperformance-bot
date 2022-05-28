@@ -1,3 +1,6 @@
+import json
+import tempfile
+
 from dropbox import Dropbox as OfficialDropbox
 from dropbox import DropboxOAuth2FlowNoRedirect
 
@@ -57,6 +60,14 @@ class DropboxService(AbstractStorageService):
         logger.info(f"Storing file {name}...")
         results = self._service.files_upload(content.encode("utf-8"), name, mute=True)
         logger.info(f"Stored file {name}: {results}")
+
+    def get_file(self, name):
+        logger.info(f"Downloading file {name}...")
+        with tempfile.NamedTemporaryFile("w+") as out_f:
+            self._service.files_download_to_file(out_f.name, name)
+            content = out_f.read()
+        logger.info(f"Downloaded file {name}.")
+        return json.loads(content)
 
     def list_imported_deckstats_deck_ids(self):
         return set(
