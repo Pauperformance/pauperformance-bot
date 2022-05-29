@@ -57,10 +57,10 @@
 {% if videos %}
 ## **Videos**
 
-| 🗣️ | 📺 | Deck | Author | Date |
-| -- | -- | ---- | ------ | ---- |
+| 🗣️ | 📺 | ⬇️ | Title | Author | Date |
+| -- | -- | -- | ---- | ------ | ---- |
 {% for video in videos -%}
-| {{ video.language }} | <i class="fa-brands fa-{{ video.fa_icon }}"></i> | [{{ video.deck_name }}]({{ video.url }}) | {{ video.creator }} | {{ "%-12s" % video.date }} |
+| {{ video.language }} | <i class="fa-brands fa-{{ video.fa_icon }}"></i> | {{ video.deck_url }} | <a href="{{ video.url }}" target="_blank">{{ video.title }}</a> | {{ video.creator }} | {{ "%-12s" % video.date }} |
 {% endfor %}
 {% endif %}
 
