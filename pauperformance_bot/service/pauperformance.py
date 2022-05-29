@@ -32,6 +32,7 @@ from pauperformance_bot.service.twitch import TwitchService
 from pauperformance_bot.service.youtube import YouTubeService
 from pauperformance_bot.util.config import read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
+from pauperformance_bot.util.path import posix_path
 
 logger = get_application_logger()
 
@@ -279,14 +280,21 @@ class PauperformanceService:
         logger.debug("Retrieving stored Twitch videos...")
         academy_videos = []
         for video in self.storage.list_imported_twitch_videos():
-            video_id, user_name, language, date, deck = video.split(">")
+            video_id, user_name, language, date, key = video.split(">")
+            video_path = posix_path(
+                self.storage.youtube_video_path,
+                video + ".txt",  # TODO: get rid of this
+            )
+            indexable_video = self.storage.get_file(video_path)
             academy_videos.append(
                 AcademyVideo(
                     video_id,
                     user_name,
+                    indexable_video["title"],
                     language,
                     date,
-                    deck,
+                    indexable_video["deck_name"],
+                    indexable_video["archetype"],
                     f"{TWITCH_VIDEO_URL}{video_id}",
                     "twitch",
                 )
@@ -298,14 +306,21 @@ class PauperformanceService:
         logger.debug("Retrieving stored YouTube videos...")
         academy_videos = []
         for video in self.storage.list_imported_youtube_videos():
-            video_id, user_name, language, date, deck = video.split(">")
+            video_id, user_name, language, date, key = video.split(">")
+            video_path = posix_path(
+                self.storage.youtube_video_path,
+                video + ".txt",  # TODO: get rid of this
+            )
+            indexable_video = self.storage.get_file(video_path)
             academy_videos.append(
                 AcademyVideo(
                     video_id,
                     user_name,
+                    indexable_video["title"],
                     language,
                     date,
-                    deck,
+                    indexable_video["deck_name"],
+                    indexable_video["archetype"],
                     f"{YOUTUBE_VIDEO_URL}{video_id}",
                     "youtube",
                 )

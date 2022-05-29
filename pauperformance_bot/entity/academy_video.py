@@ -8,17 +8,21 @@ class AcademyVideo:
         self,
         video_id,
         user_name,
+        title,
         language,
         published_at,
         deck_name,
+        archetype,
         url,
         fa_icon,
     ):
         self.video_id = video_id
         self.user_name = user_name
+        self.title = title
         self.language = language
         self.published_at = published_at
         self.deck_name = deck_name
+        self.archetype = archetype
         self.url = url
         self.fa_icon = fa_icon
 
