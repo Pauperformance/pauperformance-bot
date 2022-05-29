@@ -153,6 +153,13 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 f"published on {video.published_at}, "
                 f"url: {video.url}..."
             )
+            if video.video_id in imported_twitch_videos:
+                logger.debug(
+                    f"Video {video.video_id} already stored on "
+                    f"Storage. Skipping it."
+                )
+                continue
+
             if video.viewable != "public":
                 await discord.send_user_message(
                     warning_player.discord_id,
@@ -165,29 +172,35 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 )
                 continue
 
-            if video.video_id in imported_twitch_videos:
+            if not video.deck_name and not video.archetype:
                 logger.debug(
-                    f"Video {video.video_id} already stored on "
-                    f"Storage. Skipping it."
-                )
-                continue
-            if not video.deck_name:
-                logger.debug(
-                    f"Unable to find deck name for video {video.url}. "
+                    f"Unable to find deck name or archetype for video {video.url}. "
                     f"Skipping it..."
                 )
                 continue
+
+            deck_key = video.deck_name
+            if not deck_key:
+                deck_key = video.archetype
+
             storage_key = storage.get_imported_twitch_video_key(
                 video.video_id,
                 video.user_display_name,
                 video.language,
                 video.published_at.split("T")[0],
-                video.deck_name,
+                deck_key,
             )
             logger.info(f"Archiving information on storage in file {storage_key}...")
             storage.create_file(
                 f"{storage_key}",
-                json.dumps(vars(video), indent=4),
+                json.dumps(
+                    {
+                        **vars(video),
+                        "deck_name": video.deck_name,
+                        "archetype": video.archetype,
+                    },
+                    indent=4,
+                ),
             )
             if send_notification:
                 logger.info("Informing player on Discord...")
@@ -195,6 +208,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     player.discord_id,
                     f"📌 Imported video: {video.title}.\n\n"
                     f"Source: {video.url}\n\n"
+                    f"Archetype: {video.archetype}\n\n",
                     f"Deck: {video.deck_name}",
                 )
         logger.info(f"Updated Archive videos for {player.name}.")
@@ -238,23 +252,35 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 )
                 continue
 
-            if not video.deck_name:
+            if not video.deck_name and not video.archetype:
                 logger.debug(
-                    f"Unable to find deck name for video {video.url}. "
+                    f"Unable to find deck name or archetype for video {video.url}. "
                     f"Skipping it..."
                 )
                 continue
+
+            deck_key = video.deck_name
+            if not deck_key:
+                deck_key = video.archetype
+
             storage_key = storage.get_imported_youtube_video_key(
                 video.content_video_id,
                 video.channel_title,
                 video.language,
                 video.published_at.split("T")[0],
-                video.deck_name,
+                deck_key,
             )
             logger.info(f"Archiving information on storage in file {storage_key}...")
             storage.create_file(
                 f"{storage_key}",
-                json.dumps(vars(video), indent=4),
+                json.dumps(
+                    {
+                        **vars(video),
+                        "deck_name": video.deck_name,
+                        "archetype": video.archetype,
+                    },
+                    indent=4,
+                ),
             )
             if send_notification:
                 logger.info("Informing player on Discord...")
@@ -262,6 +288,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     player.discord_id,
                     f"📌 Imported video: {video.title}.\n\n"
                     f"Source: {video.url}\n\n"
+                    f"Archetype: {video.archetype}\n\n",
                     f"Deck: {video.deck_name}",
                 )
         logger.info(f"Updated Archive videos for {player.name}.")
