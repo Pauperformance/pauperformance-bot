@@ -1,0 +1,29 @@
+3 Ancient Den
+2 Dawnbringer Cleric
+4 Experimental Synthesizer
+2 Firebolt
+4 Galvanic Blast
+4 Glint Hawk
+3 Great Furnace
+2 Journey to Nowhere
+4 Kor Skyfisher
+4 Lightning Bolt
+2 Makeshift Munitions
+1 Mortuary Mire
+3 Mountain
+3 Plains
+3 Rustvale Bridge
+4 Seeker of the Way
+4 Spare Supplies
+4 Thraben Inspector
+4 Wind-Scarred Crag
+
+1 Dawnbringer Cleric
+1 Dust to Dust
+2 Gorilla Shaman
+2 Journey to Nowhere
+2 Krark-Clan Shaman
+1 Leave No Trace
+1 Lone Missionary
+3 Pyroblast
+2 Relic of Progenitus
