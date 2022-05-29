@@ -24,7 +24,7 @@ def is_valid_p12e_deck_name(deck_name):
         return False
     # archetype = tokens[0]
     deck_id = tokens[1]
-    if deck_id.count(".") != 1:
+    if deck_id.count(".") != 2:
         return False
     p12e_code, deck_number, player_id = deck_id.split(".")
     return len(deck_number) == 3

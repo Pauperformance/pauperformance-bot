@@ -247,20 +247,33 @@ class AcademyService:
             archetype_videos = []
             for video in sorted(
                 videos,
-                key=lambda v: v.published_at + v.deck_name + v.url,
+                key=lambda v: v.published_at + v.title + v.url,
                 reverse=True,
             ):
                 if video.deck_name.startswith(archetype_name) or any(
                     video.deck_name.startswith(alias) for alias in values["aliases"]
                 ):
+                    deck_url = ""
+                    if video.deck_name:
+                        matches = [
+                            d.url
+                            for d in all_decks
+                            if d.p12e_name.startswith(video.deck_name)
+                        ]
+                        if len(matches) > 0:
+                            # TODO: remove ugly temporary workaround for optional decks
+                            deck_url = (
+                                '<a href="{{' + matches[0] + '}}" target="_blank">🗎</a>'
+                            )
                     archetype_videos.append(
                         {
                             "language": get_language_flag(video.language),
-                            "deck_name": video.deck_name,
+                            "deck_url": deck_url,
                             "url": f"{video.url}",
                             "creator": video.user_name,
                             "date": video.published_at,
                             "fa_icon": video.fa_icon,
+                            "title": video.title.replace("|", "-"),
                         }
                     )
             template_values = {
