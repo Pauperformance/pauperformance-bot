@@ -1,0 +1,26 @@
+3 Ancient Den
+3 Boros Garrison
+4 Experimental Synthesizer
+4 Galvanic Blast
+4 Glint Hawk
+3 Great Furnace
+4 Ichor Wellspring
+4 Kor Skyfisher
+4 Kuldotha Rebirth
+4 Lightning Bolt
+1 Lorehold Campus
+2 Makeshift Munitions
+3 Mountain
+3 Plains
+2 Rally the Peasants
+2 Rustvale Bridge
+4 Seeker of the Way
+4 Thraben Inspector
+2 Wind-Scarred Crag
+
+4 Dust to Dust
+1 Electrickery
+2 Gorilla Shaman
+2 Leave No Trace
+3 Lone Missionary
+3 Pyroblast
