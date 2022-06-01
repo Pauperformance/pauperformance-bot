@@ -250,8 +250,8 @@ class AcademyService:
                 key=lambda v: v.published_at + v.title + v.url,
                 reverse=True,
             ):
-                if video.deck_name.startswith(archetype_name) or any(
-                    video.deck_name.startswith(alias) for alias in values["aliases"]
+                if video.archetype.startswith(archetype_name) or any(
+                    video.archetype.startswith(alias) for alias in values["aliases"]
                 ):
                     deck_url = ""
                     if video.deck_name:
