@@ -1,0 +1,22 @@
+2 River Boa
+2 Silhana Ledgewalker
+3 Vault Skirge
+3 Quirion Ranger
+3 Skarrgan Pit-Skulk
+4 Nest Invader
+4 Burning-Tree Emissary
+4 Nettle Sentinel
+3 Hunger of the Howlpack
+4 Vines of Vastwood
+4 Savage Swipe
+3 Elephant Guide
+4 Rancor
+17 Forest
+Sideboard
+2 Weather the Storm
+2 Epic Confrontation
+2 Relic of Progenitus
+2 Viridian Longbow
+3 Gut Shot
+4 Gleeful Sabotage
+
