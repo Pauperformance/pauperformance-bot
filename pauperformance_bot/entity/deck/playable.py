@@ -1,3 +1,5 @@
+from functools import reduce
+
 from pauperformance_bot.util.entities import auto_repr
 
 
@@ -15,13 +17,38 @@ class PlayedCard:
     def __hash__(self) -> int:
         return hash(repr(self))
 
+    def __lt__(self, other):
+        if isinstance(other, PlayedCard):
+            return self.card_name.lower() < other.card_name.lower()
+        raise ValueError(
+            f"Cannot compare instance of PlayedCard with instance of {type(other)}"
+        )
+
+    def __eq__(self, other):
+        if isinstance(other, PlayedCard):
+            return (
+                self.quantity == other.quantity
+                and self.card_name.lower() == other.card_name.lower()
+            )
+        return False
+
 
 class PlayableDeck:
+    MAIN_DECK_AMOUNT = 60
+    SIDEBOARD_AMOUNT = 15
+
+    @classmethod
+    def _validate_board(cls, board, amount):
+        if reduce(lambda t, s: t + s.quantity, board, 0) != amount:
+            raise ValueError(f"Input board does not contain {amount} cards")
+
     def __init__(
         self,
         mainboard: list[PlayedCard],
         sideboard: list[PlayedCard],
     ):
+        self._validate_board(mainboard, PlayableDeck.MAIN_DECK_AMOUNT)
+        self._validate_board(sideboard, PlayableDeck.SIDEBOARD_AMOUNT)
         self.mainboard: list[PlayedCard] = mainboard
         self.sideboard: list[PlayedCard] = sideboard
 
@@ -78,6 +105,13 @@ class PlayableDeck:
 
     def __hash__(self):
         return hash(repr(self))
+
+    def __eq__(self, other):
+        if not other or not isinstance(other, PlayableDeck):
+            return False
+        return sorted(self.mainboard) == sorted(other.mainboard) and sorted(
+            self.sideboard
+        ) == sorted(other.sideboard)
 
 
 def parse_playable_deck_from_lines(lines) -> PlayableDeck:
