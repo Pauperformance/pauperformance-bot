@@ -208,7 +208,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     player.discord_id,
                     f"📌 Imported video: {video.title}.\n\n"
                     f"Source: {video.url}\n\n"
-                    f"Archetype: {video.archetype}\n\n",
+                    f"Archetype: {video.archetype}\n\n"
                     f"Deck: {video.deck_name}",
                 )
         logger.info(f"Updated Archive videos for {player.name}.")
@@ -288,7 +288,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     player.discord_id,
                     f"📌 Imported video: {video.title}.\n\n"
                     f"Source: {video.url}\n\n"
-                    f"Archetype: {video.archetype}\n\n",
+                    f"Archetype: {video.archetype}\n\n"
                     f"Deck: {video.deck_name}",
                 )
         logger.info(f"Updated Archive videos for {player.name}.")
