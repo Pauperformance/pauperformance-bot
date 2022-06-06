@@ -1,13 +1,22 @@
 import configparser
 import glob
+from itertools import count
+from typing import Optional
 
+from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.myr import MyrFileSystem
 from pauperformance_bot.entity.api.archetype import Resource
 from pauperformance_bot.entity.api.miscellanea import Newspauper
 from pauperformance_bot.entity.api.phd import PhDSheet
+from pauperformance_bot.entity.config.archetype import (
+    ArchetypeConfig,
+    DiscordResource,
+    SideboardResource,
+)
 from pauperformance_bot.entity.phd import PhD
+from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.scryfall import ScryfallService
-from pauperformance_bot.util.config import read_archetype_config, read_newspauper_config
+from pauperformance_bot.util.config import read_newspauper_config
 from pauperformance_bot.util.entities import auto_repr, auto_str
 from pauperformance_bot.util.log import get_application_logger
 
@@ -28,6 +37,32 @@ class ConfigReader:
         config.read(config_file_path)
         logger.debug(f"Read configuration file {config_file_path}.")
         return config
+
+    @staticmethod
+    def _parse_list_value(raw_value) -> Optional[list[str]]:
+        return (
+            [value.strip(" ") for value in raw_value.split(",")] if raw_value else None
+        )
+
+    @staticmethod
+    def _read_sequential_resources(config, key):
+        resources = []
+        for i in count(1):
+            if f"{key}{i}" in config:
+                resources.append(
+                    {
+                        **config[f"{key}{i}"],
+                    }
+                )
+            else:
+                break
+        for resource in resources:
+            resource["language"] = get_language_flag(resource["language"])
+        return sorted(
+            resources,
+            key=lambda r: r.get("date", "") + r.get("name"),
+            reverse=True,
+        )
 
     def list_phd_sheets(
         self,
@@ -161,7 +196,7 @@ class ConfigReader:
     def get_pauperformance_phd(self) -> PhD:
         return next(phd for phd in self.list_phds() if phd.name == "Pauperformance")
 
-    def list_archetypes(self):
+    def list_archetypes(self) -> list[ArchetypeConfig]:
         config_dir = self.myr_file_system.RESOURCES_CONFIG_ARCHETYPES_DIR
         logger.info(f"Reading archetypes from {config_dir}...")
         archetypes = [
@@ -171,16 +206,54 @@ class ConfigReader:
         logger.info(f"Read {len(archetypes)} archetypes from {config_dir}.")
         return archetypes
 
-    def get_archetype(self, config_file_path: str):
-        # TODO: create a proper Archetype class and use it.
-        # TODO: ideally merge read_archetype_config with _read_config_file
-        config = read_archetype_config(config_file_path)
+    def get_archetype(self, config_file_path: str) -> ArchetypeConfig:
+        config = self._read_config_file(config_file_path)
+
+        # read references and perform quick integrity check
+        references = {**config["references"]}
+        for key, value in references.items():
+            if key not in value:
+                raise PauperformanceException(
+                    f"p12e code: {key} does not match value for deck {value}."
+                )
+
+        resource_sideboard = None
+        if "sideboard" in config:
+            resource_sideboard = SideboardResource(link=config["sideboard"]["url"])
+
+        resources_discord = [
+            DiscordResource(
+                name=server["name"],
+                link=server["url"],
+                language=server["language"],
+            )
+            for server in self._read_sequential_resources(config, "discord")
+        ]
+
+        resources = [
+            Resource(
+                name=resource["name"],
+                link=resource["url"],
+                language=resource["language"],
+                author=resource["author"],
+                date=resource["date"],
+            )
+            for resource in self._read_sequential_resources(config, "resource")
+        ]
+
         logger.debug(f"We should now parse this {config}...")
-        # values = config["values"]
-        # resources = config["resources"]
-        # archetype_name = values["name"]
-        # references = config["references"]
-        return config  # return Archetype()
+        return ArchetypeConfig(
+            name=config["values"]["name"],
+            aliases=self._parse_list_value(config["values"]["aliases"]),
+            family=config["values"]["family"],
+            dominant_mana=self._parse_list_value(config["values"]["mana"]),
+            game_type=self._parse_list_value(config["values"]["type"]),
+            description=config["values"]["description"],
+            reference_decks=list(references.values()),
+            resource_sideboard=resource_sideboard,
+            resources_discord=resources_discord,
+            resources=resources,
+        )
 
     def get_newspauper(self) -> Newspauper:
         config_file_path = self.myr_file_system.RESOURCES_CONFIG_NEWSPAUPER

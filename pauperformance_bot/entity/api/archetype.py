@@ -1,5 +1,11 @@
 from typing import Optional
 
+from pauperformance_bot.entity.config.archetype import (
+    ArchetypeConfig,
+    DiscordResource,
+    Resource,
+    SideboardResource,
+)
 from pauperformance_bot.util.entities import auto_repr, auto_str
 
 
@@ -23,61 +29,7 @@ class ArchetypeCard:
 
 @auto_repr
 @auto_str
-class SideboardResource:
-    def __init__(
-        self,
-        *,
-        link: str,
-    ):
-        self.link: str = link
-
-    def __hash__(self):
-        return hash(self.link)
-
-
-@auto_repr
-@auto_str
-class DiscordResource:
-    def __init__(
-        self,
-        *,
-        name: str,
-        link: str,
-        language: str,
-    ):
-        self.name: str = name
-        self.link: str = link
-        self.language: str = language
-
-    def __hash__(self):
-        return hash(self.link)
-
-
-@auto_repr
-@auto_str
-class Resource:
-    def __init__(
-        self,
-        *,
-        name: str,
-        link: str,
-        language: str,
-        author: str,
-        date: str,
-    ):
-        self.name: str = name
-        self.link: str = link
-        self.language: str = language
-        self.author: str = author
-        self.date: str = date
-
-    def __hash__(self):
-        return hash(self.link)
-
-
-@auto_repr
-@auto_str
-class Archetype:
+class Archetype(ArchetypeConfig):
     def __init__(
         self,
         *,
@@ -87,25 +39,27 @@ class Archetype:
         dominant_mana: list[str],
         game_type: list[str],
         description: str,
-        staples: list[ArchetypeCard],
-        frequent: list[ArchetypeCard],
         reference_decks: list[str],
         resource_sideboard: Optional[SideboardResource],
         resources_discord: list[DiscordResource],
         resources: list[Resource],
+        staples: list[ArchetypeCard],
+        frequent: list[ArchetypeCard],
     ):
-        self.name: str = name
-        self.aliases: Optional[list[str]] = aliases
-        self.family: Optional[str] = family
-        self.dominant_mana: list[str] = dominant_mana
-        self.game_type: list[str] = game_type
-        self.description: str = description
+        super().__init__(
+            name=name,
+            aliases=aliases,
+            family=family,
+            dominant_mana=dominant_mana,
+            game_type=game_type,
+            description=description,
+            reference_decks=reference_decks,
+            resource_sideboard=resource_sideboard,
+            resources_discord=resources_discord,
+            resources=resources,
+        )
         self.staples: list[ArchetypeCard] = staples
         self.frequent: list[ArchetypeCard] = frequent
-        self.reference_decks: list[str] = reference_decks
-        self.resource_sideboard: Optional[SideboardResource] = resource_sideboard
-        self.resources_discord: list[DiscordResource] = resources_discord
-        self.resources: list[Resource] = resources
 
     def __hash__(self):
         return hash(self.name)
