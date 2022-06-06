@@ -275,3 +275,13 @@ class ConfigReader:
         logger.debug(f"Newspauper: {newspauper}")
         logger.info(f"Read Newspauper from {config_file_path}.")
         return newspauper
+
+    def get_archetype_name_from_alias(self, name):
+        for archetype in self.list_archetypes():
+            if archetype.name == name:
+                return name
+            if archetype.aliases:
+                for alias in archetype.aliases:
+                    if alias == name:
+                        return archetype.name
+        raise PauperformanceException(f"Unable to find archetype for alias {name}")
