@@ -25,6 +25,9 @@ from pauperformance_bot.entity.academy_video import AcademyVideo
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.service.config_reader import ConfigReader
+from pauperformance_bot.service.discord_.sync.messages_sender import (
+    DiscordMessagesSenderSyncService,
+)
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.service.storage.abstract import AbstractStorageService
@@ -274,7 +277,10 @@ class PauperformanceService:
         # remove from storage
         logger.debug(f"Deleting stored deck with name {deck_name}...")
         self.storage.delete_deck_by_name(deck_name)
-        logger.debug(f"Deleted stored deck with name {deck_name}.")
+        message = f"Deleted stored deck with name {deck_name}."
+        logger.info(message)
+        discord_logger = DiscordMessagesSenderSyncService([message])
+        discord_logger.run_task()
 
     def _list_twitch_videos(self):
         logger.debug("Retrieving stored Twitch videos...")
