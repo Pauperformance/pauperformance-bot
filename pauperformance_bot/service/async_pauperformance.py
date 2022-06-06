@@ -9,6 +9,9 @@ from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.discord_.async_discord_service import (
     AsyncDiscordService,
 )
+from pauperformance_bot.service.discord_.sync.messages_sender import (
+    DiscordMessagesSenderSyncService,
+)
 from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.service.twitch import TwitchService
@@ -48,10 +51,10 @@ class AsyncPauperformanceService(PauperformanceService):
         for player in self.players:
             if not player.deckstats_id:
                 logger.info(
-                    f"Skipping player {player.name} with no Deckstats " f"account..."
+                    f"Skipping player {player.name} with no Deckstats account..."
                 )
                 continue
-            logger.info(f"Processing player {player.name}...")
+
             await self.archive.import_player_decks_from_deckstats(
                 player,
                 self.storage,
@@ -68,11 +71,12 @@ class AsyncPauperformanceService(PauperformanceService):
         for player in self.players:
             if not player.twitch_login_name:
                 logger.info(f"Skipping player {player.name} with no Twitch account...")
-            else:
-                await self.import_player_videos_from_twitch(
-                    player,
-                    send_notification=send_notification,
-                )
+                continue
+
+            await self.import_player_videos_from_twitch(
+                player,
+                send_notification=send_notification,
+            )
         logger.info("Updated Twitch videos for all users.")
 
     async def import_player_videos_from_twitch(self, player, send_notification=True):
@@ -94,11 +98,12 @@ class AsyncPauperformanceService(PauperformanceService):
         for player in self.players:
             if not player.youtube_channel_id:
                 logger.info(f"Skipping player {player.name} with no YouTube account...")
-            else:
-                await self.import_player_videos_from_youtube(
-                    player,
-                    send_notification=send_notification,
-                )
+                continue
+
+            await self.import_player_videos_from_youtube(
+                player,
+                send_notification=send_notification,
+            )
         logger.info("Updated YouTube videos for all users.")
 
     async def import_player_videos_from_youtube(self, player, send_notification=True):
@@ -143,7 +148,12 @@ class AsyncPauperformanceService(PauperformanceService):
                 message, send_notification
             )
         else:
-            logger.info("Unrecognized deck format. Skipping it.")
+            log_message = (
+                f"Unrecognized deck format in message {message.content}. Skipping it."
+            )
+            logger.info(log_message)
+            discord_logger = DiscordMessagesSenderSyncService([log_message])
+            discord_logger.run_task()
             await message.remove_reaction(DISCORD_MYR_REACTION_SEEN, self.discord.user)
             await message.add_reaction(DISCORD_MYR_REACTION_KO)
         logger.debug(

@@ -113,14 +113,18 @@ class AbstractArchiveService(metaclass=ABCMeta):
             )
             logger.info(f"Archiving information on storage in file {storage_key}...")
             storage.create_file(f"{storage_key}", str(playable_deck))
+            message = (
+                f"📌 Imported deck: {deck_name}.\n\n"
+                f"Source: {deckstats_deck.url}\n\n"
+                f"Destination: {self.get_uri(new_deck_id)}"
+            )
             if send_notification:
                 logger.info("Informing player on Discord...")
                 await discord.send_user_message(
                     player.discord_id,
-                    f"📌 Imported deck: {deck_name}.\n\n"
-                    f"Source: {deckstats_deck.url}\n\n"
-                    f"Destination: {self.get_uri(new_deck_id)}",
+                    message,
                 )
+            await discord.send_log_message(message)
             if suspicious_list:
                 await discord.send_user_message(
                     warning_player.discord_id,
@@ -178,6 +182,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 )
                 continue
 
+            # either the deck name or the archetype was provided: start importing!
             deck_key = video.deck_name
             if not deck_key:
                 deck_key = video.archetype
@@ -201,15 +206,19 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     indent=4,
                 ),
             )
+            message = (
+                f"📌 Imported video: {video.title}.\n\n"
+                f"Source: {video.url}\n\n"
+                f"Archetype: {video.archetype}\n\n"
+                f"Deck: {video.deck_name}"
+            )
             if send_notification:
                 logger.info("Informing player on Discord...")
                 await discord.send_user_message(
                     player.discord_id,
-                    f"📌 Imported video: {video.title}.\n\n"
-                    f"Source: {video.url}\n\n"
-                    f"Archetype: {video.archetype}\n\n"
-                    f"Deck: {video.deck_name}",
+                    message,
                 )
+            await discord.send_log_message(message)
         logger.info(f"Updated Archive videos for {player.name}.")
 
     async def archive_player_videos_from_youtube(
@@ -258,6 +267,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 )
                 continue
 
+            # either the deck name or the archetype was provided: start importing!
             deck_key = video.deck_name
             if not deck_key:
                 deck_key = video.archetype
@@ -281,15 +291,19 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     indent=4,
                 ),
             )
+            message = (
+                f"📌 Imported video: {video.title}.\n\n"
+                f"Source: {video.url}\n\n"
+                f"Archetype: {video.archetype}\n\n"
+                f"Deck: {video.deck_name}"
+            )
             if send_notification:
                 logger.info("Informing player on Discord...")
                 await discord.send_user_message(
                     player.discord_id,
-                    f"📌 Imported video: {video.title}.\n\n"
-                    f"Source: {video.url}\n\n"
-                    f"Archetype: {video.archetype}\n\n"
-                    f"Deck: {video.deck_name}",
+                    message,
                 )
+            await discord.send_log_message(message)
         logger.info(f"Updated Archive videos for {player.name}.")
 
     async def import_player_deck_from_mtggoldfish(
@@ -322,6 +336,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
             await discord_message.add_reaction(DISCORD_MYR_REACTION_OK)
             return
 
+        # it's a new deck: start importing!
         logger.debug(f"Deck id: {original_deck_id}")
         all_archetypes = pauperformance.get_archetypes()
         all_decks = pauperformance.list_archived_decks()
