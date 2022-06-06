@@ -263,7 +263,7 @@ class AcademyService:
                         if len(matches) > 0:
                             # TODO: remove ugly temporary workaround for optional decks
                             deck_url = (
-                                '<a href="{{' + matches[0] + '}}" target="_blank">🗎</a>'
+                                '<a href="' + matches[0] + '" target="_blank">🗎</a>'
                             )
                     archetype_videos.append(
                         {
