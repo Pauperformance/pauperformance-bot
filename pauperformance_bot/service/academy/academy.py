@@ -116,7 +116,7 @@ class AcademyService:
                     "name": values["name"],
                     "mana": values["mana"],
                     "type": ", ".join(values["type"]),
-                    "family": values["family"],
+                    "family": values["family"] if values["family"] else "",
                 }
             )
         archetypes.sort(key=lambda a: a["name"])
