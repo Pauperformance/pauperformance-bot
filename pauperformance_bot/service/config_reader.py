@@ -2,7 +2,6 @@ import configparser
 import glob
 
 from pauperformance_bot.constant.myr import MyrFileSystem
-from pauperformance_bot.constant.phds import PAUPERFORMANCE
 from pauperformance_bot.entity.api.archetype import Resource
 from pauperformance_bot.entity.api.miscellanea import Newspauper
 from pauperformance_bot.entity.api.phd import PhDSheet
@@ -119,7 +118,7 @@ class ConfigReader:
     ) -> list[PhD]:
         config_dir = self.myr_file_system.RESOURCES_CONFIG_PHDS_DIR
         logger.info(f"Reading PhDs from {config_dir}...")
-        phds: list[PhD] = [PAUPERFORMANCE] + [
+        phds: list[PhD] = [
             self.get_phd(config_file)
             for config_file in glob.glob(f"{config_dir}/*.ini")
         ]
@@ -158,6 +157,9 @@ class ConfigReader:
         )
         logger.info(f"Read PhD {phd}.")
         return phd
+
+    def get_pauperformance_phd(self) -> PhD:
+        return next(phd for phd in self.list_phds() if phd.name == "Pauperformance")
 
     def list_archetypes(self):
         config_dir = self.myr_file_system.RESOURCES_CONFIG_ARCHETYPES_DIR
