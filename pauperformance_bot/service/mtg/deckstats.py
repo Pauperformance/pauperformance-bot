@@ -9,7 +9,6 @@ from pauperformance_bot.constant.deckstats import (
     MONITORED_PAUPERFORMANCE_FOLDER,
 )
 from pauperformance_bot.constant.myr import DECKSTATS_DECKS_CACHE_DIR
-from pauperformance_bot.constant.phds import PAUPERFORMANCE
 from pauperformance_bot.entity.deck.deckstats import DeckstatsDeck
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.entity.played_cards import PlayedCard
@@ -25,11 +24,11 @@ logger = get_application_logger()
 class DeckstatsService:
     def __init__(
         self,
-        owner_id=PAUPERFORMANCE.deckstats_id,
+        owner_id,
         endpoint=API_ENDPOINT,
     ):
-        self.endpoint = endpoint
         self.owner_id = owner_id
+        self.endpoint = endpoint
 
     def list_user_folders_id(self):
         url = self.endpoint
@@ -74,7 +73,7 @@ class DeckstatsService:
             for deck in response["folder"]["decks"]:
                 actual_name = deck["name"]
                 actual_owner = owner_name
-                if owner_name == PAUPERFORMANCE.deckstats_name:
+                if owner_name == "Pauperformance":
                     dot_tokens = deck["name"].split(".")
                     actual_name = ".".join(dot_tokens[:2])
                     actual_owner = ".".join(dot_tokens[2:])
