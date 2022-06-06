@@ -25,6 +25,9 @@ from pauperformance_bot.entity.deck.playable import (
     parse_playable_deck_from_lines,
 )
 from pauperformance_bot.entity.phd import PhD
+from pauperformance_bot.entity.youtube_video import YouTubeVideo
+from pauperformance_bot.exceptions import PauperformanceException
+from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.naming import is_valid_p12e_deckstats_name
@@ -144,7 +147,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
     async def archive_player_videos_from_twitch(
         self,
-        player,
+        player: PhD,
         videos,
         storage,
         discord,
@@ -153,6 +156,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
     ):
         logger.info(f"Updating Archive videos for {player.name}...")
         imported_twitch_videos = storage.list_imported_twitch_videos_ids()
+        config_reader = ConfigReader()
         for video in videos:
             logger.debug(
                 f"Processing video '{video.title}' "
@@ -194,19 +198,26 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
             storage_key = storage.get_imported_twitch_video_key(
                 video.video_id,
-                video.user_display_name,
+                player.name,
                 video.language,
                 video.published_at.split("T")[0],
                 deck_key,
             )
             logger.info(f"Archiving information on storage in file {storage_key}...")
+            try:
+                base_archetype_name = config_reader.get_archetype_name_from_alias(
+                    video.archetype
+                )
+            except PauperformanceException:
+                base_archetype_name = "Brew"
             storage.create_file(
                 f"{storage_key}",
                 json.dumps(
                     {
                         **vars(video),
                         "deck_name": video.deck_name,
-                        "archetype": video.archetype,
+                        "archetype": base_archetype_name,
+                        "phd": player.name,
                     },
                     indent=4,
                 ),
@@ -214,7 +225,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
             message = (
                 f"📌 Imported video: {video.title}.\n\n"
                 f"Source: {video.url}\n\n"
-                f"Archetype: {video.archetype}\n\n"
+                f"Archetype: {base_archetype_name}\n\n"
                 f"Deck: {video.deck_name}"
             )
             if send_notification:
@@ -228,8 +239,8 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
     async def archive_player_videos_from_youtube(
         self,
-        player,
-        videos,
+        player: PhD,
+        videos: list[YouTubeVideo],
         storage,
         discord,
         warning_player,
@@ -237,6 +248,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
     ):
         logger.info(f"Updating Archive videos for {player.name}...")
         imported_youtube_videos = storage.list_imported_youtube_videos_ids()
+        config_reader = ConfigReader()
         for video in videos:
             logger.debug(
                 f"Processing video '{video.title}' "
@@ -279,19 +291,26 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
             storage_key = storage.get_imported_youtube_video_key(
                 video.content_video_id,
-                video.channel_title,
+                player.name,
                 video.language,
                 video.published_at.split("T")[0],
                 deck_key,
             )
             logger.info(f"Archiving information on storage in file {storage_key}...")
+            try:
+                base_archetype_name = config_reader.get_archetype_name_from_alias(
+                    video.archetype
+                )
+            except PauperformanceException:
+                base_archetype_name = "Brew"
             storage.create_file(
                 f"{storage_key}",
                 json.dumps(
                     {
                         **vars(video),
                         "deck_name": video.deck_name,
-                        "archetype": video.archetype,
+                        "archetype": base_archetype_name,
+                        "phd": player.name,
                     },
                     indent=4,
                 ),
@@ -299,7 +318,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
             message = (
                 f"📌 Imported video: {video.title}.\n\n"
                 f"Source: {video.url}\n\n"
-                f"Archetype: {video.archetype}\n\n"
+                f"Archetype: {base_archetype_name}\n\n"
                 f"Deck: {video.deck_name}"
             )
             if send_notification:

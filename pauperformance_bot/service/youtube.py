@@ -32,7 +32,7 @@ class YouTubeService:
             count=None,
         ).items
 
-    def get_channel_videos(self, channel_id, default_language):
+    def get_channel_videos(self, channel_id, default_language) -> list[YouTubeVideo]:
         channel = self.get_channel_info(channel_id)
         uploads = channel.items[0].contentDetails.relatedPlaylists.uploads
         return [
