@@ -13,7 +13,10 @@ from pauperformance_bot.credentials import (
     MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
 )
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
-from pauperformance_bot.entity.deck.playable import parse_playable_deck_from_lines
+from pauperformance_bot.entity.deck.playable import (
+    PlayableDeck,
+    parse_playable_deck_from_lines,
+)
 from pauperformance_bot.exceptions import MTGGoldfishException
 from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.util.log import get_application_logger
@@ -302,7 +305,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         listed_deck,
         decks_cache_dir=MTGGOLDFISH_DECKS_CACHE_DIR,
         use_cache=True,
-    ):
+    ) -> PlayableDeck:
         lines = None
         to_be_cached = True
         if use_cache:

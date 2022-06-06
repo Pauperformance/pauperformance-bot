@@ -20,7 +20,10 @@ from pauperformance_bot.constant.mtggoldfish import (
 )
 from pauperformance_bot.constant.myr import USA_DATE_FORMAT
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
-from pauperformance_bot.entity.deck.playable import parse_playable_deck_from_lines
+from pauperformance_bot.entity.deck.playable import (
+    PlayableDeck,
+    parse_playable_deck_from_lines,
+)
 from pauperformance_bot.entity.phd import PhD
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.util.log import get_application_logger
@@ -49,7 +52,9 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
     @staticmethod
     @abstractmethod
-    def to_playable_deck(listed_deck, decks_cache_dir=None, use_cache=True):
+    def to_playable_deck(
+        listed_deck, decks_cache_dir=None, use_cache=True
+    ) -> PlayableDeck:
         pass
 
     async def import_player_decks_from_deckstats(
