@@ -9,7 +9,7 @@ logger = get_application_logger()
 
 
 def read_config(config_file_path):
-    config = configparser.ConfigParser()
+    config = configparser.ConfigParser(allow_no_value=True)
     config.optionxform = lambda option: option  # preserve case
     config.read(config_file_path)
     logger.debug(f"Read configuration file: {config_file_path}")
