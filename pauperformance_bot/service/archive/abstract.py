@@ -19,7 +19,6 @@ from pauperformance_bot.constant.mtggoldfish import (
     MTGGOLDFISH_EVENT_LINE_TEXT,
 )
 from pauperformance_bot.constant.myr import USA_DATE_FORMAT
-from pauperformance_bot.constant.phds import PAUPERFORMANCE
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
 from pauperformance_bot.entity.deck.playable import parse_playable_deck_from_lines
 from pauperformance_bot.entity.phd import PhD
@@ -60,7 +59,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
         players_by_deckstats_id,
         set_index,
         discord,
-        warning_player=PAUPERFORMANCE,
+        warning_player,
         send_notification=True,
     ):  # TODO: get rid of players_by_deckstats_id
         logger.info(f"Updating archive decks for {player.name}...")
@@ -140,7 +139,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
         videos,
         storage,
         discord,
-        warning_player=PAUPERFORMANCE,
+        warning_player,
         send_notification=True,
     ):
         logger.info(f"Updating Archive videos for {player.name}...")
@@ -219,7 +218,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
         videos,
         storage,
         discord,
-        warning_player=PAUPERFORMANCE,
+        warning_player,
         send_notification=True,
     ):
         logger.info(f"Updating Archive videos for {player.name}...")
