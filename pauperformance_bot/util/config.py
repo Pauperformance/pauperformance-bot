@@ -1,6 +1,8 @@
 import configparser
 from itertools import count
 
+from deprecated import deprecated
+
 from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.util.log import get_application_logger
@@ -16,6 +18,7 @@ def read_config(config_file_path):
     return config
 
 
+@deprecated(reason="Migrated")
 def read_archetype_config(config_file_path):
     config = read_config(config_file_path)
     # read values
@@ -34,11 +37,27 @@ def read_archetype_config(config_file_path):
                 f"p12e code: {key} does not match value for deck {value}."
             )
     # read resources
-    resources = _read_sequential_resources(config)
+    resources = _read_sequential_resources(config, "resource")
+    servers = _read_sequential_resources(config, "discord")
+    for server in servers:
+        server["author"] = '<i class="fa-brands fa-discord"></i>'
+        server["date"] = "~"
+
+    if "sideboard" in config:
+        resources.append(
+            {
+                "url": config["sideboard"]["url"],
+                "name": "**Sideboard Guide**",
+                "author": '<i class="fa-solid fa-book"></i>',
+                "language": "🇬🇧",
+                "date": "~",
+            }
+        )
+
     return {
         "values": values,
         "references": references,
-        "resources": resources,
+        "resources": resources + servers,
     }
 
 
@@ -53,17 +72,18 @@ def read_family_config(config_file_path):
 def read_newspauper_config(config_file_path):
     config = read_config(config_file_path)
     return {
-        "resources": _read_sequential_resources(config),
+        "resources": _read_sequential_resources(config, "resource"),
     }
 
 
-def _read_sequential_resources(config):
+@deprecated(reason="Migrated")
+def _read_sequential_resources(config, key):
     resources = []
     for i in count(1):
-        if f"resource{i}" in config:
+        if f"{key}{i}" in config:
             resources.append(
                 {
-                    **config[f"resource{i}"],
+                    **config[f"{key}{i}"],
                 }
             )
         else:
@@ -71,15 +91,17 @@ def _read_sequential_resources(config):
     return _format_and_sort_resources(resources)
 
 
+@deprecated(reason="Migrated")
 def _format_and_sort_resources(resources):
     for resource in resources:
         resource["language"] = get_language_flag(resource["language"])
     return sorted(
         resources,
-        key=lambda r: r["date"],
+        key=lambda r: r.get("date", "") + r["name"],
         reverse=True,
     )
 
 
+@deprecated(reason="Migrated")
 def _parse_list_value(raw_value):
     return [value.strip(" ") for value in raw_value.split(",")] if raw_value else []
