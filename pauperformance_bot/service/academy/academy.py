@@ -250,9 +250,7 @@ class AcademyService:
                 key=lambda v: v.published_at + v.title + v.url,
                 reverse=True,
             ):
-                if video.archetype.startswith(archetype_name) or any(
-                    video.archetype.startswith(alias) for alias in values["aliases"]
-                ):
+                if video.archetype == archetype_name:
                     deck_url = ""
                     if video.deck_name:
                         matches = [
@@ -270,7 +268,7 @@ class AcademyService:
                             "language": get_language_flag(video.language),
                             "deck_url": deck_url,
                             "url": f"{video.url}",
-                            "creator": video.user_name,
+                            "creator": video.phd,
                             "date": video.published_at,
                             "fa_icon": video.fa_icon,
                             "title": video.title.replace("|", "-"),
