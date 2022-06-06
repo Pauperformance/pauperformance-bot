@@ -137,7 +137,7 @@ class AcademyDataExporter:
         logger.info(f"Exported newspauper to {self.academy_fs.ASSETS_DATA_DIR}.")
 
     def export_videos(self):
-        # self.export_twitch_videos()  # TODO
+        # self.export_twitch_videos()
         self.export_youtube_videos()
 
     def export_youtube_videos(self):
@@ -145,22 +145,21 @@ class AcademyDataExporter:
             f"Exporting YouTube videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}..."
         )
         for video_key in self.pauperformance.storage.list_imported_youtube_videos():
-            video_id, phd_name, language, date, deck_name = video_key.split(">")
-            archetype = deck_name.split(".", maxsplit=1)[0].rsplit(" ", maxsplit=1)[0]
             video_path = posix_path(
                 self.pauperformance.storage.youtube_video_path,
                 video_key + ".txt",  # TODO: get rid of this
             )
             video_json = self.pauperformance.storage.get_file(video_path)
+            video_id, phd_name, _, date, _ = video_key.split(">")
             video: Video = Video(
                 name=video_json["title"],
                 link=video_json["url"],
-                language=language,
+                language=video_json["language"],
                 phd_name=phd_name,
                 date=date,
-                archetype=archetype,
+                archetype=video_json["archetype"],
                 video_id=video_id,
-                deck_name=deck_name,
+                deck_name=video_json["deck_name"],
             )
             safe_dump_json_to_file(
                 posix_path(self.academy_fs.ASSETS_DATA_VIDEO_DIR, video.archetype),
