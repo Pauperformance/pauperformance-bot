@@ -3,6 +3,8 @@ from pauperformance_bot.entity.api.archetype import Archetype, ArchetypeCard
 from pauperformance_bot.entity.api.deck import Deck
 from pauperformance_bot.entity.api.miscellanea import Newspauper
 from pauperformance_bot.entity.api.video import Video
+from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
+from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.service.academy.academy import AcademyService
 from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance import PauperformanceService
@@ -23,6 +25,9 @@ class AcademyDataExporter:
         self.pauperformance: PauperformanceService = academy.pauperformance
         self.scryfall = self.pauperformance.scryfall
         self.config_reader: ConfigReader = self.pauperformance.config_reader
+        self.decks: list[
+            AbstractArchivedDeck
+        ] = self.academy.pauperformance.list_archived_decks()
 
     def export_all(self):
         self.export_archetypes()
@@ -47,10 +52,9 @@ class AcademyDataExporter:
         logger.info(
             f"Exporting archetypes to {self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR}..."
         )
-        all_decks = self.academy.pauperformance.list_archived_decks()
         for archetype in self.academy.pauperformance.config_reader.list_archetypes():
             archetype_decks = [
-                deck for deck in all_decks if deck.archetype == archetype.name
+                deck for deck in self.decks if deck.archetype == archetype.name
             ]
             staples, frequents = self.academy.pauperformance.analyze_cards_frequency(
                 archetype_decks
@@ -97,7 +101,27 @@ class AcademyDataExporter:
         )
 
     def export_decks(self):
-        self._tmp_export_synthetic_decks()
+        logger.info(f"Exporting decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}...")
+        banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
+        for deck in self.decks:
+            set_index_entry = self.academy.pauperformance.set_index[int(deck.p12e_code)]
+            playable_deck: PlayableDeck = self.pauperformance.archive.to_playable_deck(
+                deck
+            )
+            api_deck: Deck = Deck(
+                name=deck.p12e_name,
+                url=deck.url,
+                archetype=deck.archetype,
+                set_name=set_index_entry["name"],
+                set_date=set_index_entry["date"],
+                legal=playable_deck.is_legal(banned_cards),
+            )
+            safe_dump_json_to_file(
+                posix_path(self.academy_fs.ASSETS_DATA_DECK_DIR, deck.archetype),
+                f"{deck.p12e_name}.json",
+                api_deck,
+            )
+        logger.info(f"Exported decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}.")
 
     def export_miscellanea(self):
         self.export_newspauper()
@@ -146,41 +170,3 @@ class AcademyDataExporter:
         logger.info(
             f"Exported YouTube videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}."
         )
-
-    def _tmp_export_synthetic_decks(self):
-        logger.info(f"Exporting decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}...")
-        decks: list[Deck] = []
-        deck: Deck = Deck(
-            name="Stompy 722.001.tarmogoyf_ita",
-            url="https://www.mtggoldfish.com/deck/4680163",
-            archetype="Stompy",
-            set_name="Kamigawa: Neon Dynasty",
-            set_date="2022-02-18",
-            legal=True,
-        )
-        decks.append(deck)
-        deck: Deck = Deck(
-            name="Stompy 696.001.Ixidor29",
-            url="https://www.mtggoldfish.com/deck/4624367",
-            archetype="Stompy",
-            set_name="	Innistrad: Midnight Hunt",
-            set_date="2021-09-24",
-            legal=True,
-        )
-        decks.append(deck)
-        deck: Deck = Deck(
-            name="Stompy 722.002.tarmogoyf_ita",
-            url="https://www.mtggoldfish.com/deck/4706455",
-            archetype="Stompy",
-            set_name="Kamigawa: Neon Dynasty",
-            set_date="2022-02-18",
-            legal=True,
-        )
-        decks.append(deck)
-        for deck in decks:
-            safe_dump_json_to_file(
-                posix_path(self.academy_fs.ASSETS_DATA_DECK_DIR, deck.archetype),
-                f"{deck.name}.json",
-                deck,
-            )
-        logger.info(f"Exported decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}.")
