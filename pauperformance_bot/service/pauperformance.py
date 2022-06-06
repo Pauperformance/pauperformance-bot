@@ -301,6 +301,7 @@ class PauperformanceService:
                     date,
                     indexable_video["deck_name"],
                     indexable_video["archetype"],
+                    indexable_video["phd"],
                     f"{TWITCH_VIDEO_URL}{video_id}",
                     "twitch",
                 )
@@ -327,6 +328,7 @@ class PauperformanceService:
                     date,
                     indexable_video["deck_name"],
                     indexable_video["archetype"],
+                    indexable_video["phd"],
                     f"{YOUTUBE_VIDEO_URL}{video_id}",
                     "youtube",
                 )
@@ -334,7 +336,7 @@ class PauperformanceService:
         logger.debug("Retrieved stored YouTube videos.")
         return academy_videos
 
-    def list_videos(self):
+    def list_videos(self) -> list[AcademyVideo]:
         return self._list_twitch_videos() + self._list_youtube_videos()
 
     def print_stats(
