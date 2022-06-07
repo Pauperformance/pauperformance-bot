@@ -36,3 +36,7 @@ class ScryfallException(ClientException):
 
 class CardNotFoundException(ScryfallException):
     pass
+
+
+class ArchiveException(ClientException):
+    pass

@@ -12,12 +12,13 @@ from pauperformance_bot.credentials import (
     MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
     MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
 )
+from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
 from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.exceptions import MTGGoldfishException
+from pauperformance_bot.exceptions import ArchiveException, MTGGoldfishException
 from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
@@ -173,12 +174,17 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         return deck_id
 
     @with_login
-    def list_decks(self, filter_name=""):
+    def list_decks(
+        self, filter_name="", with_workaround=True
+    ) -> list[AbstractArchivedDeck]:
         return self._list_decks(
-            filter_name=filter_name, format_="pauper", visibility="public"
+            filter_name=filter_name,
+            format_="pauper",
+            visibility="public",
+            with_workaround=with_workaround,
         )
 
-    def _list_decks(self, filter_name, format_, visibility):
+    def _list_decks(self, filter_name, format_, visibility, with_workaround):
         all_decks = []
         for page in count(1):
             new_decks = self._list_decks_in_page(
@@ -190,26 +196,28 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             if len(new_decks) == 0:
                 break
             all_decks += new_decks
-        logger.warning("Fixing bug in MTGGoldfish pager...")
 
-        # TODO: remove whenever possible
-        # Due to a bug in the pagination mechanism, decks are sometimes
-        # returned more than once or not returned at all.
+        if with_workaround:
+            logger.warning("Fixing bug in MTGGoldfish pager...")
 
-        # first, let's remove duplicates
-        logger.info(f"Initial number of decks: {len(all_decks)}")
-        all_decks = list(set(all_decks))
-        logger.info(f"Without duplicates: {len(all_decks)}")
-        # then, grab one-by-one all the missing decks from storage
-        storage_decks = self.storage.list_imported_deckstats_deck_names()
-        mtggoldfish_decks = {d.name for d in all_decks}
-        for missing_deck in storage_decks - mtggoldfish_decks:
-            logger.warning(f"Found missing deck: {missing_deck}")
-            missing_deck = self._list_decks_in_page(1, missing_deck)
-            if len(missing_deck) != 1:
-                raise ValueError(f"Unable to find missing deck {missing_deck}")
-            all_decks += missing_deck
-        logger.info(f"Final number of decks: {len(all_decks)}")
+            # TODO: remove whenever possible
+            # Due to a bug in the pagination mechanism, decks are sometimes
+            # returned more than once or not returned at all.
+
+            # first, let's remove duplicates
+            logger.info(f"Initial number of decks: {len(all_decks)}")
+            all_decks = list(set(all_decks))
+            logger.info(f"Without duplicates: {len(all_decks)}")
+            # then, grab one-by-one all the missing decks from storage
+            storage_decks = self.storage.list_imported_deckstats_deck_names()
+            mtggoldfish_decks = {d.name for d in all_decks}
+            for missing_deck in storage_decks - mtggoldfish_decks:
+                logger.warning(f"Found missing deck: {missing_deck}")
+                missing_deck = self._list_decks_in_page(1, missing_deck)
+                if len(missing_deck) != 1:
+                    raise ValueError(f"Unable to find missing deck {missing_deck}")
+                all_decks += missing_deck
+            logger.info(f"Final number of decks: {len(all_decks)}")
         return sorted(all_decks, key=lambda d: d.name)
 
     @with_login
@@ -302,7 +310,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
 
     @staticmethod
     def to_playable_deck(
-        listed_deck,
+        listed_deck: AbstractArchivedDeck,
         decks_cache_dir=MTGGOLDFISH_DECKS_CACHE_DIR,
         use_cache=True,
     ) -> PlayableDeck:
@@ -330,3 +338,9 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             ) as cache_f:
                 cache_f.writelines("\n".join(lines))
         return parse_playable_deck_from_lines(lines)
+
+    def get_deck(self, deck_name: str) -> AbstractArchivedDeck:
+        try:
+            return self.list_decks(filter_name=deck_name, with_workaround=False)[0]
+        except IndexError:
+            raise ArchiveException(f"Unable to find deck with name {deck_name}.")

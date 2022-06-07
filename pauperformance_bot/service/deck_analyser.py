@@ -3,6 +3,7 @@ from typing import Tuple
 from scipy import spatial
 
 from pauperformance_bot.entity.deck.playable import PlayableDeck
+from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
@@ -45,5 +46,25 @@ def get_similarity(deck1: PlayableDeck, deck2: PlayableDeck) -> float:
     return sim
 
 
-def classify_deck(deck: PlayableDeck, archetypes_list) -> Tuple[str, float]:
-    return "", 0  # TODO: compute similarity with each latest reference list
+def classify_deck(
+    deck: PlayableDeck, pauperformance: PauperformanceService
+) -> Tuple[str, float]:
+    logger.debug("Classifying deck...")
+    archetypes = pauperformance.config_reader.list_archetypes()
+    most_similar_deck = ""
+    highest_similarity = 0
+    for archetype in archetypes:
+        logger.debug(f"Comparing deck with reference lists of {archetype.name}...")
+        for reference_deck in archetype.reference_decks:
+            logger.debug(f"Comparing deck with reference list {reference_deck}...")
+            deck2 = pauperformance.get_playable_deck(reference_deck)
+            logger.debug(f"Compared deck with reference list {reference_deck}.")
+            score = get_similarity(deck, deck2)
+            logger.debug(f"Similarity: {score}.")
+            if score > highest_similarity:
+                logger.debug("Updated most similar deck.")
+                highest_similarity = score
+                most_similar_deck = reference_deck
+            logger.debug(f"Compared deck with reference lists of {archetype.name}.")
+    logger.debug("Classifying deck...")
+    return most_similar_deck, highest_similarity
