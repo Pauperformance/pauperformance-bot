@@ -5,11 +5,13 @@ from os import linesep, listdir
 from os.path import isfile, join, sep
 
 from pauperformance_bot.constant.myr import ARCHIVE_DIR, MTGGOLDFISH_ARCHIVE_SUBDIR
+from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.archive.local import LocalArchivedDeck as LocalDeck
 from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
     parse_playable_deck_from_lines,
 )
+from pauperformance_bot.exceptions import ArchiveException
 from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
@@ -48,7 +50,9 @@ class LocalArchiveService(AbstractArchiveService):
         logger.info(f"Stored file {output_file}.")
         return deck_id
 
-    def list_decks(self, filter_name=""):
+    def list_decks(
+        self, filter_name="", with_workaround=True
+    ) -> list[AbstractArchivedDeck]:
         logger.info(f"Listing decks in {self._root_dir}...")
         decks = []
         for file in (
@@ -78,7 +82,7 @@ class LocalArchiveService(AbstractArchiveService):
 
     @staticmethod
     def to_playable_deck(
-        listed_deck, decks_cache_dir="USELESS!", use_cache=False
+        listed_deck: AbstractArchivedDeck, decks_cache_dir="USELESS!", use_cache=False
     ) -> PlayableDeck:
         if use_cache:
             logger.info("Ignoring cache on local Archive...")
@@ -100,3 +104,9 @@ class LocalArchiveService(AbstractArchiveService):
                 ]
             )
             return deck
+
+    def get_deck(self, deck_name: str) -> AbstractArchivedDeck:
+        for deck in self.list_decks():
+            if deck.p12e_name == deck_name:
+                return deck
+        raise ArchiveException(f"Unable to find deck with name {deck_name}.")

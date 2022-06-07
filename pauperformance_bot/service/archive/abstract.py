@@ -19,6 +19,7 @@ from pauperformance_bot.constant.mtggoldfish import (
     MTGGOLDFISH_EVENT_LINE_TEXT,
 )
 from pauperformance_bot.constant.myr import USA_DATE_FORMAT
+from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
 from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
@@ -46,7 +47,11 @@ class AbstractArchiveService(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def list_decks(self, filter_name=""):
+    def list_decks(
+        self, filter_name="", with_workaround=True
+    ) -> list[AbstractArchivedDeck]:
+        # TODO: remove with_workaround parameter as soon as MTGGolfish fixes the
+        # pagination bug...
         pass
 
     @abstractmethod
@@ -56,8 +61,12 @@ class AbstractArchiveService(metaclass=ABCMeta):
     @staticmethod
     @abstractmethod
     def to_playable_deck(
-        listed_deck, decks_cache_dir=None, use_cache=True
+        listed_deck: AbstractArchivedDeck, decks_cache_dir=None, use_cache=True
     ) -> PlayableDeck:
+        pass
+
+    @abstractmethod
+    def get_deck(self, deck_name: str) -> AbstractArchivedDeck:
         pass
 
     async def import_player_decks_from_deckstats(

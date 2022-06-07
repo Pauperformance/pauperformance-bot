@@ -22,6 +22,8 @@ from pauperformance_bot.constant.pauperformance import (
 from pauperformance_bot.constant.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.entity.academy_video import AcademyVideo
+from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
+from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.service.config_reader import ConfigReader
@@ -211,7 +213,7 @@ class PauperformanceService:
                 )
         return all_decks
 
-    def list_archived_decks(self):
+    def list_archived_decks(self) -> list[AbstractArchivedDeck]:
         return self.archive.list_decks()
 
     @staticmethod
@@ -353,3 +355,6 @@ class PauperformanceService:
         print(f"Resources: {resources}")
         print(f"Decks: {len(self.list_archived_decks())}")
         print(f"Videos: {len(self.list_videos())}")
+
+    def get_playable_deck(self, deck_name: str) -> PlayableDeck:
+        return self.archive.to_playable_deck(self.archive.get_deck(deck_name))
