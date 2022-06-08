@@ -4,7 +4,7 @@ from pauperformance_bot.constant.discord import (
     DISCORD_CHANNEL_WELCOME_ID,
 )
 from pauperformance_bot.credentials import DISCORD_BOT_TOKEN
-from pauperformance_bot.service.discord_.sync_discord_service import (
+from pauperformance_bot.service.nexus.sync_discord_service import (
     AbstractSyncDiscordService,
 )
 from pauperformance_bot.util.log import get_application_logger
