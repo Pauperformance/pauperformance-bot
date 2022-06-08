@@ -30,5 +30,15 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install .[test]
     - name: Run tox
+      env:
+        DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+        DROPBOX_APP_KEY: ${{ secrets.DROPBOX_APP_KEY }}
+        DROPBOX_APP_SECRET: ${{ secrets.DROPBOX_APP_SECRET }}
+        DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+        MTGGOLDFISH_PAUPERFORMANCE_PASSWORD: ${{ secrets.MTGGOLDFISH_PAUPERFORMANCE_PASSWORD }}
+        MTGGOLDFISH_PAUPERFORMANCE_USERNAME: ${{ secrets.MTGGOLDFISH_PAUPERFORMANCE_USERNAME }}
+        TWITCH_APP_CLIENT_ID: ${{ secrets.TWITCH_APP_CLIENT_ID }}
+        TWITCH_APP_CLIENT_SECRET: ${{ secrets.TWITCH_APP_CLIENT_SECRET }}
+        YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
       run: |
         tox
