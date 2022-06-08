@@ -2,6 +2,7 @@ from typing import Tuple
 
 from scipy import spatial
 
+from pauperformance_bot.entity.config.archetype import ArchetypeConfig
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.util.log import get_application_logger
@@ -19,6 +20,34 @@ def _cosine_similarity(v1, v2, w=1.0):
 
 
 def _vectorize(cards_map1, cards_map2):
+    # In Pauper, only few decks take advantage of Snow-Covered lands.
+    # However, Snow-Covered lands are often used.
+    # For better similarity results, we want Snow-Covered lands to be treated as normal
+    # lands.
+    basic_lands = ["Forest", "Island", "Mountain", "Plains", "Swamp"]
+    for card_map in (cards_map1, cards_map2):
+        for land in basic_lands:
+            snow_land = f"Snow-Covered {land}"
+            if snow_land in card_map:
+                snow_amount = card_map[snow_land]
+                non_snow_amount = card_map.get(land, 0)
+                del card_map[snow_land]
+                card_map[land] = snow_amount + non_snow_amount
+
+    # Hydroblast and Blue Elemental Blast should be considered equivalent.
+    # Same holds for Pyroblast and Red Elemental Blast.
+    for card_map in (cards_map1, cards_map2):
+        if "Blue Elemental Blast" in card_map:
+            beb_amount = card_map["Blue Elemental Blast"]
+            hydro_amount = card_map.get("Hydroblast", 0)
+            del card_map["Blue Elemental Blast"]
+            card_map["Hydroblast"] = beb_amount + hydro_amount
+        if "Red Elemental Blast" in card_map:
+            beb_amount = card_map["Red Elemental Blast"]
+            hydro_amount = card_map.get("Pyroblast", 0)
+            del card_map["Red Elemental Blast"]
+            card_map["Pyroblast"] = beb_amount + hydro_amount
+
     all_cards = list(set(cards_map1.keys()).union(set(cards_map2.keys())))
     all_cards.sort()
     return (
@@ -41,17 +70,17 @@ def get_similarity(deck1: PlayableDeck, deck2: PlayableDeck) -> float:
     logger.debug(f"Mainboard similarity: {sim_main}")
     sim_side = _cosine_similarity(vector_side1, vector_side2, SIDEBOARD_WEIGHT)
     logger.debug(f"sideboard similarity: {sim_side}")
-    sim = sim_main * sim_side
+    sim = (sim_main + sim_side) / 2
     logger.debug(f"Computed similarity between decks: {sim}.")
     return sim
 
 
 def classify_deck(
     deck: PlayableDeck, pauperformance: PauperformanceService
-) -> Tuple[str, float]:
+) -> Tuple[ArchetypeConfig, float]:
     logger.debug("Classifying deck...")
     archetypes = pauperformance.config_reader.list_archetypes()
-    most_similar_deck = ""
+    most_similar_archetype = None
     highest_similarity = 0
     for archetype in archetypes:
         logger.debug(f"Comparing deck with reference lists of {archetype.name}...")
@@ -64,7 +93,7 @@ def classify_deck(
             if score > highest_similarity:
                 logger.debug("Updated most similar deck.")
                 highest_similarity = score
-                most_similar_deck = reference_deck
+                most_similar_archetype = archetype
             logger.debug(f"Compared deck with reference lists of {archetype.name}.")
     logger.debug("Classifying deck...")
-    return most_similar_deck, highest_similarity
+    return most_similar_archetype, highest_similarity
