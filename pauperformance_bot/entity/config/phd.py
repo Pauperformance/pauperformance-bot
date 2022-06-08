@@ -5,7 +5,7 @@ from pauperformance_bot.util.entities import auto_repr, auto_str
 
 @auto_repr
 @auto_str
-class PhD:
+class PhDConfig:
     def __init__(
         self,
         *,

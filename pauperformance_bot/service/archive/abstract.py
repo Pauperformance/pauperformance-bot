@@ -19,13 +19,13 @@ from pauperformance_bot.constant.mtggoldfish import (
     MTGGOLDFISH_EVENT_LINE_TEXT,
 )
 from pauperformance_bot.constant.myr import USA_DATE_FORMAT
+from pauperformance_bot.entity.config.phd import PhDConfig
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
 from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.entity.phd import PhD
 from pauperformance_bot.entity.youtube_video import YouTubeVideo
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.config_reader import ConfigReader
@@ -156,7 +156,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
     async def archive_player_videos_from_twitch(
         self,
-        player: PhD,
+        player: PhDConfig,
         videos,
         storage,
         discord,
@@ -248,7 +248,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
     async def archive_player_videos_from_youtube(
         self,
-        player: PhD,
+        player: PhDConfig,
         videos: list[YouTubeVideo],
         storage,
         discord,
@@ -342,7 +342,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
     async def import_player_deck_from_mtggoldfish(
         self,
         url,
-        player: PhD,
+        player: PhDConfig,
         pauperformance,
         discord_message,
         p12e_name=None,
