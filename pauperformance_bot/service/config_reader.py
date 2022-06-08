@@ -13,7 +13,7 @@ from pauperformance_bot.entity.config.archetype import (
     DiscordResource,
     SideboardResource,
 )
-from pauperformance_bot.entity.phd import PhD
+from pauperformance_bot.entity.config.phd import PhDConfig
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.util.config import read_newspauper_config
@@ -150,10 +150,10 @@ class ConfigReader:
 
     def list_phds(
         self,
-    ) -> list[PhD]:
+    ) -> list[PhDConfig]:
         config_dir = self.myr_file_system.RESOURCES_CONFIG_PHDS_DIR
         logger.info(f"Reading PhDs from {config_dir}...")
-        phds: list[PhD] = [
+        phds: list[PhDConfig] = [
             self.get_phd(config_file)
             for config_file in glob.glob(f"{config_dir}/*.ini")
         ]
@@ -163,7 +163,7 @@ class ConfigReader:
     def get_phd(
         self,
         config_file_path: str,
-    ) -> PhD:
+    ) -> PhDConfig:
         config = self._read_config_file(config_file_path)
         values = config["values"]
         dev = config["dev"]
@@ -180,7 +180,7 @@ class ConfigReader:
         )
         discord_id = int(discord_id) if (discord_id := dev["discord_id"]) else None
 
-        phd: PhD = PhD(
+        phd: PhDConfig = PhDConfig(
             name=values["name"],
             mtgo_name=values["mtgo_name"],
             twitch_login_name=twitch_login_name,
@@ -193,7 +193,7 @@ class ConfigReader:
         logger.info(f"Read PhD {phd}.")
         return phd
 
-    def get_pauperformance_phd(self) -> PhD:
+    def get_pauperformance_phd(self) -> PhDConfig:
         return next(phd for phd in self.list_phds() if phd.name == "Pauperformance")
 
     def list_archetypes(self) -> list[ArchetypeConfig]:
