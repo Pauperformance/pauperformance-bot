@@ -11,7 +11,9 @@ from pauperformance_bot.credentials import (
     DROPBOX_REFRESH_TOKEN,
 )
 from pauperformance_bot.exceptions import StoredFileNotFound
-from pauperformance_bot.service.storage.abstract import AbstractStorageService
+from pauperformance_bot.service.pauperformance.storage.abstract import (
+    AbstractStorageService,
+)
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()

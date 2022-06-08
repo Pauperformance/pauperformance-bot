@@ -25,16 +25,20 @@ from pauperformance_bot.entity.academy_video import AcademyVideo
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.exceptions import PauperformanceException
-from pauperformance_bot.service.archive.abstract import AbstractArchiveService
-from pauperformance_bot.service.config_reader import ConfigReader
+from pauperformance_bot.service.arena.twitch import TwitchService
+from pauperformance_bot.service.arena.youtube import YouTubeService
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
+from pauperformance_bot.service.mtg.scryfall import ScryfallService
 from pauperformance_bot.service.nexus.sync.messages_sender import (
     DiscordMessagesSenderSyncService,
 )
-from pauperformance_bot.service.scryfall import ScryfallService
-from pauperformance_bot.service.storage.abstract import AbstractStorageService
-from pauperformance_bot.service.twitch import TwitchService
-from pauperformance_bot.service.youtube import YouTubeService
+from pauperformance_bot.service.pauperformance.archive.abstract import (
+    AbstractArchiveService,
+)
+from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
+from pauperformance_bot.service.pauperformance.storage.abstract import (
+    AbstractStorageService,
+)
 from pauperformance_bot.util.config import read_archetype_config
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
