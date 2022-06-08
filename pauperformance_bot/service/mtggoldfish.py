@@ -14,6 +14,8 @@ from pauperformance_bot.constant.mtggoldfish import (
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
 from pauperformance_bot.entity.deck.playable import parse_playable_deck_from_lines
 from pauperformance_bot.exceptions import MTGGoldfishException
+from pauperformance_bot.service.deck_analyser import classify_deck
+from pauperformance_bot.service.pauperformance import PauperformanceService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import now_utc
 
@@ -21,7 +23,11 @@ logger = get_application_logger()
 
 
 class MTGGoldfish:
-    def get_pauper_meta(self, metagame_page_url: str = FULL_PAUPER_METAGAME_URL):
+    def get_pauper_meta(
+        self,
+        pauperformance: PauperformanceService,
+        metagame_page_url: str = FULL_PAUPER_METAGAME_URL,
+    ):
         logger.info(f"Getting pauper meta from {metagame_page_url}...")
         response = requests.get(metagame_page_url)
         if response.status_code != 200:
@@ -44,6 +50,7 @@ class MTGGoldfish:
             raise MTGGoldfishException(
                 "Mismatch with archetype shares after parsing meta."
             )
+        meta = {}
         for share, link in zip(archetype_shares, archetype_links):
             logger.info(f"Archetype {link}: {share}.")
             logger.debug(f"Retrieving sample deck for archetype {link}...")
@@ -67,12 +74,13 @@ class MTGGoldfish:
             content = urlopen(fake_deck.download_txt_url).read()
             lines = content.decode("utf-8").split("\r\n")
             playable_deck = parse_playable_deck_from_lines(lines)
-            logger.debug(f"Retrieved sample deck for archetype {link}: {playable_deck}")
-            # TODO compute similarity with reference lists (we need at least 1 for each
-            # archetype...)
-        meta = {}
+            # logger.debug(
+            #     f"Retrieved sample deck for archetype {link}: {playable_deck}"
+            # )
+            similar_archetype, similarity_score = classify_deck(
+                playable_deck,
+                pauperformance,
+            )
+            meta[link] = (share, similar_archetype, similarity_score)
         logger.info(f"Got pauper meta {meta}.")
-
-
-if __name__ == "__main__":
-    MTGGoldfish().get_pauper_meta()
+        return meta
