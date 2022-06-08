@@ -70,6 +70,8 @@ $ pip install .        # default
 $ pip install .[test]  # test
 $ pip install .[dev]   # dev
 ```
+On Windows 10 you may need Windows 10 SDK and MSVC C++, you can install or upgrade them using [Visual Studio Build Tools](https://visualstudio.microsoft.com/it/downloads/?q=build+tools).
+
 You can verify `pauperformance-bot` is working by running:
 ```
 $ myr test hello
