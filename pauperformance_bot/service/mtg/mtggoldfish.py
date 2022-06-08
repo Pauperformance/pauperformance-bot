@@ -14,10 +14,10 @@ from pauperformance_bot.constant.mtggoldfish import (
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
 from pauperformance_bot.entity.deck.playable import parse_playable_deck_from_lines
 from pauperformance_bot.exceptions import MTGGoldfishException
-from pauperformance_bot.service.deck_analyser import classify_deck
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
+from pauperformance_bot.service.pauperformance.silver import SilverService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import now_utc
 
@@ -53,6 +53,7 @@ class MTGGoldfish:
                 "Mismatch with archetype shares after parsing meta."
             )
         meta = {}
+        silver = SilverService(pauperformance)
         for share, link in zip(archetype_shares, archetype_links):
             logger.info(f"Archetype {link}: {share}.")
             logger.debug(f"Retrieving sample deck for archetype {link}...")
@@ -79,10 +80,7 @@ class MTGGoldfish:
             # logger.debug(
             #     f"Retrieved sample deck for archetype {link}: {playable_deck}"
             # )
-            similar_archetype, similarity_score = classify_deck(
-                playable_deck,
-                pauperformance,
-            )
+            similar_archetype, similarity_score = silver.classify_deck(playable_deck)
             meta[link] = (share, similar_archetype, similarity_score)
         logger.info(f"Got pauper meta {meta}.")
         return meta
