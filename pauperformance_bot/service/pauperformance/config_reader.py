@@ -15,7 +15,7 @@ from pauperformance_bot.entity.config.archetype import (
 )
 from pauperformance_bot.entity.config.phd import PhDConfig
 from pauperformance_bot.exceptions import PauperformanceException
-from pauperformance_bot.service.scryfall import ScryfallService
+from pauperformance_bot.service.mtg.scryfall import ScryfallService
 from pauperformance_bot.util.config import read_newspauper_config
 from pauperformance_bot.util.entities import auto_repr, auto_str
 from pauperformance_bot.util.log import get_application_logger

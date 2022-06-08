@@ -6,8 +6,10 @@ from pauperformance_bot.entity.api.video import Video
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.service.academy.academy import AcademyService
-from pauperformance_bot.service.config_reader import ConfigReader
-from pauperformance_bot.service.pauperformance import PauperformanceService
+from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
+from pauperformance_bot.service.pauperformance.pauperformance import (
+    PauperformanceService,
+)
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path, safe_dump_json_to_file
 

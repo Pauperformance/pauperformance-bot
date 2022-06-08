@@ -19,7 +19,9 @@ from pauperformance_bot.entity.deck.playable import (
     parse_playable_deck_from_lines,
 )
 from pauperformance_bot.exceptions import ArchiveException, MTGGoldfishException
-from pauperformance_bot.service.archive.abstract import AbstractArchiveService
+from pauperformance_bot.service.pauperformance.archive.abstract import (
+    AbstractArchiveService,
+)
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
 
