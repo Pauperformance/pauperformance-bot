@@ -32,7 +32,9 @@ from pauperformance_bot.constant.myr import (
     TEMPLATES_FAMILIES_DIR,
     TEMPLATES_PAGES_DIR,
 )
-from pauperformance_bot.service.pauperformance import PauperformanceService
+from pauperformance_bot.service.pauperformance.pauperformance import (
+    PauperformanceService,
+)
 from pauperformance_bot.util.config import (
     read_archetype_config,
     read_family_config,

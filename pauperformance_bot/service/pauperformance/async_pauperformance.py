@@ -5,15 +5,17 @@ from pauperformance_bot.constant.discord import (
 )
 from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.entity.config.phd import PhDConfig
-from pauperformance_bot.service.config_reader import ConfigReader
+from pauperformance_bot.service.arena.twitch import TwitchService
+from pauperformance_bot.service.arena.youtube import YouTubeService
+from pauperformance_bot.service.mtg.scryfall import ScryfallService
 from pauperformance_bot.service.nexus.async_discord_service import AsyncDiscordService
 from pauperformance_bot.service.nexus.sync.messages_sender import (
     DiscordMessagesSenderSyncService,
 )
-from pauperformance_bot.service.pauperformance import PauperformanceService
-from pauperformance_bot.service.scryfall import ScryfallService
-from pauperformance_bot.service.twitch import TwitchService
-from pauperformance_bot.service.youtube import YouTubeService
+from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
+from pauperformance_bot.service.pauperformance.pauperformance import (
+    PauperformanceService,
+)
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
