@@ -1,5 +1,6 @@
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.entity.played_cards import PlayedCard
+
 # from pauperformance_bot.service.deck_analyser import get_similarity
 
 
