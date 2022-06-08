@@ -27,10 +27,10 @@ from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.archive.abstract import AbstractArchiveService
 from pauperformance_bot.service.config_reader import ConfigReader
-from pauperformance_bot.service.discord_.sync.messages_sender import (
+from pauperformance_bot.service.mtg.deckstats import DeckstatsService
+from pauperformance_bot.service.nexus.sync.messages_sender import (
     DiscordMessagesSenderSyncService,
 )
-from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.scryfall import ScryfallService
 from pauperformance_bot.service.storage.abstract import AbstractStorageService
 from pauperformance_bot.service.twitch import TwitchService
