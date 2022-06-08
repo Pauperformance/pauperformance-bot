@@ -28,8 +28,8 @@ from pauperformance_bot.entity.deck.playable import (
 )
 from pauperformance_bot.entity.youtube_video import YouTubeVideo
 from pauperformance_bot.exceptions import PauperformanceException
-from pauperformance_bot.service.config_reader import ConfigReader
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
+from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.naming import is_valid_p12e_deckstats_name
 from pauperformance_bot.util.time import datetime_to_ms, now_utc, pretty_str

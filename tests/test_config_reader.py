@@ -1,4 +1,4 @@
-from pauperformance_bot.service.config_reader import ConfigReader
+from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
 
 
 def test_list_phd_sheets():

@@ -1,10 +1,14 @@
 import asyncio
 
 from pauperformance_bot.service.academy.academy import AcademyService
-from pauperformance_bot.service.archive.mtggoldfish import MTGGoldfishArchiveService
-from pauperformance_bot.service.async_pauperformance import AsyncPauperformanceService
 from pauperformance_bot.service.nexus.async_discord_service import AsyncDiscordService
-from pauperformance_bot.service.storage.dropbox_ import DropboxService
+from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
+    MTGGoldfishArchiveService,
+)
+from pauperformance_bot.service.pauperformance.async_pauperformance import (
+    AsyncPauperformanceService,
+)
+from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 
 
 async def async_academy_update():
