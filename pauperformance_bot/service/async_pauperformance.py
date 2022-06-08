@@ -6,10 +6,8 @@ from pauperformance_bot.constant.discord import (
 from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.entity.config.phd import PhDConfig
 from pauperformance_bot.service.config_reader import ConfigReader
-from pauperformance_bot.service.discord_.async_discord_service import (
-    AsyncDiscordService,
-)
-from pauperformance_bot.service.discord_.sync.messages_sender import (
+from pauperformance_bot.service.nexus.async_discord_service import AsyncDiscordService
+from pauperformance_bot.service.nexus.sync.messages_sender import (
     DiscordMessagesSenderSyncService,
 )
 from pauperformance_bot.service.pauperformance import PauperformanceService
