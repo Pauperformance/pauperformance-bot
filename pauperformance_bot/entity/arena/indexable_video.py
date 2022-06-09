@@ -1,4 +1,4 @@
-from pauperformance_bot.constant.myr import VIDEO_DECK_TAG
+from pauperformance_bot.constant.pauperformance.myr import VIDEO_DECK_TAG
 from pauperformance_bot.util.entities import auto_repr, auto_str
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.naming import is_valid_p12e_deck_name

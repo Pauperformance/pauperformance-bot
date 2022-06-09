@@ -1,7 +1,7 @@
 import logging
 import os
 
-from pauperformance_bot.constant.myr import (
+from pauperformance_bot.constant.pauperformance.myr import (
     APPLICATION_NAME,
     DEFAULT_LOGGING_FILE,
     PAUPERFORMANCE_BOT_DIR,

@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from pauperformance_bot.constant.myr import (
+from pauperformance_bot.constant.pauperformance.myr import (
     STORAGE_DECKS_SUBDIR,
     STORAGE_DECKSTATS_DECKS_SUBDIR,
     STORAGE_MTGGOLDFISH_DECKS_SUBDIR,

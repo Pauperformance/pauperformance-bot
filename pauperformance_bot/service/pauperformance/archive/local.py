@@ -4,7 +4,10 @@ import uuid
 from os import linesep, listdir
 from os.path import isfile, join, sep
 
-from pauperformance_bot.constant.myr import ARCHIVE_DIR, MTGGOLDFISH_ARCHIVE_SUBDIR
+from pauperformance_bot.constant.pauperformance.myr import (
+    ARCHIVE_DIR,
+    MTGGOLDFISH_ARCHIVE_SUBDIR,
+)
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.archive.local import LocalArchivedDeck as LocalDeck
 from pauperformance_bot.entity.deck.playable import (

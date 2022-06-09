@@ -4,7 +4,7 @@ from itertools import count
 from typing import Optional
 
 from pauperformance_bot.constant.flags import get_language_flag
-from pauperformance_bot.constant.myr import MyrFileSystem
+from pauperformance_bot.constant.pauperformance.myr import MyrFileSystem
 from pauperformance_bot.entity.api.archetype import Resource
 from pauperformance_bot.entity.api.miscellanea import Newspauper
 from pauperformance_bot.entity.api.phd import PhDSheet

@@ -2,7 +2,10 @@ from typing import Tuple
 
 from scipy import spatial
 
-from pauperformance_bot.constant.silver import MAINBOARD_WEIGHT, SIDEBOARD_WEIGHT
+from pauperformance_bot.constant.pauperformance.silver import (
+    MAINBOARD_WEIGHT,
+    SIDEBOARD_WEIGHT,
+)
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.service.pauperformance.pauperformance import (

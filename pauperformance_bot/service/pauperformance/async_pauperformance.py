@@ -1,9 +1,9 @@
-from pauperformance_bot.constant.discord import (
+from pauperformance_bot.constant.mtg.mtggoldfish import DECK_API_ENDPOINT
+from pauperformance_bot.constant.pauperformance.nexus import (
     DISCORD_MAX_HISTORY_LIMIT,
     DISCORD_MYR_REACTION_KO,
     DISCORD_MYR_REACTION_SEEN,
 )
-from pauperformance_bot.constant.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.entity.config.phd import PhDConfig
 from pauperformance_bot.service.arena.twitch import TwitchService
 from pauperformance_bot.service.arena.youtube import YouTubeService

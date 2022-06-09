@@ -1,9 +1,9 @@
 from pyyoutube import Api
 
-from pauperformance_bot.constant.myr import VIDEO_LANGUAGE_TAG
-from pauperformance_bot.constant.youtube import YOUTUBE_VIDEO_URL
+from pauperformance_bot.constant.arena.youtube import YOUTUBE_VIDEO_URL
+from pauperformance_bot.constant.pauperformance.myr import VIDEO_LANGUAGE_TAG
 from pauperformance_bot.credentials import YOUTUBE_API_KEY
-from pauperformance_bot.entity.youtube_video import YouTubeVideo
+from pauperformance_bot.entity.arena.youtube_video import YouTubeVideo
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()

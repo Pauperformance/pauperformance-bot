@@ -1,4 +1,7 @@
-from pauperformance_bot.constant.academy import ACADEMY_FILE_SYSTEM, AcademyFileSystem
+from pauperformance_bot.constant.pauperformance.academy import (
+    ACADEMY_FILE_SYSTEM,
+    AcademyFileSystem,
+)
 from pauperformance_bot.entity.api.archetype import Archetype, ArchetypeCard
 from pauperformance_bot.entity.api.deck import Deck
 from pauperformance_bot.entity.api.miscellanea import Newspauper

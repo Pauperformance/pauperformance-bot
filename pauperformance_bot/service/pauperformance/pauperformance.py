@@ -8,19 +8,19 @@ from datetime import datetime
 from pathlib import Path
 from time import sleep
 
-from pauperformance_bot.constant.myr import (
+from pauperformance_bot.constant.arena.twitch import TWITCH_VIDEO_URL
+from pauperformance_bot.constant.arena.youtube import YOUTUBE_VIDEO_URL
+from pauperformance_bot.constant.pauperformance.myr import (
     CONFIG_ARCHETYPES_DIR,
     CONFIG_FAMILIES_DIR,
     LAST_SET_INDEX_FILE,
     PAUPER_CARDS_INDEX_CACHE_FILE,
     USA_DATE_FORMAT,
 )
-from pauperformance_bot.constant.pauperformance import (
+from pauperformance_bot.constant.pauperformance.pauperformance import (
     INCREMENTAL_CARDS_INDEX_SKIP_SETS,
     KNOWN_SETS_WITH_NO_PAUPER_CARDS,
 )
-from pauperformance_bot.constant.twitch import TWITCH_VIDEO_URL
-from pauperformance_bot.constant.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.entity.academy_video import AcademyVideo
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.playable import PlayableDeck

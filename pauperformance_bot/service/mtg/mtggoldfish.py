@@ -3,7 +3,7 @@ from urllib.request import urlopen
 import requests
 from pyquery import PyQuery
 
-from pauperformance_bot.constant.mtggoldfish import (
+from pauperformance_bot.constant.mtg.mtggoldfish import (
     API_ENDPOINT,
     DECK_API_TOKEN,
     DECK_TOOLS_CONTAINER_CLASS,

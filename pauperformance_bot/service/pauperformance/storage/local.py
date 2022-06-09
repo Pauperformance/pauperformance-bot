@@ -2,7 +2,7 @@ import json
 from os import listdir, remove
 from os.path import isfile, join, sep
 
-from pauperformance_bot.constant.myr import STORAGE_DIR
+from pauperformance_bot.constant.pauperformance.myr import STORAGE_DIR
 from pauperformance_bot.exceptions import StoredFileNotFound
 from pauperformance_bot.service.pauperformance.storage.abstract import (
     AbstractStorageService,

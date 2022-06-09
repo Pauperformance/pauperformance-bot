@@ -1,7 +1,7 @@
 import os
 from importlib import import_module
 
-from pauperformance_bot.constant.myr import SECRETS_UNTRACKED_FILE
+from pauperformance_bot.constant.pauperformance.myr import SECRETS_UNTRACKED_FILE
 
 
 def _get_credential_from_secrets(credential_key):

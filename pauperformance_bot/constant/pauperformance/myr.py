@@ -25,7 +25,7 @@ MTGGOLDFISH_ARCHIVE_SUBDIR = "mtggoldfish"
 # TOP_PATH must resolve to the top directory (i.e. the cloned repo),
 # for example:
 # /home/you/pauperformance-bot
-TOP_PATH = Path(__file__).parent.parent.parent.resolve()
+TOP_PATH = Path(__file__).parent.parent.parent.parent.resolve()
 SOURCE_DIR = posix_path(TOP_PATH.as_posix(), "pauperformance_bot")
 
 # logging

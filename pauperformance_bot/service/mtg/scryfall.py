@@ -5,8 +5,8 @@ from functools import lru_cache, partial
 
 import requests
 
-from pauperformance_bot.constant.myr import SCRYFALL_CARDS_CACHE_DIR
-from pauperformance_bot.constant.scryfall import API_ENDPOINT, WEBSITE_URL
+from pauperformance_bot.constant.mtg.scryfall import API_ENDPOINT, WEBSITE_URL
+from pauperformance_bot.constant.pauperformance.myr import SCRYFALL_CARDS_CACHE_DIR
 from pauperformance_bot.exceptions import CardNotFoundException
 from pauperformance_bot.util.cache import to_pkl_name
 from pauperformance_bot.util.log import get_application_logger
