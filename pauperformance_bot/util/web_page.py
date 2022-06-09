@@ -1,3 +1,7 @@
+from deprecated import deprecated
+
+
+@deprecated(reason="Migrated")
 class WebPage:
     def __init__(self, page_name):
         self.page_name = page_name
