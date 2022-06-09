@@ -4,7 +4,7 @@ from pauperformance_bot.constant.pauperformance.academy import (
 )
 from pauperformance_bot.entity.api.archetype import Archetype, ArchetypeCard
 from pauperformance_bot.entity.api.deck import Deck
-from pauperformance_bot.entity.api.miscellanea import Newspauper
+from pauperformance_bot.entity.api.miscellanea import Changelog, Newspauper
 from pauperformance_bot.entity.api.video import Video
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.playable import PlayableDeck
@@ -129,17 +129,28 @@ class AcademyDataExporter:
         logger.info(f"Exported decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}.")
 
     def export_miscellanea(self):
+        self.export_changelog()
         self.export_newspauper()
 
+    def export_changelog(self):
+        logger.info(f"Exporting Changelog to {self.academy_fs.ASSETS_DATA_DIR}...")
+        changelog: Changelog = self.config_reader.get_changelog()
+        safe_dump_json_to_file(
+            self.academy_fs.ASSETS_DATA_DIR,
+            "changelog.json",
+            changelog,
+        )
+        logger.info(f"Exported Changelog to {self.academy_fs.ASSETS_DATA_DIR}.")
+
     def export_newspauper(self):
-        logger.info(f"Exporting newspauper to {self.academy_fs.ASSETS_DATA_DIR}...")
+        logger.info(f"Exporting Newspauper to {self.academy_fs.ASSETS_DATA_DIR}...")
         newspauper: Newspauper = self.config_reader.get_newspauper()
         safe_dump_json_to_file(
             self.academy_fs.ASSETS_DATA_DIR,
             "newspauper.json",
             newspauper,
         )
-        logger.info(f"Exported newspauper to {self.academy_fs.ASSETS_DATA_DIR}.")
+        logger.info(f"Exported Newspauper to {self.academy_fs.ASSETS_DATA_DIR}.")
 
     def export_videos(self):
         # self.export_twitch_videos()
