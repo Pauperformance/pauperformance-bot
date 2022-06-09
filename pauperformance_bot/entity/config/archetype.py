@@ -59,6 +59,26 @@ class Resource:
 
 @auto_repr
 @auto_str
+class ChangelogEntry:
+    def __init__(
+        self,
+        *,
+        text: str,
+        date: str,
+        scope: str,
+        link: Optional[str],
+    ):
+        self.text: str = text
+        self.date: str = date
+        self.scope: str = scope
+        self.link: Optional[str] = link
+
+    def __hash__(self):
+        return hash(self.text)
+
+
+@auto_repr
+@auto_str
 class ArchetypeConfig:
     def __init__(
         self,
