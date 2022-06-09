@@ -4,14 +4,13 @@ from functools import partial
 
 import requests
 
-from pauperformance_bot.constant.deckstats import (
+from pauperformance_bot.constant.mtg.deckstats import (
     API_ENDPOINT,
     MONITORED_PAUPERFORMANCE_FOLDER,
 )
-from pauperformance_bot.constant.myr import DECKSTATS_DECKS_CACHE_DIR
+from pauperformance_bot.constant.pauperformance.myr import DECKSTATS_DECKS_CACHE_DIR
 from pauperformance_bot.entity.deck.deckstats import DeckstatsDeck
-from pauperformance_bot.entity.deck.playable import PlayableDeck
-from pauperformance_bot.entity.played_cards import PlayedCard
+from pauperformance_bot.entity.deck.playable import PlayableDeck, PlayedCard
 from pauperformance_bot.exceptions import DeckstatsException
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.naming import is_valid_p12e_deckstats_name

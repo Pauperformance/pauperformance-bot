@@ -6,19 +6,20 @@ from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 
-from pauperformance_bot.constant.deckstats import REQUEST_SLEEP_TIMEOUT
-from pauperformance_bot.constant.discord import (
+from pauperformance_bot.constant.mtg.deckstats import REQUEST_SLEEP_TIMEOUT
+from pauperformance_bot.constant.mtg.mtggoldfish import (
+    MTGGOLDFISH_DECK_DATE_TEXT,
+    MTGGOLDFISH_DECK_PAGE_DATE_FORMAT,
+    MTGGOLDFISH_EVENT_LINE_TEXT,
+)
+from pauperformance_bot.constant.pauperformance.myr import USA_DATE_FORMAT
+from pauperformance_bot.constant.pauperformance.nexus import (
     DISCORD_MYR_REACTION_KO,
     DISCORD_MYR_REACTION_OK,
     DISCORD_MYR_REACTION_SEEN,
     DISCORD_MYR_REACTION_WARNING,
 )
-from pauperformance_bot.constant.mtggoldfish import (
-    MTGGOLDFISH_DECK_DATE_TEXT,
-    MTGGOLDFISH_DECK_PAGE_DATE_FORMAT,
-    MTGGOLDFISH_EVENT_LINE_TEXT,
-)
-from pauperformance_bot.constant.myr import USA_DATE_FORMAT
+from pauperformance_bot.entity.arena.youtube_video import YouTubeVideo
 from pauperformance_bot.entity.config.phd import PhDConfig
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
@@ -26,7 +27,6 @@ from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.entity.youtube_video import YouTubeVideo
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.pauperformance.config_reader import ConfigReader

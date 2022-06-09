@@ -1,6 +1,6 @@
 import os
 
-from pauperformance_bot.constant.myr import TOP_PATH
+from pauperformance_bot.constant.pauperformance.myr import TOP_PATH
 from pauperformance_bot.util.path import posix_path
 from pauperformance_bot.util.web_page import WebPage
 

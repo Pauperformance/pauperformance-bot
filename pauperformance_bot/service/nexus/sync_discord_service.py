@@ -1,7 +1,7 @@
 import asyncio
 from abc import ABC, abstractmethod
 
-from pauperformance_bot.constant.discord import (
+from pauperformance_bot.constant.pauperformance.nexus import (
     DISCORD_CHANNEL_IMPORT_DECK_ID,
     DISCORD_CHANNEL_MYR_LOG_ID,
     DISCORD_CHANNEL_WELCOME_ID,

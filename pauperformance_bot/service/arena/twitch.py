@@ -5,8 +5,8 @@ from pauperformance_bot.credentials import (
     TWITCH_APP_CLIENT_ID,
     TWITCH_APP_CLIENT_SECRET,
 )
-from pauperformance_bot.entity.twitch_user import TwitchUser
-from pauperformance_bot.entity.twitch_video import TwitchVideo
+from pauperformance_bot.entity.arena.twitch_user import TwitchUser
+from pauperformance_bot.entity.arena.twitch_video import TwitchVideo
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()

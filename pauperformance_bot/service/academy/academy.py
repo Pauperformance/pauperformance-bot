@@ -2,7 +2,8 @@ import glob
 from collections import defaultdict
 from pathlib import Path
 
-from pauperformance_bot.constant.academy import (
+from pauperformance_bot.constant.flags import get_language_flag
+from pauperformance_bot.constant.pauperformance.academy import (
     ARCHETYPES_DIR,
     ARCHETYPES_DIR_RELATIVE_URL,
     ARCHETYPES_INDEX_OUTPUT_FILE,
@@ -15,8 +16,7 @@ from pauperformance_bot.constant.academy import (
     SET_INDEX_OUTPUT_FILE,
     SET_INDEX_PAGE_NAME,
 )
-from pauperformance_bot.constant.flags import get_language_flag
-from pauperformance_bot.constant.myr import (
+from pauperformance_bot.constant.pauperformance.myr import (
     ARCHETYPE_TEMPLATE_FILE,
     ARCHETYPES_INDEX_TEMPLATE_FILE,
     CONFIG_ARCHETYPES_DIR,

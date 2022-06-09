@@ -1,4 +1,4 @@
-from pauperformance_bot.constant.mtggoldfish import (
+from pauperformance_bot.constant.mtg.mtggoldfish import (
     DECK_API_ENDPOINT,
     DECK_DOWNLOAD_API_ENDPOINT,
 )

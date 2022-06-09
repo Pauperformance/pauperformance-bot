@@ -10,7 +10,7 @@ from pauperformance_bot.cli.builder.utils import (
     handle_default_cli_options,
 )
 from pauperformance_bot.cli.group import academy, test
-from pauperformance_bot.constant.myr import APPLICATION_NAME
+from pauperformance_bot.constant.pauperformance.myr import APPLICATION_NAME
 
 
 class MyrCLI(CLIRunnable):

@@ -6,8 +6,11 @@ from urllib.request import urlopen
 from pyquery import PyQuery
 from requests import session
 
-from pauperformance_bot.constant.mtggoldfish import API_ENDPOINT, DECK_API_ENDPOINT
-from pauperformance_bot.constant.myr import MTGGOLDFISH_DECKS_CACHE_DIR, USA_DATE_FORMAT
+from pauperformance_bot.constant.mtg.mtggoldfish import API_ENDPOINT, DECK_API_ENDPOINT
+from pauperformance_bot.constant.pauperformance.myr import (
+    MTGGOLDFISH_DECKS_CACHE_DIR,
+    USA_DATE_FORMAT,
+)
 from pauperformance_bot.credentials import (
     MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
     MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
