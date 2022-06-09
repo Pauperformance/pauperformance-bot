@@ -1,4 +1,6 @@
-from typing import Tuple
+import itertools
+from collections import defaultdict
+from typing import DefaultDict, Tuple
 
 from scipy import spatial
 
@@ -6,12 +8,15 @@ from pauperformance_bot.constant.pauperformance.silver import (
     MAINBOARD_WEIGHT,
     SIDEBOARD_WEIGHT,
 )
+from pauperformance_bot.entity.api.miscellanea import Metagame, MetaShare
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
 from pauperformance_bot.entity.deck.playable import PlayableDeck
+from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
 from pauperformance_bot.util.log import get_application_logger
+from pauperformance_bot.util.math import truncate
 
 logger = get_application_logger()
 
@@ -104,3 +109,42 @@ class SilverService:
                 logger.debug(f"Compared deck with reference lists of {archetype.name}.")
         logger.debug("Classifying deck...")
         return most_similar_archetype, highest_similarity
+
+    def get_metagame(self) -> Metagame:
+        mtggoldfish = MTGGoldfish()
+        mtggoldfish_meta = mtggoldfish.get_pauper_meta()
+        meta_shares: DefaultDict[str, list[MetaShare]] = defaultdict(list)
+        for link, values in mtggoldfish_meta.items():
+            share, playable_deck = values
+            similar_archetype, similarity_score = self.classify_deck(playable_deck)
+            archetype_name = similar_archetype.name
+            if similarity_score < 0.30:
+                archetype_name = "Brew"
+                similarity_score = 1 - similarity_score
+            meta_share = MetaShare(
+                mtggolfish_urls=[link],
+                meta_share=float(share[:-1]),  # drop trailing '%'
+                archetype_name=archetype_name,
+                accuracy=truncate(similarity_score * 100, 1),  # similarity is in [0, 1]
+            )
+            meta_shares[archetype_name].append(meta_share)
+        # if possible, merge meta_shares
+        grouped_meta_shares: list[MetaShare] = []
+        for archetype, shares in meta_shares.items():
+            if len(shares) == 1:
+                grouped_meta_shares.append(shares[0])
+                continue
+            logger.debug(
+                f"Merging {len(shares)} shares for the same archetype ({archetype})..."
+            )
+            grouped_meta_shares.append(
+                MetaShare(
+                    mtggolfish_urls=list(
+                        itertools.chain(*(s.mtggolfish_urls for s in shares))
+                    ),
+                    meta_share=sum(s.meta_share for s in shares),
+                    archetype_name=archetype,
+                    accuracy=sum(s.accuracy for s in shares) / len(shares),
+                )
+            )
+        return Metagame(meta_shares=grouped_meta_shares)

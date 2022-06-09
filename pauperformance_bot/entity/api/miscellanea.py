@@ -29,3 +29,37 @@ class Changelog:
 
     def __hash__(self):
         return hash(self.changes)
+
+
+@auto_repr
+@auto_str
+class MetaShare:
+    def __init__(
+        self,
+        *,
+        mtggolfish_urls: list[str],
+        meta_share: float,
+        archetype_name: str,
+        accuracy: float,
+    ):
+        self.mtggolfish_urls: list[str] = mtggolfish_urls
+        self.meta_share: float = meta_share
+        self.archetype_name: str = archetype_name
+        self.accuracy: float = accuracy
+
+    def __hash__(self):
+        return hash(self.mtggolfish_urls)
+
+
+@auto_repr
+@auto_str
+class Metagame:
+    def __init__(
+        self,
+        *,
+        meta_shares: list[MetaShare],
+    ):
+        self.meta_shares: list[MetaShare] = meta_shares
+
+    def __hash__(self):
+        return hash(self.meta_shares)
