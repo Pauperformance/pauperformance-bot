@@ -1,3 +1,4 @@
+from time import sleep
 from urllib.request import urlopen
 
 import requests
@@ -12,12 +13,11 @@ from pauperformance_bot.constant.mtg.mtggoldfish import (
     METAGAME_SHARE_CLASS,
 )
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
-from pauperformance_bot.entity.deck.playable import parse_playable_deck_from_lines
-from pauperformance_bot.exceptions import MTGGoldfishException
-from pauperformance_bot.service.pauperformance.pauperformance import (
-    PauperformanceService,
+from pauperformance_bot.entity.deck.playable import (
+    PlayableDeck,
+    parse_playable_deck_from_lines,
 )
-from pauperformance_bot.service.pauperformance.silver import SilverService
+from pauperformance_bot.exceptions import MTGGoldfishException
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import now_utc
 
@@ -27,9 +27,8 @@ logger = get_application_logger()
 class MTGGoldfish:
     def get_pauper_meta(
         self,
-        pauperformance: PauperformanceService,
         metagame_page_url: str = FULL_PAUPER_METAGAME_URL,
-    ):
+    ) -> dict[str, tuple[str, PlayableDeck]]:
         logger.info(f"Getting pauper meta from {metagame_page_url}...")
         response = requests.get(metagame_page_url)
         if response.status_code != 200:
@@ -52,8 +51,7 @@ class MTGGoldfish:
             raise MTGGoldfishException(
                 "Mismatch with archetype shares after parsing meta."
             )
-        meta = {}
-        silver = SilverService(pauperformance)
+        meta_decks = {}
         for share, link in zip(archetype_shares, archetype_links):
             logger.info(f"Archetype {link}: {share}.")
             logger.debug(f"Retrieving sample deck for archetype {link}...")
@@ -80,7 +78,7 @@ class MTGGoldfish:
             # logger.debug(
             #     f"Retrieved sample deck for archetype {link}: {playable_deck}"
             # )
-            similar_archetype, similarity_score = silver.classify_deck(playable_deck)
-            meta[link] = (share, similar_archetype, similarity_score)
-        logger.info(f"Got pauper meta {meta}.")
-        return meta
+            meta_decks[link] = (share, playable_deck)
+            sleep(2)  # avoid flooding (and soft-ban)
+        logger.info(f"Got pauper meta: {len(meta_decks)} archetypes.")
+        return meta_decks

@@ -1,6 +1,7 @@
 import json
 import os
 import uuid
+from functools import cache
 from os import linesep, listdir
 from os.path import isfile, join, sep
 
@@ -55,9 +56,7 @@ class LocalArchiveService(AbstractArchiveService):
         logger.info(f"Stored file {output_file}.")
         return deck_id
 
-    def list_decks(
-        self, filter_name="", with_workaround=True
-    ) -> list[AbstractArchivedDeck]:
+    def list_decks(self) -> list[AbstractArchivedDeck]:
         logger.info(f"Listing decks in {self._root_dir}...")
         decks = []
         for file in (
@@ -74,8 +73,7 @@ class LocalArchiveService(AbstractArchiveService):
                     file.rsplit(sep, maxsplit=1)[1],
                     self._root_dir,
                 )
-                if filter_name in deck.name:
-                    decks.append(deck)
+                decks.append(deck)
         logger.info(f"Listed files in {self._root_dir}...")
         return decks
 
@@ -110,6 +108,7 @@ class LocalArchiveService(AbstractArchiveService):
             )
             return deck
 
+    @cache
     def get_deck(self, deck_name: str) -> AbstractArchivedDeck:
         for deck in self.list_decks():
             if deck.p12e_name == deck_name:

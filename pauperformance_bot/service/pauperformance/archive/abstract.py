@@ -47,11 +47,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def list_decks(
-        self, filter_name="", with_workaround=True
-    ) -> list[AbstractArchivedDeck]:
-        # TODO: remove with_workaround parameter as soon as MTGGolfish fixes the
-        # pagination bug...
+    def list_decks(self) -> list[AbstractArchivedDeck]:
         pass
 
     @abstractmethod

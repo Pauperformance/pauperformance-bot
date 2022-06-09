@@ -11,3 +11,11 @@ FULL_PAUPER_METAGAME_URL = f"{API_ENDPOINT}/metagame/pauper/full"
 METAGAME_SHARE_CLASS = ".metagame-percentage"
 METAGAME_ARCHETYPE_TITLE_URL_CLASS = ".archetype-tile-image a"
 DECK_TOOLS_CONTAINER_CLASS = ".tools-container a"
+
+NO_COOKIE_HEADER = {
+    "accept": "text/html,application/xhtml+xml,application/xml;"
+    "q=0.9,image/avif,image/webp,image/apng,*/*;"
+    "q=0.8,application/signed-exchange;"
+    "v=b3;"
+    "q=0.9",
+}
