@@ -10,6 +10,7 @@ from pauperformance_bot.util.log import get_application_logger
 logger = get_application_logger()
 
 
+@deprecated(reason="Migrated")
 def read_config(config_file_path):
     config = configparser.ConfigParser(allow_no_value=True)
     config.optionxform = lambda option: option  # preserve case
@@ -61,6 +62,7 @@ def read_archetype_config(config_file_path):
     }
 
 
+@deprecated(reason="Migrated")
 def read_family_config(config_file_path):
     config = read_config(config_file_path)
     values = {
@@ -69,6 +71,7 @@ def read_family_config(config_file_path):
     return values
 
 
+@deprecated(reason="Migrated")
 def read_newspauper_config(config_file_path):
     config = read_config(config_file_path)
     return {

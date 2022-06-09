@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from urllib.parse import quote
 
+from deprecated import deprecated
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from pauperformance_bot.constant.pauperformance.academy import (
@@ -13,10 +14,12 @@ from pauperformance_bot.util.time import pretty_str, simple_str
 logger = get_application_logger()
 
 
+@deprecated(reason="Migrated")
 def tagify(name):
     return f"`{name}`"
 
 
+@deprecated(reason="Migrated")
 def to_archetype_page_mana(mana):
     return (
         f'<img src="../{RESOURCES_IMAGES_MANA_RELATIVE_URL}/{mana}.png" '
@@ -24,14 +27,17 @@ def to_archetype_page_mana(mana):
     )
 
 
+@deprecated(reason="Migrated")
 def to_github_anchor(name):
     return name.lower().replace(" ", "-").replace(".", "").replace(":", "")
 
 
+@deprecated(reason="Migrated")
 def to_url_encoded(name):
     return quote(name)
 
 
+@deprecated(reason="Migrated")
 def render_template(template_dir, template_file, output_file, values):
     os.makedirs(Path(output_file).parent.as_posix(), exist_ok=True)
     env = Environment(
