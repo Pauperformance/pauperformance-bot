@@ -6,17 +6,18 @@ from typing import Optional
 from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.pauperformance.myr import MyrFileSystem
 from pauperformance_bot.entity.api.archetype import Resource
-from pauperformance_bot.entity.api.miscellanea import Newspauper
+from pauperformance_bot.entity.api.miscellanea import Changelog, Newspauper
 from pauperformance_bot.entity.api.phd import PhDSheet
 from pauperformance_bot.entity.config.archetype import (
     ArchetypeConfig,
+    ChangelogEntry,
     DiscordResource,
     SideboardResource,
 )
 from pauperformance_bot.entity.config.phd import PhDConfig
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.mtg.scryfall import ScryfallService
-from pauperformance_bot.util.config import read_newspauper_config
+from pauperformance_bot.util.config import read_config_with_sequential_resources
 from pauperformance_bot.util.entities import auto_repr, auto_str
 from pauperformance_bot.util.log import get_application_logger
 
@@ -258,7 +259,7 @@ class ConfigReader:
     def get_newspauper(self) -> Newspauper:
         config_file_path = self.myr_file_system.RESOURCES_CONFIG_NEWSPAUPER
         logger.info(f"Reading Newspauper from {config_file_path}...")
-        config = read_newspauper_config(config_file_path)
+        config = read_config_with_sequential_resources(config_file_path)
         news: list[Resource] = [
             Resource(
                 name=resource["name"],
@@ -275,6 +276,26 @@ class ConfigReader:
         logger.debug(f"Newspauper: {newspauper}")
         logger.info(f"Read Newspauper from {config_file_path}.")
         return newspauper
+
+    def get_changelog(self) -> Changelog:
+        config_file_path = self.myr_file_system.RESOURCES_CONFIG_CHANGELOG
+        logger.info(f"Reading Changelog from {config_file_path}...")
+        config = read_config_with_sequential_resources(config_file_path)
+        changes: list[ChangelogEntry] = [
+            ChangelogEntry(
+                text=resource["text"],
+                date=resource["date"],
+                scope=resource["scope"],
+                link=resource["link"],
+            )
+            for resource in config["resources"]
+        ]
+        changelog: Changelog = Changelog(
+            changes=changes,
+        )
+        logger.debug(f"Changelog: {changelog}")
+        logger.info(f"Read Changelog from {config_file_path}.")
+        return changelog
 
     def get_archetype_name_from_alias(self, name):
         for archetype in self.list_archetypes():

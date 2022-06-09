@@ -110,6 +110,9 @@ class MyrFileSystem:
         self.RESOURCES_CONFIG_NEWSPAUPER: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "newspauper.ini"
         )
+        self.RESOURCES_CONFIG_CHANGELOG: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "changelog.ini"
+        )
 
 
 MYR_FILE_SYSTEM = MyrFileSystem()
