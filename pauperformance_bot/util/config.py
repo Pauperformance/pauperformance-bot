@@ -71,8 +71,7 @@ def read_family_config(config_file_path):
     return values
 
 
-@deprecated(reason="Migrated")
-def read_newspauper_config(config_file_path):
+def read_config_with_sequential_resources(config_file_path):
     config = read_config(config_file_path)
     return {
         "resources": _read_sequential_resources(config, "resource"),
@@ -97,10 +96,11 @@ def _read_sequential_resources(config, key):
 @deprecated(reason="Migrated")
 def _format_and_sort_resources(resources):
     for resource in resources:
-        resource["language"] = get_language_flag(resource["language"])
+        if "language" in resource:
+            resource["language"] = get_language_flag(resource["language"])
     return sorted(
         resources,
-        key=lambda r: r.get("date", "") + r["name"],
+        key=lambda r: r.get("date", "") + r.get("name", "") + r.get("text", ""),
         reverse=True,
     )
 

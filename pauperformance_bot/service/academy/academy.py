@@ -37,8 +37,8 @@ from pauperformance_bot.service.pauperformance.pauperformance import (
 )
 from pauperformance_bot.util.config import (
     read_archetype_config,
+    read_config_with_sequential_resources,
     read_family_config,
-    read_newspauper_config,
 )
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path
@@ -78,7 +78,9 @@ class AcademyService:
         logger.info(
             f"Rendering home in {templates_pages_dir} from " f"{home_template_file}..."
         )
-        config = read_newspauper_config(posix_path(config_dir, newspauper_file))
+        config = read_config_with_sequential_resources(
+            posix_path(config_dir, newspauper_file)
+        )
         resources = config["resources"]
         current_set = self.pauperformance.get_current_set_index()
         render_template(
