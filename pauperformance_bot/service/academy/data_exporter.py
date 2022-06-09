@@ -4,7 +4,7 @@ from pauperformance_bot.constant.pauperformance.academy import (
 )
 from pauperformance_bot.entity.api.archetype import Archetype, ArchetypeCard
 from pauperformance_bot.entity.api.deck import Deck
-from pauperformance_bot.entity.api.miscellanea import Changelog, Newspauper
+from pauperformance_bot.entity.api.miscellanea import Changelog, Metagame, Newspauper
 from pauperformance_bot.entity.api.video import Video
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.playable import PlayableDeck
@@ -13,6 +13,7 @@ from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
+from pauperformance_bot.service.pauperformance.silver import SilverService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path, safe_dump_json_to_file
 
@@ -131,6 +132,7 @@ class AcademyDataExporter:
     def export_miscellanea(self):
         self.export_changelog()
         self.export_newspauper()
+        self.export_metagame()
 
     def export_changelog(self):
         logger.info(f"Exporting Changelog to {self.academy_fs.ASSETS_DATA_DIR}...")
@@ -151,6 +153,17 @@ class AcademyDataExporter:
             newspauper,
         )
         logger.info(f"Exported Newspauper to {self.academy_fs.ASSETS_DATA_DIR}.")
+
+    def export_metagame(self):
+        logger.info(f"Exporting Metagame to {self.academy_fs.ASSETS_DATA_DIR}...")
+        silver: SilverService = SilverService(self.pauperformance)
+        metagame: Metagame = silver.get_metagame()
+        safe_dump_json_to_file(
+            self.academy_fs.ASSETS_DATA_DIR,
+            "metagame.json",
+            metagame,
+        )
+        logger.info(f"Exported Metagame to {self.academy_fs.ASSETS_DATA_DIR}.")
 
     def export_videos(self):
         # self.export_twitch_videos()
