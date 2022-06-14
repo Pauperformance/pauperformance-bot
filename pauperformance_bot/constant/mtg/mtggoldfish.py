@@ -19,3 +19,5 @@ NO_COOKIE_HEADER = {
     "v=b3;"
     "q=0.9",
 }
+
+REQUESTS_SLEEP_SECONDS = 2
