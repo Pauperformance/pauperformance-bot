@@ -6,6 +6,7 @@ from pauperformance_bot.entity.deck.playable import (
     PlayedCard,
     get_decks_diff,
 )
+from pauperformance_bot.service.mtg.downloader.mtgdecks import MtgdecksDeckDownloader
 from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
 
 EXPECTED_DECK_AETHERHUB_MAIN = [
@@ -98,6 +99,28 @@ EXPECTED_DECK_MTGTOP8_SIDE = [
     PlayedCard(3, "Gut Shot"),
     PlayedCard(4, "Gleeful Sabotage"),
 ]
+EXPECTED_DECK_MTGDECKS_MAIN = [
+    PlayedCard(4, "Thermo-Alchemist"),
+    PlayedCard(4, "Voldaren Epicure"),
+    PlayedCard(4, "Needle Drop"),
+    PlayedCard(4, "Searing Blaze"),
+    PlayedCard(4, "Lightning Bolt"),
+    PlayedCard(4, "Fireblast"),
+    PlayedCard(3, "Flame Rift"),
+    PlayedCard(4, "Skewer the Critics"),
+    PlayedCard(4, "Rift Bolt"),
+    PlayedCard(4, "Lava Spike"),
+    PlayedCard(4, "Chain Lightning"),
+    PlayedCard(1, "Forgotten Cave"),
+    PlayedCard(16, "Mountain"),
+]
+EXPECTED_DECK_MTGDECKS_SIDE = [
+    PlayedCard(2, "Molten Rain"),
+    PlayedCard(2, "Martyr of Ashes"),
+    PlayedCard(3, "Electrickery"),
+    PlayedCard(4, "Smash to Smithereens"),
+    PlayedCard(4, "Keldon Marauders"),
+]
 
 
 class TestMtgoDownloader(unittest.TestCase):
@@ -148,6 +171,18 @@ class TestMtgoDownloader(unittest.TestCase):
         )
         downloader = MtgoDeckDownloader(
             "https://tappedout.net/mtg-decks/gobliny-combo/?fmt=dek&cb=1653244312"
+        )
+
+        res = downloader.download()
+
+        self._validate_result(expected_deck, res)
+
+    def test_downloader_mtgdeck(self):
+        expected_deck = PlayableDeck(
+            EXPECTED_DECK_MTGDECKS_MAIN, EXPECTED_DECK_MTGDECKS_SIDE
+        )
+        downloader = MtgdecksDeckDownloader(
+            "https://mtgdecks.net/Pauper/burn-decklist-by-thormyn-1380435/txt"
         )
 
         res = downloader.download()
