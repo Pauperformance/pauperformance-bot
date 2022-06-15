@@ -26,7 +26,7 @@ class DeckDownloaderService:
             "https://www.mtgtop8.com/mtgo?d=473002"
 
         Returns:
-            PlayableDeck: the representation of the deck or None.
+            Optional[PlayableDeck]: the representation of the deck or None.
         """
         for domain, cls in DeckDownloaderService._downloaders.items():
             if domain in url:
