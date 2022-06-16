@@ -6,8 +6,8 @@ from pauperformance_bot.entity.deck.playable import (
     PlayedCard,
     get_decks_diff,
 )
-from pauperformance_bot.service.mtg.downloader.mtgdecks import MtgdecksDeckDownloader
 from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
+from pauperformance_bot.service.mtg.downloader.mtgdecks import MtgdecksDeckDownloader
 
 EXPECTED_DECK_AETHERHUB_MAIN = [
     PlayedCard(3, "Cast Down"),
