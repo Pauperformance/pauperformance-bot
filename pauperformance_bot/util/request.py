@@ -27,13 +27,13 @@ def _http_request_retry(http_request):
 
 
 @_http_request_retry
-def execute_http_request(request_fn, url, timeout=(3 * 20, 120)):
+def execute_http_request(request_fn, url, timeout=(3 * 20, 120), headers={}):
     # Assumes the request_fn is from requests module.
     # Timeout is a tuple (connection_timeout, read_timeout).
     # Further details here:
     # https://3.python-requests.org/user/quickstart/#timeouts
     # Caller should catch ConnectionError and HTTPError, or more broadly
     # requests.exceptions.RequestException
-    response = request_fn(url, timeout=timeout)
+    response = request_fn(url, timeout=timeout, headers=headers)
     response.raise_for_status()
     return response

@@ -11,6 +11,7 @@ venv/
 
 # IDE
 .idea/
+.vscode
 
 # tox
 .mypy_cache/
