@@ -9,7 +9,7 @@ def test_get_similarity():
         PlayedCard(3, "Gush"),
         PlayedCard(54, "X"),
     ]
-    sideboard1 = [PlayedCard(4, "Plains"), PlayedCard(4, "Forest")]
+    sideboard1 = [PlayedCard(11, "Plains"), PlayedCard(4, "Forest")]
     deck1 = PlayableDeck(mainboard1, sideboard1)
 
     mainboard2 = [
@@ -17,7 +17,7 @@ def test_get_similarity():
         PlayedCard(4, "Gush"),
         PlayedCard(54, "X"),
     ]
-    sideboard2 = [PlayedCard(4, "Plains"), PlayedCard(4, "Forest")]
+    sideboard2 = [PlayedCard(11, "Plains"), PlayedCard(4, "Forest")]
     deck2 = PlayableDeck(mainboard2, sideboard2)
     # assert get_similarity(deck1, deck2) > 0.99
     assert deck1 != deck2  # TODO: remove
