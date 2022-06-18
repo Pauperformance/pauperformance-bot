@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pauperformance_bot.util.entities import auto_repr, auto_str
 
 
@@ -23,3 +25,35 @@ class Deck:
 
     def __hash__(self):
         return hash(self.name)
+
+
+@auto_repr
+@auto_str
+class MTGGoldfishTournamentDeck:
+    def __init__(
+        self,
+        *,
+        url: str,
+        archetype: str,
+        place: str,
+        pilot: str,
+        tabletop_price: Optional[int],
+        mtgo_price: Optional[int],
+        tournament_id: str,
+        tournament_name: str,
+    ):
+        self.url: str = url
+        self.archetype: str = archetype
+        self.place: str = place
+        self.pilot: str = pilot
+        self.tabletop_price: Optional[int] = tabletop_price
+        self.mtgo_price: Optional[int] = mtgo_price
+        self.tournament_id: str = tournament_id
+        self.tournament_name: str = tournament_name
+
+    @property
+    def identifier(self) -> str:
+        return self.url.rsplit("/", maxsplit=1)[-1]
+
+    def __hash__(self):
+        return hash(self.identifier)

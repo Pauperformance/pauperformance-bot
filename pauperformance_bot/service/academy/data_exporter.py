@@ -123,7 +123,9 @@ class AcademyDataExporter:
                 legal=playable_deck.is_legal(banned_cards),
             )
             safe_dump_json_to_file(
-                posix_path(self.academy_fs.ASSETS_DATA_DECK_DIR, deck.archetype),
+                posix_path(
+                    self.academy_fs.ASSETS_DATA_DECK_ACADEMY_DIR, deck.archetype
+                ),
                 f"{deck.p12e_name}.json",
                 api_deck,
             )
