@@ -47,8 +47,10 @@ class PlayableDeck:
         mainboard: list[PlayedCard],
         sideboard: list[PlayedCard],
     ):
-        self._validate_board(mainboard, PlayableDeck.MAIN_DECK_AMOUNT)
-        self._validate_board(sideboard, PlayableDeck.SIDEBOARD_AMOUNT)
+        # TODO: improve the check and then re-enable it.
+        # [June 18, 2022: we have decks with 60+ main cards.]
+        # self._validate_board(mainboard, PlayableDeck.MAIN_DECK_AMOUNT)
+        # self._validate_board(sideboard, PlayableDeck.SIDEBOARD_AMOUNT)
         self.mainboard: list[PlayedCard] = mainboard
         self.sideboard: list[PlayedCard] = sideboard
 

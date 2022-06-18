@@ -16,15 +16,13 @@ from pauperformance_bot.constant.mtg.mtggoldfish import (
     METAGAME_SHARE_CLASS,
     REQUESTS_SLEEP_SECONDS,
 )
+from pauperformance_bot.entity.api.deck import MTGGoldfishTournamentDeck
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
 from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.entity.mtg.mtggoldfish import (
-    MTGGoldfishTournamentDeck,
-    MTGGoldfishTournamentSearchResult,
-)
+from pauperformance_bot.entity.mtg.mtggoldfish import MTGGoldfishTournamentSearchResult
 from pauperformance_bot.exceptions import MTGGoldfishException
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.time import now_utc
@@ -144,7 +142,10 @@ class MTGGoldfish:
         return tournaments
 
     @staticmethod
-    def get_tournament_decks(url: str) -> list[MTGGoldfishTournamentDeck]:
+    def get_tournament_decks(
+        tournament_result: MTGGoldfishTournamentSearchResult,
+    ) -> list[MTGGoldfishTournamentDeck]:
+        url = tournament_result.url
         logger.debug(f"Extracting tournament decks from {url}...")
         tournament_decks: list[MTGGoldfishTournamentDeck] = []
         html_page = urllib.request.urlopen(url)
@@ -153,11 +154,21 @@ class MTGGoldfish:
             columns = tr.contents
             if len(columns) < 10:
                 continue
-            place = columns[1].text.strip()
-            archetype = columns[3].text.strip()
-            pilot = columns[5].text.strip()
-            tabletop_price = int(columns[7].text.strip()[2:])
-            mtgo_price = int(columns[9].text.strip().split()[0])
+            # sometimes the special ' ' character is used instead of ' ': fix it
+            place = columns[1].text.strip().replace(" ", " ")
+            archetype = columns[3].text.strip().replace(" ", " ")
+            pilot = columns[5].text.strip().replace(" ", " ")
+            # Sometimes MTGGoldfish does not report deck prices.
+            # Maybe in the past they could not get this info.
+            # Let's take into account missing values.
+            try:
+                tabletop_price = int(columns[7].text.strip()[2:])
+            except (ValueError, IndexError):
+                tabletop_price = None
+            try:
+                mtgo_price = int(columns[9].text.strip().split()[0])
+            except (ValueError, IndexError):
+                mtgo_price = None
             tournament_deck = MTGGoldfishTournamentDeck(
                 url=f"{API_ENDPOINT}{list(columns[3].children)[1]['href']}",
                 archetype=archetype,
@@ -165,6 +176,8 @@ class MTGGoldfish:
                 pilot=pilot,
                 tabletop_price=tabletop_price,
                 mtgo_price=mtgo_price,
+                tournament_id=tournament_result.identifier,
+                tournament_name=tournament_result.name,
             )
             logger.debug(f"Extracted deck {tournament_deck}.")
             tournament_decks.append(tournament_deck)
