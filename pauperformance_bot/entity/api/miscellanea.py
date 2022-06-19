@@ -50,6 +50,18 @@ class MetaShare:
     def __hash__(self):
         return hash(self.mtggolfish_urls)
 
+    def __lt__(self, other):
+        if isinstance(other, MetaShare):
+            return self.meta_share < other.meta_share
+        raise ValueError(
+            f"Cannot compare instance of MetaShare with instance of {type(other)}"
+        )
+
+    def __eq__(self, other):
+        if isinstance(other, MetaShare):
+            return self.archetype_name == other.archetype_name
+        return False
+
 
 @auto_repr
 @auto_str
