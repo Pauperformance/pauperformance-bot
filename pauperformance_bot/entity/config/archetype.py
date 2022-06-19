@@ -84,7 +84,7 @@ class ArchetypeConfig:
         self,
         *,
         name: str,
-        aliases: Optional[list[str]],
+        aliases: list[str],
         family: Optional[str],
         dominant_mana: list[str],
         game_type: list[str],
@@ -97,7 +97,7 @@ class ArchetypeConfig:
         resources: list[Resource],
     ):
         self.name: str = name
-        self.aliases: Optional[list[str]] = aliases
+        self.aliases: list[str] = aliases
         self.family: Optional[str] = family
         self.dominant_mana: list[str] = dominant_mana
         self.game_type: list[str] = game_type

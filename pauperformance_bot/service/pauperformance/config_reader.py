@@ -1,7 +1,6 @@
 import configparser
 import glob
 from itertools import count
-from typing import Optional
 
 from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.pauperformance.myr import MyrFileSystem
@@ -40,10 +39,8 @@ class ConfigReader:
         return config
 
     @staticmethod
-    def _parse_list_value(raw_value) -> Optional[list[str]]:
-        return (
-            [value.strip(" ") for value in raw_value.split(",")] if raw_value else None
-        )
+    def _parse_list_value(raw_value) -> list[str]:
+        return [value.strip(" ") for value in raw_value.split(",")] if raw_value else []
 
     @staticmethod
     def _read_sequential_resources(config, key):
