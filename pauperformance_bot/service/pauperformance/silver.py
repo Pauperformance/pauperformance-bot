@@ -22,8 +22,19 @@ logger = get_application_logger()
 
 
 class SilverService:
-    def __init__(self, pauperformance: PauperformanceService):
+    def __init__(
+        self,
+        pauperformance: PauperformanceService,
+        known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = None,
+    ):
         self.pauperformance: PauperformanceService = pauperformance
+        self.archetypes: list[
+            ArchetypeConfig
+        ] = self.pauperformance.config_reader.list_archetypes()
+        self.known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = (
+            known_decks if known_decks else []
+        )
+        self._decks_cache: dict[str, PlayableDeck] = {}
 
     @staticmethod
     def _cosine_similarity(v1, v2, w=1.0):
@@ -91,23 +102,31 @@ class SilverService:
         deck: PlayableDeck,
     ) -> Tuple[ArchetypeConfig, float]:
         logger.debug("Classifying deck...")
-        archetypes = self.pauperformance.config_reader.list_archetypes()
-        most_similar_archetype = None
-        highest_similarity = 0
-        for archetype in archetypes:
+        most_similar_archetype, highest_similarity = None, 0
+        for archetype in self.archetypes:
             logger.debug(f"Comparing deck with reference lists of {archetype.name}...")
             for reference_deck in archetype.reference_decks:
                 logger.debug(f"Comparing deck with reference list {reference_deck}...")
-                deck2 = self.pauperformance.get_playable_deck(reference_deck)
+                if reference_deck not in self._decks_cache:
+                    self._decks_cache[
+                        reference_deck
+                    ] = self.pauperformance.get_playable_deck(reference_deck)
+                deck2 = self._decks_cache[reference_deck]
                 logger.debug(f"Compared deck with reference list {reference_deck}.")
                 score = self.get_similarity(deck, deck2)
                 logger.debug(f"Similarity: {score}.")
                 if score > highest_similarity:
-                    logger.debug("Updated most similar deck.")
-                    highest_similarity = score
-                    most_similar_archetype = archetype
+                    most_similar_archetype, highest_similarity = archetype, score
                 logger.debug(f"Compared deck with reference lists of {archetype.name}.")
-        logger.debug("Classifying deck...")
+
+        logger.debug("Comparing deck with known decks...")
+        for deck2, archetype in self.known_decks:
+            score = self.get_similarity(deck, deck2)
+            logger.debug(f"Similarity: {score}.")
+            if score > highest_similarity:
+                most_similar_archetype, highest_similarity = archetype, score
+        logger.debug("Compared deck with known decks.")
+        logger.debug("Classified deck.")
         return most_similar_archetype, highest_similarity
 
     def get_metagame(self) -> Metagame:

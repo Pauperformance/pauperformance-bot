@@ -41,6 +41,7 @@ class MTGGoldfishTournamentDeck:
         mtgo_price: Optional[int],
         tournament_id: str,
         tournament_name: str,
+        tournament_date: str,
     ):
         self.url: str = url
         self.archetype: str = archetype
@@ -50,6 +51,7 @@ class MTGGoldfishTournamentDeck:
         self.mtgo_price: Optional[int] = mtgo_price
         self.tournament_id: str = tournament_id
         self.tournament_name: str = tournament_name
+        self.tournament_date: str = tournament_date
 
     @property
     def identifier(self) -> str:
