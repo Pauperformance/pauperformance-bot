@@ -1,7 +1,6 @@
 import configparser
 import glob
 from itertools import count
-from typing import Optional
 
 from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.pauperformance.myr import MyrFileSystem
@@ -40,10 +39,8 @@ class ConfigReader:
         return config
 
     @staticmethod
-    def _parse_list_value(raw_value) -> Optional[list[str]]:
-        return (
-            [value.strip(" ") for value in raw_value.split(",")] if raw_value else None
-        )
+    def _parse_list_value(raw_value) -> list[str]:
+        return [value.strip(" ") for value in raw_value.split(",")] if raw_value else []
 
     @staticmethod
     def _read_sequential_resources(config, key):
@@ -202,13 +199,19 @@ class ConfigReader:
         logger.info(f"Reading archetypes from {config_dir}...")
         archetypes = [
             self.get_archetype(config_file)
-            for config_file in glob.glob(f"{config_dir}/*.ini")
+            for config_file in sorted(glob.glob(f"{config_dir}/*.ini"))
         ]
         logger.info(f"Read {len(archetypes)} archetypes from {config_dir}.")
         return archetypes
 
     def get_archetype(self, config_file_path: str) -> ArchetypeConfig:
         config = self._read_config_file(config_file_path)
+        must_have_cards: list[str] = config["values"]["must_have_cards"].split("\n")
+        must_have_cards.remove("")
+        must_not_have_cards: list[str] = config["values"]["must_not_have_cards"].split(
+            "\n"
+        )
+        must_not_have_cards.remove("")
 
         # read references and perform quick integrity check
         references = {**config["references"]}
@@ -250,6 +253,8 @@ class ConfigReader:
             dominant_mana=self._parse_list_value(config["values"]["mana"]),
             game_type=self._parse_list_value(config["values"]["type"]),
             description=config["values"]["description"],
+            must_have_cards=must_have_cards,
+            must_not_have_cards=must_not_have_cards,
             reference_decks=list(references.values()),
             resource_sideboard=resource_sideboard,
             resources_discord=resources_discord,
