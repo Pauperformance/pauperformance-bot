@@ -63,3 +63,4 @@ class AcademyFileSystem:
 
 
 ACADEMY_FILE_SYSTEM = AcademyFileSystem()
+TOP_N_ARCHETYPES_PIE_CHART = 14
