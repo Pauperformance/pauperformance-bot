@@ -1,5 +1,6 @@
 from functools import reduce
 from itertools import chain
+from typing import List, Tuple
 
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
 from pauperformance_bot.util.entities import auto_repr
@@ -36,23 +37,38 @@ class PlayedCard:
 
 
 class PlayableDeck:
-    MAIN_DECK_AMOUNT = 60
-    SIDEBOARD_AMOUNT = 15
+    MAINBOARD_MIN_AMOUNT = 60
+    SIDEBOARD_MAX_AMOUNT = 15
+    MAX_NON_LAND_QUANTITY = 4
 
     @classmethod
-    def _validate_board(cls, board, amount):
-        if reduce(lambda t, s: t + s.quantity, board, 0) != amount:
-            raise ValueError(f"Input board does not contain {amount} cards")
+    def validate_boards(cls, mainboard, sideboard) -> Tuple[bool, List[str]]:
+        errors = []
+
+        main_amt = reduce(lambda t, s: t + s.quantity, mainboard, 0)
+        if main_amt < PlayableDeck.MAINBOARD_MIN_AMOUNT:
+            errors.append(
+                f"Mainboard contains {main_amt} cards which is less than"
+                + f" {PlayableDeck.MAINBOARD_MIN_AMOUNT}"
+            )
+        side_amt = reduce(lambda t, s: t + s.quantity, sideboard, 0)
+        if side_amt > PlayableDeck.SIDEBOARD_MAX_AMOUNT:
+            errors.append(
+                f"Sideboard contains {side_amt} cards which is more than"
+                + f" {PlayableDeck.SIDEBOARD_MAX_AMOUNT}"
+            )
+
+        # TODO check that there is no more than 4 copies of a non-land card
+        return len(errors) == 0, errors
 
     def __init__(
         self,
         mainboard: list[PlayedCard],
         sideboard: list[PlayedCard],
     ):
-        # TODO: improve the check and then re-enable it.
-        # [June 18, 2022: we have decks with 60+ main cards.]
-        # self._validate_board(mainboard, PlayableDeck.MAIN_DECK_AMOUNT)
-        # self._validate_board(sideboard, PlayableDeck.SIDEBOARD_AMOUNT)
+        valid, errors = PlayableDeck.validate_boards(mainboard, sideboard)
+        if not valid:
+            raise ValueError("\n".join(errors))
         self.mainboard: list[PlayedCard] = mainboard
         self.sideboard: list[PlayedCard] = sideboard
 
