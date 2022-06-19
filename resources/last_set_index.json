@@ -4546,5 +4546,11 @@
         "scryfall_code": "pclb",
         "name": "Commander Legends: Battle for Baldur's Gate Promos",
         "date": "2022-06-10"
+    },
+    "759": {
+        "p12e_code": 759,
+        "scryfall_code": "aclb",
+        "name": "Battle for Baldur's Gate Art Series",
+        "date": "2022-06-10"
     }
 }
