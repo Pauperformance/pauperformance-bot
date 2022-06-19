@@ -89,6 +89,8 @@ class ArchetypeConfig:
         dominant_mana: list[str],
         game_type: list[str],
         description: str,
+        must_have_cards: list[str],
+        must_not_have_cards: list[str],
         reference_decks: list[str],
         resource_sideboard: Optional[SideboardResource],
         resources_discord: list[DiscordResource],
@@ -100,6 +102,8 @@ class ArchetypeConfig:
         self.dominant_mana: list[str] = dominant_mana
         self.game_type: list[str] = game_type
         self.description: str = description
+        self.must_have_cards: list[str] = must_have_cards
+        self.must_not_have_cards: list[str] = must_not_have_cards
         self.reference_decks: list[str] = reference_decks
         self.resource_sideboard: Optional[SideboardResource] = resource_sideboard
         self.resources_discord: list[DiscordResource] = resources_discord
