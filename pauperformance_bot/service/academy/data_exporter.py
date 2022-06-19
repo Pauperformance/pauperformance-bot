@@ -5,9 +5,12 @@ import time
 from pathlib import Path
 
 import jsonpickle
+import matplotlib.pyplot as plt
+import seaborn
 
 from pauperformance_bot.constant.pauperformance.academy import (
     ACADEMY_FILE_SYSTEM,
+    TOP_N_ARCHETYPES_PIE_CHART,
     AcademyFileSystem,
 )
 from pauperformance_bot.entity.api.archetype import Archetype, ArchetypeCard
@@ -167,8 +170,10 @@ class AcademyDataExporter:
         )
         logger.info(f"Exported Newspauper to {self.academy_fs.ASSETS_DATA_DIR}.")
 
-    def export_metagame(self):
-        logger.info(f"Exporting Metagame to {self.academy_fs.ASSETS_DATA_INTEL_DIR}...")
+    def export_metagame(self, top_n_chart=TOP_N_ARCHETYPES_PIE_CHART):
+        logger.info(
+            f"Exporting Metagame data to {self.academy_fs.ASSETS_DATA_INTEL_DIR}..."
+        )
         silver: SilverService = SilverService(self.pauperformance)
         metagame: Metagame = silver.get_metagame()
         safe_dump_json_to_file(
@@ -176,7 +181,29 @@ class AcademyDataExporter:
             "metagame.json",
             metagame,
         )
-        logger.info(f"Exported Metagame to {self.academy_fs.ASSETS_DATA_INTEL_DIR}.")
+        logger.info(
+            f"Exported Metagame data to {self.academy_fs.ASSETS_DATA_INTEL_DIR}."
+        )
+        logger.info(
+            f"Exporting Metagame picture to {self.academy_fs.ASSETS_DATA_INTEL_DIR}..."
+        )
+        data = []
+        labels = []
+        for meta_share in sorted(metagame.meta_shares, reverse=True):
+            data.append(meta_share.meta_share)
+            labels.append(meta_share.archetype_name)
+        colors = seaborn.color_palette("colorblind", n_colors=top_n_chart + 1)
+        other_meta = sum(data[top_n_chart:])
+        data = data[:top_n_chart]
+        data.append(other_meta)
+        labels = labels[:top_n_chart]
+        labels.append("Other")
+        plt.figure(figsize=(7, 7))
+        plt.pie(data, labels=labels, colors=colors, autopct="%.0f%%")
+        plt.savefig(posix_path(self.academy_fs.ASSETS_DATA_INTEL_DIR, "metagame.png"))
+        logger.info(
+            f"Exported Metagame picture to {self.academy_fs.ASSETS_DATA_INTEL_DIR}."
+        )
 
     def export_videos(self):
         # self.export_twitch_videos()
