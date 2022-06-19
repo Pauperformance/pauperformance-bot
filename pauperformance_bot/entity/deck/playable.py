@@ -1,5 +1,7 @@
 from functools import reduce
+from itertools import chain
 
+from pauperformance_bot.entity.config.archetype import ArchetypeConfig
 from pauperformance_bot.util.entities import auto_repr
 
 
@@ -114,6 +116,18 @@ class PlayableDeck:
         return sorted(self.mainboard) == sorted(other.mainboard) and sorted(
             self.sideboard
         ) == sorted(other.sideboard)
+
+    def __contains__(self, item):
+        return any(c.card_name == item for c in chain(self.mainboard, self.sideboard))
+
+    def can_belong_to_archetype(self, archetype: ArchetypeConfig) -> bool:
+        for must_have_card in archetype.must_have_cards:
+            if must_have_card not in self:
+                return False
+        for must_not_have_card in archetype.must_not_have_cards:
+            if must_not_have_card in self:
+                return False
+        return True
 
 
 def parse_playable_deck_from_lines(lines) -> PlayableDeck:

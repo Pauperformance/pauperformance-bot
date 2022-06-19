@@ -104,6 +104,9 @@ class SilverService:
         logger.debug("Classifying deck...")
         most_similar_archetype, highest_similarity = None, 0
         for archetype in self.archetypes:
+            if not deck.can_belong_to_archetype(archetype):
+                logger.debug(f"Skipping archetype {archetype.name} due to rules...")
+                continue
             logger.debug(f"Comparing deck with reference lists of {archetype.name}...")
             for reference_deck in archetype.reference_decks:
                 logger.debug(f"Comparing deck with reference list {reference_deck}...")
