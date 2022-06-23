@@ -3,6 +3,7 @@ dev/
 dist/
 
 # Python
+.venv/
 venv/
 *.py[co]
 */__pycache__/
