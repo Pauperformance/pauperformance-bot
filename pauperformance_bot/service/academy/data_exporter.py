@@ -1,7 +1,4 @@
-import glob
 import logging
-import os
-import time
 from pathlib import Path
 
 import jsonpickle
@@ -19,9 +16,11 @@ from pauperformance_bot.entity.api.miscellanea import Changelog, Metagame, Newsp
 from pauperformance_bot.entity.api.video import Video
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
-from pauperformance_bot.entity.deck.playable import PlayableDeck
+from pauperformance_bot.entity.deck.playable import (
+    PlayableDeck,
+    parse_playable_deck_from_lines,
+)
 from pauperformance_bot.service.academy.academy import AcademyService
-from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
 from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
@@ -52,9 +51,10 @@ class AcademyDataExporter:
     def export_all(self):
         # self.export_archetypes()
         # self.export_decks()
-        self.export_miscellanea()
+        # self.export_miscellanea()
         # self.export_phd_sheets()
         # self.export_videos()
+        pass
 
     def export_phd_sheets(self):
         logger.info(f"Exporting phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}...")
@@ -148,7 +148,8 @@ class AcademyDataExporter:
     def export_miscellanea(self):
         # self.export_changelog()
         # self.export_newspauper()
-        self.export_metagame()
+        # self.export_metagame()
+        pass
 
     def export_changelog(self):
         logger.info(f"Exporting Changelog to {self.academy_fs.ASSETS_DATA_DIR}...")
@@ -362,79 +363,278 @@ class AcademyDataExporter:
             ("https://www.mtggoldfish.com/deck/3059914#online", "Orzhov Pestilence"),
             ("https://www.mtggoldfish.com/deck/884869#online", "Dimir Alchemy"),
             ("https://www.mtggoldfish.com/deck/99691#online", "MonoU Delver"),
+            ("https://www.mtggoldfish.com/deck/193618#online", "Izzet 8-Post"),
+            ("https://www.mtggoldfish.com/deck/193686#online", "Stompy"),
+            ("https://www.mtggoldfish.com/deck/4315445#online", "MonoB Control"),
+            ("https://www.mtggoldfish.com/deck/1716388#online", "Flicker Tron"),
+            ("https://www.mtggoldfish.com/deck/472450#online", "Stompy"),
+            ("https://www.mtggoldfish.com/deck/2656936#online", "Boros Monarch"),
+            ("https://www.mtggoldfish.com/deck/4486046#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/163605#online", "Izzet 8-Post"),
+            ("https://www.mtggoldfish.com/deck/1269313#online", "MonoB Ponza"),
+            ("https://www.mtggoldfish.com/deck/3378642#online", "MonoW Heroic"),
+            (
+                "https://www.mtggoldfish.com/deck/102380#online",
+                "Empty The Warrens Storm",
+            ),
+            (
+                "https://www.mtggoldfish.com/deck/118871#online",
+                "Empty The Warrens Storm",
+            ),
+            ("https://www.mtggoldfish.com/deck/937125#online", "Dimir Delver"),
+            (
+                "https://www.mtggoldfish.com/deck/129793#online",
+                "Empty The Warrens Storm",
+            ),
+            ("https://www.mtggoldfish.com/deck/33728#online", "Burn"),
+            (
+                "https://www.mtggoldfish.com/deck/118871#online",
+                "Empty The Warrens Storm",
+            ),
+            ("https://www.mtggoldfish.com/deck/321531#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/180711#online", "MonoU Faeries"),
+            ("https://www.mtggoldfish.com/deck/81081#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/4182914#online", "Cycling Storm"),
+            ("https://www.mtggoldfish.com/deck/448174#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/3962634#online", "Flicker Tron"),
+            ("https://www.mtggoldfish.com/deck/3895663#online", "Red Deck Wins"),
+            ("https://www.mtggoldfish.com/deck/3415146#online", "Acid Trip"),
+            ("https://www.mtggoldfish.com/deck/76956#online", "Red Deck Wins"),
+            ("https://www.mtggoldfish.com/deck/2435059#online", "Flicker Tron"),
+            ("https://www.mtggoldfish.com/deck/862949#online", "Inside Out"),
+            ("https://www.mtggoldfish.com/deck/32365#online", "White Weenie"),
+            ("https://www.mtggoldfish.com/deck/4366056#online", "MonoW Heroic"),
+            ("https://www.mtggoldfish.com/deck/2972098#online", "Red Deck Wins"),
+            ("https://www.mtggoldfish.com/deck/3432743#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/152476#online", "Esper Familiars"),
+            ("https://www.mtggoldfish.com/deck/650045#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/4854331#online", "Boros Bully"),
+            ("https://www.mtggoldfish.com/deck/1488534#online", "Dimir Control"),
+            ("https://www.mtggoldfish.com/deck/4284478#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/35330#online", "MonoB Control"),
+            ("https://www.mtggoldfish.com/deck/249503#online", "Izzet Faeries"),
+            ("https://www.mtggoldfish.com/deck/1156935#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/3760141#online", "Walls"),
+            ("https://www.mtggoldfish.com/deck/2162401#online", "Orzhov Pestilence"),
+            ("https://www.mtggoldfish.com/deck/193609#online", "MonoU Faeries"),
+            ("https://www.mtggoldfish.com/deck/654678#online", "Slivers"),
+            ("https://www.mtggoldfish.com/deck/111269#online", "Infect"),
+            ("https://www.mtggoldfish.com/deck/498473#online", "Izzet Blitz"),
+            ("https://www.mtggoldfish.com/deck/770861#online", "MonoU Faeries"),
+            ("https://www.mtggoldfish.com/deck/147490#online", "Bogles"),
+            ("https://www.mtggoldfish.com/deck/3650797#online", "Familiars"),
+            ("https://www.mtggoldfish.com/deck/112300#online", "White Weenie"),
+            ("https://www.mtggoldfish.com/deck/50697#online", "Burn"),
+            ("https://www.mtggoldfish.com/deck/101331#online", "MonoU Delver"),
+            ("https://www.mtggoldfish.com/deck/749969#online", "MonoB Control"),
+            ("https://www.mtggoldfish.com/deck/15903#online", "Stompy"),
+            ("https://www.mtggoldfish.com/deck/1111449#online", "Slivers"),
+            ("https://www.mtggoldfish.com/deck/4265788#online", "MonoW Heroic"),
+            ("https://www.mtggoldfish.com/deck/361902#online", "Esper Familiars"),
+            ("https://www.mtggoldfish.com/deck/3892355#online", "Boros Monarch"),
+            ("https://www.mtggoldfish.com/deck/166294#online", "White Weenie"),
+            ("https://www.mtggoldfish.com/deck/117461#online", "Trinket Control"),
+            ("https://www.mtggoldfish.com/deck/62937#online", "Goblins"),
+            ("https://www.mtggoldfish.com/deck/3776807#online", "Acid Trip"),
+            ("https://www.mtggoldfish.com/deck/160902#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/736212#online", "Dimir Teachings"),
+            ("https://www.mtggoldfish.com/deck/303994#online", "MonoB Control"),
+            ("https://www.mtggoldfish.com/deck/15979#online", "Izzet 8-Post"),
+            ("https://www.mtggoldfish.com/deck/174283#online", "Dimir Flicker"),
+            ("https://www.mtggoldfish.com/deck/62581#online", "Izzet 8-Post"),
+            ("https://www.mtggoldfish.com/deck/2565335#online", "Elves"),
+            ("https://www.mtggoldfish.com/deck/1298251#online", "Dimir Control"),
+            ("https://www.mtggoldfish.com/deck/3963688#online", "Jund Cascade"),
+            ("https://www.mtggoldfish.com/deck/60628#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/393384#online", "MonoU Faeries"),
+            ("https://www.mtggoldfish.com/deck/266509#online", "Esper Familiars"),
+            ("https://www.mtggoldfish.com/deck/190851#online", "Izzet Blitz"),
+            ("https://www.mtggoldfish.com/deck/2208921#online", "Boros Monarch"),
+            ("https://www.mtggoldfish.com/deck/1716390#online", "Inside Out"),
+            ("https://www.mtggoldfish.com/deck/29940#online", "Izzet 8-Post"),
+            ("https://www.mtggoldfish.com/deck/190685#online", "Izzet Blitz"),
+            ("https://www.mtggoldfish.com/deck/4165549#online", "White Weenie"),
+            ("https://www.mtggoldfish.com/deck/98930#online", "Goblins"),
+            ("https://www.mtggoldfish.com/deck/264409#online", "Bogles"),
+            ("https://www.mtggoldfish.com/deck/179895#online", "Goblins"),
+            (
+                "https://www.mtggoldfish.com/deck/93140#online",
+                "Empty The Warrens Storm",
+            ),
+            ("https://www.mtggoldfish.com/deck/19155#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/184600#online", "Burn"),
+            ("https://www.mtggoldfish.com/deck/258484#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/456953#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/653781#online", "Golgari TortEx"),
+            (
+                "https://www.mtggoldfish.com/deck/93322#online",
+                "Empty The Warrens Storm",
+            ),
+            ("https://www.mtggoldfish.com/deck/39713#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/278744#online", "Izzet Blitz"),
+            ("https://www.mtggoldfish.com/deck/112610#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/354104#online", "Stompy"),
+            ("https://www.mtggoldfish.com/deck/1006029#online", "Boros Monarch"),
+            ("https://www.mtggoldfish.com/deck/2908770#online", "Familiars"),
+            ("https://www.mtggoldfish.com/deck/115527#online", "MonoU Faeries"),
+            ("https://www.mtggoldfish.com/deck/146245#online", "MonoB Control"),
+            ("https://www.mtggoldfish.com/deck/3808077#online", "Flicker Tron"),
+            ("https://www.mtggoldfish.com/deck/30208#online", "Dimir 8-Post"),
+            ("https://www.mtggoldfish.com/deck/149931#online", "White Weenie"),
+            ("https://www.mtggoldfish.com/deck/3668368#online", "Elves"),
+            ("https://www.mtggoldfish.com/deck/696153#online", "Izzet Blitz"),
+            ("https://www.mtggoldfish.com/deck/218996#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/2940582#online", "Dimir Delver"),
+            ("https://www.mtggoldfish.com/deck/218996#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/208687#online", "Acid Trip"),
+            ("https://www.mtggoldfish.com/deck/219895#online", "MonoU Faeries"),
+            ("https://www.mtggoldfish.com/deck/4602587#online", "Gruul Ponza"),
+            ("https://www.mtggoldfish.com/deck/198886#online", "Burn"),
+            ("https://www.mtggoldfish.com/deck/2578982#online", "Stompy"),
+            (
+                "https://www.mtggoldfish.com/deck/170186#online",
+                "Empty The Warrens Storm",
+            ),
+            ("https://www.mtggoldfish.com/deck/73174#online", "MonoU Faeries"),
+            ("https://www.mtggoldfish.com/deck/133481#online", "MonoU Delver"),
+            ("https://www.mtggoldfish.com/deck/4871133#online", "Turbofog"),
+            ("https://www.mtggoldfish.com/deck/121072#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/359696#online", "MonoU Faeries"),
+            (
+                "https://www.mtggoldfish.com/deck/112305#online",
+                "Empty The Warrens Storm",
+            ),
+            ("https://www.mtggoldfish.com/deck/79939#online", "Dimir 8-Post"),
+            (
+                "https://www.mtggoldfish.com/deck/170250#online",
+                "Empty The Warrens Storm",
+            ),
+            ("https://www.mtggoldfish.com/deck/3574909#online", "Orzhov Pestilence"),
+            ("https://www.mtggoldfish.com/deck/205640#online", "MonoB Control"),
+            ("https://www.mtggoldfish.com/deck/171526#online", "MonoU Delver"),
+            ("https://www.mtggoldfish.com/deck/188371#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/124280#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/308338#online", "Dimir Delver"),
+            ("https://www.mtggoldfish.com/deck/453998#online", "Bogles"),
+            ("https://www.mtggoldfish.com/deck/408405#online", "Affinity"),
+            ("https://www.mtggoldfish.com/deck/280102#online", "MonoU Delver"),
+            ("https://www.mtggoldfish.com/deck/4755505#online", "Boros Synth"),
+            ("https://www.mtggoldfish.com/deck/183637#online", "MonoU Faeries"),
+            ("https://www.mtggoldfish.com/deck/2033573#online", "Stompy"),
+            ("https://www.mtggoldfish.com/deck/421440#online", "Bogles"),
+            ("https://www.mtggoldfish.com/deck/222387#online", "MonoB Control"),
+            ("https://www.mtggoldfish.com/deck/163822#online", "White Weenie"),
+            ("https://www.mtggoldfish.com/deck/3669879#online", "MonoW Heroic"),
+            (
+                "https://www.mtggoldfish.com/deck/108126#online",
+                "Empty The Warrens Storm",
+            ),
+            ("https://www.mtggoldfish.com/deck/244378#online", "Izzet Faeries"),
+            ("https://www.mtggoldfish.com/deck/166340#online", "Infect"),
+            ("https://www.mtggoldfish.com/deck/559608#online", "MonoU Faeries"),
+            ("https://www.mtggoldfish.com/deck/4824607#online", "Stompy"),
+            ("https://www.mtggoldfish.com/deck/3099428#online", "Jeskai Ephemerate"),
+            ("https://www.mtggoldfish.com/deck/83731#online", "MonoU Faeries"),
+            ("https://www.mtggoldfish.com/deck/247764#online", "Golgari TortEx"),
+            ("https://www.mtggoldfish.com/deck/259542#online", "Burn"),
         ]
         known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = []
         for deck_url, archetype_name in manual_tags:
-            download_url = deck_url.replace("/deck", "/deck/download")
-            deck_downloader = MtgoDeckDownloader(download_url)
-            playable_deck = deck_downloader.download()
-            archetype = next(a for a in archetypes if a.name == archetype_name)
-            known_decks.append((playable_deck, archetype))
-            time.sleep(1)
+            mtggoldfish_deck_id = deck_url.replace("#online", "").rsplit("/")[-1]
+            playable_deck_path = posix_path(
+                self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
+                f"{mtggoldfish_deck_id}.txt",
+            )
+            playable_deck: PlayableDeck = parse_playable_deck_from_lines(
+                [line.strip() for line in open(playable_deck_path).readlines()]
+            )
+            try:
+                archetype = next(a for a in archetypes if a.name == archetype_name)
+                known_decks.append((playable_deck, archetype))
+            except StopIteration:
+                logger.error(f"Wrong manual tag for archetype {archetype_name}.")
+                raise
         return known_decks
 
     def export_intel_decks(self):
         logger.info(
-            f"Exporting decks intel to {self.academy_fs.ASSETS_DATA_INTEL_DIR}..."
+            f"Exporting decks intel to {self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR}..."
         )
         known_decks = self._get_known_decks()  # let's help Silver
         silver: SilverService = SilverService(self.pauperformance, known_decks)
+        # we need to classify all unclassified decks
+        self._classify_mtggoldfish_tournament_decks(silver)
+
+    def _classify_mtggoldfish_tournament_decks(self, silver: SilverService):
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
-        for deck_file in glob.glob(
-            f"{self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_DIR}{os.sep}*.json"
-        ):
-            if any(
-                deck_file.rsplit("/")[-1] in p.as_posix()
-                for p in Path(self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR).rglob(
-                    "*.json"
-                )
-            ):
+        already_classified_deck_ids = set(
+            p.as_posix().split("/")[-1].replace(".json", "")
+            for p in Path(self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR).rglob("*.json")
+        )
+        unclassified_decks_count = 0
+        for playable_deck_file in Path(
+            self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR
+        ).glob("*.txt"):
+            playable_deck_file = playable_deck_file.as_posix()
+            deck_id = playable_deck_file.split("/")[-1].replace(".txt", "")
+            if deck_id in already_classified_deck_ids:
                 logger.debug(
-                    f"Deck {deck_file.rsplit('/')[-1]} already classified. "
-                    f"Skipping it..."
+                    f"Deck {playable_deck_file} already classified. Skipping it..."
                 )
                 continue
-            time.sleep(4)
-            tournament_deck: MTGGoldfishTournamentDeck = jsonpickle.decode(
-                open(deck_file).read()
+            # A PlayableDeck has no knowledge about the time it was created.
+            # This information is stored in the tournament metadata for the deck.
+            tournament_deck_path = posix_path(
+                self.academy_fs.ASSETS_DATA_TOURNAMENT_MTGGOLDFISH_DECKS_DIR,
+                f"{deck_id}.json",
             )
-            logger.debug(f"Classifying deck at {tournament_deck.url}...")
-            download_url = tournament_deck.url.replace("/deck", "/deck/download")
-            deck_downloader = MtgoDeckDownloader(download_url)
             try:
-                playable_deck = deck_downloader.download()
-                most_similar_archetype, highest_similarity = silver.classify_deck(
-                    playable_deck
+                tournament_deck: MTGGoldfishTournamentDeck = jsonpickle.decode(
+                    open(tournament_deck_path).read()
                 )
-                logger.debug(
-                    f"Deck could be {most_similar_archetype.name} "
-                    f"({highest_similarity})."
+            except FileNotFoundError:
+                logger.warning(
+                    f"Unable to find tournament deck metadata: {tournament_deck_path}. "
+                    f"Please, download it first."
                 )
-                if "Boros" in most_similar_archetype.name:  # TODO: remove
-                    continue
-                if highest_similarity < 0.80:
-                    logger.debug("Similarity score not sufficient. Skipping deck...")
-                    logger.warning(tournament_deck.url)
-                    continue
-                logger.debug("Similarity score sufficient. Storing intel...")
-                set_index_entry = self.academy.pauperformance.get_set_index_by_date(
-                    usa_date=tournament_deck.tournament_date
-                )
-                api_deck: Deck = Deck(
-                    name=tournament_deck.archetype,
-                    url=tournament_deck.url,
-                    archetype=most_similar_archetype.name,
-                    set_name=set_index_entry["name"],
-                    set_date=set_index_entry["date"],
-                    legal=playable_deck.is_legal(banned_cards),
-                )
-                safe_dump_json_to_file(
-                    posix_path(
-                        self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR, api_deck.archetype
-                    ),
-                    f"{tournament_deck.identifier}.json",
-                    api_deck,
-                )
-            except Exception:  # TODO: remove
-                logger.warning(f"Exception while processing {deck_file}...")
-        logger.info(f"Exported decks intel to {self.academy_fs.ASSETS_DATA_INTEL_DIR}.")
+                continue  # no tournament, no party: skip the deck
+            logger.debug(f"Classifying deck {playable_deck_file}...")
+            playable_deck = parse_playable_deck_from_lines(
+                [line.strip() for line in open(playable_deck_file).readlines()]
+            )
+            most_similar_archetype, highest_similarity = silver.classify_deck(
+                playable_deck
+            )
+            logger.debug(
+                f"Deck could be {most_similar_archetype.name} "
+                f"({highest_similarity})."
+            )
+            if highest_similarity < 0.80:
+                logger.debug("Similarity score not sufficient. Skipping deck...")
+                unclassified_decks_count += 1
+                # logger.warning(f"https://www.mtggoldfish.com/deck/{deck_id}")
+                continue
+            logger.debug("Similarity score sufficient. Storing intel...")
+            set_index_entry = self.academy.pauperformance.get_set_index_by_date(
+                usa_date=tournament_deck.tournament_date
+            )
+            api_deck: Deck = Deck(
+                name=tournament_deck.archetype,
+                url=tournament_deck.url,
+                archetype=most_similar_archetype.name,
+                set_name=set_index_entry["name"],
+                set_date=set_index_entry["date"],
+                legal=playable_deck.is_legal(banned_cards),
+            )
+            safe_dump_json_to_file(
+                posix_path(
+                    self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR, api_deck.archetype
+                ),
+                f"{deck_id}.json",
+                api_deck,
+            )
+        logger.info(f"Classified decks: {len(already_classified_deck_ids)}")
+        logger.warning(f"Unclassified decks: {unclassified_decks_count}")
+        logger.info(
+            f"Exported decks intel to {self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR}."
+        )
