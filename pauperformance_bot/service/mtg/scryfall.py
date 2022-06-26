@@ -89,6 +89,11 @@ class ScryfallService:
         return self.search_cards(query)
 
     @lru_cache(maxsize=1)
+    def get_legal_artifact_lands(self):
+        query = "(type:artifact type:land) legal:pauper"
+        return self.search_cards(query)
+
+    @lru_cache(maxsize=1)
     def get_banned_cards(self):
         query = "banned:pauper"
         return self.search_cards(query)
