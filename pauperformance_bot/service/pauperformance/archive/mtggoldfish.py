@@ -11,8 +11,8 @@ from pauperformance_bot.constant.mtg.mtggoldfish import (
     DECK_API_ENDPOINT,
     NO_COOKIE_HEADER,
 )
+from pauperformance_bot.constant.pauperformance.academy import AcademyFileSystem
 from pauperformance_bot.constant.pauperformance.myr import (
-    MTGGOLDFISH_DECKS_CACHE_DIR,
     USA_DATE_FORMAT,
 )
 from pauperformance_bot.credentials import (
@@ -320,9 +320,10 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
     @staticmethod
     def to_playable_deck(
         listed_deck: AbstractArchivedDeck,
-        decks_cache_dir=MTGGOLDFISH_DECKS_CACHE_DIR,
+        decks_cache_dir=AcademyFileSystem().ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
         use_cache=True,
     ) -> PlayableDeck:
+        # TODO: fix ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR
         lines = None
         to_be_cached = True
         if use_cache:
