@@ -8,6 +8,8 @@ from datetime import datetime
 from pathlib import Path
 from time import sleep
 
+from requests.exceptions import HTTPError
+
 from pauperformance_bot.constant.arena.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.arena.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.constant.pauperformance.myr import (
@@ -68,12 +70,18 @@ class PauperformanceService:
         self.incremental_card_index = self._build_incremental_card_index()
 
     def _build_set_index(self, last_set_index_file=LAST_SET_INDEX_FILE):
-        logger.info("Building Scryfall set index...")
-        scryfall_sets = self.scryfall.get_sets()
-        scryfall_sets = sorted(
-            scryfall_sets["data"], key=lambda s: s["released_at"] + s["code"]
-        )
-        logger.info("Built Scryfall set index.")
+        try:
+            logger.info("Building Scryfall set index...")
+            scryfall_sets = self.scryfall.get_sets()
+            scryfall_sets = sorted(
+                scryfall_sets["data"], key=lambda s: s["released_at"] + s["code"]
+            )
+            logger.info("Built Scryfall set index.")
+        except HTTPError:  # Scryfall may be unreachable
+            logger.warning(
+                "Unable to retrieve Scryfall sets. Going to use cached version."
+            )
+            scryfall_sets = []
 
         logger.info("Building Pauperformance set index...")
         with open(last_set_index_file, "r") as index_f:
@@ -87,6 +95,7 @@ class PauperformanceService:
         )
         known_sets = {s["scryfall_code"] for s in set_index.values()}
         p12e_code = max(set_index.keys()) + 1
+        need_to_update_cache = False
         for s in scryfall_sets:
             if s["code"] in known_sets:
                 continue
@@ -96,13 +105,15 @@ class PauperformanceService:
                 "name": s["name"],
                 "date": s["released_at"],
             }
+            need_to_update_cache = True
             p12e_code += 1
         logger.info("Built Pauperformance set index.")
 
-        logger.info("Saving Pauperformance set index...")
-        with open(last_set_index_file, "w") as index_f:
-            index_f.write(json.dumps(set_index, indent=4))
-        logger.info("Saved Pauperformance set index.")
+        if need_to_update_cache:
+            logger.info("Saving Pauperformance set index...")
+            with open(last_set_index_file, "w") as index_f:
+                index_f.write(json.dumps(set_index, indent=4))
+            logger.info("Saved Pauperformance set index.")
         return set_index
 
     def _build_card_index(
