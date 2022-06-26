@@ -48,8 +48,8 @@ class AcademyFileSystem:
         self.ASSETS_DATA_DECK_ACADEMY_DIR: str = posix_path(
             self.ASSETS_DATA_DECK_DIR, "academy"
         )
-        self.ASSETS_DATA_DECK_MTGGOLDFISH_DIR: str = posix_path(
-            self.ASSETS_DATA_DECK_DIR, "mtggoldfish"
+        self.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR: str = posix_path(
+            self.ASSETS_DATA_DECK_DIR, "mtggoldfish_tournament"
         )
         self.ASSETS_DATA_INTEL_DIR: str = posix_path(self.ASSETS_DATA_DIR, "intel")
         self.ASSETS_DATA_INTEL_DECK_DIR: str = posix_path(

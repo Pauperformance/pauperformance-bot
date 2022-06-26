@@ -58,7 +58,7 @@ class Checker:
             if deck.url.startswith(DECK_API_ENDPOINT):
                 mtggoldfish_deck_id = deck.url.rsplit("/")[-1]
                 playable_deck_path = posix_path(
-                    academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_DIR,
+                    academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
                     f"{mtggoldfish_deck_id}.txt",
                 )
             else:
