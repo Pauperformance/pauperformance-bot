@@ -59,6 +59,12 @@ class AcademyFileSystem:
         self.ASSETS_DATA_TOURNAMENT_DIR: str = posix_path(
             self.ASSETS_DATA_DIR, "tournament"
         )
+        self.ASSETS_DATA_TOURNAMENT_MTGGOLDFISH_DIR: str = posix_path(
+            self.ASSETS_DATA_TOURNAMENT_DIR, "mtggoldfish"
+        )
+        self.ASSETS_DATA_TOURNAMENT_MTGGOLDFISH_DECKS_DIR: str = posix_path(
+            self.ASSETS_DATA_TOURNAMENT_MTGGOLDFISH_DIR, "deck"
+        )
         self.ASSETS_DATA_VIDEO_DIR: str = posix_path(self.ASSETS_DATA_DIR, "video")
 
 
