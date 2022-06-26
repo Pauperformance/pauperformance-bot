@@ -16,10 +16,14 @@ class DeckListParser(metaclass=ABCMeta):
 
 class MtgoDeckListParser(DeckListParser):
     def parse_lines(self, lines) -> PlayableDeck:
-        separator = lines.index("")
-        maindeck = lines[:separator]
+        try:
+            separator = lines.index("")
+            maindeck = lines[:separator]
+            sideboard = lines[separator + 1 :]
+        except ValueError:
+            maindeck = lines
+            sideboard = []
         maindeck.sort(key=lambda pc: pc.split(" ", maxsplit=1)[1])
-        sideboard = lines[separator + 1 :]
         sideboard.sort(key=lambda pc: pc.split(" ", maxsplit=1)[1])
         return PlayableDeck(
             [PlayedCard(*(line.split(" ", maxsplit=1))) for line in maindeck],
