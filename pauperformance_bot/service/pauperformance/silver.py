@@ -97,12 +97,101 @@ class SilverService:
         logger.debug(f"Computed similarity between decks: {sim}.")
         return sim
 
+    def _is_affinity(self, deck: PlayableDeck) -> bool:
+        artifact_lands = self.pauperformance.scryfall.get_legal_artifact_lands()
+        artifact_lands_names = [c["name"] for c in artifact_lands]
+        affinity_creatures = [
+            "Frogmite",
+            "Atog",
+            "Myr Enforcer",
+            "Carapace Forger",
+            "Sojourner's Companion",
+            "Somber Hoverguard",
+        ]
+        has_artifact_mana_base = (
+            len([c for c in artifact_lands_names if c in deck]) >= 4
+        )
+        has_affinity_creatures = len([c for c in affinity_creatures if c in deck]) >= 2
+        if (
+            has_artifact_mana_base
+            and has_affinity_creatures
+            and "Galvanic Blast" in deck
+        ):
+            return True
+        return False
+
+    def _is_flicker_tron(self, deck: PlayableDeck) -> bool:
+        return all(
+            c in deck
+            for c in (
+                "Urza's Mine",
+                "Urza's Tower",
+                "Urza's Power Plant",
+                "Ghostly Flicker",
+            )
+        )
+
+    def _is_empty_the_warrens_storm(self, deck: PlayableDeck) -> bool:
+        return all(
+            c in deck for c in ("Empty the Warrens", "Dark Ritual", "Cabal Ritual")
+        )
+
+    def _is_goblins(self, deck: PlayableDeck) -> bool:
+        return all(
+            c in deck
+            for c in ("Sparksmith", "Mountain", "Goblin Bushwhacker", "Mogg Conscripts")
+        )
+
+    def _is_monow_heroic(self, deck: PlayableDeck) -> bool:
+        return all(
+            c in deck
+            for c in ("Lagonna-Band Trailblazer", "Hyena Umbra", "Deftblade Elite")
+        )
+
+    def _is_izzet_blitz(self, deck: PlayableDeck) -> bool:
+        blitz_creatures = [
+            "Kiln Fiend",
+            "Nivix Cyclops",
+            "Wee Dragonauts",
+        ]
+        return len([c for c in blitz_creatures if c in deck]) >= 2
+
+    def _is_monob_control(self, deck: PlayableDeck) -> bool:
+        monob_control_cards = [
+            "Gray Merchant of Asphodel",
+            "Cuombajj Witches",
+            "Oubliette",
+            "Chittering Rats",
+            "Tendrils of Corruption",
+            "Chainer's Edict",
+            "Sign in Blood",
+        ]
+        return len([c for c in monob_control_cards if c in deck]) >= 3
+
     def classify_deck(
         self,
         deck: PlayableDeck,
     ) -> Tuple[ArchetypeConfig, float]:
         logger.debug("Classifying deck...")
         most_similar_archetype, highest_similarity = None, 0
+
+        # TODO: remove this block in the future if it becomes useless
+        # First, check if archetype can be detected with rules.
+        archetype_predicates = [
+            ("Affinity", self._is_affinity),
+            ("Flicker Tron", self._is_flicker_tron),
+            ("Empty The Warrens Storm", self._is_empty_the_warrens_storm),
+            ("Goblins", self._is_goblins),
+            ("MonoW Heroic", self._is_monow_heroic),
+            ("Izzet Blitz", self._is_izzet_blitz),
+            ("MonoB Control", self._is_monob_control),
+        ]
+        for archetype_name, archetype_predicate in archetype_predicates:
+            if archetype_predicate(deck):
+                logger.debug(f"Deck is {archetype_name}.")
+                return next(a for a in self.archetypes if a.name == archetype_name), 1.0
+
+        # Second, compare with other known decks.
         for archetype in self.archetypes:
             if not deck.can_belong_to_archetype(archetype):
                 logger.debug(f"Skipping archetype {archetype.name} due to rules...")
