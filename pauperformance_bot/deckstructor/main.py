@@ -20,15 +20,15 @@ def __merge_deck_sideboard(deck, sideboard):
 def __validate_pool(cards, pool):
     for card in cards:
         if card not in pool:
-            warnings.warn(f'{card} not in pool', PoolWarning)
+            warnings.warn(f"{card} not in pool", PoolWarning)
 
 
 def extract_deck(text, pool):
     mainboard = {}
     sideboard = {}
-    pattern = re.compile(r'^(\d+) (.+)')
+    pattern = re.compile(r"^(\d+) (.+)")
 
-    lines = text.split('\n')
+    lines = text.split("\n")
 
     is_deck = False
     is_mainboard = True
@@ -47,7 +47,9 @@ def extract_deck(text, pool):
     cards = __merge_deck_sideboard(mainboard, sideboard)
     __validate_pool(cards, pool)
 
-    deck = PlayableDeck(mainboard=[PlayedCard(quantity, name) for name, quantity in mainboard.items()],
-                        sideboard=[PlayedCard(quantity, name) for name, quantity in sideboard.items()])
+    deck = PlayableDeck(
+        mainboard=[PlayedCard(quantity, name) for name, quantity in mainboard.items()],
+        sideboard=[PlayedCard(quantity, name) for name, quantity in sideboard.items()],
+    )
 
     return deck
