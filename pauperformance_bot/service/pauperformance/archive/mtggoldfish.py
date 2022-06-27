@@ -12,9 +12,7 @@ from pauperformance_bot.constant.mtg.mtggoldfish import (
     NO_COOKIE_HEADER,
 )
 from pauperformance_bot.constant.pauperformance.academy import AcademyFileSystem
-from pauperformance_bot.constant.pauperformance.myr import (
-    USA_DATE_FORMAT,
-)
+from pauperformance_bot.constant.pauperformance.myr import USA_DATE_FORMAT
 from pauperformance_bot.credentials import (
     MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
     MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
