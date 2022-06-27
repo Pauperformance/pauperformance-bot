@@ -1,4 +1,3 @@
-from functools import reduce
 from itertools import chain
 from typing import List, Tuple
 
@@ -45,13 +44,13 @@ class PlayableDeck:
     def validate_boards(cls, mainboard, sideboard) -> Tuple[bool, List[str]]:
         errors = []
 
-        main_amt = reduce(lambda t, s: t + s.quantity, mainboard, 0)
+        main_amt = sum(c.quantity for c in mainboard)
         if main_amt < PlayableDeck.MAINBOARD_MIN_AMOUNT:
             errors.append(
                 f"Mainboard contains {main_amt} cards which is less than"
                 + f" {PlayableDeck.MAINBOARD_MIN_AMOUNT}"
             )
-        side_amt = reduce(lambda t, s: t + s.quantity, sideboard, 0)
+        side_amt = sum(c.quantity for c in sideboard)
         if side_amt > PlayableDeck.SIDEBOARD_MAX_AMOUNT:
             errors.append(
                 f"Sideboard contains {side_amt} cards which is more than"
