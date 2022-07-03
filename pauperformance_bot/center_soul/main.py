@@ -1,7 +1,7 @@
 import os
 import re
 from os import path
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Tuple
 
 import jsonpickle
 
@@ -77,16 +77,36 @@ class ArchetypeMeta:
         self._cards = cards
 
     @property
-    def nr_decks(self):
+    def nr_decks(self) -> int:
         return len(self._playable_decks)
 
     @property
-    def cards(self):
-        return self._cards.keys()
+    def cards(self) -> List[str]:
+        return list(self._cards.keys())
 
     @property
-    def most_played(self):
+    def most_played(self) -> str:
         return max(self._cards.items(), key=lambda x: x[1]["count"])
+
+    @property
+    def total_played(self) -> int:
+        return sum(card['count'] for _, card in self._cards.items())
+
+    @property
+    def deck_frequencies(self) -> List[Tuple[str, float]]:
+        return sorted(
+            list(map(lambda card: (card[0], card[1]['decks']/self.nr_decks), self._cards.items())),
+            key=lambda x: x[1], reverse=True
+        )
+
+    @property
+    def card_frequencies(self) -> List[Tuple[str, float]]:
+        total = self.total_played
+        return sorted(
+            list(map(lambda card: (card[0], card[1]['count'] / total), self._cards.items())),
+            key=lambda x: x[1], reverse=True
+        )
+
 
 class ArchetypeMetaFactory:
 
@@ -129,8 +149,12 @@ def main():
     aas = AcademyAssetsService()
     am = ArchetypeMetaFactory(academy, aas).build_meta_for(archetype)
     logger.info(am.cards)
-
     logger.info(f'nr. decks: {am.nr_decks} max: {am.most_played}')
+    dfq = am.deck_frequencies
+    cfq = am.card_frequencies
+    logger.info(f'max deck freq.: {dfq[0]} max card freq {cfq[0]}')
+    logger.info(f'staples(decks): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= 0.9, dfq))))}')
+    logger.info(f'staples(cards): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= 0.07, cfq))))}')
 
 
 if __name__ == '__main__':
