@@ -1,6 +1,7 @@
 import os
 import re
 from os import path
+from statistics import stdev, mean, variance
 from typing import List, Optional, Dict, Tuple
 
 import jsonpickle
@@ -124,10 +125,10 @@ class ArchetypeMetaFactory:
         cards = {}
         for i, pd in enumerate(playable_decks):
             for card in pd.sideboard + pd.mainboard:
-                sf_card = self._academy.scryfall.get_card_named(card.card_name)
+                sf_card = self._academy.scryfall.get_card_named(card.card_name, fuzzy=True)
                 if not sf_card:
-                    logger.error(f'Cannot fetch {card.card_name} from Scryfall '
-                                 + 'card will still be included in centroid')
+                    logger.warning(
+                        f'Cannot fetch {card.card_name} from Scryfall card will still be included in centroid')
                 elif 'land' in sf_card['type_line'].lower():
                     logger.debug(f'Skipping land {card.card_name}')
                     continue
@@ -143,7 +144,7 @@ def main():
     archive = LocalArchiveService()
     pauperformance = PauperformanceService(storage, archive)
     academy = AcademyService(pauperformance)
-    archetype = 'Burn'
+    archetype = 'Izzet Faeries'
     # index = academy.set_index
     # logger.info(index)
     aas = AcademyAssetsService()
@@ -152,9 +153,20 @@ def main():
     logger.info(f'nr. decks: {am.nr_decks} max: {am.most_played}')
     dfq = am.deck_frequencies
     cfq = am.card_frequencies
-    logger.info(f'max deck freq.: {dfq[0]} max card freq {cfq[0]}')
+    logger.info('# DECKS')
+    logger.info(f'max deck freq.: {dfq[0]}')
     logger.info(f'staples(decks): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= 0.9, dfq))))}')
+    deck_freqs = [f[1] for f in dfq]
+    mean_deck_freq = mean(deck_freqs)
+    logger.info(f'stdev: {stdev(deck_freqs)} mean {mean_deck_freq} variance: {variance(deck_freqs)}')
+    logger.info(f'staples(decks): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= mean_deck_freq + stdev(deck_freqs), dfq))))}')
+    logger.info('# CARDS')
+    logger.info(f'max card freq {cfq[0]}')
     logger.info(f'staples(cards): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= 0.07, cfq))))}')
+    card_freqs = [f[1] for f in cfq]
+    mean_card_freq = mean(card_freqs)
+    logger.info(f'stdev: {stdev(card_freqs)} mean {mean_card_freq} variance: {variance(card_freqs)}')
+    logger.info(f'staples(cards): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= mean_card_freq + stdev(card_freqs), cfq))))}')
 
 
 if __name__ == '__main__':
