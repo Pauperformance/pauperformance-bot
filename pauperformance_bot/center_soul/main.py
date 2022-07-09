@@ -1,5 +1,6 @@
 import os
 import re
+from copy import copy
 from os import path
 from statistics import stdev, mean, variance
 from typing import List, Optional, Dict, Tuple
@@ -139,16 +140,25 @@ class ArchetypeMetaFactory:
         return ArchetypeMeta(archetype, playable_decks, cards)
 
 
-def main():
-    storage = LocalStorageService()
-    archive = LocalArchiveService()
-    pauperformance = PauperformanceService(storage, archive)
-    academy = AcademyService(pauperformance)
-    archetype = 'Izzet Faeries'
-    # index = academy.set_index
-    # logger.info(index)
-    aas = AcademyAssetsService()
-    am = ArchetypeMetaFactory(academy, aas).build_meta_for(archetype)
+class ArchetypeCentroid:
+
+    def __init__(self, meta: ArchetypeMeta):
+        if not meta or not isinstance(meta, ArchetypeMeta):
+            raise ValueError(f'{type(meta)} is not ArchetypeMeta')
+        self._cards = sorted(list(filter(lambda f: f[1] >= 0.9, meta.deck_frequencies)))
+
+    @property
+    def cards(self) -> List[Tuple[str, float]]:
+        return copy(self._cards)
+
+    def __repr__(self):
+        return f'Nr. Cards: {len(self._cards)} Cards: {self._cards}'
+
+    def __str__(self):
+        return f'{self._cards}'
+
+
+def test_outputs(am: ArchetypeMeta):
     logger.info(am.cards)
     logger.info(f'nr. decks: {am.nr_decks} max: {am.most_played}')
     dfq = am.deck_frequencies
@@ -159,14 +169,31 @@ def main():
     deck_freqs = [f[1] for f in dfq]
     mean_deck_freq = mean(deck_freqs)
     logger.info(f'stdev: {stdev(deck_freqs)} mean {mean_deck_freq} variance: {variance(deck_freqs)}')
-    logger.info(f'staples(decks): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= mean_deck_freq + stdev(deck_freqs), dfq))))}')
+    logger.info(
+        f'staples(decks): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= mean_deck_freq + stdev(deck_freqs), dfq))))}')
     logger.info('# CARDS')
     logger.info(f'max card freq {cfq[0]}')
     logger.info(f'staples(cards): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= 0.07, cfq))))}')
     card_freqs = [f[1] for f in cfq]
     mean_card_freq = mean(card_freqs)
     logger.info(f'stdev: {stdev(card_freqs)} mean {mean_card_freq} variance: {variance(card_freqs)}')
-    logger.info(f'staples(cards): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= mean_card_freq + stdev(card_freqs), cfq))))}')
+    s_card_fqs = sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= mean_card_freq + stdev(card_freqs), cfq))))
+    logger.info(f'staples(cards): {s_card_fqs}')
+
+
+def main():
+    storage = LocalStorageService()
+    archive = LocalArchiveService()
+    pauperformance = PauperformanceService(storage, archive)
+    academy = AcademyService(pauperformance)
+    archetype = 'Izzet Faeries'
+    # index = academy.set_index
+    # logger.info(index)
+    aas = AcademyAssetsService()
+    am = ArchetypeMetaFactory(academy, aas).build_meta_for(archetype)
+    centroid = ArchetypeCentroid(am)
+    logger.info(centroid.__repr__())
+
 
 
 if __name__ == '__main__':
