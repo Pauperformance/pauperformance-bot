@@ -2,8 +2,8 @@ import os
 import re
 from copy import copy
 from os import path
-from statistics import stdev, mean, variance
-from typing import List, Optional, Dict, Tuple
+from statistics import mean, stdev, variance
+from typing import Dict, List, Optional, Tuple
 
 import jsonpickle
 
