@@ -154,9 +154,7 @@ class ArchetypeMetaFactory:
                     card.card_name, fuzzy=True
                 )
                 if not sf_card:
-                    logger.warning(
-                        f"Cannot fetch {card.card_name} from Scryfall card will still be included in centroid"
-                    )
+                    logger.warning(f"Cannot fetch {card.card_name} from Scryfall")
                 elif "land" in sf_card["type_line"].lower():
                     logger.debug(f"Skipping land {card.card_name}")
                     continue
@@ -191,27 +189,20 @@ def test_outputs(am: ArchetypeMeta):
     cfq = am.card_frequencies
     logger.info("# DECKS")
     logger.info(f"max deck freq.: {dfq[0]}")
-    logger.info(
-        f"staples(decks): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= 0.9, dfq))))}"
-    )
+    centroid = sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= 0.9, dfq))))
+    logger.info(f"centroid(decks): {centroid}")
     deck_freqs = [f[1] for f in dfq]
     mean_deck_freq = mean(deck_freqs)
-    logger.info(
-        f"stdev: {stdev(deck_freqs)} mean {mean_deck_freq} variance: {variance(deck_freqs)}"
-    )
-    logger.info(
-        f"staples(decks): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= mean_deck_freq + stdev(deck_freqs), dfq))))}"
-    )
+    logger.info(f"stdev: {stdev(deck_freqs)}  variance: {variance(deck_freqs)}")
+    logger.info(f"mean {mean_deck_freq}")
     logger.info("# CARDS")
     logger.info(f"max card freq {cfq[0]}")
-    logger.info(
-        f"staples(cards): {sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= 0.07, cfq))))}"
-    )
+    centroid = sorted(list(map(lambda f: f[0], filter(lambda f: f[1] >= 0.07, cfq))))
+    logger.info(f"centroid(cards): {centroid}")
     card_freqs = [f[1] for f in cfq]
     mean_card_freq = mean(card_freqs)
-    logger.info(
-        f"stdev: {stdev(card_freqs)} mean {mean_card_freq} variance: {variance(card_freqs)}"
-    )
+    logger.info(f"stdev: {stdev(card_freqs)} variance: {variance(card_freqs)}")
+    logger.info(f"mean {mean_card_freq}")
     s_card_fqs = sorted(
         list(
             map(
