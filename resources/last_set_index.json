@@ -4552,5 +4552,287 @@
         "scryfall_code": "aclb",
         "name": "Battle for Baldur's Gate Art Series",
         "date": "2022-06-10"
+    },
+    "760": {
+        "p12e_code": 760,
+        "scryfall_code": "o90p",
+        "name": "Oversized 90's Promos",
+        "date": "1996-04-01"
+    },
+    "761": {
+        "p12e_code": 761,
+        "scryfall_code": "olep",
+        "name": "Oversized League Prizes",
+        "date": "1997-05-30"
+    },
+    "762": {
+        "p12e_code": 762,
+        "scryfall_code": "wmc",
+        "name": "World Magic Cup Qualifiers",
+        "date": "2013-04-06"
+    },
+    "763": {
+        "p12e_code": 763,
+        "scryfall_code": "ptsnc",
+        "name": "Streets of New Capenna Southeast Asia Tokens",
+        "date": "2022-04-30"
+    },
+    "764": {
+        "p12e_code": 764,
+        "scryfall_code": "hbg",
+        "name": "Alchemy Horizons: Baldur's Gate",
+        "date": "2022-07-07"
+    },
+    "765": {
+        "p12e_code": 765,
+        "scryfall_code": "t2x2",
+        "name": "Double Masters 2022 Tokens",
+        "date": "2022-07-08"
+    },
+    "766": {
+        "p12e_code": 766,
+        "scryfall_code": "ea1",
+        "name": "Explorer Anthology 1",
+        "date": "2022-07-28"
+    },
+    "767": {
+        "p12e_code": 767,
+        "scryfall_code": "ha6",
+        "name": "Historic Anthology 6",
+        "date": "2022-07-28"
+    },
+    "768": {
+        "p12e_code": 768,
+        "scryfall_code": "psvc",
+        "name": "Summer Vacation Promos 2022",
+        "date": "2022-08-01"
+    },
+    "769": {
+        "p12e_code": 769,
+        "scryfall_code": "p30a",
+        "name": "30th Anniversary Promos",
+        "date": "2022-09-02"
+    },
+    "770": {
+        "p12e_code": 770,
+        "scryfall_code": "tdmu",
+        "name": "Dominaria United Tokens",
+        "date": "2022-09-09"
+    },
+    "771": {
+        "p12e_code": 771,
+        "scryfall_code": "prcq",
+        "name": "Regional Championship Qualifiers 2022",
+        "date": "2022-10-01"
+    },
+    "772": {
+        "p12e_code": 772,
+        "scryfall_code": "sunf",
+        "name": "Unfinity Sticker Sheets",
+        "date": "2022-10-07"
+    },
+    "773": {
+        "p12e_code": 773,
+        "scryfall_code": "gn3",
+        "name": "Game Night 2022",
+        "date": "2022-10-14"
+    },
+    "774": {
+        "p12e_code": 774,
+        "scryfall_code": "mneo",
+        "name": "Kamigawa: Neon Destiny Minigames",
+        "date": "2022-02-18"
+    },
+    "775": {
+        "p12e_code": 775,
+        "scryfall_code": "sneo",
+        "name": "Kamigawa: Neon Dynasty Substitute Cards",
+        "date": "2022-02-18"
+    },
+    "776": {
+        "p12e_code": 776,
+        "scryfall_code": "q07",
+        "name": "Challenger Decks 2022",
+        "date": "2022-04-01"
+    },
+    "777": {
+        "p12e_code": 777,
+        "scryfall_code": "msnc",
+        "name": "Streets of New Capenna Minigames",
+        "date": "2022-04-29"
+    },
+    "778": {
+        "p12e_code": 778,
+        "scryfall_code": "mclb",
+        "name": "Commander Legends: Battle for Baldur's Gate Minigames",
+        "date": "2022-06-10"
+    },
+    "779": {
+        "p12e_code": 779,
+        "scryfall_code": "admu",
+        "name": "Dominaria United Art Series",
+        "date": "2022-09-09"
+    },
+    "780": {
+        "p12e_code": 780,
+        "scryfall_code": "p30h",
+        "name": "30th Anniversary History Promos",
+        "date": "2022-09-09"
+    },
+    "781": {
+        "p12e_code": 781,
+        "scryfall_code": "pdmu",
+        "name": "Dominaria United Promos",
+        "date": "2022-09-09"
+    },
+    "782": {
+        "p12e_code": 782,
+        "scryfall_code": "pdwa",
+        "name": "Dominaria United Japanese Promo Tokens",
+        "date": "2022-09-09"
+    },
+    "783": {
+        "p12e_code": 783,
+        "scryfall_code": "tdmc",
+        "name": "Dominaria United Commander Tokens",
+        "date": "2022-09-09"
+    },
+    "784": {
+        "p12e_code": 784,
+        "scryfall_code": "ydmu",
+        "name": "Alchemy: Dominaria",
+        "date": "2022-10-05"
+    },
+    "785": {
+        "p12e_code": 785,
+        "scryfall_code": "uplist",
+        "name": "The List (Unfinity Foil Edition)",
+        "date": "2022-10-07"
+    },
+    "786": {
+        "p12e_code": 786,
+        "scryfall_code": "tgn3",
+        "name": "Game Night: Free-for-All Tokens",
+        "date": "2022-10-14"
+    },
+    "787": {
+        "p12e_code": 787,
+        "scryfall_code": "slc",
+        "name": "Secret Lair 30th Anniversary Countdown Kit",
+        "date": "2022-11-01"
+    },
+    "788": {
+        "p12e_code": 788,
+        "scryfall_code": "q08",
+        "name": "Pioneer Challenger Decks 2022",
+        "date": "2022-11-04"
+    },
+    "789": {
+        "p12e_code": 789,
+        "scryfall_code": "abro",
+        "name": "The Brothers' War Art Series",
+        "date": "2022-11-18"
+    },
+    "790": {
+        "p12e_code": 790,
+        "scryfall_code": "bot",
+        "name": "Transformers",
+        "date": "2022-11-18"
+    },
+    "791": {
+        "p12e_code": 791,
+        "scryfall_code": "brc",
+        "name": "The Brothers' War Commander",
+        "date": "2022-11-18"
+    },
+    "792": {
+        "p12e_code": 792,
+        "scryfall_code": "brr",
+        "name": "The Brothers' War Retro Artifacts",
+        "date": "2022-11-18"
+    },
+    "793": {
+        "p12e_code": 793,
+        "scryfall_code": "pbro",
+        "name": "The Brothers' War Promos",
+        "date": "2022-11-18"
+    },
+    "794": {
+        "p12e_code": 794,
+        "scryfall_code": "tbot",
+        "name": "Transformers Tokens",
+        "date": "2022-11-18"
+    },
+    "795": {
+        "p12e_code": 795,
+        "scryfall_code": "tbrc",
+        "name": "The Brothers' War Commander Tokens",
+        "date": "2022-11-18"
+    },
+    "796": {
+        "p12e_code": 796,
+        "scryfall_code": "tbro",
+        "name": "The Brothers' War Tokens",
+        "date": "2022-11-18"
+    },
+    "797": {
+        "p12e_code": 797,
+        "scryfall_code": "pewk",
+        "name": "Eternal Weekend 2022",
+        "date": "2022-11-26"
+    },
+    "798": {
+        "p12e_code": 798,
+        "scryfall_code": "30a",
+        "name": "30th Anniversary Edition",
+        "date": "2022-11-28"
+    },
+    "799": {
+        "p12e_code": 799,
+        "scryfall_code": "t30a",
+        "name": "30th Anniversary Tokens",
+        "date": "2022-11-28"
+    },
+    "800": {
+        "p12e_code": 800,
+        "scryfall_code": "j22",
+        "name": "Jumpstart 2022",
+        "date": "2022-12-02"
+    },
+    "801": {
+        "p12e_code": 801,
+        "scryfall_code": "scd",
+        "name": "Starter Commander Decks",
+        "date": "2022-12-02"
+    },
+    "802": {
+        "p12e_code": 802,
+        "scryfall_code": "tscd",
+        "name": "Starter Commander Deck Tokens",
+        "date": "2022-12-02"
+    },
+    "803": {
+        "p12e_code": 803,
+        "scryfall_code": "pr23",
+        "name": "Regional Championship Qualifiers 2023",
+        "date": "2023-01-01"
+    },
+    "804": {
+        "p12e_code": 804,
+        "scryfall_code": "onc",
+        "name": "Phyrexia: All Will Be One Commander",
+        "date": "2023-02-03"
+    },
+    "805": {
+        "p12e_code": 805,
+        "scryfall_code": "one",
+        "name": "Phyrexia: All Will Be One",
+        "date": "2023-02-03"
+    },
+    "806": {
+        "p12e_code": 806,
+        "scryfall_code": "dmr",
+        "name": "Dominaria Remastered",
+        "date": "2023-03-31"
     }
 }
