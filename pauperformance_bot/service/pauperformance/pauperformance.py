@@ -116,6 +116,44 @@ class PauperformanceService:
             logger.info("Saved Pauperformance set index.")
         return set_index
 
+    def _invalidate_cached_set_cards_index(
+        self,
+        p12e_code,
+        cards_index_cache_file=PAUPER_CARDS_INDEX_CACHE_FILE,
+    ):
+        extracted_file = cards_index_cache_file.rstrip(".tgz")
+        try:
+            logger.debug(
+                f"Trying to load card index from cache: " f"{cards_index_cache_file}"
+            )
+            with tarfile.open(cards_index_cache_file, "r:gz") as tar:
+                tar.extractall(path=os.path.dirname(cards_index_cache_file))
+            with open(extracted_file, "rb") as cache_f:
+                card_index = pickle.load(cache_f)
+                logger.debug(f"Loaded card index from cache: {extracted_file}")
+                del card_index[p12e_code]
+                self._save_cards_index_cache_file(card_index)
+        except FileNotFoundError:
+            logger.debug("No cache found for card index.")
+
+    def _save_cards_index_cache_file(
+        self,
+        card_index,
+        cards_index_cache_file=PAUPER_CARDS_INDEX_CACHE_FILE,
+    ):
+        extracted_file = cards_index_cache_file.rstrip(".tgz")
+        logger.debug(f"Updating cache file {extracted_file}...")
+        with open(extracted_file, "wb") as cache_f:
+            pickle.dump(card_index, cache_f)
+        logger.debug(f"Updated cache file {extracted_file}.")
+        logger.debug(f"Archiving cache file {cards_index_cache_file}...")
+        with tarfile.open(cards_index_cache_file, "w:gz") as tar:
+            tar.add(
+                extracted_file,
+                arcname=os.path.basename(extracted_file),
+            )
+        logger.debug(f"Archived cache file {cards_index_cache_file}.")
+
     def _build_card_index(
         self,
         skip_sets=KNOWN_SETS_WITH_NO_PAUPER_CARDS,
@@ -155,17 +193,7 @@ class PauperformanceService:
                 f"adding: {sorted(list(to_be_removed_sets))}"
             )
 
-        logger.debug(f"Updating cache file {extracted_file}...")
-        with open(extracted_file, "wb") as cache_f:
-            pickle.dump(card_index, cache_f)
-        logger.debug(f"Updated cache file {extracted_file}.")
-        logger.debug(f"Archiving cache file {cards_index_cache_file}...")
-        with tarfile.open(cards_index_cache_file, "w:gz") as tar:
-            tar.add(
-                extracted_file,
-                arcname=os.path.basename(extracted_file),
-            )
-        logger.debug(f"Archived cache file {cards_index_cache_file}.")
+        self._save_cards_index_cache_file(card_index)
         return card_index
 
     def _build_incremental_card_index(
