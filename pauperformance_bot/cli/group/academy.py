@@ -40,7 +40,6 @@ class UpdateCommand2(CLICommand):
 
 
 class AcademyGroup(CLIGroup):
-
     _cli_commands = [UpdateCommand(), UpdateCommand2()]
 
     def __init__(self):

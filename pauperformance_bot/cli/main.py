@@ -14,7 +14,6 @@ from pauperformance_bot.constant.pauperformance.myr import APPLICATION_NAME
 
 
 class MyrCLI(CLIRunnable):
-
     _cli_tools = [
         academy.AcademyGroup(),
         test.TestGroup(),
