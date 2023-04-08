@@ -11,7 +11,9 @@ from requests import session
 from pauperformance_bot.constant.mtg.mtggoldfish import (
     API_ENDPOINT,
     DECK_API_ENDPOINT,
-    NO_COOKIE_HEADER, MTGGOLDFISH_THROTTLE_ERROR_RESPONSE, REQUESTS_SLEEP_SECONDS,
+    MTGGOLDFISH_THROTTLE_ERROR_RESPONSE,
+    NO_COOKIE_HEADER,
+    REQUESTS_SLEEP_SECONDS,
 )
 from pauperformance_bot.constant.pauperformance.myr import (
     MTGGOLDFISH_DECKS_CACHE_DIR,
