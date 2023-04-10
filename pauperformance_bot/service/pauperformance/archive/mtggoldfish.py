@@ -1,4 +1,3 @@
-import os
 import time
 from datetime import datetime
 from functools import cache, wraps
@@ -64,8 +63,6 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         self.deck_api_endpoint = deck_api_endpoint
         self.session = session()
         self.logged = False
-
-        os.makedirs(MTGGOLDFISH_DECKS_CACHE_DIR, exist_ok=True)
 
         # Dear reader,
         # The following attributes should have never existed.
