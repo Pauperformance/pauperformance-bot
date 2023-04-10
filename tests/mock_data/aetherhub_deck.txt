@@ -1,28 +1,32 @@
-3 Cast Down
-2 Make Disappear
+3 Thoughtcast
+2 Krark-Clan Shaman
+3 Great Furnace
+3 Seat of the Synod
+3 Vault of Whispers
+1 Reckoner's Bargain
+4 Deadly Dispute
 4 Galvanic Blast
-4 Cleansing Wildfire
-3 Serpentine Curve
-1 Fling
-4 Mistvault Bridge
+2 Experimental Synthesizer
 4 Drossforge Bridge
-4 Silverbluff Bridge
-4 Island
-3 Swamp
-4 Mountain
-3 Lightning Bolt
-3 Augur of Bolas
-2 Thorn of the Black Rose
-4 Frantic Inventory
-1 Devious Cover-Up
-2 Gurmag Angler
-1 Mystical Teachings
-4 Counterspell
+3 Mistvault Bridge
+3 Silverbluff Bridge
+4 Ichor Wellspring
+2 Blood Fountain
+2 Frogmite
+4 Myr Enforcer
+2 Kenku Artificer
+1 Gearseeker Serpent
+1 Cast Down
+2 Metallic Rebuke
+4 Chromatic Star
+1 Makeshift Munitions
+1 Nihil Spellbomb
+1 Aether Spellbomb
 
-3 Fiery Cannonade
-2 Make Disappear
-2 Nihil Spellbomb
+2 Gorilla Shaman
+3 Hydroblast
+4 Pyroblast
+2 Negate
 2 Chainer's Edict
-2 Dispel
-2 Abrade
-2 Debt to the Kami
+1 Electrickery
+1 Makeshift Munitions

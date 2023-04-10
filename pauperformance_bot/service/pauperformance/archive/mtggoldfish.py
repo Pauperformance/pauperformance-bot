@@ -1,3 +1,5 @@
+import os
+import time
 from datetime import datetime
 from functools import cache, wraps
 from itertools import count
@@ -9,7 +11,9 @@ from requests import session
 from pauperformance_bot.constant.mtg.mtggoldfish import (
     API_ENDPOINT,
     DECK_API_ENDPOINT,
+    MTGGOLDFISH_THROTTLE_ERROR_RESPONSE,
     NO_COOKIE_HEADER,
+    REQUESTS_SLEEP_SECONDS,
 )
 from pauperformance_bot.constant.pauperformance.academy import AcademyFileSystem
 from pauperformance_bot.constant.pauperformance.myr import USA_DATE_FORMAT
@@ -60,6 +64,8 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         self.deck_api_endpoint = deck_api_endpoint
         self.session = session()
         self.logged = False
+
+        os.makedirs(MTGGOLDFISH_DECKS_CACHE_DIR, exist_ok=True)
 
         # Dear reader,
         # The following attributes should have never existed.
@@ -337,8 +343,12 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             except FileNotFoundError:
                 pass
         if not lines:
-            content = urlopen(listed_deck.download_txt_url).read()
-            lines = content.decode("utf-8").split("\r\n")
+            lines = [MTGGOLDFISH_THROTTLE_ERROR_RESPONSE]
+            while MTGGOLDFISH_THROTTLE_ERROR_RESPONSE in lines:
+                content = urlopen(listed_deck.download_txt_url).read()
+                lines = content.decode("utf-8")
+                time.sleep(REQUESTS_SLEEP_SECONDS)
+            lines = lines.split("\r\n")
         if to_be_cached:
             with open(
                 posix_path(decks_cache_dir, f"{listed_deck.deck_id}.txt"),
