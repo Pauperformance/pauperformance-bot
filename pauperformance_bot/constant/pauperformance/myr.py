@@ -39,6 +39,7 @@ VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 # resources/
 # | cache/
 # | config/
+# | silver/
 # | templates/
 # | last_set_index.pkl
 
@@ -112,6 +113,15 @@ class MyrFileSystem:
         )
         self.RESOURCES_CONFIG_CHANGELOG: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "changelog.ini"
+        )
+
+        self.RESOURCES_SILVER_DIR: str = posix_path(self.RESOURCES_DIR, "silver")
+        self.RESOURCES_SILVER_TRAINING_DATA_ARCHETYPES_DIR: str = posix_path(
+            self.RESOURCES_SILVER_DIR, "training_data_archetypes"
+        )
+        self.MTGGOLDFISH_DECK_TRAINING_DATA: str = posix_path(
+            self.RESOURCES_SILVER_TRAINING_DATA_ARCHETYPES_DIR,
+            "mtggoldfish_tournament_decks.csv",
         )
 
 

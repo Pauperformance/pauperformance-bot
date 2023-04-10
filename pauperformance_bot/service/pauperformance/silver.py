@@ -36,6 +36,9 @@ class SilverService:
         )
         self._decks_cache: dict[str, PlayableDeck] = {}
 
+    def add_known_decks(self, known_decks: list[tuple[PlayableDeck, ArchetypeConfig]]):
+        self.known_decks += known_decks
+
     @staticmethod
     def _cosine_similarity(v1, v2, w=1.0):
         if w == 0:
