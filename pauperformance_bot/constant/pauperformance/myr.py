@@ -57,7 +57,6 @@ else:
 
 CACHE_DIR = posix_path(RESOURCES_DIR, "cache")
 DECKSTATS_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "deckstats_decks")
-MTGGOLDFISH_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "mtggoldfish_decks")
 SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
 PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(
     CACHE_DIR,
