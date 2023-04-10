@@ -21,7 +21,6 @@ class HelloCommand(CLICommand):
 
 
 class TestGroup(CLIGroup):
-
     _cli_commands = [HelloCommand()]
 
     def __init__(self):

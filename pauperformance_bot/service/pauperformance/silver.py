@@ -36,6 +36,9 @@ class SilverService:
         )
         self._decks_cache: dict[str, PlayableDeck] = {}
 
+    def add_known_decks(self, known_decks: list[tuple[PlayableDeck, ArchetypeConfig]]):
+        self.known_decks += known_decks
+
     @staticmethod
     def _cosine_similarity(v1, v2, w=1.0):
         if w == 0:
@@ -168,6 +171,27 @@ class SilverService:
         ]
         return len([c for c in monob_control_cards if c in deck]) >= 3
 
+    def _is_infect(self, deck: PlayableDeck) -> bool:
+        infect_creatures = [
+            "Glistener Elf",
+            "Llanowar Augur",
+            "Blight Mamba",
+            "Ichorclaw Myr",
+            "Rot Wolf",
+        ]
+        return len([c for c in infect_creatures if c in deck]) >= 3
+
+    def _is_walls(self, deck: PlayableDeck) -> bool:
+        walss_creatures = [
+            "Overgrown Battlement",
+            "Axebane Guardian",
+            "Valakut Invoker",
+            "Secret Door",
+            "Galvanic Alchemist",
+            "Shield-Wall Sentinel",
+        ]
+        return len([c for c in walss_creatures if c in deck]) >= 3
+
     def classify_deck(
         self,
         deck: PlayableDeck,
@@ -185,6 +209,8 @@ class SilverService:
             ("MonoW Heroic", self._is_monow_heroic),
             ("Izzet Blitz", self._is_izzet_blitz),
             ("MonoB Control", self._is_monob_control),
+            ("Infect", self._is_infect),
+            ("Walls", self._is_walls),
         ]
         for archetype_name, archetype_predicate in archetype_predicates:
             if archetype_predicate(deck):
