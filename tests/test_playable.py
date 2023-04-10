@@ -6,7 +6,6 @@ from pauperformance_bot.entity.deck.playable import PlayableDeck, PlayedCard
 
 class TestPlayableDeck(unittest.TestCase):
     def test_playable_deck_with_no_sideboard(self):
-
         pd = PlayableDeck(data.DECK_MAIN, [])
 
         self.assertIsNotNone(pd)
@@ -35,14 +34,12 @@ class TestPlayableDeck(unittest.TestCase):
             PlayableDeck(data.DECK_MAIN, side_deck)
 
     def test_playable_deck(self):
-
         pd = PlayableDeck(data.DECK_MAIN, data.DECK_SIDE)
 
         self.assertListEqual(data.DECK_MAIN, pd.mainboard)
         self.assertListEqual(data.DECK_SIDE, pd.sideboard)
 
     def test_playable_deck_with_less_than_fifteen_side(self):
-
         pd = PlayableDeck(data.DECK_MAIN, data.DECK_SIDE[:-1])
 
         self.assertListEqual(data.DECK_MAIN, pd.mainboard)
