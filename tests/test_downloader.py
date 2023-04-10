@@ -10,35 +10,39 @@ from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloa
 from pauperformance_bot.service.mtg.downloader.mtgdecks import MtgdecksDeckDownloader
 
 EXPECTED_DECK_AETHERHUB_MAIN = [
-    PlayedCard(3, "Cast Down"),
-    PlayedCard(2, "Make Disappear"),
+    PlayedCard(3, "Thoughtcast"),
+    PlayedCard(2, "Krark-Clan Shaman"),
+    PlayedCard(3, "Great Furnace"),
+    PlayedCard(3, "Seat of the Synod"),
+    PlayedCard(3, "Vault of Whispers"),
+    PlayedCard(1, "Reckoner's Bargain"),
+    PlayedCard(4, "Deadly Dispute"),
     PlayedCard(4, "Galvanic Blast"),
-    PlayedCard(4, "Cleansing Wildfire"),
-    PlayedCard(3, "Serpentine Curve"),
-    PlayedCard(1, "Fling"),
-    PlayedCard(4, "Mistvault Bridge"),
+    PlayedCard(2, "Experimental Synthesizer"),
     PlayedCard(4, "Drossforge Bridge"),
-    PlayedCard(4, "Silverbluff Bridge"),
-    PlayedCard(4, "Island"),
-    PlayedCard(3, "Swamp"),
-    PlayedCard(4, "Mountain"),
-    PlayedCard(3, "Lightning Bolt"),
-    PlayedCard(3, "Augur of Bolas"),
-    PlayedCard(2, "Thorn of the Black Rose"),
-    PlayedCard(4, "Frantic Inventory"),
-    PlayedCard(1, "Devious Cover-Up"),
-    PlayedCard(2, "Gurmag Angler"),
-    PlayedCard(1, "Mystical Teachings"),
-    PlayedCard(4, "Counterspell"),
+    PlayedCard(3, "Mistvault Bridge"),
+    PlayedCard(3, "Silverbluff Bridge"),
+    PlayedCard(4, "Ichor Wellspring"),
+    PlayedCard(2, "Blood Fountain"),
+    PlayedCard(2, "Frogmite"),
+    PlayedCard(4, "Myr Enforcer"),
+    PlayedCard(2, "Kenku Artificer"),
+    PlayedCard(1, "Gearseeker Serpent"),
+    PlayedCard(1, "Cast Down"),
+    PlayedCard(2, "Metallic Rebuke"),
+    PlayedCard(4, "Chromatic Star"),
+    PlayedCard(1, "Makeshift Munitions"),
+    PlayedCard(1, "Nihil Spellbomb"),
+    PlayedCard(1, "Aether Spellbomb"),
 ]
 EXPECTED_DECK_AETHERHUB_SIDE = [
-    PlayedCard(3, "Fiery Cannonade"),
-    PlayedCard(2, "Make Disappear"),
-    PlayedCard(2, "Nihil Spellbomb"),
+    PlayedCard(2, "Gorilla Shaman"),
+    PlayedCard(3, "Hydroblast"),
+    PlayedCard(4, "Pyroblast"),
+    PlayedCard(2, "Negate"),
     PlayedCard(2, "Chainer's Edict"),
-    PlayedCard(2, "Dispel"),
-    PlayedCard(2, "Abrade"),
-    PlayedCard(2, "Debt to the Kami"),
+    PlayedCard(1, "Electrickery"),
+    PlayedCard(1, "Makeshift Munitions"),
 ]
 EXPECTED_DECK_TAPPEDOUT_MAIN = [
     PlayedCard(4, "Chromatic Star"),
@@ -142,7 +146,7 @@ class TestMtgoDownloader(unittest.TestCase):
             EXPECTED_DECK_AETHERHUB_MAIN, EXPECTED_DECK_AETHERHUB_SIDE
         )
         downloader = MtgoDeckDownloader(
-            "https://aetherhub.com/Deck/MtgoDeckExport/733379"
+            "https://aetherhub.com/Deck/MtgoDeckExport/883786"
         )
 
         res = downloader.download()
