@@ -6,9 +6,9 @@ retrying
 argcomplete
 scipy
 MarkupSafe==2.0.1  # v2.1.0 has removed soft_unicode, required by markupsafe, required by jinja2
-twitchAPI
+twitchAPI==2.5.5  # v3.10.0+ requires additional work
 python-youtube
-discord.py
+discord.py==1.7.3  # v2+ requires additional work
 beautifulsoup4
 jsonpickle
 Deprecated
