@@ -5,7 +5,7 @@ flake8
 pytest
 pytest-xdist
 pytest-cov
-tox
+tox==3.25.0  # pulls chardet>=5.1, conflicting with discord
 black
 isort
 mypy
