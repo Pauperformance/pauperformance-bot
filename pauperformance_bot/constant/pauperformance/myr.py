@@ -56,12 +56,9 @@ else:
     RESOURCES_DIR = posix_path(TOP_PATH.as_posix(), "resources")
 
 CACHE_DIR = posix_path(RESOURCES_DIR, "cache")
+PAUPER_CARDS_INDEX_CACHE_DIR = posix_path(CACHE_DIR, "cards_index")
 DECKSTATS_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "deckstats_decks")
 SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
-PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(
-    CACHE_DIR,
-    "pauper_cards_index.pkl.tgz",
-)
 
 CONFIG_DIR = posix_path(RESOURCES_DIR, "config")
 CONFIG_ARCHETYPES_DIR = posix_path(CONFIG_DIR, "archetypes")
@@ -81,7 +78,7 @@ HOME_TEMPLATE_FILE = "index.md.j2"
 PAUPER_POOL_TEMPLATE_FILE = "pauper_pool.md.j2"
 SET_INDEX_TEMPLATE_FILE = "set_index.md.j2"
 
-LAST_SET_INDEX_FILE = posix_path(RESOURCES_DIR, "last_set_index.json")
+SET_INDEX_FILE = posix_path(RESOURCES_DIR, "set_index.json")
 
 
 class MyrFileSystem:

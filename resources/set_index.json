@@ -1,0 +1,5072 @@
+{
+    "1": {
+        "p12e_code": 1,
+        "scryfall_code": "lea",
+        "name": "Limited Edition Alpha",
+        "date": "1993-08-05"
+    },
+    "2": {
+        "p12e_code": 2,
+        "scryfall_code": "leb",
+        "name": "Limited Edition Beta",
+        "date": "1993-10-04"
+    },
+    "3": {
+        "p12e_code": 3,
+        "scryfall_code": "2ed",
+        "name": "Unlimited Edition",
+        "date": "1993-12-01"
+    },
+    "4": {
+        "p12e_code": 4,
+        "scryfall_code": "ced",
+        "name": "Collectors\u2019 Edition",
+        "date": "1993-12-10"
+    },
+    "5": {
+        "p12e_code": 5,
+        "scryfall_code": "cei",
+        "name": "Intl. Collectors\u2019 Edition",
+        "date": "1993-12-10"
+    },
+    "6": {
+        "p12e_code": 6,
+        "scryfall_code": "arn",
+        "name": "Arabian Nights",
+        "date": "1993-12-17"
+    },
+    "7": {
+        "p12e_code": 7,
+        "scryfall_code": "atq",
+        "name": "Antiquities",
+        "date": "1994-03-04"
+    },
+    "8": {
+        "p12e_code": 8,
+        "scryfall_code": "3ed",
+        "name": "Revised Edition",
+        "date": "1994-04-01"
+    },
+    "9": {
+        "p12e_code": 9,
+        "scryfall_code": "fbb",
+        "name": "Foreign Black Border",
+        "date": "1994-04-01"
+    },
+    "10": {
+        "p12e_code": 10,
+        "scryfall_code": "leg",
+        "name": "Legends",
+        "date": "1994-06-01"
+    },
+    "11": {
+        "p12e_code": 11,
+        "scryfall_code": "sum",
+        "name": "Summer Magic / Edgar",
+        "date": "1994-06-21"
+    },
+    "12": {
+        "p12e_code": 12,
+        "scryfall_code": "pdrc",
+        "name": "Dragon Con",
+        "date": "1994-07-15"
+    },
+    "13": {
+        "p12e_code": 13,
+        "scryfall_code": "drk",
+        "name": "The Dark",
+        "date": "1994-08-01"
+    },
+    "14": {
+        "p12e_code": 14,
+        "scryfall_code": "phpr",
+        "name": "HarperPrism Book Promos",
+        "date": "1994-09-01"
+    },
+    "15": {
+        "p12e_code": 15,
+        "scryfall_code": "fem",
+        "name": "Fallen Empires",
+        "date": "1994-11-01"
+    },
+    "16": {
+        "p12e_code": 16,
+        "scryfall_code": "plgm",
+        "name": "DCI Legend Membership",
+        "date": "1995-01-01"
+    },
+    "17": {
+        "p12e_code": 17,
+        "scryfall_code": "pmei",
+        "name": "Media Inserts",
+        "date": "1995-01-01"
+    },
+    "18": {
+        "p12e_code": 18,
+        "scryfall_code": "4bb",
+        "name": "Fourth Edition Foreign Black Border",
+        "date": "1995-04-01"
+    },
+    "19": {
+        "p12e_code": 19,
+        "scryfall_code": "4ed",
+        "name": "Fourth Edition",
+        "date": "1995-04-01"
+    },
+    "20": {
+        "p12e_code": 20,
+        "scryfall_code": "ice",
+        "name": "Ice Age",
+        "date": "1995-06-03"
+    },
+    "21": {
+        "p12e_code": 21,
+        "scryfall_code": "chr",
+        "name": "Chronicles",
+        "date": "1995-07-01"
+    },
+    "22": {
+        "p12e_code": 22,
+        "scryfall_code": "ren",
+        "name": "Renaissance",
+        "date": "1995-08-01"
+    },
+    "23": {
+        "p12e_code": 23,
+        "scryfall_code": "rin",
+        "name": "Rinascimento",
+        "date": "1995-08-01"
+    },
+    "24": {
+        "p12e_code": 24,
+        "scryfall_code": "hml",
+        "name": "Homelands",
+        "date": "1995-10-01"
+    },
+    "25": {
+        "p12e_code": 25,
+        "scryfall_code": "ptc",
+        "name": "Pro Tour Collector Set",
+        "date": "1996-05-01"
+    },
+    "26": {
+        "p12e_code": 26,
+        "scryfall_code": "all",
+        "name": "Alliances",
+        "date": "1996-06-10"
+    },
+    "27": {
+        "p12e_code": 27,
+        "scryfall_code": "rqs",
+        "name": "Rivals Quick Start Set",
+        "date": "1996-07-01"
+    },
+    "28": {
+        "p12e_code": 28,
+        "scryfall_code": "parl",
+        "name": "Arena League 1996",
+        "date": "1996-08-02"
+    },
+    "29": {
+        "p12e_code": 29,
+        "scryfall_code": "pcel",
+        "name": "Celebration Cards",
+        "date": "1996-08-14"
+    },
+    "30": {
+        "p12e_code": 30,
+        "scryfall_code": "pred",
+        "name": "Redemption Program",
+        "date": "1996-10-01"
+    },
+    "31": {
+        "p12e_code": 31,
+        "scryfall_code": "mir",
+        "name": "Mirage",
+        "date": "1996-10-08"
+    },
+    "32": {
+        "p12e_code": 32,
+        "scryfall_code": "mgb",
+        "name": "Multiverse Gift Box",
+        "date": "1996-11-01"
+    },
+    "33": {
+        "p12e_code": 33,
+        "scryfall_code": "itp",
+        "name": "Introductory Two-Player Set",
+        "date": "1996-12-31"
+    },
+    "34": {
+        "p12e_code": 34,
+        "scryfall_code": "vis",
+        "name": "Visions",
+        "date": "1997-02-03"
+    },
+    "35": {
+        "p12e_code": 35,
+        "scryfall_code": "5ed",
+        "name": "Fifth Edition",
+        "date": "1997-03-24"
+    },
+    "36": {
+        "p12e_code": 36,
+        "scryfall_code": "past",
+        "name": "Astral Cards",
+        "date": "1997-04-01"
+    },
+    "37": {
+        "p12e_code": 37,
+        "scryfall_code": "pmic",
+        "name": "MicroProse Promos",
+        "date": "1997-04-01"
+    },
+    "38": {
+        "p12e_code": 38,
+        "scryfall_code": "por",
+        "name": "Portal",
+        "date": "1997-05-01"
+    },
+    "39": {
+        "p12e_code": 39,
+        "scryfall_code": "ppod",
+        "name": "Portal Demo Game",
+        "date": "1997-05-01"
+    },
+    "40": {
+        "p12e_code": 40,
+        "scryfall_code": "pvan",
+        "name": "Vanguard Series",
+        "date": "1997-05-01"
+    },
+    "41": {
+        "p12e_code": 41,
+        "scryfall_code": "wth",
+        "name": "Weatherlight",
+        "date": "1997-06-09"
+    },
+    "42": {
+        "p12e_code": 42,
+        "scryfall_code": "wc97",
+        "name": "World Championship Decks 1997",
+        "date": "1997-08-13"
+    },
+    "43": {
+        "p12e_code": 43,
+        "scryfall_code": "ptmp",
+        "name": "Tempest Promos",
+        "date": "1997-10-14"
+    },
+    "44": {
+        "p12e_code": 44,
+        "scryfall_code": "tmp",
+        "name": "Tempest",
+        "date": "1997-10-14"
+    },
+    "45": {
+        "p12e_code": 45,
+        "scryfall_code": "jgp",
+        "name": "Judge Gift Cards 1998",
+        "date": "1998-01-01"
+    },
+    "46": {
+        "p12e_code": 46,
+        "scryfall_code": "psth",
+        "name": "Stronghold Promos",
+        "date": "1998-03-02"
+    },
+    "47": {
+        "p12e_code": 47,
+        "scryfall_code": "sth",
+        "name": "Stronghold",
+        "date": "1998-03-02"
+    },
+    "48": {
+        "p12e_code": 48,
+        "scryfall_code": "exo",
+        "name": "Exodus",
+        "date": "1998-06-15"
+    },
+    "49": {
+        "p12e_code": 49,
+        "scryfall_code": "pexo",
+        "name": "Exodus Promos",
+        "date": "1998-06-15"
+    },
+    "50": {
+        "p12e_code": 50,
+        "scryfall_code": "p02",
+        "name": "Portal Second Age",
+        "date": "1998-06-24"
+    },
+    "51": {
+        "p12e_code": 51,
+        "scryfall_code": "tugl",
+        "name": "Unglued Tokens",
+        "date": "1998-08-11"
+    },
+    "52": {
+        "p12e_code": 52,
+        "scryfall_code": "ugl",
+        "name": "Unglued",
+        "date": "1998-08-11"
+    },
+    "53": {
+        "p12e_code": 53,
+        "scryfall_code": "wc98",
+        "name": "World Championship Decks 1998",
+        "date": "1998-08-12"
+    },
+    "54": {
+        "p12e_code": 54,
+        "scryfall_code": "palp",
+        "name": "Asia Pacific Land Program",
+        "date": "1998-09-01"
+    },
+    "55": {
+        "p12e_code": 55,
+        "scryfall_code": "pusg",
+        "name": "Urza's Saga Promos",
+        "date": "1998-10-12"
+    },
+    "56": {
+        "p12e_code": 56,
+        "scryfall_code": "usg",
+        "name": "Urza's Saga",
+        "date": "1998-10-12"
+    },
+    "57": {
+        "p12e_code": 57,
+        "scryfall_code": "ath",
+        "name": "Anthologies",
+        "date": "1998-11-01"
+    },
+    "58": {
+        "p12e_code": 58,
+        "scryfall_code": "g99",
+        "name": "Judge Gift Cards 1999",
+        "date": "1999-01-01"
+    },
+    "59": {
+        "p12e_code": 59,
+        "scryfall_code": "pal99",
+        "name": "Arena League 1999",
+        "date": "1999-01-01"
+    },
+    "60": {
+        "p12e_code": 60,
+        "scryfall_code": "pulg",
+        "name": "Urza's Legacy Promos",
+        "date": "1999-02-15"
+    },
+    "61": {
+        "p12e_code": 61,
+        "scryfall_code": "ulg",
+        "name": "Urza's Legacy",
+        "date": "1999-02-15"
+    },
+    "62": {
+        "p12e_code": 62,
+        "scryfall_code": "6ed",
+        "name": "Classic Sixth Edition",
+        "date": "1999-04-21"
+    },
+    "63": {
+        "p12e_code": 63,
+        "scryfall_code": "puds",
+        "name": "Urza's Destiny Promos",
+        "date": "1999-06-07"
+    },
+    "64": {
+        "p12e_code": 64,
+        "scryfall_code": "uds",
+        "name": "Urza's Destiny",
+        "date": "1999-06-07"
+    },
+    "65": {
+        "p12e_code": 65,
+        "scryfall_code": "pptk",
+        "name": "Portal: Three Kingdoms Promos",
+        "date": "1999-07-01"
+    },
+    "66": {
+        "p12e_code": 66,
+        "scryfall_code": "s99",
+        "name": "Starter 1999",
+        "date": "1999-07-01"
+    },
+    "67": {
+        "p12e_code": 67,
+        "scryfall_code": "ptk",
+        "name": "Portal Three Kingdoms",
+        "date": "1999-07-06"
+    },
+    "68": {
+        "p12e_code": 68,
+        "scryfall_code": "pgru",
+        "name": "Guru",
+        "date": "1999-07-12"
+    },
+    "69": {
+        "p12e_code": 69,
+        "scryfall_code": "pwor",
+        "name": "World Championship Promos",
+        "date": "1999-08-04"
+    },
+    "70": {
+        "p12e_code": 70,
+        "scryfall_code": "wc99",
+        "name": "World Championship Decks 1999",
+        "date": "1999-08-04"
+    },
+    "71": {
+        "p12e_code": 71,
+        "scryfall_code": "pwos",
+        "name": "Wizards of the Coast Online Store",
+        "date": "1999-09-04"
+    },
+    "72": {
+        "p12e_code": 72,
+        "scryfall_code": "mmq",
+        "name": "Mercadian Masques",
+        "date": "1999-10-04"
+    },
+    "73": {
+        "p12e_code": 73,
+        "scryfall_code": "pmmq",
+        "name": "Mercadian Masques Promos",
+        "date": "1999-10-04"
+    },
+    "74": {
+        "p12e_code": 74,
+        "scryfall_code": "brb",
+        "name": "Battle Royale Box Set",
+        "date": "1999-11-12"
+    },
+    "75": {
+        "p12e_code": 75,
+        "scryfall_code": "psus",
+        "name": "Junior Super Series",
+        "date": "1999-12-01"
+    },
+    "76": {
+        "p12e_code": 76,
+        "scryfall_code": "fnm",
+        "name": "Friday Night Magic 2000",
+        "date": "2000-01-01"
+    },
+    "77": {
+        "p12e_code": 77,
+        "scryfall_code": "g00",
+        "name": "Judge Gift Cards 2000",
+        "date": "2000-01-01"
+    },
+    "78": {
+        "p12e_code": 78,
+        "scryfall_code": "pal00",
+        "name": "Arena League 2000",
+        "date": "2000-01-01"
+    },
+    "79": {
+        "p12e_code": 79,
+        "scryfall_code": "pelp",
+        "name": "European Land Program",
+        "date": "2000-02-05"
+    },
+    "80": {
+        "p12e_code": 80,
+        "scryfall_code": "nem",
+        "name": "Nemesis",
+        "date": "2000-02-14"
+    },
+    "81": {
+        "p12e_code": 81,
+        "scryfall_code": "pnem",
+        "name": "Nemesis Promos",
+        "date": "2000-02-14"
+    },
+    "82": {
+        "p12e_code": 82,
+        "scryfall_code": "s00",
+        "name": "Starter 2000",
+        "date": "2000-04-01"
+    },
+    "83": {
+        "p12e_code": 83,
+        "scryfall_code": "pcy",
+        "name": "Prophecy",
+        "date": "2000-06-05"
+    },
+    "84": {
+        "p12e_code": 84,
+        "scryfall_code": "ppcy",
+        "name": "Prophecy Promos",
+        "date": "2000-06-05"
+    },
+    "85": {
+        "p12e_code": 85,
+        "scryfall_code": "wc00",
+        "name": "World Championship Decks 2000",
+        "date": "2000-08-02"
+    },
+    "86": {
+        "p12e_code": 86,
+        "scryfall_code": "btd",
+        "name": "Beatdown Box Set",
+        "date": "2000-10-01"
+    },
+    "87": {
+        "p12e_code": 87,
+        "scryfall_code": "inv",
+        "name": "Invasion",
+        "date": "2000-10-02"
+    },
+    "88": {
+        "p12e_code": 88,
+        "scryfall_code": "pinv",
+        "name": "Invasion Promos",
+        "date": "2000-10-02"
+    },
+    "89": {
+        "p12e_code": 89,
+        "scryfall_code": "f01",
+        "name": "Friday Night Magic 2001",
+        "date": "2001-01-01"
+    },
+    "90": {
+        "p12e_code": 90,
+        "scryfall_code": "g01",
+        "name": "Judge Gift Cards 2001",
+        "date": "2001-01-01"
+    },
+    "91": {
+        "p12e_code": 91,
+        "scryfall_code": "mpr",
+        "name": "Magic Player Rewards 2001",
+        "date": "2001-01-01"
+    },
+    "92": {
+        "p12e_code": 92,
+        "scryfall_code": "pal01",
+        "name": "Arena League 2001",
+        "date": "2001-01-01"
+    },
+    "93": {
+        "p12e_code": 93,
+        "scryfall_code": "pls",
+        "name": "Planeshift",
+        "date": "2001-02-05"
+    },
+    "94": {
+        "p12e_code": 94,
+        "scryfall_code": "ppls",
+        "name": "Planeshift Promos",
+        "date": "2001-02-05"
+    },
+    "95": {
+        "p12e_code": 95,
+        "scryfall_code": "7ed",
+        "name": "Seventh Edition",
+        "date": "2001-04-11"
+    },
+    "96": {
+        "p12e_code": 96,
+        "scryfall_code": "apc",
+        "name": "Apocalypse",
+        "date": "2001-06-04"
+    },
+    "97": {
+        "p12e_code": 97,
+        "scryfall_code": "papc",
+        "name": "Apocalypse Promos",
+        "date": "2001-06-04"
+    },
+    "98": {
+        "p12e_code": 98,
+        "scryfall_code": "psdg",
+        "name": "Sega Dreamcast Cards",
+        "date": "2001-06-28"
+    },
+    "99": {
+        "p12e_code": 99,
+        "scryfall_code": "wc01",
+        "name": "World Championship Decks 2001",
+        "date": "2001-08-08"
+    },
+    "100": {
+        "p12e_code": 100,
+        "scryfall_code": "ody",
+        "name": "Odyssey",
+        "date": "2001-10-01"
+    },
+    "101": {
+        "p12e_code": 101,
+        "scryfall_code": "pody",
+        "name": "Odyssey Promos",
+        "date": "2001-10-01"
+    },
+    "102": {
+        "p12e_code": 102,
+        "scryfall_code": "dkm",
+        "name": "Deckmasters",
+        "date": "2001-12-01"
+    },
+    "103": {
+        "p12e_code": 103,
+        "scryfall_code": "f02",
+        "name": "Friday Night Magic 2002",
+        "date": "2002-01-01"
+    },
+    "104": {
+        "p12e_code": 104,
+        "scryfall_code": "g02",
+        "name": "Judge Gift Cards 2002",
+        "date": "2002-01-01"
+    },
+    "105": {
+        "p12e_code": 105,
+        "scryfall_code": "pal02",
+        "name": "Arena League 2002",
+        "date": "2002-01-01"
+    },
+    "106": {
+        "p12e_code": 106,
+        "scryfall_code": "pr2",
+        "name": "Magic Player Rewards 2002",
+        "date": "2002-01-01"
+    },
+    "107": {
+        "p12e_code": 107,
+        "scryfall_code": "ptor",
+        "name": "Torment Promos",
+        "date": "2002-02-04"
+    },
+    "108": {
+        "p12e_code": 108,
+        "scryfall_code": "tor",
+        "name": "Torment",
+        "date": "2002-02-04"
+    },
+    "109": {
+        "p12e_code": 109,
+        "scryfall_code": "jud",
+        "name": "Judgment",
+        "date": "2002-05-27"
+    },
+    "110": {
+        "p12e_code": 110,
+        "scryfall_code": "pjud",
+        "name": "Judgment Promos",
+        "date": "2002-05-27"
+    },
+    "111": {
+        "p12e_code": 111,
+        "scryfall_code": "prm",
+        "name": "Magic Online Promos",
+        "date": "2002-06-24"
+    },
+    "112": {
+        "p12e_code": 112,
+        "scryfall_code": "phj",
+        "name": "Hobby Japan Promos",
+        "date": "2002-07-01"
+    },
+    "113": {
+        "p12e_code": 113,
+        "scryfall_code": "wc02",
+        "name": "World Championship Decks 2002",
+        "date": "2002-08-14"
+    },
+    "114": {
+        "p12e_code": 114,
+        "scryfall_code": "ons",
+        "name": "Onslaught",
+        "date": "2002-10-07"
+    },
+    "115": {
+        "p12e_code": 115,
+        "scryfall_code": "f03",
+        "name": "Friday Night Magic 2003",
+        "date": "2003-01-01"
+    },
+    "116": {
+        "p12e_code": 116,
+        "scryfall_code": "g03",
+        "name": "Judge Gift Cards 2003",
+        "date": "2003-01-01"
+    },
+    "117": {
+        "p12e_code": 117,
+        "scryfall_code": "ovnt",
+        "name": "Vintage Championship",
+        "date": "2003-01-01"
+    },
+    "118": {
+        "p12e_code": 118,
+        "scryfall_code": "p03",
+        "name": "Magic Player Rewards 2003",
+        "date": "2003-01-01"
+    },
+    "119": {
+        "p12e_code": 119,
+        "scryfall_code": "pal03",
+        "name": "Arena League 2003",
+        "date": "2003-01-01"
+    },
+    "120": {
+        "p12e_code": 120,
+        "scryfall_code": "pjjt",
+        "name": "Japan Junior Tournament",
+        "date": "2003-01-01"
+    },
+    "121": {
+        "p12e_code": 121,
+        "scryfall_code": "pmoa",
+        "name": "Magic Online Avatars",
+        "date": "2003-01-01"
+    },
+    "122": {
+        "p12e_code": 122,
+        "scryfall_code": "lgn",
+        "name": "Legions",
+        "date": "2003-02-03"
+    },
+    "123": {
+        "p12e_code": 123,
+        "scryfall_code": "plgn",
+        "name": "Legions Promos",
+        "date": "2003-02-03"
+    },
+    "124": {
+        "p12e_code": 124,
+        "scryfall_code": "pons",
+        "name": "Onslaught Promos",
+        "date": "2003-02-03"
+    },
+    "125": {
+        "p12e_code": 125,
+        "scryfall_code": "pscg",
+        "name": "Scourge Promos",
+        "date": "2003-05-26"
+    },
+    "126": {
+        "p12e_code": 126,
+        "scryfall_code": "scg",
+        "name": "Scourge",
+        "date": "2003-05-26"
+    },
+    "127": {
+        "p12e_code": 127,
+        "scryfall_code": "8ed",
+        "name": "Eighth Edition",
+        "date": "2003-07-28"
+    },
+    "128": {
+        "p12e_code": 128,
+        "scryfall_code": "p8ed",
+        "name": "Eighth Edition Promos",
+        "date": "2003-07-28"
+    },
+    "129": {
+        "p12e_code": 129,
+        "scryfall_code": "wc03",
+        "name": "World Championship Decks 2003",
+        "date": "2003-08-06"
+    },
+    "130": {
+        "p12e_code": 130,
+        "scryfall_code": "mrd",
+        "name": "Mirrodin",
+        "date": "2003-10-02"
+    },
+    "131": {
+        "p12e_code": 131,
+        "scryfall_code": "f04",
+        "name": "Friday Night Magic 2004",
+        "date": "2004-01-01"
+    },
+    "132": {
+        "p12e_code": 132,
+        "scryfall_code": "g04",
+        "name": "Judge Gift Cards 2004",
+        "date": "2004-01-01"
+    },
+    "133": {
+        "p12e_code": 133,
+        "scryfall_code": "p04",
+        "name": "Magic Player Rewards 2004",
+        "date": "2004-01-01"
+    },
+    "134": {
+        "p12e_code": 134,
+        "scryfall_code": "pal04",
+        "name": "Arena League 2004",
+        "date": "2004-01-01"
+    },
+    "135": {
+        "p12e_code": 135,
+        "scryfall_code": "dst",
+        "name": "Darksteel",
+        "date": "2004-02-06"
+    },
+    "136": {
+        "p12e_code": 136,
+        "scryfall_code": "5dn",
+        "name": "Fifth Dawn",
+        "date": "2004-06-04"
+    },
+    "137": {
+        "p12e_code": 137,
+        "scryfall_code": "p5dn",
+        "name": "Fifth Dawn Promos",
+        "date": "2004-06-04"
+    },
+    "138": {
+        "p12e_code": 138,
+        "scryfall_code": "pdst",
+        "name": "Darksteel Promos",
+        "date": "2004-06-04"
+    },
+    "139": {
+        "p12e_code": 139,
+        "scryfall_code": "pmrd",
+        "name": "Mirrodin Promos",
+        "date": "2004-06-04"
+    },
+    "140": {
+        "p12e_code": 140,
+        "scryfall_code": "wc04",
+        "name": "World Championship Decks 2004",
+        "date": "2004-09-01"
+    },
+    "141": {
+        "p12e_code": 141,
+        "scryfall_code": "chk",
+        "name": "Champions of Kamigawa",
+        "date": "2004-10-01"
+    },
+    "142": {
+        "p12e_code": 142,
+        "scryfall_code": "pchk",
+        "name": "Champions of Kamigawa Promos",
+        "date": "2004-10-01"
+    },
+    "143": {
+        "p12e_code": 143,
+        "scryfall_code": "punh",
+        "name": "Unhinged Promos",
+        "date": "2004-11-19"
+    },
+    "144": {
+        "p12e_code": 144,
+        "scryfall_code": "unh",
+        "name": "Unhinged",
+        "date": "2004-11-19"
+    },
+    "145": {
+        "p12e_code": 145,
+        "scryfall_code": "f05",
+        "name": "Friday Night Magic 2005",
+        "date": "2005-01-01"
+    },
+    "146": {
+        "p12e_code": 146,
+        "scryfall_code": "g05",
+        "name": "Judge Gift Cards 2005",
+        "date": "2005-01-01"
+    },
+    "147": {
+        "p12e_code": 147,
+        "scryfall_code": "p05",
+        "name": "Magic Player Rewards 2005",
+        "date": "2005-01-01"
+    },
+    "148": {
+        "p12e_code": 148,
+        "scryfall_code": "pal05",
+        "name": "Arena League 2005",
+        "date": "2005-01-01"
+    },
+    "149": {
+        "p12e_code": 149,
+        "scryfall_code": "pjse",
+        "name": "Junior Series Europe",
+        "date": "2005-01-01"
+    },
+    "150": {
+        "p12e_code": 150,
+        "scryfall_code": "pmps",
+        "name": "Magic Premiere Shop 2005",
+        "date": "2005-01-01"
+    },
+    "151": {
+        "p12e_code": 151,
+        "scryfall_code": "bok",
+        "name": "Betrayers of Kamigawa",
+        "date": "2005-02-04"
+    },
+    "152": {
+        "p12e_code": 152,
+        "scryfall_code": "pbok",
+        "name": "Betrayers of Kamigawa Promos",
+        "date": "2005-02-04"
+    },
+    "153": {
+        "p12e_code": 153,
+        "scryfall_code": "psok",
+        "name": "Saviors of Kamigawa Promos",
+        "date": "2005-06-03"
+    },
+    "154": {
+        "p12e_code": 154,
+        "scryfall_code": "sok",
+        "name": "Saviors of Kamigawa",
+        "date": "2005-06-03"
+    },
+    "155": {
+        "p12e_code": 155,
+        "scryfall_code": "9ed",
+        "name": "Ninth Edition",
+        "date": "2005-07-29"
+    },
+    "156": {
+        "p12e_code": 156,
+        "scryfall_code": "p9ed",
+        "name": "Ninth Edition Promos",
+        "date": "2005-07-29"
+    },
+    "157": {
+        "p12e_code": 157,
+        "scryfall_code": "psal",
+        "name": "Salvat 2005",
+        "date": "2005-08-22"
+    },
+    "158": {
+        "p12e_code": 158,
+        "scryfall_code": "prav",
+        "name": "Ravnica: City of Guilds Promos",
+        "date": "2005-10-07"
+    },
+    "159": {
+        "p12e_code": 159,
+        "scryfall_code": "rav",
+        "name": "Ravnica: City of Guilds",
+        "date": "2005-10-07"
+    },
+    "160": {
+        "p12e_code": 160,
+        "scryfall_code": "p2hg",
+        "name": "Two-Headed Giant Tournament",
+        "date": "2005-12-09"
+    },
+    "161": {
+        "p12e_code": 161,
+        "scryfall_code": "f06",
+        "name": "Friday Night Magic 2006",
+        "date": "2006-01-01"
+    },
+    "162": {
+        "p12e_code": 162,
+        "scryfall_code": "g06",
+        "name": "Judge Gift Cards 2006",
+        "date": "2006-01-01"
+    },
+    "163": {
+        "p12e_code": 163,
+        "scryfall_code": "p06",
+        "name": "Magic Player Rewards 2006",
+        "date": "2006-01-01"
+    },
+    "164": {
+        "p12e_code": 164,
+        "scryfall_code": "pal06",
+        "name": "Arena League 2006",
+        "date": "2006-01-01"
+    },
+    "165": {
+        "p12e_code": 165,
+        "scryfall_code": "pgtw",
+        "name": "Gateway 2006",
+        "date": "2006-01-01"
+    },
+    "166": {
+        "p12e_code": 166,
+        "scryfall_code": "phuk",
+        "name": "Hachette UK",
+        "date": "2006-01-01"
+    },
+    "167": {
+        "p12e_code": 167,
+        "scryfall_code": "pjas",
+        "name": "Junior APAC Series",
+        "date": "2006-01-01"
+    },
+    "168": {
+        "p12e_code": 168,
+        "scryfall_code": "pmps06",
+        "name": "Magic Premiere Shop 2006",
+        "date": "2006-01-01"
+    },
+    "169": {
+        "p12e_code": 169,
+        "scryfall_code": "gpt",
+        "name": "Guildpact",
+        "date": "2006-02-03"
+    },
+    "170": {
+        "p12e_code": 170,
+        "scryfall_code": "pgpt",
+        "name": "Guildpact Promos",
+        "date": "2006-02-03"
+    },
+    "171": {
+        "p12e_code": 171,
+        "scryfall_code": "pcmp",
+        "name": "Champs and States",
+        "date": "2006-03-18"
+    },
+    "172": {
+        "p12e_code": 172,
+        "scryfall_code": "dis",
+        "name": "Dissension",
+        "date": "2006-05-05"
+    },
+    "173": {
+        "p12e_code": 173,
+        "scryfall_code": "pdis",
+        "name": "Dissension Promos",
+        "date": "2006-05-05"
+    },
+    "174": {
+        "p12e_code": 174,
+        "scryfall_code": "csp",
+        "name": "Coldsnap",
+        "date": "2006-07-21"
+    },
+    "175": {
+        "p12e_code": 175,
+        "scryfall_code": "cst",
+        "name": "Coldsnap Theme Decks",
+        "date": "2006-07-21"
+    },
+    "176": {
+        "p12e_code": 176,
+        "scryfall_code": "pcsp",
+        "name": "Coldsnap Promos",
+        "date": "2006-07-21"
+    },
+    "177": {
+        "p12e_code": 177,
+        "scryfall_code": "ptsp",
+        "name": "Time Spiral Promos",
+        "date": "2006-10-06"
+    },
+    "178": {
+        "p12e_code": 178,
+        "scryfall_code": "tsb",
+        "name": "Time Spiral Timeshifted",
+        "date": "2006-10-06"
+    },
+    "179": {
+        "p12e_code": 179,
+        "scryfall_code": "tsp",
+        "name": "Time Spiral",
+        "date": "2006-10-06"
+    },
+    "180": {
+        "p12e_code": 180,
+        "scryfall_code": "hho",
+        "name": "Happy Holidays",
+        "date": "2006-12-31"
+    },
+    "181": {
+        "p12e_code": 181,
+        "scryfall_code": "f07",
+        "name": "Friday Night Magic 2007",
+        "date": "2007-01-01"
+    },
+    "182": {
+        "p12e_code": 182,
+        "scryfall_code": "g07",
+        "name": "Judge Gift Cards 2007",
+        "date": "2007-01-01"
+    },
+    "183": {
+        "p12e_code": 183,
+        "scryfall_code": "p07",
+        "name": "Magic Player Rewards 2007",
+        "date": "2007-01-01"
+    },
+    "184": {
+        "p12e_code": 184,
+        "scryfall_code": "pg07",
+        "name": "Gateway 2007",
+        "date": "2007-01-01"
+    },
+    "185": {
+        "p12e_code": 185,
+        "scryfall_code": "pmps07",
+        "name": "Magic Premiere Shop 2007",
+        "date": "2007-01-01"
+    },
+    "186": {
+        "p12e_code": 186,
+        "scryfall_code": "pres",
+        "name": "Resale Promos",
+        "date": "2007-01-01"
+    },
+    "187": {
+        "p12e_code": 187,
+        "scryfall_code": "plc",
+        "name": "Planar Chaos",
+        "date": "2007-02-02"
+    },
+    "188": {
+        "p12e_code": 188,
+        "scryfall_code": "pplc",
+        "name": "Planar Chaos Promos",
+        "date": "2007-02-02"
+    },
+    "189": {
+        "p12e_code": 189,
+        "scryfall_code": "ppro",
+        "name": "Pro Tour Promos",
+        "date": "2007-02-09"
+    },
+    "190": {
+        "p12e_code": 190,
+        "scryfall_code": "pgpx",
+        "name": "Grand Prix Promos",
+        "date": "2007-02-24"
+    },
+    "191": {
+        "p12e_code": 191,
+        "scryfall_code": "fut",
+        "name": "Future Sight",
+        "date": "2007-05-04"
+    },
+    "192": {
+        "p12e_code": 192,
+        "scryfall_code": "pfut",
+        "name": "Future Sight Promos",
+        "date": "2007-05-04"
+    },
+    "193": {
+        "p12e_code": 193,
+        "scryfall_code": "10e",
+        "name": "Tenth Edition",
+        "date": "2007-07-13"
+    },
+    "194": {
+        "p12e_code": 194,
+        "scryfall_code": "p10e",
+        "name": "Tenth Edition Promos",
+        "date": "2007-07-13"
+    },
+    "195": {
+        "p12e_code": 195,
+        "scryfall_code": "t10e",
+        "name": "Tenth Edition Tokens",
+        "date": "2007-07-13"
+    },
+    "196": {
+        "p12e_code": 196,
+        "scryfall_code": "psum",
+        "name": "Summer of Magic",
+        "date": "2007-07-21"
+    },
+    "197": {
+        "p12e_code": 197,
+        "scryfall_code": "me1",
+        "name": "Masters Edition",
+        "date": "2007-09-10"
+    },
+    "198": {
+        "p12e_code": 198,
+        "scryfall_code": "lrw",
+        "name": "Lorwyn",
+        "date": "2007-10-12"
+    },
+    "199": {
+        "p12e_code": 199,
+        "scryfall_code": "plrw",
+        "name": "Lorwyn Promos",
+        "date": "2007-10-12"
+    },
+    "200": {
+        "p12e_code": 200,
+        "scryfall_code": "tlrw",
+        "name": "Lorwyn Tokens",
+        "date": "2007-10-12"
+    },
+    "201": {
+        "p12e_code": 201,
+        "scryfall_code": "dd1",
+        "name": "Duel Decks: Elves vs. Goblins",
+        "date": "2007-11-16"
+    },
+    "202": {
+        "p12e_code": 202,
+        "scryfall_code": "tdd1",
+        "name": "Duel Decks: Elves vs. Goblins Tokens",
+        "date": "2007-11-16"
+    },
+    "203": {
+        "p12e_code": 203,
+        "scryfall_code": "f08",
+        "name": "Friday Night Magic 2008",
+        "date": "2008-01-01"
+    },
+    "204": {
+        "p12e_code": 204,
+        "scryfall_code": "g08",
+        "name": "Judge Gift Cards 2008",
+        "date": "2008-01-01"
+    },
+    "205": {
+        "p12e_code": 205,
+        "scryfall_code": "p08",
+        "name": "Magic Player Rewards 2008",
+        "date": "2008-01-01"
+    },
+    "206": {
+        "p12e_code": 206,
+        "scryfall_code": "pg08",
+        "name": "Gateway 2008",
+        "date": "2008-01-01"
+    },
+    "207": {
+        "p12e_code": 207,
+        "scryfall_code": "pmps08",
+        "name": "Magic Premiere Shop 2008",
+        "date": "2008-01-01"
+    },
+    "208": {
+        "p12e_code": 208,
+        "scryfall_code": "mor",
+        "name": "Morningtide",
+        "date": "2008-02-01"
+    },
+    "209": {
+        "p12e_code": 209,
+        "scryfall_code": "pmor",
+        "name": "Morningtide Promos",
+        "date": "2008-02-01"
+    },
+    "210": {
+        "p12e_code": 210,
+        "scryfall_code": "tmor",
+        "name": "Morningtide Tokens",
+        "date": "2008-02-01"
+    },
+    "211": {
+        "p12e_code": 211,
+        "scryfall_code": "p15a",
+        "name": "15th Anniversary Cards",
+        "date": "2008-04-01"
+    },
+    "212": {
+        "p12e_code": 212,
+        "scryfall_code": "pshm",
+        "name": "Shadowmoor Promos",
+        "date": "2008-05-02"
+    },
+    "213": {
+        "p12e_code": 213,
+        "scryfall_code": "shm",
+        "name": "Shadowmoor",
+        "date": "2008-05-02"
+    },
+    "214": {
+        "p12e_code": 214,
+        "scryfall_code": "tshm",
+        "name": "Shadowmoor Tokens",
+        "date": "2008-05-02"
+    },
+    "215": {
+        "p12e_code": 215,
+        "scryfall_code": "eve",
+        "name": "Eventide",
+        "date": "2008-07-25"
+    },
+    "216": {
+        "p12e_code": 216,
+        "scryfall_code": "peve",
+        "name": "Eventide Promos",
+        "date": "2008-07-25"
+    },
+    "217": {
+        "p12e_code": 217,
+        "scryfall_code": "teve",
+        "name": "Eventide Tokens",
+        "date": "2008-07-25"
+    },
+    "218": {
+        "p12e_code": 218,
+        "scryfall_code": "drb",
+        "name": "From the Vault: Dragons",
+        "date": "2008-08-29"
+    },
+    "219": {
+        "p12e_code": 219,
+        "scryfall_code": "me2",
+        "name": "Masters Edition II",
+        "date": "2008-09-22"
+    },
+    "220": {
+        "p12e_code": 220,
+        "scryfall_code": "pwpn",
+        "name": "Wizards Play Network 2008",
+        "date": "2008-10-01"
+    },
+    "221": {
+        "p12e_code": 221,
+        "scryfall_code": "ala",
+        "name": "Shards of Alara",
+        "date": "2008-10-03"
+    },
+    "222": {
+        "p12e_code": 222,
+        "scryfall_code": "pala",
+        "name": "Shards of Alara Promos",
+        "date": "2008-10-03"
+    },
+    "223": {
+        "p12e_code": 223,
+        "scryfall_code": "tala",
+        "name": "Shards of Alara Tokens",
+        "date": "2008-10-03"
+    },
+    "224": {
+        "p12e_code": 224,
+        "scryfall_code": "dd2",
+        "name": "Duel Decks: Jace vs. Chandra",
+        "date": "2008-11-07"
+    },
+    "225": {
+        "p12e_code": 225,
+        "scryfall_code": "tdd2",
+        "name": "Duel Decks: Jace vs. Chandra Tokens",
+        "date": "2008-11-07"
+    },
+    "226": {
+        "p12e_code": 226,
+        "scryfall_code": "f09",
+        "name": "Friday Night Magic 2009",
+        "date": "2009-01-01"
+    },
+    "227": {
+        "p12e_code": 227,
+        "scryfall_code": "g09",
+        "name": "Judge Gift Cards 2009",
+        "date": "2009-01-01"
+    },
+    "228": {
+        "p12e_code": 228,
+        "scryfall_code": "p09",
+        "name": "Magic Player Rewards 2009",
+        "date": "2009-01-01"
+    },
+    "229": {
+        "p12e_code": 229,
+        "scryfall_code": "pdtp",
+        "name": "Duels of the Planeswalkers 2009 Promos ",
+        "date": "2009-01-01"
+    },
+    "230": {
+        "p12e_code": 230,
+        "scryfall_code": "pmps09",
+        "name": "Magic Premiere Shop 2009",
+        "date": "2009-01-01"
+    },
+    "231": {
+        "p12e_code": 231,
+        "scryfall_code": "pwp09",
+        "name": "Wizards Play Network 2009",
+        "date": "2009-01-01"
+    },
+    "232": {
+        "p12e_code": 232,
+        "scryfall_code": "pbook",
+        "name": "Miscellaneous Book Promos",
+        "date": "2009-01-27"
+    },
+    "233": {
+        "p12e_code": 233,
+        "scryfall_code": "con",
+        "name": "Conflux",
+        "date": "2009-02-06"
+    },
+    "234": {
+        "p12e_code": 234,
+        "scryfall_code": "pcon",
+        "name": "Conflux Promos",
+        "date": "2009-02-06"
+    },
+    "235": {
+        "p12e_code": 235,
+        "scryfall_code": "tcon",
+        "name": "Conflux Tokens",
+        "date": "2009-02-06"
+    },
+    "236": {
+        "p12e_code": 236,
+        "scryfall_code": "purl",
+        "name": "URL/Convention Promos",
+        "date": "2009-02-08"
+    },
+    "237": {
+        "p12e_code": 237,
+        "scryfall_code": "ddc",
+        "name": "Duel Decks: Divine vs. Demonic",
+        "date": "2009-04-10"
+    },
+    "238": {
+        "p12e_code": 238,
+        "scryfall_code": "tddc",
+        "name": "Duel Decks: Divine vs. Demonic Tokens",
+        "date": "2009-04-10"
+    },
+    "239": {
+        "p12e_code": 239,
+        "scryfall_code": "arb",
+        "name": "Alara Reborn",
+        "date": "2009-04-30"
+    },
+    "240": {
+        "p12e_code": 240,
+        "scryfall_code": "parb",
+        "name": "Alara Reborn Promos",
+        "date": "2009-04-30"
+    },
+    "241": {
+        "p12e_code": 241,
+        "scryfall_code": "tarb",
+        "name": "Alara Reborn Tokens",
+        "date": "2009-04-30"
+    },
+    "242": {
+        "p12e_code": 242,
+        "scryfall_code": "pm10",
+        "name": "Magic 2010 Promos",
+        "date": "2009-07-16"
+    },
+    "243": {
+        "p12e_code": 243,
+        "scryfall_code": "m10",
+        "name": "Magic 2010",
+        "date": "2009-07-17"
+    },
+    "244": {
+        "p12e_code": 244,
+        "scryfall_code": "tm10",
+        "name": "Magic 2010 Tokens",
+        "date": "2009-07-17"
+    },
+    "245": {
+        "p12e_code": 245,
+        "scryfall_code": "v09",
+        "name": "From the Vault: Exiled",
+        "date": "2009-08-28"
+    },
+    "246": {
+        "p12e_code": 246,
+        "scryfall_code": "hop",
+        "name": "Planechase",
+        "date": "2009-09-04"
+    },
+    "247": {
+        "p12e_code": 247,
+        "scryfall_code": "ohop",
+        "name": "Planechase Planes",
+        "date": "2009-09-04"
+    },
+    "248": {
+        "p12e_code": 248,
+        "scryfall_code": "phop",
+        "name": "Promotional Planes",
+        "date": "2009-09-04"
+    },
+    "249": {
+        "p12e_code": 249,
+        "scryfall_code": "me3",
+        "name": "Masters Edition III",
+        "date": "2009-09-07"
+    },
+    "250": {
+        "p12e_code": 250,
+        "scryfall_code": "pzen",
+        "name": "Zendikar Promos",
+        "date": "2009-10-02"
+    },
+    "251": {
+        "p12e_code": 251,
+        "scryfall_code": "tzen",
+        "name": "Zendikar Tokens",
+        "date": "2009-10-02"
+    },
+    "252": {
+        "p12e_code": 252,
+        "scryfall_code": "zen",
+        "name": "Zendikar",
+        "date": "2009-10-02"
+    },
+    "253": {
+        "p12e_code": 253,
+        "scryfall_code": "ddd",
+        "name": "Duel Decks: Garruk vs. Liliana",
+        "date": "2009-10-30"
+    },
+    "254": {
+        "p12e_code": 254,
+        "scryfall_code": "tddd",
+        "name": "Duel Decks: Garruk vs. Liliana Tokens",
+        "date": "2009-10-30"
+    },
+    "255": {
+        "p12e_code": 255,
+        "scryfall_code": "h09",
+        "name": "Premium Deck Series: Slivers",
+        "date": "2009-11-20"
+    },
+    "256": {
+        "p12e_code": 256,
+        "scryfall_code": "f10",
+        "name": "Friday Night Magic 2010",
+        "date": "2010-01-01"
+    },
+    "257": {
+        "p12e_code": 257,
+        "scryfall_code": "g10",
+        "name": "Judge Gift Cards 2010",
+        "date": "2010-01-01"
+    },
+    "258": {
+        "p12e_code": 258,
+        "scryfall_code": "p10",
+        "name": "Magic Player Rewards 2010",
+        "date": "2010-01-01"
+    },
+    "259": {
+        "p12e_code": 259,
+        "scryfall_code": "pdp10",
+        "name": "Duels of the Planeswalkers 2010 Promos ",
+        "date": "2010-01-01"
+    },
+    "260": {
+        "p12e_code": 260,
+        "scryfall_code": "pmps10",
+        "name": "Magic Premiere Shop 2010",
+        "date": "2010-01-01"
+    },
+    "261": {
+        "p12e_code": 261,
+        "scryfall_code": "pwp10",
+        "name": "Wizards Play Network 2010",
+        "date": "2010-01-01"
+    },
+    "262": {
+        "p12e_code": 262,
+        "scryfall_code": "pwwk",
+        "name": "Worldwake Promos",
+        "date": "2010-02-05"
+    },
+    "263": {
+        "p12e_code": 263,
+        "scryfall_code": "twwk",
+        "name": "Worldwake Tokens",
+        "date": "2010-02-05"
+    },
+    "264": {
+        "p12e_code": 264,
+        "scryfall_code": "wwk",
+        "name": "Worldwake",
+        "date": "2010-02-05"
+    },
+    "265": {
+        "p12e_code": 265,
+        "scryfall_code": "dde",
+        "name": "Duel Decks: Phyrexia vs. the Coalition",
+        "date": "2010-03-19"
+    },
+    "266": {
+        "p12e_code": 266,
+        "scryfall_code": "tdde",
+        "name": "Duel Decks: Phyrexia vs. the Coalition Tokens",
+        "date": "2010-03-19"
+    },
+    "267": {
+        "p12e_code": 267,
+        "scryfall_code": "proe",
+        "name": "Rise of the Eldrazi Promos",
+        "date": "2010-04-23"
+    },
+    "268": {
+        "p12e_code": 268,
+        "scryfall_code": "roe",
+        "name": "Rise of the Eldrazi",
+        "date": "2010-04-23"
+    },
+    "269": {
+        "p12e_code": 269,
+        "scryfall_code": "troe",
+        "name": "Rise of the Eldrazi Tokens",
+        "date": "2010-04-23"
+    },
+    "270": {
+        "p12e_code": 270,
+        "scryfall_code": "dpa",
+        "name": "Duels of the Planeswalkers",
+        "date": "2010-06-04"
+    },
+    "271": {
+        "p12e_code": 271,
+        "scryfall_code": "arc",
+        "name": "Archenemy",
+        "date": "2010-06-18"
+    },
+    "272": {
+        "p12e_code": 272,
+        "scryfall_code": "oarc",
+        "name": "Archenemy Schemes",
+        "date": "2010-06-18"
+    },
+    "273": {
+        "p12e_code": 273,
+        "scryfall_code": "parc",
+        "name": "Promotional Schemes",
+        "date": "2010-06-18"
+    },
+    "274": {
+        "p12e_code": 274,
+        "scryfall_code": "pm11",
+        "name": "Magic 2011 Promos",
+        "date": "2010-07-15"
+    },
+    "275": {
+        "p12e_code": 275,
+        "scryfall_code": "m11",
+        "name": "Magic 2011",
+        "date": "2010-07-16"
+    },
+    "276": {
+        "p12e_code": 276,
+        "scryfall_code": "tm11",
+        "name": "Magic 2011 Tokens",
+        "date": "2010-07-16"
+    },
+    "277": {
+        "p12e_code": 277,
+        "scryfall_code": "v10",
+        "name": "From the Vault: Relics",
+        "date": "2010-08-27"
+    },
+    "278": {
+        "p12e_code": 278,
+        "scryfall_code": "ddf",
+        "name": "Duel Decks: Elspeth vs. Tezzeret",
+        "date": "2010-09-03"
+    },
+    "279": {
+        "p12e_code": 279,
+        "scryfall_code": "tddf",
+        "name": "Duel Decks: Elspeth vs. Tezzeret Tokens",
+        "date": "2010-09-03"
+    },
+    "280": {
+        "p12e_code": 280,
+        "scryfall_code": "psom",
+        "name": "Scars of Mirrodin Promos",
+        "date": "2010-09-30"
+    },
+    "281": {
+        "p12e_code": 281,
+        "scryfall_code": "som",
+        "name": "Scars of Mirrodin",
+        "date": "2010-10-01"
+    },
+    "282": {
+        "p12e_code": 282,
+        "scryfall_code": "tsom",
+        "name": "Scars of Mirrodin Tokens",
+        "date": "2010-10-01"
+    },
+    "283": {
+        "p12e_code": 283,
+        "scryfall_code": "td0",
+        "name": "Magic Online Theme Decks",
+        "date": "2010-11-08"
+    },
+    "284": {
+        "p12e_code": 284,
+        "scryfall_code": "pd2",
+        "name": "Premium Deck Series: Fire and Lightning",
+        "date": "2010-11-19"
+    },
+    "285": {
+        "p12e_code": 285,
+        "scryfall_code": "f11",
+        "name": "Friday Night Magic 2011",
+        "date": "2011-01-01"
+    },
+    "286": {
+        "p12e_code": 286,
+        "scryfall_code": "g11",
+        "name": "Judge Gift Cards 2011",
+        "date": "2011-01-01"
+    },
+    "287": {
+        "p12e_code": 287,
+        "scryfall_code": "olgc",
+        "name": "Legacy Championship",
+        "date": "2011-01-01"
+    },
+    "288": {
+        "p12e_code": 288,
+        "scryfall_code": "p11",
+        "name": "Magic Player Rewards 2011",
+        "date": "2011-01-01"
+    },
+    "289": {
+        "p12e_code": 289,
+        "scryfall_code": "pdp12",
+        "name": "Duels of the Planeswalkers 2012 Promos ",
+        "date": "2011-01-01"
+    },
+    "290": {
+        "p12e_code": 290,
+        "scryfall_code": "pmps11",
+        "name": "Magic Premiere Shop 2011",
+        "date": "2011-01-01"
+    },
+    "291": {
+        "p12e_code": 291,
+        "scryfall_code": "ps11",
+        "name": "Salvat 2011",
+        "date": "2011-01-01"
+    },
+    "292": {
+        "p12e_code": 292,
+        "scryfall_code": "pwp11",
+        "name": "Wizards Play Network 2011",
+        "date": "2011-01-01"
+    },
+    "293": {
+        "p12e_code": 293,
+        "scryfall_code": "me4",
+        "name": "Masters Edition IV",
+        "date": "2011-01-10"
+    },
+    "294": {
+        "p12e_code": 294,
+        "scryfall_code": "pmbs",
+        "name": "Mirrodin Besieged Promos",
+        "date": "2011-02-03"
+    },
+    "295": {
+        "p12e_code": 295,
+        "scryfall_code": "mbs",
+        "name": "Mirrodin Besieged",
+        "date": "2011-02-04"
+    },
+    "296": {
+        "p12e_code": 296,
+        "scryfall_code": "tmbs",
+        "name": "Mirrodin Besieged Tokens",
+        "date": "2011-02-04"
+    },
+    "297": {
+        "p12e_code": 297,
+        "scryfall_code": "ddg",
+        "name": "Duel Decks: Knights vs. Dragons",
+        "date": "2011-04-01"
+    },
+    "298": {
+        "p12e_code": 298,
+        "scryfall_code": "tddg",
+        "name": "Duel Decks: Knights vs. Dragons Tokens",
+        "date": "2011-04-01"
+    },
+    "299": {
+        "p12e_code": 299,
+        "scryfall_code": "pnph",
+        "name": "New Phyrexia Promos",
+        "date": "2011-05-12"
+    },
+    "300": {
+        "p12e_code": 300,
+        "scryfall_code": "nph",
+        "name": "New Phyrexia",
+        "date": "2011-05-13"
+    },
+    "301": {
+        "p12e_code": 301,
+        "scryfall_code": "tnph",
+        "name": "New Phyrexia Tokens",
+        "date": "2011-05-13"
+    },
+    "302": {
+        "p12e_code": 302,
+        "scryfall_code": "td2",
+        "name": "Duel Decks: Mirrodin Pure vs. New Phyrexia",
+        "date": "2011-05-14"
+    },
+    "303": {
+        "p12e_code": 303,
+        "scryfall_code": "cmd",
+        "name": "Commander 2011",
+        "date": "2011-06-17"
+    },
+    "304": {
+        "p12e_code": 304,
+        "scryfall_code": "ocmd",
+        "name": "Commander 2011 Oversized",
+        "date": "2011-06-17"
+    },
+    "305": {
+        "p12e_code": 305,
+        "scryfall_code": "pcmd",
+        "name": "Commander 2011 Launch Party",
+        "date": "2011-06-17"
+    },
+    "306": {
+        "p12e_code": 306,
+        "scryfall_code": "pm12",
+        "name": "Magic 2012 Promos",
+        "date": "2011-07-14"
+    },
+    "307": {
+        "p12e_code": 307,
+        "scryfall_code": "m12",
+        "name": "Magic 2012",
+        "date": "2011-07-15"
+    },
+    "308": {
+        "p12e_code": 308,
+        "scryfall_code": "tm12",
+        "name": "Magic 2012 Tokens",
+        "date": "2011-07-15"
+    },
+    "309": {
+        "p12e_code": 309,
+        "scryfall_code": "v11",
+        "name": "From the Vault: Legends",
+        "date": "2011-08-26"
+    },
+    "310": {
+        "p12e_code": 310,
+        "scryfall_code": "ddh",
+        "name": "Duel Decks: Ajani vs. Nicol Bolas",
+        "date": "2011-09-02"
+    },
+    "311": {
+        "p12e_code": 311,
+        "scryfall_code": "tddh",
+        "name": "Duel Decks: Ajani vs. Nicol Bolas Tokens",
+        "date": "2011-09-02"
+    },
+    "312": {
+        "p12e_code": 312,
+        "scryfall_code": "pisd",
+        "name": "Innistrad Promos",
+        "date": "2011-09-24"
+    },
+    "313": {
+        "p12e_code": 313,
+        "scryfall_code": "isd",
+        "name": "Innistrad",
+        "date": "2011-09-30"
+    },
+    "314": {
+        "p12e_code": 314,
+        "scryfall_code": "tisd",
+        "name": "Innistrad Tokens",
+        "date": "2011-09-30"
+    },
+    "315": {
+        "p12e_code": 315,
+        "scryfall_code": "pd3",
+        "name": "Premium Deck Series: Graveborn",
+        "date": "2011-11-18"
+    },
+    "316": {
+        "p12e_code": 316,
+        "scryfall_code": "f12",
+        "name": "Friday Night Magic 2012",
+        "date": "2012-01-01"
+    },
+    "317": {
+        "p12e_code": 317,
+        "scryfall_code": "j12",
+        "name": "Judge Gift Cards 2012",
+        "date": "2012-01-01"
+    },
+    "318": {
+        "p12e_code": 318,
+        "scryfall_code": "l12",
+        "name": "League Tokens 2012",
+        "date": "2012-01-01"
+    },
+    "319": {
+        "p12e_code": 319,
+        "scryfall_code": "pdp13",
+        "name": "Duels of the Planeswalkers 2013 Promos ",
+        "date": "2012-01-01"
+    },
+    "320": {
+        "p12e_code": 320,
+        "scryfall_code": "pidw",
+        "name": "IDW Comics 2012",
+        "date": "2012-01-01"
+    },
+    "321": {
+        "p12e_code": 321,
+        "scryfall_code": "pwp12",
+        "name": "Wizards Play Network 2012",
+        "date": "2012-01-01"
+    },
+    "322": {
+        "p12e_code": 322,
+        "scryfall_code": "pdka",
+        "name": "Dark Ascension Promos",
+        "date": "2012-01-28"
+    },
+    "323": {
+        "p12e_code": 323,
+        "scryfall_code": "dka",
+        "name": "Dark Ascension",
+        "date": "2012-02-03"
+    },
+    "324": {
+        "p12e_code": 324,
+        "scryfall_code": "tdka",
+        "name": "Dark Ascension Tokens",
+        "date": "2012-02-03"
+    },
+    "325": {
+        "p12e_code": 325,
+        "scryfall_code": "ddi",
+        "name": "Duel Decks: Venser vs. Koth",
+        "date": "2012-03-30"
+    },
+    "326": {
+        "p12e_code": 326,
+        "scryfall_code": "tddi",
+        "name": "Duel Decks: Venser vs. Koth Tokens",
+        "date": "2012-03-30"
+    },
+    "327": {
+        "p12e_code": 327,
+        "scryfall_code": "pavr",
+        "name": "Avacyn Restored Promos",
+        "date": "2012-04-28"
+    },
+    "328": {
+        "p12e_code": 328,
+        "scryfall_code": "phel",
+        "name": "Open the Helvault",
+        "date": "2012-04-28"
+    },
+    "329": {
+        "p12e_code": 329,
+        "scryfall_code": "avr",
+        "name": "Avacyn Restored",
+        "date": "2012-05-04"
+    },
+    "330": {
+        "p12e_code": 330,
+        "scryfall_code": "tavr",
+        "name": "Avacyn Restored Tokens",
+        "date": "2012-05-04"
+    },
+    "331": {
+        "p12e_code": 331,
+        "scryfall_code": "opc2",
+        "name": "Planechase 2012 Planes",
+        "date": "2012-06-01"
+    },
+    "332": {
+        "p12e_code": 332,
+        "scryfall_code": "pc2",
+        "name": "Planechase 2012",
+        "date": "2012-06-01"
+    },
+    "333": {
+        "p12e_code": 333,
+        "scryfall_code": "pm13",
+        "name": "Magic 2013 Promos",
+        "date": "2012-07-12"
+    },
+    "334": {
+        "p12e_code": 334,
+        "scryfall_code": "m13",
+        "name": "Magic 2013",
+        "date": "2012-07-13"
+    },
+    "335": {
+        "p12e_code": 335,
+        "scryfall_code": "tm13",
+        "name": "Magic 2013 Tokens",
+        "date": "2012-07-13"
+    },
+    "336": {
+        "p12e_code": 336,
+        "scryfall_code": "v12",
+        "name": "From the Vault: Realms",
+        "date": "2012-08-31"
+    },
+    "337": {
+        "p12e_code": 337,
+        "scryfall_code": "ddj",
+        "name": "Duel Decks: Izzet vs. Golgari",
+        "date": "2012-09-07"
+    },
+    "338": {
+        "p12e_code": 338,
+        "scryfall_code": "tddj",
+        "name": "Duel Decks: Izzet vs. Golgari Tokens",
+        "date": "2012-09-07"
+    },
+    "339": {
+        "p12e_code": 339,
+        "scryfall_code": "prtr",
+        "name": "Return to Ravnica Promos",
+        "date": "2012-10-05"
+    },
+    "340": {
+        "p12e_code": 340,
+        "scryfall_code": "rtr",
+        "name": "Return to Ravnica",
+        "date": "2012-10-05"
+    },
+    "341": {
+        "p12e_code": 341,
+        "scryfall_code": "trtr",
+        "name": "Return to Ravnica Tokens",
+        "date": "2012-10-05"
+    },
+    "342": {
+        "p12e_code": 342,
+        "scryfall_code": "cm1",
+        "name": "Commander's Arsenal",
+        "date": "2012-11-02"
+    },
+    "343": {
+        "p12e_code": 343,
+        "scryfall_code": "ocm1",
+        "name": "Commander's Arsenal Oversized",
+        "date": "2012-11-02"
+    },
+    "344": {
+        "p12e_code": 344,
+        "scryfall_code": "f13",
+        "name": "Friday Night Magic 2013",
+        "date": "2013-01-01"
+    },
+    "345": {
+        "p12e_code": 345,
+        "scryfall_code": "j13",
+        "name": "Judge Gift Cards 2013",
+        "date": "2013-01-01"
+    },
+    "346": {
+        "p12e_code": 346,
+        "scryfall_code": "l13",
+        "name": "League Tokens 2013",
+        "date": "2013-01-01"
+    },
+    "347": {
+        "p12e_code": 347,
+        "scryfall_code": "pdp14",
+        "name": "Duels of the Planeswalkers 2014 Promos ",
+        "date": "2013-01-01"
+    },
+    "348": {
+        "p12e_code": 348,
+        "scryfall_code": "pi13",
+        "name": "IDW Comics 2013",
+        "date": "2013-01-01"
+    },
+    "349": {
+        "p12e_code": 349,
+        "scryfall_code": "pgtc",
+        "name": "Gatecrash Promos",
+        "date": "2013-01-26"
+    },
+    "350": {
+        "p12e_code": 350,
+        "scryfall_code": "gtc",
+        "name": "Gatecrash",
+        "date": "2013-02-01"
+    },
+    "351": {
+        "p12e_code": 351,
+        "scryfall_code": "tgtc",
+        "name": "Gatecrash Tokens",
+        "date": "2013-02-01"
+    },
+    "352": {
+        "p12e_code": 352,
+        "scryfall_code": "ddk",
+        "name": "Duel Decks: Sorin vs. Tibalt",
+        "date": "2013-03-15"
+    },
+    "353": {
+        "p12e_code": 353,
+        "scryfall_code": "tddk",
+        "name": "Duel Decks: Sorin vs. Tibalt Tokens",
+        "date": "2013-03-15"
+    },
+    "354": {
+        "p12e_code": 354,
+        "scryfall_code": "pwcq",
+        "name": "World Magic Cup Qualifiers",
+        "date": "2013-04-06"
+    },
+    "355": {
+        "p12e_code": 355,
+        "scryfall_code": "pdgm",
+        "name": "Dragon's Maze Promos",
+        "date": "2013-04-27"
+    },
+    "356": {
+        "p12e_code": 356,
+        "scryfall_code": "dgm",
+        "name": "Dragon's Maze",
+        "date": "2013-05-03"
+    },
+    "357": {
+        "p12e_code": 357,
+        "scryfall_code": "tdgm",
+        "name": "Dragon's Maze Tokens",
+        "date": "2013-05-03"
+    },
+    "358": {
+        "p12e_code": 358,
+        "scryfall_code": "mma",
+        "name": "Modern Masters",
+        "date": "2013-06-07"
+    },
+    "359": {
+        "p12e_code": 359,
+        "scryfall_code": "tmma",
+        "name": "Modern Masters Tokens",
+        "date": "2013-06-07"
+    },
+    "360": {
+        "p12e_code": 360,
+        "scryfall_code": "pm14",
+        "name": "Magic 2014 Promos",
+        "date": "2013-07-18"
+    },
+    "361": {
+        "p12e_code": 361,
+        "scryfall_code": "psdc",
+        "name": "San Diego Comic-Con 2013",
+        "date": "2013-07-18"
+    },
+    "362": {
+        "p12e_code": 362,
+        "scryfall_code": "m14",
+        "name": "Magic 2014",
+        "date": "2013-07-19"
+    },
+    "363": {
+        "p12e_code": 363,
+        "scryfall_code": "tm14",
+        "name": "Magic 2014 Tokens",
+        "date": "2013-07-19"
+    },
+    "364": {
+        "p12e_code": 364,
+        "scryfall_code": "v13",
+        "name": "From the Vault: Twenty",
+        "date": "2013-08-23"
+    },
+    "365": {
+        "p12e_code": 365,
+        "scryfall_code": "ddl",
+        "name": "Duel Decks: Heroes vs. Monsters",
+        "date": "2013-09-06"
+    },
+    "366": {
+        "p12e_code": 366,
+        "scryfall_code": "tddl",
+        "name": "Duel Decks: Heroes vs. Monsters Tokens",
+        "date": "2013-09-06"
+    },
+    "367": {
+        "p12e_code": 367,
+        "scryfall_code": "pths",
+        "name": "Theros Promos",
+        "date": "2013-09-21"
+    },
+    "368": {
+        "p12e_code": 368,
+        "scryfall_code": "thp1",
+        "name": "Theros Hero's Path",
+        "date": "2013-09-27"
+    },
+    "369": {
+        "p12e_code": 369,
+        "scryfall_code": "ths",
+        "name": "Theros",
+        "date": "2013-09-27"
+    },
+    "370": {
+        "p12e_code": 370,
+        "scryfall_code": "tths",
+        "name": "Theros Tokens",
+        "date": "2013-09-27"
+    },
+    "371": {
+        "p12e_code": 371,
+        "scryfall_code": "tfth",
+        "name": "Face the Hydra",
+        "date": "2013-10-19"
+    },
+    "372": {
+        "p12e_code": 372,
+        "scryfall_code": "c13",
+        "name": "Commander 2013",
+        "date": "2013-11-01"
+    },
+    "373": {
+        "p12e_code": 373,
+        "scryfall_code": "oc13",
+        "name": "Commander 2013 Oversized",
+        "date": "2013-11-01"
+    },
+    "374": {
+        "p12e_code": 374,
+        "scryfall_code": "f14",
+        "name": "Friday Night Magic 2014",
+        "date": "2014-01-01"
+    },
+    "375": {
+        "p12e_code": 375,
+        "scryfall_code": "j14",
+        "name": "Judge Gift Cards 2014",
+        "date": "2014-01-01"
+    },
+    "376": {
+        "p12e_code": 376,
+        "scryfall_code": "l14",
+        "name": "League Tokens 2014",
+        "date": "2014-01-01"
+    },
+    "377": {
+        "p12e_code": 377,
+        "scryfall_code": "pdp15",
+        "name": "Duels of the Planeswalkers 2015 Promos ",
+        "date": "2014-01-01"
+    },
+    "378": {
+        "p12e_code": 378,
+        "scryfall_code": "pi14",
+        "name": "IDW Comics 2014",
+        "date": "2014-01-01"
+    },
+    "379": {
+        "p12e_code": 379,
+        "scryfall_code": "pbng",
+        "name": "Born of the Gods Promos",
+        "date": "2014-02-01"
+    },
+    "380": {
+        "p12e_code": 380,
+        "scryfall_code": "bng",
+        "name": "Born of the Gods",
+        "date": "2014-02-07"
+    },
+    "381": {
+        "p12e_code": 381,
+        "scryfall_code": "tbng",
+        "name": "Born of the Gods Tokens",
+        "date": "2014-02-07"
+    },
+    "382": {
+        "p12e_code": 382,
+        "scryfall_code": "thp2",
+        "name": "Born of the Gods Hero's Path",
+        "date": "2014-02-07"
+    },
+    "383": {
+        "p12e_code": 383,
+        "scryfall_code": "tbth",
+        "name": "Battle the Horde",
+        "date": "2014-03-01"
+    },
+    "384": {
+        "p12e_code": 384,
+        "scryfall_code": "ddm",
+        "name": "Duel Decks: Jace vs. Vraska",
+        "date": "2014-03-14"
+    },
+    "385": {
+        "p12e_code": 385,
+        "scryfall_code": "tddm",
+        "name": "Duel Decks: Jace vs. Vraska Tokens",
+        "date": "2014-03-14"
+    },
+    "386": {
+        "p12e_code": 386,
+        "scryfall_code": "pjou",
+        "name": "Journey into Nyx Promos",
+        "date": "2014-04-26"
+    },
+    "387": {
+        "p12e_code": 387,
+        "scryfall_code": "jou",
+        "name": "Journey into Nyx",
+        "date": "2014-05-02"
+    },
+    "388": {
+        "p12e_code": 388,
+        "scryfall_code": "thp3",
+        "name": "Journey into Nyx Hero's Path",
+        "date": "2014-05-02"
+    },
+    "389": {
+        "p12e_code": 389,
+        "scryfall_code": "tjou",
+        "name": "Journey into Nyx Tokens",
+        "date": "2014-05-02"
+    },
+    "390": {
+        "p12e_code": 390,
+        "scryfall_code": "tdag",
+        "name": "Defeat a God",
+        "date": "2014-05-25"
+    },
+    "391": {
+        "p12e_code": 391,
+        "scryfall_code": "md1",
+        "name": "Modern Event Deck 2014",
+        "date": "2014-05-30"
+    },
+    "392": {
+        "p12e_code": 392,
+        "scryfall_code": "tmd1",
+        "name": "Modern Event Deck 2014 Tokens",
+        "date": "2014-05-30"
+    },
+    "393": {
+        "p12e_code": 393,
+        "scryfall_code": "cns",
+        "name": "Conspiracy",
+        "date": "2014-06-06"
+    },
+    "394": {
+        "p12e_code": 394,
+        "scryfall_code": "pcns",
+        "name": "Conspiracy Promos",
+        "date": "2014-06-06"
+    },
+    "395": {
+        "p12e_code": 395,
+        "scryfall_code": "tcns",
+        "name": "Conspiracy Tokens",
+        "date": "2014-06-06"
+    },
+    "396": {
+        "p12e_code": 396,
+        "scryfall_code": "vma",
+        "name": "Vintage Masters",
+        "date": "2014-06-16"
+    },
+    "397": {
+        "p12e_code": 397,
+        "scryfall_code": "ps14",
+        "name": "San Diego Comic-Con 2014",
+        "date": "2014-07-08"
+    },
+    "398": {
+        "p12e_code": 398,
+        "scryfall_code": "ppc1",
+        "name": "M15 Prerelease Challenge",
+        "date": "2014-07-12"
+    },
+    "399": {
+        "p12e_code": 399,
+        "scryfall_code": "pm15",
+        "name": "Magic 2015 Promos",
+        "date": "2014-07-17"
+    },
+    "400": {
+        "p12e_code": 400,
+        "scryfall_code": "cp1",
+        "name": "Magic 2015 Clash Pack",
+        "date": "2014-07-18"
+    },
+    "401": {
+        "p12e_code": 401,
+        "scryfall_code": "m15",
+        "name": "Magic 2015",
+        "date": "2014-07-18"
+    },
+    "402": {
+        "p12e_code": 402,
+        "scryfall_code": "tm15",
+        "name": "Magic 2015 Tokens",
+        "date": "2014-07-18"
+    },
+    "403": {
+        "p12e_code": 403,
+        "scryfall_code": "v14",
+        "name": "From the Vault: Annihilation",
+        "date": "2014-08-22"
+    },
+    "404": {
+        "p12e_code": 404,
+        "scryfall_code": "ddn",
+        "name": "Duel Decks: Speed vs. Cunning",
+        "date": "2014-09-05"
+    },
+    "405": {
+        "p12e_code": 405,
+        "scryfall_code": "ktk",
+        "name": "Khans of Tarkir",
+        "date": "2014-09-26"
+    },
+    "406": {
+        "p12e_code": 406,
+        "scryfall_code": "pktk",
+        "name": "Khans of Tarkir Promos",
+        "date": "2014-09-26"
+    },
+    "407": {
+        "p12e_code": 407,
+        "scryfall_code": "tktk",
+        "name": "Khans of Tarkir Tokens",
+        "date": "2014-09-26"
+    },
+    "408": {
+        "p12e_code": 408,
+        "scryfall_code": "c14",
+        "name": "Commander 2014",
+        "date": "2014-11-07"
+    },
+    "409": {
+        "p12e_code": 409,
+        "scryfall_code": "oc14",
+        "name": "Commander 2014 Oversized",
+        "date": "2014-11-07"
+    },
+    "410": {
+        "p12e_code": 410,
+        "scryfall_code": "tc14",
+        "name": "Commander 2014 Tokens",
+        "date": "2014-11-07"
+    },
+    "411": {
+        "p12e_code": 411,
+        "scryfall_code": "dvd",
+        "name": "Duel Decks Anthology: Divine vs. Demonic",
+        "date": "2014-12-05"
+    },
+    "412": {
+        "p12e_code": 412,
+        "scryfall_code": "evg",
+        "name": "Duel Decks Anthology: Elves vs. Goblins",
+        "date": "2014-12-05"
+    },
+    "413": {
+        "p12e_code": 413,
+        "scryfall_code": "gvl",
+        "name": "Duel Decks Anthology: Garruk vs. Liliana",
+        "date": "2014-12-05"
+    },
+    "414": {
+        "p12e_code": 414,
+        "scryfall_code": "jvc",
+        "name": "Duel Decks Anthology: Jace vs. Chandra",
+        "date": "2014-12-05"
+    },
+    "415": {
+        "p12e_code": 415,
+        "scryfall_code": "tdvd",
+        "name": "Duel Decks Anthology: Divine vs. Demonic Tokens",
+        "date": "2014-12-05"
+    },
+    "416": {
+        "p12e_code": 416,
+        "scryfall_code": "tevg",
+        "name": "Duel Decks Anthology: Elves vs. Goblins Tokens",
+        "date": "2014-12-05"
+    },
+    "417": {
+        "p12e_code": 417,
+        "scryfall_code": "tgvl",
+        "name": "Duel Decks Anthology: Garruk vs. Liliana Tokens",
+        "date": "2014-12-05"
+    },
+    "418": {
+        "p12e_code": 418,
+        "scryfall_code": "tjvc",
+        "name": "Duel Decks Anthology: Jace vs. Chandra Tokens",
+        "date": "2014-12-05"
+    },
+    "419": {
+        "p12e_code": 419,
+        "scryfall_code": "f15",
+        "name": "Friday Night Magic 2015",
+        "date": "2015-01-01"
+    },
+    "420": {
+        "p12e_code": 420,
+        "scryfall_code": "j15",
+        "name": "Judge Gift Cards 2015",
+        "date": "2015-01-01"
+    },
+    "421": {
+        "p12e_code": 421,
+        "scryfall_code": "l15",
+        "name": "League Tokens 2015",
+        "date": "2015-01-01"
+    },
+    "422": {
+        "p12e_code": 422,
+        "scryfall_code": "ugin",
+        "name": "Ugin's Fate",
+        "date": "2015-01-17"
+    },
+    "423": {
+        "p12e_code": 423,
+        "scryfall_code": "cp2",
+        "name": "Fate Reforged Clash Pack",
+        "date": "2015-01-23"
+    },
+    "424": {
+        "p12e_code": 424,
+        "scryfall_code": "frf",
+        "name": "Fate Reforged",
+        "date": "2015-01-23"
+    },
+    "425": {
+        "p12e_code": 425,
+        "scryfall_code": "pfrf",
+        "name": "Fate Reforged Promos",
+        "date": "2015-01-23"
+    },
+    "426": {
+        "p12e_code": 426,
+        "scryfall_code": "tfrf",
+        "name": "Fate Reforged Tokens",
+        "date": "2015-01-23"
+    },
+    "427": {
+        "p12e_code": 427,
+        "scryfall_code": "ddo",
+        "name": "Duel Decks: Elspeth vs. Kiora",
+        "date": "2015-02-27"
+    },
+    "428": {
+        "p12e_code": 428,
+        "scryfall_code": "dtk",
+        "name": "Dragons of Tarkir",
+        "date": "2015-03-27"
+    },
+    "429": {
+        "p12e_code": 429,
+        "scryfall_code": "pdtk",
+        "name": "Dragons of Tarkir Promos",
+        "date": "2015-03-27"
+    },
+    "430": {
+        "p12e_code": 430,
+        "scryfall_code": "tdtk",
+        "name": "Dragons of Tarkir Tokens",
+        "date": "2015-03-27"
+    },
+    "431": {
+        "p12e_code": 431,
+        "scryfall_code": "ptkdf",
+        "name": "Tarkir Dragonfury",
+        "date": "2015-04-03"
+    },
+    "432": {
+        "p12e_code": 432,
+        "scryfall_code": "tpr",
+        "name": "Tempest Remastered",
+        "date": "2015-05-06"
+    },
+    "433": {
+        "p12e_code": 433,
+        "scryfall_code": "mm2",
+        "name": "Modern Masters 2015",
+        "date": "2015-05-22"
+    },
+    "434": {
+        "p12e_code": 434,
+        "scryfall_code": "tmm2",
+        "name": "Modern Masters 2015 Tokens",
+        "date": "2015-05-22"
+    },
+    "435": {
+        "p12e_code": 435,
+        "scryfall_code": "ps15",
+        "name": "San Diego Comic-Con 2015",
+        "date": "2015-07-09"
+    },
+    "436": {
+        "p12e_code": 436,
+        "scryfall_code": "cp3",
+        "name": "Magic Origins Clash Pack",
+        "date": "2015-07-17"
+    },
+    "437": {
+        "p12e_code": 437,
+        "scryfall_code": "ori",
+        "name": "Magic Origins",
+        "date": "2015-07-17"
+    },
+    "438": {
+        "p12e_code": 438,
+        "scryfall_code": "pori",
+        "name": "Magic Origins Promos",
+        "date": "2015-07-17"
+    },
+    "439": {
+        "p12e_code": 439,
+        "scryfall_code": "tori",
+        "name": "Magic Origins Tokens",
+        "date": "2015-07-17"
+    },
+    "440": {
+        "p12e_code": 440,
+        "scryfall_code": "v15",
+        "name": "From the Vault: Angels",
+        "date": "2015-08-21"
+    },
+    "441": {
+        "p12e_code": 441,
+        "scryfall_code": "ddp",
+        "name": "Duel Decks: Zendikar vs. Eldrazi",
+        "date": "2015-08-28"
+    },
+    "442": {
+        "p12e_code": 442,
+        "scryfall_code": "bfz",
+        "name": "Battle for Zendikar",
+        "date": "2015-10-02"
+    },
+    "443": {
+        "p12e_code": 443,
+        "scryfall_code": "exp",
+        "name": "Zendikar Expeditions",
+        "date": "2015-10-02"
+    },
+    "444": {
+        "p12e_code": 444,
+        "scryfall_code": "pbfz",
+        "name": "Battle for Zendikar Promos",
+        "date": "2015-10-02"
+    },
+    "445": {
+        "p12e_code": 445,
+        "scryfall_code": "pss1",
+        "name": "BFZ Standard Series",
+        "date": "2015-10-02"
+    },
+    "446": {
+        "p12e_code": 446,
+        "scryfall_code": "tbfz",
+        "name": "Battle for Zendikar Tokens",
+        "date": "2015-10-02"
+    },
+    "447": {
+        "p12e_code": 447,
+        "scryfall_code": "c15",
+        "name": "Commander 2015",
+        "date": "2015-11-13"
+    },
+    "448": {
+        "p12e_code": 448,
+        "scryfall_code": "oc15",
+        "name": "Commander 2015 Oversized",
+        "date": "2015-11-13"
+    },
+    "449": {
+        "p12e_code": 449,
+        "scryfall_code": "tc15",
+        "name": "Commander 2015 Tokens",
+        "date": "2015-11-13"
+    },
+    "450": {
+        "p12e_code": 450,
+        "scryfall_code": "pz1",
+        "name": "Legendary Cube Prize Pack",
+        "date": "2015-11-18"
+    },
+    "451": {
+        "p12e_code": 451,
+        "scryfall_code": "f16",
+        "name": "Friday Night Magic 2016",
+        "date": "2016-01-01"
+    },
+    "452": {
+        "p12e_code": 452,
+        "scryfall_code": "j16",
+        "name": "Judge Gift Cards 2016",
+        "date": "2016-01-01"
+    },
+    "453": {
+        "p12e_code": 453,
+        "scryfall_code": "l16",
+        "name": "League Tokens 2016",
+        "date": "2016-01-01"
+    },
+    "454": {
+        "p12e_code": 454,
+        "scryfall_code": "ogw",
+        "name": "Oath of the Gatewatch",
+        "date": "2016-01-22"
+    },
+    "455": {
+        "p12e_code": 455,
+        "scryfall_code": "pogw",
+        "name": "Oath of the Gatewatch Promos",
+        "date": "2016-01-22"
+    },
+    "456": {
+        "p12e_code": 456,
+        "scryfall_code": "togw",
+        "name": "Oath of the Gatewatch Tokens",
+        "date": "2016-01-22"
+    },
+    "457": {
+        "p12e_code": 457,
+        "scryfall_code": "ddq",
+        "name": "Duel Decks: Blessed vs. Cursed",
+        "date": "2016-02-26"
+    },
+    "458": {
+        "p12e_code": 458,
+        "scryfall_code": "psoi",
+        "name": "Shadows over Innistrad Promos",
+        "date": "2016-04-08"
+    },
+    "459": {
+        "p12e_code": 459,
+        "scryfall_code": "soi",
+        "name": "Shadows over Innistrad",
+        "date": "2016-04-08"
+    },
+    "460": {
+        "p12e_code": 460,
+        "scryfall_code": "tsoi",
+        "name": "Shadows over Innistrad Tokens",
+        "date": "2016-04-08"
+    },
+    "461": {
+        "p12e_code": 461,
+        "scryfall_code": "w16",
+        "name": "Welcome Deck 2016",
+        "date": "2016-04-08"
+    },
+    "462": {
+        "p12e_code": 462,
+        "scryfall_code": "ema",
+        "name": "Eternal Masters",
+        "date": "2016-06-10"
+    },
+    "463": {
+        "p12e_code": 463,
+        "scryfall_code": "tema",
+        "name": "Eternal Masters Tokens",
+        "date": "2016-06-10"
+    },
+    "464": {
+        "p12e_code": 464,
+        "scryfall_code": "emn",
+        "name": "Eldritch Moon",
+        "date": "2016-07-22"
+    },
+    "465": {
+        "p12e_code": 465,
+        "scryfall_code": "pemn",
+        "name": "Eldritch Moon Promos",
+        "date": "2016-07-22"
+    },
+    "466": {
+        "p12e_code": 466,
+        "scryfall_code": "temn",
+        "name": "Eldritch Moon Tokens",
+        "date": "2016-07-22"
+    },
+    "467": {
+        "p12e_code": 467,
+        "scryfall_code": "v16",
+        "name": "From the Vault: Lore",
+        "date": "2016-08-19"
+    },
+    "468": {
+        "p12e_code": 468,
+        "scryfall_code": "cn2",
+        "name": "Conspiracy: Take the Crown",
+        "date": "2016-08-26"
+    },
+    "469": {
+        "p12e_code": 469,
+        "scryfall_code": "tcn2",
+        "name": "Conspiracy: Take the Crown Tokens",
+        "date": "2016-08-26"
+    },
+    "470": {
+        "p12e_code": 470,
+        "scryfall_code": "ddr",
+        "name": "Duel Decks: Nissa vs. Ob Nixilis",
+        "date": "2016-09-02"
+    },
+    "471": {
+        "p12e_code": 471,
+        "scryfall_code": "kld",
+        "name": "Kaladesh",
+        "date": "2016-09-30"
+    },
+    "472": {
+        "p12e_code": 472,
+        "scryfall_code": "mps",
+        "name": "Kaladesh Inventions",
+        "date": "2016-09-30"
+    },
+    "473": {
+        "p12e_code": 473,
+        "scryfall_code": "pkld",
+        "name": "Kaladesh Promos",
+        "date": "2016-09-30"
+    },
+    "474": {
+        "p12e_code": 474,
+        "scryfall_code": "tkld",
+        "name": "Kaladesh Tokens",
+        "date": "2016-09-30"
+    },
+    "475": {
+        "p12e_code": 475,
+        "scryfall_code": "ps16",
+        "name": "San Diego Comic-Con 2016",
+        "date": "2016-10-01"
+    },
+    "476": {
+        "p12e_code": 476,
+        "scryfall_code": "c16",
+        "name": "Commander 2016",
+        "date": "2016-11-11"
+    },
+    "477": {
+        "p12e_code": 477,
+        "scryfall_code": "oc16",
+        "name": "Commander 2016 Oversized",
+        "date": "2016-11-11"
+    },
+    "478": {
+        "p12e_code": 478,
+        "scryfall_code": "tc16",
+        "name": "Commander 2016 Tokens",
+        "date": "2016-11-11"
+    },
+    "479": {
+        "p12e_code": 479,
+        "scryfall_code": "pz2",
+        "name": "Treasure Chest",
+        "date": "2016-11-16"
+    },
+    "480": {
+        "p12e_code": 480,
+        "scryfall_code": "pca",
+        "name": "Planechase Anthology",
+        "date": "2016-11-25"
+    },
+    "481": {
+        "p12e_code": 481,
+        "scryfall_code": "tpca",
+        "name": "Planechase Anthology Tokens",
+        "date": "2016-11-25"
+    },
+    "482": {
+        "p12e_code": 482,
+        "scryfall_code": "f17",
+        "name": "Friday Night Magic 2017",
+        "date": "2017-01-01"
+    },
+    "483": {
+        "p12e_code": 483,
+        "scryfall_code": "j17",
+        "name": "Judge Gift Cards 2017",
+        "date": "2017-01-01"
+    },
+    "484": {
+        "p12e_code": 484,
+        "scryfall_code": "l17",
+        "name": "League Tokens 2017",
+        "date": "2017-01-01"
+    },
+    "485": {
+        "p12e_code": 485,
+        "scryfall_code": "aer",
+        "name": "Aether Revolt",
+        "date": "2017-01-20"
+    },
+    "486": {
+        "p12e_code": 486,
+        "scryfall_code": "paer",
+        "name": "Aether Revolt Promos",
+        "date": "2017-01-20"
+    },
+    "487": {
+        "p12e_code": 487,
+        "scryfall_code": "taer",
+        "name": "Aether Revolt Tokens",
+        "date": "2017-01-20"
+    },
+    "488": {
+        "p12e_code": 488,
+        "scryfall_code": "mm3",
+        "name": "Modern Masters 2017",
+        "date": "2017-03-17"
+    },
+    "489": {
+        "p12e_code": 489,
+        "scryfall_code": "tmm3",
+        "name": "Modern Masters 2017 Tokens",
+        "date": "2017-03-17"
+    },
+    "490": {
+        "p12e_code": 490,
+        "scryfall_code": "dds",
+        "name": "Duel Decks: Mind vs. Might",
+        "date": "2017-03-31"
+    },
+    "491": {
+        "p12e_code": 491,
+        "scryfall_code": "tdds",
+        "name": "Duel Decks: Mind vs. Might Tokens",
+        "date": "2017-03-31"
+    },
+    "492": {
+        "p12e_code": 492,
+        "scryfall_code": "w17",
+        "name": "Welcome Deck 2017",
+        "date": "2017-04-15"
+    },
+    "493": {
+        "p12e_code": 493,
+        "scryfall_code": "akh",
+        "name": "Amonkhet",
+        "date": "2017-04-28"
+    },
+    "494": {
+        "p12e_code": 494,
+        "scryfall_code": "mp2",
+        "name": "Amonkhet Invocations",
+        "date": "2017-04-28"
+    },
+    "495": {
+        "p12e_code": 495,
+        "scryfall_code": "pakh",
+        "name": "Amonkhet Promos",
+        "date": "2017-04-28"
+    },
+    "496": {
+        "p12e_code": 496,
+        "scryfall_code": "takh",
+        "name": "Amonkhet Tokens",
+        "date": "2017-04-28"
+    },
+    "497": {
+        "p12e_code": 497,
+        "scryfall_code": "cma",
+        "name": "Commander Anthology",
+        "date": "2017-06-09"
+    },
+    "498": {
+        "p12e_code": 498,
+        "scryfall_code": "tcma",
+        "name": "Commander Anthology Tokens",
+        "date": "2017-06-09"
+    },
+    "499": {
+        "p12e_code": 499,
+        "scryfall_code": "e01",
+        "name": "Archenemy: Nicol Bolas",
+        "date": "2017-06-16"
+    },
+    "500": {
+        "p12e_code": 500,
+        "scryfall_code": "oe01",
+        "name": "Archenemy: Nicol Bolas Schemes",
+        "date": "2017-06-16"
+    },
+    "501": {
+        "p12e_code": 501,
+        "scryfall_code": "hou",
+        "name": "Hour of Devastation",
+        "date": "2017-07-14"
+    },
+    "502": {
+        "p12e_code": 502,
+        "scryfall_code": "phou",
+        "name": "Hour of Devastation Promos",
+        "date": "2017-07-14"
+    },
+    "503": {
+        "p12e_code": 503,
+        "scryfall_code": "thou",
+        "name": "Hour of Devastation Tokens",
+        "date": "2017-07-14"
+    },
+    "504": {
+        "p12e_code": 504,
+        "scryfall_code": "ps17",
+        "name": "San Diego Comic-Con 2017",
+        "date": "2017-07-20"
+    },
+    "505": {
+        "p12e_code": 505,
+        "scryfall_code": "c17",
+        "name": "Commander 2017",
+        "date": "2017-08-25"
+    },
+    "506": {
+        "p12e_code": 506,
+        "scryfall_code": "oc17",
+        "name": "Commander 2017 Oversized",
+        "date": "2017-08-25"
+    },
+    "507": {
+        "p12e_code": 507,
+        "scryfall_code": "tc17",
+        "name": "Commander 2017 Tokens",
+        "date": "2017-08-25"
+    },
+    "508": {
+        "p12e_code": 508,
+        "scryfall_code": "te01",
+        "name": "Archenemy: Nicol Bolas Tokens",
+        "date": "2017-09-08"
+    },
+    "509": {
+        "p12e_code": 509,
+        "scryfall_code": "h17",
+        "name": "HasCon 2017",
+        "date": "2017-09-20"
+    },
+    "510": {
+        "p12e_code": 510,
+        "scryfall_code": "htr16",
+        "name": "2016 Heroes of the Realm",
+        "date": "2017-09-20"
+    },
+    "511": {
+        "p12e_code": 511,
+        "scryfall_code": "pss2",
+        "name": "XLN Standard Showdown",
+        "date": "2017-09-29"
+    },
+    "512": {
+        "p12e_code": 512,
+        "scryfall_code": "pxln",
+        "name": "Ixalan Promos",
+        "date": "2017-09-29"
+    },
+    "513": {
+        "p12e_code": 513,
+        "scryfall_code": "txln",
+        "name": "Ixalan Tokens",
+        "date": "2017-09-29"
+    },
+    "514": {
+        "p12e_code": 514,
+        "scryfall_code": "xln",
+        "name": "Ixalan",
+        "date": "2017-09-29"
+    },
+    "515": {
+        "p12e_code": 515,
+        "scryfall_code": "g17",
+        "name": "2017 Gift Pack",
+        "date": "2017-10-20"
+    },
+    "516": {
+        "p12e_code": 516,
+        "scryfall_code": "ddt",
+        "name": "Duel Decks: Merfolk vs. Goblins",
+        "date": "2017-10-24"
+    },
+    "517": {
+        "p12e_code": 517,
+        "scryfall_code": "tddt",
+        "name": "Duel Decks: Merfolk vs. Goblins Tokens",
+        "date": "2017-10-24"
+    },
+    "518": {
+        "p12e_code": 518,
+        "scryfall_code": "ima",
+        "name": "Iconic Masters",
+        "date": "2017-11-17"
+    },
+    "519": {
+        "p12e_code": 519,
+        "scryfall_code": "e02",
+        "name": "Explorers of Ixalan",
+        "date": "2017-11-24"
+    },
+    "520": {
+        "p12e_code": 520,
+        "scryfall_code": "pxtc",
+        "name": "XLN Treasure Chest",
+        "date": "2017-11-24"
+    },
+    "521": {
+        "p12e_code": 521,
+        "scryfall_code": "v17",
+        "name": "From the Vault: Transform",
+        "date": "2017-11-24"
+    },
+    "522": {
+        "p12e_code": 522,
+        "scryfall_code": "tima",
+        "name": "Iconic Masters Tokens",
+        "date": "2017-11-29"
+    },
+    "523": {
+        "p12e_code": 523,
+        "scryfall_code": "pust",
+        "name": "Unstable Promos",
+        "date": "2017-12-08"
+    },
+    "524": {
+        "p12e_code": 524,
+        "scryfall_code": "tust",
+        "name": "Unstable Tokens",
+        "date": "2017-12-08"
+    },
+    "525": {
+        "p12e_code": 525,
+        "scryfall_code": "ust",
+        "name": "Unstable",
+        "date": "2017-12-08"
+    },
+    "526": {
+        "p12e_code": 526,
+        "scryfall_code": "f18",
+        "name": "Friday Night Magic 2018",
+        "date": "2017-12-27"
+    },
+    "527": {
+        "p12e_code": 527,
+        "scryfall_code": "j18",
+        "name": "Judge Gift Cards 2018",
+        "date": "2018-01-01"
+    },
+    "528": {
+        "p12e_code": 528,
+        "scryfall_code": "prix",
+        "name": "Rivals of Ixalan Promos",
+        "date": "2018-01-19"
+    },
+    "529": {
+        "p12e_code": 529,
+        "scryfall_code": "rix",
+        "name": "Rivals of Ixalan",
+        "date": "2018-01-19"
+    },
+    "530": {
+        "p12e_code": 530,
+        "scryfall_code": "trix",
+        "name": "Rivals of Ixalan Tokens",
+        "date": "2018-01-19"
+    },
+    "531": {
+        "p12e_code": 531,
+        "scryfall_code": "pnat",
+        "name": "Nationals Promos",
+        "date": "2018-01-25"
+    },
+    "532": {
+        "p12e_code": 532,
+        "scryfall_code": "plny",
+        "name": "Lunar New Year 2018 ",
+        "date": "2018-02-16"
+    },
+    "533": {
+        "p12e_code": 533,
+        "scryfall_code": "a25",
+        "name": "Masters 25",
+        "date": "2018-03-16"
+    },
+    "534": {
+        "p12e_code": 534,
+        "scryfall_code": "ta25",
+        "name": "Masters 25 Tokens",
+        "date": "2018-03-16"
+    },
+    "535": {
+        "p12e_code": 535,
+        "scryfall_code": "ddu",
+        "name": "Duel Decks: Elves vs. Inventors",
+        "date": "2018-04-06"
+    },
+    "536": {
+        "p12e_code": 536,
+        "scryfall_code": "tddu",
+        "name": "Duel Decks: Elves vs. Inventors Tokens",
+        "date": "2018-04-06"
+    },
+    "537": {
+        "p12e_code": 537,
+        "scryfall_code": "dom",
+        "name": "Dominaria",
+        "date": "2018-04-27"
+    },
+    "538": {
+        "p12e_code": 538,
+        "scryfall_code": "pdom",
+        "name": "Dominaria Promos",
+        "date": "2018-04-27"
+    },
+    "539": {
+        "p12e_code": 539,
+        "scryfall_code": "tdom",
+        "name": "Dominaria Tokens",
+        "date": "2018-04-27"
+    },
+    "540": {
+        "p12e_code": 540,
+        "scryfall_code": "bbd",
+        "name": "Battlebond",
+        "date": "2018-06-08"
+    },
+    "541": {
+        "p12e_code": 541,
+        "scryfall_code": "cm2",
+        "name": "Commander Anthology Volume II",
+        "date": "2018-06-08"
+    },
+    "542": {
+        "p12e_code": 542,
+        "scryfall_code": "pbbd",
+        "name": "Battlebond Promos",
+        "date": "2018-06-08"
+    },
+    "543": {
+        "p12e_code": 543,
+        "scryfall_code": "tbbd",
+        "name": "Battlebond Tokens",
+        "date": "2018-06-08"
+    },
+    "544": {
+        "p12e_code": 544,
+        "scryfall_code": "tcm2",
+        "name": "Commander Anthology Volume II Tokens",
+        "date": "2018-06-08"
+    },
+    "545": {
+        "p12e_code": 545,
+        "scryfall_code": "ss1",
+        "name": "Signature Spellbook: Jace",
+        "date": "2018-06-15"
+    },
+    "546": {
+        "p12e_code": 546,
+        "scryfall_code": "gs1",
+        "name": "Global Series Jiang Yanggu & Mu Yanling",
+        "date": "2018-06-22"
+    },
+    "547": {
+        "p12e_code": 547,
+        "scryfall_code": "m19",
+        "name": "Core Set 2019",
+        "date": "2018-07-13"
+    },
+    "548": {
+        "p12e_code": 548,
+        "scryfall_code": "pm19",
+        "name": "Core Set 2019 Promos",
+        "date": "2018-07-13"
+    },
+    "549": {
+        "p12e_code": 549,
+        "scryfall_code": "pss3",
+        "name": "M19 Standard Showdown",
+        "date": "2018-07-13"
+    },
+    "550": {
+        "p12e_code": 550,
+        "scryfall_code": "tm19",
+        "name": "Core Set 2019 Tokens",
+        "date": "2018-07-13"
+    },
+    "551": {
+        "p12e_code": 551,
+        "scryfall_code": "ana",
+        "name": "Arena New Player Experience",
+        "date": "2018-07-14"
+    },
+    "552": {
+        "p12e_code": 552,
+        "scryfall_code": "oana",
+        "name": "Arena New Player Experience Cards",
+        "date": "2018-07-14"
+    },
+    "553": {
+        "p12e_code": 553,
+        "scryfall_code": "pana",
+        "name": "MTG Arena Promos",
+        "date": "2018-07-14"
+    },
+    "554": {
+        "p12e_code": 554,
+        "scryfall_code": "xana",
+        "name": "Arena New Player Experience Extras",
+        "date": "2018-07-14"
+    },
+    "555": {
+        "p12e_code": 555,
+        "scryfall_code": "ps18",
+        "name": "San Diego Comic-Con 2018",
+        "date": "2018-07-19"
+    },
+    "556": {
+        "p12e_code": 556,
+        "scryfall_code": "htr17",
+        "name": "2017 Heroes of the Realm",
+        "date": "2018-08-01"
+    },
+    "557": {
+        "p12e_code": 557,
+        "scryfall_code": "c18",
+        "name": "Commander 2018",
+        "date": "2018-08-09"
+    },
+    "558": {
+        "p12e_code": 558,
+        "scryfall_code": "oc18",
+        "name": "Commander 2018 Oversized",
+        "date": "2018-08-09"
+    },
+    "559": {
+        "p12e_code": 559,
+        "scryfall_code": "tc18",
+        "name": "Commander 2018 Tokens",
+        "date": "2018-08-09"
+    },
+    "560": {
+        "p12e_code": 560,
+        "scryfall_code": "grn",
+        "name": "Guilds of Ravnica",
+        "date": "2018-10-05"
+    },
+    "561": {
+        "p12e_code": 561,
+        "scryfall_code": "med",
+        "name": "Mythic Edition",
+        "date": "2018-10-05"
+    },
+    "562": {
+        "p12e_code": 562,
+        "scryfall_code": "pgrn",
+        "name": "Guilds of Ravnica Promos",
+        "date": "2018-10-05"
+    },
+    "563": {
+        "p12e_code": 563,
+        "scryfall_code": "tgrn",
+        "name": "Guilds of Ravnica Tokens",
+        "date": "2018-10-05"
+    },
+    "564": {
+        "p12e_code": 564,
+        "scryfall_code": "tmed",
+        "name": "Mythic Edition Tokens",
+        "date": "2018-10-05"
+    },
+    "565": {
+        "p12e_code": 565,
+        "scryfall_code": "gk1",
+        "name": "GRN Guild Kit",
+        "date": "2018-11-02"
+    },
+    "566": {
+        "p12e_code": 566,
+        "scryfall_code": "tgk1",
+        "name": "GRN Guild Kit Tokens",
+        "date": "2018-11-02"
+    },
+    "567": {
+        "p12e_code": 567,
+        "scryfall_code": "prwk",
+        "name": "GRN Ravnica Weekend",
+        "date": "2018-11-09"
+    },
+    "568": {
+        "p12e_code": 568,
+        "scryfall_code": "g18",
+        "name": "M19 Gift Pack",
+        "date": "2018-11-16"
+    },
+    "569": {
+        "p12e_code": 569,
+        "scryfall_code": "gnt",
+        "name": "Game Night",
+        "date": "2018-11-16"
+    },
+    "570": {
+        "p12e_code": 570,
+        "scryfall_code": "puma",
+        "name": "Ultimate Box Topper",
+        "date": "2018-12-07"
+    },
+    "571": {
+        "p12e_code": 571,
+        "scryfall_code": "tuma",
+        "name": "Ultimate Masters Tokens",
+        "date": "2018-12-07"
+    },
+    "572": {
+        "p12e_code": 572,
+        "scryfall_code": "uma",
+        "name": "Ultimate Masters",
+        "date": "2018-12-07"
+    },
+    "573": {
+        "p12e_code": 573,
+        "scryfall_code": "opca",
+        "name": "Planechase Anthology Planes",
+        "date": "2018-12-25"
+    },
+    "574": {
+        "p12e_code": 574,
+        "scryfall_code": "pf19",
+        "name": "MagicFest 2019",
+        "date": "2019-01-01"
+    },
+    "575": {
+        "p12e_code": 575,
+        "scryfall_code": "prna",
+        "name": "Ravnica Allegiance Promos",
+        "date": "2019-01-25"
+    },
+    "576": {
+        "p12e_code": 576,
+        "scryfall_code": "rna",
+        "name": "Ravnica Allegiance",
+        "date": "2019-01-25"
+    },
+    "577": {
+        "p12e_code": 577,
+        "scryfall_code": "trna",
+        "name": "Ravnica Allegiance Tokens",
+        "date": "2019-01-25"
+    },
+    "578": {
+        "p12e_code": 578,
+        "scryfall_code": "gk2",
+        "name": "RNA Guild Kit",
+        "date": "2019-02-15"
+    },
+    "579": {
+        "p12e_code": 579,
+        "scryfall_code": "tgk2",
+        "name": "RNA Guild Kit Tokens",
+        "date": "2019-02-15"
+    },
+    "580": {
+        "p12e_code": 580,
+        "scryfall_code": "prw2",
+        "name": "RNA Ravnica Weekend",
+        "date": "2019-02-16"
+    },
+    "581": {
+        "p12e_code": 581,
+        "scryfall_code": "j19",
+        "name": "Judge Gift Cards 2019",
+        "date": "2019-04-10"
+    },
+    "582": {
+        "p12e_code": 582,
+        "scryfall_code": "pwar",
+        "name": "War of the Spark Promos",
+        "date": "2019-05-03"
+    },
+    "583": {
+        "p12e_code": 583,
+        "scryfall_code": "twar",
+        "name": "War of the Spark Tokens",
+        "date": "2019-05-03"
+    },
+    "584": {
+        "p12e_code": 584,
+        "scryfall_code": "war",
+        "name": "War of the Spark",
+        "date": "2019-05-03"
+    },
+    "585": {
+        "p12e_code": 585,
+        "scryfall_code": "tmh1",
+        "name": "Modern Horizons Tokens",
+        "date": "2019-05-30"
+    },
+    "586": {
+        "p12e_code": 586,
+        "scryfall_code": "amh1",
+        "name": "Modern Horizons Art Series",
+        "date": "2019-06-05"
+    },
+    "587": {
+        "p12e_code": 587,
+        "scryfall_code": "mh1",
+        "name": "Modern Horizons",
+        "date": "2019-06-14"
+    },
+    "588": {
+        "p12e_code": 588,
+        "scryfall_code": "pmh1",
+        "name": "Modern Horizons Promos",
+        "date": "2019-06-14"
+    },
+    "589": {
+        "p12e_code": 589,
+        "scryfall_code": "ss2",
+        "name": "Signature Spellbook: Gideon",
+        "date": "2019-06-28"
+    },
+    "590": {
+        "p12e_code": 590,
+        "scryfall_code": "m20",
+        "name": "Core Set 2020",
+        "date": "2019-07-12"
+    },
+    "591": {
+        "p12e_code": 591,
+        "scryfall_code": "pm20",
+        "name": "Core Set 2020 Promos",
+        "date": "2019-07-12"
+    },
+    "592": {
+        "p12e_code": 592,
+        "scryfall_code": "ppp1",
+        "name": "M20 Promo Packs",
+        "date": "2019-07-12"
+    },
+    "593": {
+        "p12e_code": 593,
+        "scryfall_code": "tm20",
+        "name": "Core Set 2020 Tokens",
+        "date": "2019-07-12"
+    },
+    "594": {
+        "p12e_code": 594,
+        "scryfall_code": "ps19",
+        "name": "San Diego Comic-Con 2019",
+        "date": "2019-07-18"
+    },
+    "595": {
+        "p12e_code": 595,
+        "scryfall_code": "htr18",
+        "name": "2018 Heroes of the Realm",
+        "date": "2019-08-01"
+    },
+    "596": {
+        "p12e_code": 596,
+        "scryfall_code": "tc19",
+        "name": "Commander 2019 Tokens",
+        "date": "2019-08-01"
+    },
+    "597": {
+        "p12e_code": 597,
+        "scryfall_code": "c19",
+        "name": "Commander 2019",
+        "date": "2019-08-23"
+    },
+    "598": {
+        "p12e_code": 598,
+        "scryfall_code": "oc19",
+        "name": "Commander 2019 Oversized",
+        "date": "2019-08-31"
+    },
+    "599": {
+        "p12e_code": 599,
+        "scryfall_code": "teld",
+        "name": "Throne of Eldraine Tokens",
+        "date": "2019-09-04"
+    },
+    "600": {
+        "p12e_code": 600,
+        "scryfall_code": "eld",
+        "name": "Throne of Eldraine",
+        "date": "2019-10-04"
+    },
+    "601": {
+        "p12e_code": 601,
+        "scryfall_code": "peld",
+        "name": "Throne of Eldraine Promos",
+        "date": "2019-10-04"
+    },
+    "602": {
+        "p12e_code": 602,
+        "scryfall_code": "ptg",
+        "name": "Ponies: The Galloping",
+        "date": "2019-10-22"
+    },
+    "603": {
+        "p12e_code": 603,
+        "scryfall_code": "cmb1",
+        "name": "Mystery Booster Playtest Cards 2019",
+        "date": "2019-11-07"
+    },
+    "604": {
+        "p12e_code": 604,
+        "scryfall_code": "mb1",
+        "name": "Mystery Booster",
+        "date": "2019-11-07"
+    },
+    "605": {
+        "p12e_code": 605,
+        "scryfall_code": "gn2",
+        "name": "Game Night 2019",
+        "date": "2019-11-15"
+    },
+    "606": {
+        "p12e_code": 606,
+        "scryfall_code": "tgn2",
+        "name": "Game Night 2019 Tokens",
+        "date": "2019-11-15"
+    },
+    "607": {
+        "p12e_code": 607,
+        "scryfall_code": "ha1",
+        "name": "Historic Anthology 1",
+        "date": "2019-11-21"
+    },
+    "608": {
+        "p12e_code": 608,
+        "scryfall_code": "sld",
+        "name": "Secret Lair Drop",
+        "date": "2019-12-02"
+    },
+    "609": {
+        "p12e_code": 609,
+        "scryfall_code": "j20",
+        "name": "Judge Gift Cards 2020",
+        "date": "2020-01-01"
+    },
+    "610": {
+        "p12e_code": 610,
+        "scryfall_code": "pf20",
+        "name": "MagicFest 2020",
+        "date": "2020-01-01"
+    },
+    "611": {
+        "p12e_code": 611,
+        "scryfall_code": "pthb",
+        "name": "Theros Beyond Death Promos",
+        "date": "2020-01-24"
+    },
+    "612": {
+        "p12e_code": 612,
+        "scryfall_code": "thb",
+        "name": "Theros Beyond Death",
+        "date": "2020-01-24"
+    },
+    "613": {
+        "p12e_code": 613,
+        "scryfall_code": "tthb",
+        "name": "Theros Beyond Death Tokens",
+        "date": "2020-01-24"
+    },
+    "614": {
+        "p12e_code": 614,
+        "scryfall_code": "tund",
+        "name": "Unsanctioned Tokens",
+        "date": "2020-02-29"
+    },
+    "615": {
+        "p12e_code": 615,
+        "scryfall_code": "und",
+        "name": "Unsanctioned",
+        "date": "2020-02-29"
+    },
+    "616": {
+        "p12e_code": 616,
+        "scryfall_code": "fmb1",
+        "name": "Mystery Booster Retail Edition Foils",
+        "date": "2020-03-08"
+    },
+    "617": {
+        "p12e_code": 617,
+        "scryfall_code": "ha2",
+        "name": "Historic Anthology 2",
+        "date": "2020-03-12"
+    },
+    "618": {
+        "p12e_code": 618,
+        "scryfall_code": "c20",
+        "name": "Commander 2020",
+        "date": "2020-04-17"
+    },
+    "619": {
+        "p12e_code": 619,
+        "scryfall_code": "oc20",
+        "name": "Commander 2020 Oversized",
+        "date": "2020-04-17"
+    },
+    "620": {
+        "p12e_code": 620,
+        "scryfall_code": "pc20",
+        "name": "Commander 2020 Promos",
+        "date": "2020-04-17"
+    },
+    "621": {
+        "p12e_code": 621,
+        "scryfall_code": "tc20",
+        "name": "Commander 2020 Tokens",
+        "date": "2020-04-17"
+    },
+    "622": {
+        "p12e_code": 622,
+        "scryfall_code": "iko",
+        "name": "Ikoria: Lair of Behemoths",
+        "date": "2020-04-24"
+    },
+    "623": {
+        "p12e_code": 623,
+        "scryfall_code": "piko",
+        "name": "Ikoria: Lair of Behemoths Promos",
+        "date": "2020-04-24"
+    },
+    "624": {
+        "p12e_code": 624,
+        "scryfall_code": "tiko",
+        "name": "Ikoria: Lair of Behemoths Tokens",
+        "date": "2020-04-24"
+    },
+    "625": {
+        "p12e_code": 625,
+        "scryfall_code": "plg20",
+        "name": "Love Your LGS 2020",
+        "date": "2020-05-18"
+    },
+    "626": {
+        "p12e_code": 626,
+        "scryfall_code": "ha3",
+        "name": "Historic Anthology 3",
+        "date": "2020-05-21"
+    },
+    "627": {
+        "p12e_code": 627,
+        "scryfall_code": "slu",
+        "name": "Secret Lair: Ultimate Edition",
+        "date": "2020-05-29"
+    },
+    "628": {
+        "p12e_code": 628,
+        "scryfall_code": "fjmp",
+        "name": "Jumpstart Front Cards",
+        "date": "2020-06-18"
+    },
+    "629": {
+        "p12e_code": 629,
+        "scryfall_code": "ss3",
+        "name": "Signature Spellbook: Chandra",
+        "date": "2020-06-26"
+    },
+    "630": {
+        "p12e_code": 630,
+        "scryfall_code": "m21",
+        "name": "Core Set 2021",
+        "date": "2020-07-03"
+    },
+    "631": {
+        "p12e_code": 631,
+        "scryfall_code": "pm21",
+        "name": "Core Set 2021 Promos",
+        "date": "2020-07-03"
+    },
+    "632": {
+        "p12e_code": 632,
+        "scryfall_code": "tm21",
+        "name": "Core Set 2021 Tokens",
+        "date": "2020-07-03"
+    },
+    "633": {
+        "p12e_code": 633,
+        "scryfall_code": "ajmp",
+        "name": "Jumpstart Arena Exclusives",
+        "date": "2020-07-17"
+    },
+    "634": {
+        "p12e_code": 634,
+        "scryfall_code": "jmp",
+        "name": "Jumpstart",
+        "date": "2020-07-17"
+    },
+    "635": {
+        "p12e_code": 635,
+        "scryfall_code": "htr19",
+        "name": "2019 Heroes of the Realm",
+        "date": "2020-08-01"
+    },
+    "636": {
+        "p12e_code": 636,
+        "scryfall_code": "2xm",
+        "name": "Double Masters",
+        "date": "2020-08-07"
+    },
+    "637": {
+        "p12e_code": 637,
+        "scryfall_code": "t2xm",
+        "name": "Double Masters Tokens",
+        "date": "2020-08-07"
+    },
+    "638": {
+        "p12e_code": 638,
+        "scryfall_code": "akr",
+        "name": "Amonkhet Remastered",
+        "date": "2020-08-13"
+    },
+    "639": {
+        "p12e_code": 639,
+        "scryfall_code": "anb",
+        "name": "Arena Beginner Set",
+        "date": "2020-08-13"
+    },
+    "640": {
+        "p12e_code": 640,
+        "scryfall_code": "aznr",
+        "name": "Zendikar Rising Art Series",
+        "date": "2020-09-25"
+    },
+    "641": {
+        "p12e_code": 641,
+        "scryfall_code": "mznr",
+        "name": "Zendikar Rising Minigames",
+        "date": "2020-09-25"
+    },
+    "642": {
+        "p12e_code": 642,
+        "scryfall_code": "pznr",
+        "name": "Zendikar Rising Promos",
+        "date": "2020-09-25"
+    },
+    "643": {
+        "p12e_code": 643,
+        "scryfall_code": "sznr",
+        "name": "Zendikar Rising Substitute Cards",
+        "date": "2020-09-25"
+    },
+    "644": {
+        "p12e_code": 644,
+        "scryfall_code": "tznc",
+        "name": "Zendikar Rising Commander Tokens",
+        "date": "2020-09-25"
+    },
+    "645": {
+        "p12e_code": 645,
+        "scryfall_code": "tznr",
+        "name": "Zendikar Rising Tokens",
+        "date": "2020-09-25"
+    },
+    "646": {
+        "p12e_code": 646,
+        "scryfall_code": "znc",
+        "name": "Zendikar Rising Commander",
+        "date": "2020-09-25"
+    },
+    "647": {
+        "p12e_code": 647,
+        "scryfall_code": "zne",
+        "name": "Zendikar Rising Expeditions",
+        "date": "2020-09-25"
+    },
+    "648": {
+        "p12e_code": 648,
+        "scryfall_code": "znr",
+        "name": "Zendikar Rising",
+        "date": "2020-09-25"
+    },
+    "649": {
+        "p12e_code": 649,
+        "scryfall_code": "plist",
+        "name": "The List",
+        "date": "2020-09-26"
+    },
+    "650": {
+        "p12e_code": 650,
+        "scryfall_code": "klr",
+        "name": "Kaladesh Remastered",
+        "date": "2020-11-12"
+    },
+    "651": {
+        "p12e_code": 651,
+        "scryfall_code": "cmr",
+        "name": "Commander Legends",
+        "date": "2020-11-20"
+    },
+    "652": {
+        "p12e_code": 652,
+        "scryfall_code": "tcmr",
+        "name": "Commander Legends Tokens",
+        "date": "2020-11-20"
+    },
+    "653": {
+        "p12e_code": 653,
+        "scryfall_code": "cc1",
+        "name": "Commander Collection: Green",
+        "date": "2020-12-04"
+    },
+    "654": {
+        "p12e_code": 654,
+        "scryfall_code": "pj21",
+        "name": "Judge Gift Cards 2021",
+        "date": "2021-01-01"
+    },
+    "655": {
+        "p12e_code": 655,
+        "scryfall_code": "pl21",
+        "name": "Year of the Ox 2021",
+        "date": "2021-01-25"
+    },
+    "656": {
+        "p12e_code": 656,
+        "scryfall_code": "akhm",
+        "name": "Kaldheim Art Series",
+        "date": "2021-02-05"
+    },
+    "657": {
+        "p12e_code": 657,
+        "scryfall_code": "khc",
+        "name": "Kaldheim Commander",
+        "date": "2021-02-05"
+    },
+    "658": {
+        "p12e_code": 658,
+        "scryfall_code": "khm",
+        "name": "Kaldheim",
+        "date": "2021-02-05"
+    },
+    "659": {
+        "p12e_code": 659,
+        "scryfall_code": "pkhm",
+        "name": "Kaldheim Promos",
+        "date": "2021-02-05"
+    },
+    "660": {
+        "p12e_code": 660,
+        "scryfall_code": "tkhc",
+        "name": "Kaldheim Commander Tokens",
+        "date": "2021-02-05"
+    },
+    "661": {
+        "p12e_code": 661,
+        "scryfall_code": "tkhm",
+        "name": "Kaldheim Tokens",
+        "date": "2021-02-05"
+    },
+    "662": {
+        "p12e_code": 662,
+        "scryfall_code": "ha4",
+        "name": "Historic Anthology 4",
+        "date": "2021-03-11"
+    },
+    "663": {
+        "p12e_code": 663,
+        "scryfall_code": "tsr",
+        "name": "Time Spiral Remastered",
+        "date": "2021-03-19"
+    },
+    "664": {
+        "p12e_code": 664,
+        "scryfall_code": "ttsr",
+        "name": "Time Spiral Remastered Tokens",
+        "date": "2021-03-19"
+    },
+    "665": {
+        "p12e_code": 665,
+        "scryfall_code": "astx",
+        "name": "Strixhaven Art Series",
+        "date": "2021-04-23"
+    },
+    "666": {
+        "p12e_code": 666,
+        "scryfall_code": "c21",
+        "name": "Commander 2021",
+        "date": "2021-04-23"
+    },
+    "667": {
+        "p12e_code": 667,
+        "scryfall_code": "pstx",
+        "name": "Strixhaven: School of Mages Promos",
+        "date": "2021-04-23"
+    },
+    "668": {
+        "p12e_code": 668,
+        "scryfall_code": "sta",
+        "name": "Strixhaven Mystical Archive",
+        "date": "2021-04-23"
+    },
+    "669": {
+        "p12e_code": 669,
+        "scryfall_code": "stx",
+        "name": "Strixhaven: School of Mages",
+        "date": "2021-04-23"
+    },
+    "670": {
+        "p12e_code": 670,
+        "scryfall_code": "tc21",
+        "name": "Commander 2021 Tokens",
+        "date": "2021-04-23"
+    },
+    "671": {
+        "p12e_code": 671,
+        "scryfall_code": "oc21",
+        "name": "Commander 2021 Display Commanders",
+        "date": "2021-04-23"
+    },
+    "672": {
+        "p12e_code": 672,
+        "scryfall_code": "tstx",
+        "name": "Strixhaven: School of Mages Tokens",
+        "date": "2021-04-23"
+    },
+    "673": {
+        "p12e_code": 673,
+        "scryfall_code": "ha5",
+        "name": "Historic Anthology 5",
+        "date": "2021-05-27"
+    },
+    "674": {
+        "p12e_code": 674,
+        "scryfall_code": "amh2",
+        "name": "Modern Horizons 2 Art Series",
+        "date": "2021-06-18"
+    },
+    "675": {
+        "p12e_code": 675,
+        "scryfall_code": "h1r",
+        "name": "Modern Horizons 1 Timeshifts",
+        "date": "2021-06-18"
+    },
+    "676": {
+        "p12e_code": 676,
+        "scryfall_code": "mh2",
+        "name": "Modern Horizons 2",
+        "date": "2021-06-18"
+    },
+    "677": {
+        "p12e_code": 677,
+        "scryfall_code": "pmh2",
+        "name": "Modern Horizons 2 Promos",
+        "date": "2021-06-18"
+    },
+    "678": {
+        "p12e_code": 678,
+        "scryfall_code": "pwp21",
+        "name": "Wizards Play Network 2021",
+        "date": "2021-06-18"
+    },
+    "679": {
+        "p12e_code": 679,
+        "scryfall_code": "tmh2",
+        "name": "Modern Horizons 2 Tokens",
+        "date": "2021-06-18"
+    },
+    "680": {
+        "p12e_code": 680,
+        "scryfall_code": "plg21",
+        "name": "Love Your LGS 2021",
+        "date": "2021-06-22"
+    },
+    "681": {
+        "p12e_code": 681,
+        "scryfall_code": "aafr",
+        "name": "Adventures in the Forgotten Realms Art Series",
+        "date": "2021-07-23"
+    },
+    "682": {
+        "p12e_code": 682,
+        "scryfall_code": "afc",
+        "name": "Forgotten Realms Commander",
+        "date": "2021-07-23"
+    },
+    "683": {
+        "p12e_code": 683,
+        "scryfall_code": "afr",
+        "name": "Adventures in the Forgotten Realms",
+        "date": "2021-07-23"
+    },
+    "684": {
+        "p12e_code": 684,
+        "scryfall_code": "pafr",
+        "name": "Adventures in the Forgotten Realms Promos",
+        "date": "2021-07-23"
+    },
+    "685": {
+        "p12e_code": 685,
+        "scryfall_code": "tafc",
+        "name": "Forgotten Realms Commander Tokens",
+        "date": "2021-07-23"
+    },
+    "686": {
+        "p12e_code": 686,
+        "scryfall_code": "tafr",
+        "name": "Adventures in the Forgotten Realms Tokens",
+        "date": "2021-07-23"
+    },
+    "687": {
+        "p12e_code": 687,
+        "scryfall_code": "mkhm",
+        "name": "Kaldheim Minigames",
+        "date": "2021-02-05"
+    },
+    "688": {
+        "p12e_code": 688,
+        "scryfall_code": "mstx",
+        "name": "Strixhaven: School of Mages Minigames",
+        "date": "2021-04-23"
+    },
+    "689": {
+        "p12e_code": 689,
+        "scryfall_code": "mmh2",
+        "name": "Modern Horizons 2 Minigames",
+        "date": "2021-06-18"
+    },
+    "690": {
+        "p12e_code": 690,
+        "scryfall_code": "mafr",
+        "name": "Adventures in the Forgotten Realms Minigames",
+        "date": "2021-07-23"
+    },
+    "691": {
+        "p12e_code": 691,
+        "scryfall_code": "oafc",
+        "name": "Forgotten Realms Commander Display Commanders",
+        "date": "2021-07-23"
+    },
+    "692": {
+        "p12e_code": 692,
+        "scryfall_code": "htr20",
+        "name": "2020 Heroes of the Realm",
+        "date": "2021-08-01"
+    },
+    "693": {
+        "p12e_code": 693,
+        "scryfall_code": "cmb2",
+        "name": "Mystery Booster Playtest Cards 2021",
+        "date": "2021-08-20"
+    },
+    "694": {
+        "p12e_code": 694,
+        "scryfall_code": "j21",
+        "name": "Jumpstart: Historic Horizons",
+        "date": "2021-08-26"
+    },
+    "695": {
+        "p12e_code": 695,
+        "scryfall_code": "mic",
+        "name": "Midnight Hunt Commander",
+        "date": "2021-09-24"
+    },
+    "696": {
+        "p12e_code": 696,
+        "scryfall_code": "mid",
+        "name": "Innistrad: Midnight Hunt",
+        "date": "2021-09-24"
+    },
+    "697": {
+        "p12e_code": 697,
+        "scryfall_code": "pmid",
+        "name": "Innistrad: Midnight Hunt Promos",
+        "date": "2021-09-24"
+    },
+    "698": {
+        "p12e_code": 698,
+        "scryfall_code": "smid",
+        "name": "Innistrad: Midnight Hunt Substitute Cards",
+        "date": "2021-09-24"
+    },
+    "699": {
+        "p12e_code": 699,
+        "scryfall_code": "tmic",
+        "name": "Midnight Hunt Commander Tokens",
+        "date": "2021-09-24"
+    },
+    "700": {
+        "p12e_code": 700,
+        "scryfall_code": "tmid",
+        "name": "Innistrad: Midnight Hunt Tokens",
+        "date": "2021-09-24"
+    },
+    "701": {
+        "p12e_code": 701,
+        "scryfall_code": "vow",
+        "name": "Innistrad: Crimson Vow",
+        "date": "2021-11-19"
+    },
+    "702": {
+        "p12e_code": 702,
+        "scryfall_code": "cc2",
+        "name": "Commander Collection: Black",
+        "date": "2021-12-31"
+    },
+    "703": {
+        "p12e_code": 703,
+        "scryfall_code": "q06",
+        "name": "Pioneer Challenge Decks 2021",
+        "date": "2021-10-15"
+    },
+    "704": {
+        "p12e_code": 704,
+        "scryfall_code": "pw09",
+        "name": "Wizards Play Network 2009",
+        "date": "2009-01-01"
+    },
+    "705": {
+        "p12e_code": 705,
+        "scryfall_code": "pw10",
+        "name": "Wizards Play Network 2010",
+        "date": "2010-01-01"
+    },
+    "706": {
+        "p12e_code": 706,
+        "scryfall_code": "pw11",
+        "name": "Wizards Play Network 2011",
+        "date": "2011-01-01"
+    },
+    "707": {
+        "p12e_code": 707,
+        "scryfall_code": "pw12",
+        "name": "Wizards Play Network 2012",
+        "date": "2012-01-01"
+    },
+    "708": {
+        "p12e_code": 708,
+        "scryfall_code": "pf21",
+        "name": "MagicFest 2021",
+        "date": "2021-01-01"
+    },
+    "709": {
+        "p12e_code": 709,
+        "scryfall_code": "pw21",
+        "name": "Wizards Play Network 2021",
+        "date": "2021-06-18"
+    },
+    "710": {
+        "p12e_code": 710,
+        "scryfall_code": "amid",
+        "name": "Midnight Hunt Art Series",
+        "date": "2021-09-24"
+    },
+    "711": {
+        "p12e_code": 711,
+        "scryfall_code": "omic",
+        "name": "Midnight Hunt Commander Display Commanders",
+        "date": "2021-09-24"
+    },
+    "712": {
+        "p12e_code": 712,
+        "scryfall_code": "avow",
+        "name": "Crimson Vow Art Series",
+        "date": "2021-11-19"
+    },
+    "713": {
+        "p12e_code": 713,
+        "scryfall_code": "ovoc",
+        "name": "Crimson Vow Commander Display Commanders",
+        "date": "2021-11-19"
+    },
+    "714": {
+        "p12e_code": 714,
+        "scryfall_code": "pvow",
+        "name": "Innistrad: Crimson Vow Promos",
+        "date": "2021-11-19"
+    },
+    "715": {
+        "p12e_code": 715,
+        "scryfall_code": "tvoc",
+        "name": "Crimson Vow Commander Tokens",
+        "date": "2021-11-19"
+    },
+    "716": {
+        "p12e_code": 716,
+        "scryfall_code": "tvow",
+        "name": "Innistrad: Crimson Vow Tokens",
+        "date": "2021-11-19"
+    },
+    "717": {
+        "p12e_code": 717,
+        "scryfall_code": "voc",
+        "name": "Crimson Vow Commander",
+        "date": "2021-11-19"
+    },
+    "718": {
+        "p12e_code": 718,
+        "scryfall_code": "y22",
+        "name": "Alchemy: Innistrad",
+        "date": "2021-12-09"
+    },
+    "719": {
+        "p12e_code": 719,
+        "scryfall_code": "p22",
+        "name": "Judge Gift Cards 2022",
+        "date": "2022-01-01"
+    },
+    "720": {
+        "p12e_code": 720,
+        "scryfall_code": "dbl",
+        "name": "Innistrad: Double Feature",
+        "date": "2022-01-28"
+    },
+    "721": {
+        "p12e_code": 721,
+        "scryfall_code": "nec",
+        "name": "Neon Dynasty Commander",
+        "date": "2022-02-18"
+    },
+    "722": {
+        "p12e_code": 722,
+        "scryfall_code": "neo",
+        "name": "Kamigawa: Neon Dynasty",
+        "date": "2022-02-18"
+    },
+    "723": {
+        "p12e_code": 723,
+        "scryfall_code": "tnec",
+        "name": "Neon Dynasty Commander Tokens",
+        "date": "2022-02-18"
+    },
+    "724": {
+        "p12e_code": 724,
+        "scryfall_code": "tneo",
+        "name": "Kamigawa: Neon Dynasty Tokens",
+        "date": "2022-02-18"
+    },
+    "725": {
+        "p12e_code": 725,
+        "scryfall_code": "pw22",
+        "name": "Wizards Play Network 2022",
+        "date": "2022-03-05"
+    },
+    "726": {
+        "p12e_code": 726,
+        "scryfall_code": "tunf",
+        "name": "Unfinity Tokens",
+        "date": "2022-12-31"
+    },
+    "727": {
+        "p12e_code": 727,
+        "scryfall_code": "unf",
+        "name": "Unfinity",
+        "date": "2022-12-31"
+    },
+    "728": {
+        "p12e_code": 728,
+        "scryfall_code": "pl22",
+        "name": "Year of the Tiger 2022",
+        "date": "2022-02-25"
+    },
+    "729": {
+        "p12e_code": 729,
+        "scryfall_code": "svow",
+        "name": "Innistrad: Crimson Vow Substitute Cards",
+        "date": "2021-11-19"
+    },
+    "730": {
+        "p12e_code": 730,
+        "scryfall_code": "pneo",
+        "name": "Kamigawa: Neon Dynasty Promos",
+        "date": "2022-02-18"
+    },
+    "731": {
+        "p12e_code": 731,
+        "scryfall_code": "skhm",
+        "name": "Kaldheim Substitute Cards",
+        "date": "2021-02-05"
+    },
+    "732": {
+        "p12e_code": 732,
+        "scryfall_code": "sstx",
+        "name": "Strixhaven: School of Mages Substitute Cards",
+        "date": "2021-04-23"
+    },
+    "733": {
+        "p12e_code": 733,
+        "scryfall_code": "mvow",
+        "name": "Innistrad: Crimson Vow Minigames",
+        "date": "2021-11-19"
+    },
+    "734": {
+        "p12e_code": 734,
+        "scryfall_code": "phed",
+        "name": "Heads I Win, Tails You Lose",
+        "date": "2022-04-22"
+    },
+    "735": {
+        "p12e_code": 735,
+        "scryfall_code": "snc",
+        "name": "Streets of New Capenna",
+        "date": "2022-04-29"
+    },
+    "736": {
+        "p12e_code": 736,
+        "scryfall_code": "slx",
+        "name": "Universes Within",
+        "date": "2022-03-03"
+    },
+    "737": {
+        "p12e_code": 737,
+        "scryfall_code": "aneo",
+        "name": "Neon Dynasty Art Series",
+        "date": "2022-02-18"
+    },
+    "738": {
+        "p12e_code": 738,
+        "scryfall_code": "yneo",
+        "name": "Alchemy: Kamigawa",
+        "date": "2022-03-17"
+    },
+    "739": {
+        "p12e_code": 739,
+        "scryfall_code": "ymid",
+        "name": "Alchemy: Innistrad",
+        "date": "2021-12-09"
+    },
+    "740": {
+        "p12e_code": 740,
+        "scryfall_code": "clb",
+        "name": "Commander Legends: Battle for Baldur's Gate",
+        "date": "2022-06-10"
+    },
+    "741": {
+        "p12e_code": 741,
+        "scryfall_code": "ncc",
+        "name": "New Capenna Commander",
+        "date": "2022-04-29"
+    },
+    "742": {
+        "p12e_code": 742,
+        "scryfall_code": "gdy",
+        "name": "Game Day Promos",
+        "date": "2022-04-08"
+    },
+    "743": {
+        "p12e_code": 743,
+        "scryfall_code": "tsnc",
+        "name": "Streets of New Capenna Tokens",
+        "date": "2022-04-10"
+    },
+    "744": {
+        "p12e_code": 744,
+        "scryfall_code": "tncc",
+        "name": "New Capenna Commander Tokens",
+        "date": "2022-04-20"
+    },
+    "745": {
+        "p12e_code": 745,
+        "scryfall_code": "asnc",
+        "name": "New Capenna Art Series",
+        "date": "2022-04-29"
+    },
+    "746": {
+        "p12e_code": 746,
+        "scryfall_code": "psnc",
+        "name": "Streets of New Capenna Promos",
+        "date": "2022-04-30"
+    },
+    "747": {
+        "p12e_code": 747,
+        "scryfall_code": "pncc",
+        "name": "New Capenna Commander Promos",
+        "date": "2022-04-09"
+    },
+    "748": {
+        "p12e_code": 748,
+        "scryfall_code": "tclb",
+        "name": "Battle for Baldur's Gate Tokens",
+        "date": "2022-06-10"
+    },
+    "749": {
+        "p12e_code": 749,
+        "scryfall_code": "plg22",
+        "name": "Love Your LGS 2022",
+        "date": "2022-07-01"
+    },
+    "750": {
+        "p12e_code": 750,
+        "scryfall_code": "2x2",
+        "name": "Double Masters 2022",
+        "date": "2022-07-08"
+    },
+    "751": {
+        "p12e_code": 751,
+        "scryfall_code": "sch",
+        "name": "Store Championships 2022",
+        "date": "2022-07-09"
+    },
+    "752": {
+        "p12e_code": 752,
+        "scryfall_code": "40k",
+        "name": "Warhammer 40,000",
+        "date": "2022-08-12"
+    },
+    "753": {
+        "p12e_code": 753,
+        "scryfall_code": "t40k",
+        "name": "Warhammer 40,000 Tokens",
+        "date": "2022-08-12"
+    },
+    "754": {
+        "p12e_code": 754,
+        "scryfall_code": "dmc",
+        "name": "Dominaria United Commander",
+        "date": "2022-09-09"
+    },
+    "755": {
+        "p12e_code": 755,
+        "scryfall_code": "dmu",
+        "name": "Dominaria United",
+        "date": "2022-09-09"
+    },
+    "756": {
+        "p12e_code": 756,
+        "scryfall_code": "bro",
+        "name": "The Brothers' War",
+        "date": "2022-11-18"
+    },
+    "757": {
+        "p12e_code": 757,
+        "scryfall_code": "ysnc",
+        "name": "Alchemy: New Capenna",
+        "date": "2022-06-02"
+    },
+    "758": {
+        "p12e_code": 758,
+        "scryfall_code": "pclb",
+        "name": "Commander Legends: Battle for Baldur's Gate Promos",
+        "date": "2022-06-10"
+    },
+    "759": {
+        "p12e_code": 759,
+        "scryfall_code": "aclb",
+        "name": "Battle for Baldur's Gate Art Series",
+        "date": "2022-06-10"
+    },
+    "760": {
+        "p12e_code": 760,
+        "scryfall_code": "o90p",
+        "name": "Oversized 90's Promos",
+        "date": "1996-04-01"
+    },
+    "761": {
+        "p12e_code": 761,
+        "scryfall_code": "olep",
+        "name": "Oversized League Prizes",
+        "date": "1997-05-30"
+    },
+    "762": {
+        "p12e_code": 762,
+        "scryfall_code": "wmc",
+        "name": "World Magic Cup Qualifiers",
+        "date": "2013-04-06"
+    },
+    "763": {
+        "p12e_code": 763,
+        "scryfall_code": "ptsnc",
+        "name": "Streets of New Capenna Southeast Asia Tokens",
+        "date": "2022-04-30"
+    },
+    "764": {
+        "p12e_code": 764,
+        "scryfall_code": "hbg",
+        "name": "Alchemy Horizons: Baldur's Gate",
+        "date": "2022-07-07"
+    },
+    "765": {
+        "p12e_code": 765,
+        "scryfall_code": "t2x2",
+        "name": "Double Masters 2022 Tokens",
+        "date": "2022-07-08"
+    },
+    "766": {
+        "p12e_code": 766,
+        "scryfall_code": "ea1",
+        "name": "Explorer Anthology 1",
+        "date": "2022-07-28"
+    },
+    "767": {
+        "p12e_code": 767,
+        "scryfall_code": "ha6",
+        "name": "Historic Anthology 6",
+        "date": "2022-07-28"
+    },
+    "768": {
+        "p12e_code": 768,
+        "scryfall_code": "psvc",
+        "name": "Summer Vacation Promos 2022",
+        "date": "2022-08-01"
+    },
+    "769": {
+        "p12e_code": 769,
+        "scryfall_code": "p30a",
+        "name": "30th Anniversary Promos",
+        "date": "2022-09-02"
+    },
+    "770": {
+        "p12e_code": 770,
+        "scryfall_code": "tdmu",
+        "name": "Dominaria United Tokens",
+        "date": "2022-09-09"
+    },
+    "771": {
+        "p12e_code": 771,
+        "scryfall_code": "prcq",
+        "name": "Regional Championship Qualifiers 2022",
+        "date": "2022-10-01"
+    },
+    "772": {
+        "p12e_code": 772,
+        "scryfall_code": "sunf",
+        "name": "Unfinity Sticker Sheets",
+        "date": "2022-10-07"
+    },
+    "773": {
+        "p12e_code": 773,
+        "scryfall_code": "gn3",
+        "name": "Game Night 2022",
+        "date": "2022-10-14"
+    },
+    "774": {
+        "p12e_code": 774,
+        "scryfall_code": "mneo",
+        "name": "Kamigawa: Neon Destiny Minigames",
+        "date": "2022-02-18"
+    },
+    "775": {
+        "p12e_code": 775,
+        "scryfall_code": "sneo",
+        "name": "Kamigawa: Neon Dynasty Substitute Cards",
+        "date": "2022-02-18"
+    },
+    "776": {
+        "p12e_code": 776,
+        "scryfall_code": "q07",
+        "name": "Challenger Decks 2022",
+        "date": "2022-04-01"
+    },
+    "777": {
+        "p12e_code": 777,
+        "scryfall_code": "msnc",
+        "name": "Streets of New Capenna Minigames",
+        "date": "2022-04-29"
+    },
+    "778": {
+        "p12e_code": 778,
+        "scryfall_code": "mclb",
+        "name": "Commander Legends: Battle for Baldur's Gate Minigames",
+        "date": "2022-06-10"
+    },
+    "779": {
+        "p12e_code": 779,
+        "scryfall_code": "admu",
+        "name": "Dominaria United Art Series",
+        "date": "2022-09-09"
+    },
+    "780": {
+        "p12e_code": 780,
+        "scryfall_code": "p30h",
+        "name": "30th Anniversary History Promos",
+        "date": "2022-09-09"
+    },
+    "781": {
+        "p12e_code": 781,
+        "scryfall_code": "pdmu",
+        "name": "Dominaria United Promos",
+        "date": "2022-09-09"
+    },
+    "782": {
+        "p12e_code": 782,
+        "scryfall_code": "pdwa",
+        "name": "Dominaria United Japanese Promo Tokens",
+        "date": "2022-09-09"
+    },
+    "783": {
+        "p12e_code": 783,
+        "scryfall_code": "tdmc",
+        "name": "Dominaria United Commander Tokens",
+        "date": "2022-09-09"
+    },
+    "784": {
+        "p12e_code": 784,
+        "scryfall_code": "ydmu",
+        "name": "Alchemy: Dominaria",
+        "date": "2022-10-05"
+    },
+    "785": {
+        "p12e_code": 785,
+        "scryfall_code": "uplist",
+        "name": "The List (Unfinity Foil Edition)",
+        "date": "2022-10-07"
+    },
+    "786": {
+        "p12e_code": 786,
+        "scryfall_code": "tgn3",
+        "name": "Game Night: Free-for-All Tokens",
+        "date": "2022-10-14"
+    },
+    "787": {
+        "p12e_code": 787,
+        "scryfall_code": "slc",
+        "name": "Secret Lair 30th Anniversary Countdown Kit",
+        "date": "2022-11-01"
+    },
+    "788": {
+        "p12e_code": 788,
+        "scryfall_code": "q08",
+        "name": "Pioneer Challenger Decks 2022",
+        "date": "2022-11-04"
+    },
+    "789": {
+        "p12e_code": 789,
+        "scryfall_code": "abro",
+        "name": "The Brothers' War Art Series",
+        "date": "2022-11-18"
+    },
+    "790": {
+        "p12e_code": 790,
+        "scryfall_code": "bot",
+        "name": "Transformers",
+        "date": "2022-11-18"
+    },
+    "791": {
+        "p12e_code": 791,
+        "scryfall_code": "brc",
+        "name": "The Brothers' War Commander",
+        "date": "2022-11-18"
+    },
+    "792": {
+        "p12e_code": 792,
+        "scryfall_code": "brr",
+        "name": "The Brothers' War Retro Artifacts",
+        "date": "2022-11-18"
+    },
+    "793": {
+        "p12e_code": 793,
+        "scryfall_code": "pbro",
+        "name": "The Brothers' War Promos",
+        "date": "2022-11-18"
+    },
+    "794": {
+        "p12e_code": 794,
+        "scryfall_code": "tbot",
+        "name": "Transformers Tokens",
+        "date": "2022-11-18"
+    },
+    "795": {
+        "p12e_code": 795,
+        "scryfall_code": "tbrc",
+        "name": "The Brothers' War Commander Tokens",
+        "date": "2022-11-18"
+    },
+    "796": {
+        "p12e_code": 796,
+        "scryfall_code": "tbro",
+        "name": "The Brothers' War Tokens",
+        "date": "2022-11-18"
+    },
+    "797": {
+        "p12e_code": 797,
+        "scryfall_code": "pewk",
+        "name": "Eternal Weekend 2022",
+        "date": "2022-11-26"
+    },
+    "798": {
+        "p12e_code": 798,
+        "scryfall_code": "30a",
+        "name": "30th Anniversary Edition",
+        "date": "2022-11-28"
+    },
+    "799": {
+        "p12e_code": 799,
+        "scryfall_code": "t30a",
+        "name": "30th Anniversary Tokens",
+        "date": "2022-11-28"
+    },
+    "800": {
+        "p12e_code": 800,
+        "scryfall_code": "j22",
+        "name": "Jumpstart 2022",
+        "date": "2022-12-02"
+    },
+    "801": {
+        "p12e_code": 801,
+        "scryfall_code": "scd",
+        "name": "Starter Commander Decks",
+        "date": "2022-12-02"
+    },
+    "802": {
+        "p12e_code": 802,
+        "scryfall_code": "tscd",
+        "name": "Starter Commander Deck Tokens",
+        "date": "2022-12-02"
+    },
+    "803": {
+        "p12e_code": 803,
+        "scryfall_code": "pr23",
+        "name": "Regional Championship Qualifiers 2023",
+        "date": "2023-01-01"
+    },
+    "804": {
+        "p12e_code": 804,
+        "scryfall_code": "onc",
+        "name": "Phyrexia: All Will Be One Commander",
+        "date": "2023-02-03"
+    },
+    "805": {
+        "p12e_code": 805,
+        "scryfall_code": "one",
+        "name": "Phyrexia: All Will Be One",
+        "date": "2023-02-03"
+    },
+    "806": {
+        "p12e_code": 806,
+        "scryfall_code": "dmr",
+        "name": "Dominaria Remastered",
+        "date": "2023-03-31"
+    },
+    "807": {
+        "p12e_code": 807,
+        "scryfall_code": "bchr",
+        "name": "Chronicles Foreign Black Border",
+        "date": "1995-07-01"
+    },
+    "808": {
+        "p12e_code": 808,
+        "scryfall_code": "pdci",
+        "name": "DCI Promos",
+        "date": "2006-01-01"
+    },
+    "809": {
+        "p12e_code": 809,
+        "scryfall_code": "phtr",
+        "name": "2016 Heroes of the Realm",
+        "date": "2017-09-20"
+    },
+    "810": {
+        "p12e_code": 810,
+        "scryfall_code": "ph17",
+        "name": "2017 Heroes of the Realm",
+        "date": "2018-08-01"
+    },
+    "811": {
+        "p12e_code": 811,
+        "scryfall_code": "ph18",
+        "name": "2018 Heroes of the Realm",
+        "date": "2019-08-01"
+    },
+    "812": {
+        "p12e_code": 812,
+        "scryfall_code": "pwcs",
+        "name": "Planeswalker Championship Promos",
+        "date": "2019-10-01"
+    },
+    "813": {
+        "p12e_code": 813,
+        "scryfall_code": "ph19",
+        "name": "2019 Heroes of the Realm",
+        "date": "2020-08-01"
+    },
+    "814": {
+        "p12e_code": 814,
+        "scryfall_code": "ph20",
+        "name": "2020 Heroes of the Realm",
+        "date": "2021-08-01"
+    },
+    "815": {
+        "p12e_code": 815,
+        "scryfall_code": "mmid",
+        "name": "Innistrad: Midnight Hunt Minigames",
+        "date": "2021-09-24"
+    },
+    "816": {
+        "p12e_code": 816,
+        "scryfall_code": "ph21",
+        "name": "2021 Heroes of the Realm",
+        "date": "2022-08-01"
+    },
+    "817": {
+        "p12e_code": 817,
+        "scryfall_code": "mdmu",
+        "name": "Dominaria United Minigames",
+        "date": "2022-09-09"
+    },
+    "818": {
+        "p12e_code": 818,
+        "scryfall_code": "wdmu",
+        "name": "Dominaria United Japanese Promo Tokens",
+        "date": "2022-09-09"
+    },
+    "819": {
+        "p12e_code": 819,
+        "scryfall_code": "mbro",
+        "name": "The Brothers' War Minigames",
+        "date": "2022-11-18"
+    },
+    "820": {
+        "p12e_code": 820,
+        "scryfall_code": "fj22",
+        "name": "Jumpstart 2022 Front Cards",
+        "date": "2022-12-02"
+    },
+    "821": {
+        "p12e_code": 821,
+        "scryfall_code": "ea2",
+        "name": "Explorer Anthology 2",
+        "date": "2022-12-13"
+    },
+    "822": {
+        "p12e_code": 822,
+        "scryfall_code": "ybro",
+        "name": "Alchemy: The Brothers' War",
+        "date": "2022-12-13"
+    },
+    "823": {
+        "p12e_code": 823,
+        "scryfall_code": "p23",
+        "name": "Judge Gift Cards 2023",
+        "date": "2023-01-01"
+    },
+    "824": {
+        "p12e_code": 824,
+        "scryfall_code": "pw23",
+        "name": "Wizards Play Network 2023",
+        "date": "2023-01-01"
+    },
+    "825": {
+        "p12e_code": 825,
+        "scryfall_code": "tdmr",
+        "name": "Dominaria Remastered Tokens",
+        "date": "2023-01-13"
+    },
+    "826": {
+        "p12e_code": 826,
+        "scryfall_code": "wone",
+        "name": "Phyrexia: All Will Be One Japanese Promo Tokens",
+        "date": "2023-01-27"
+    },
+    "827": {
+        "p12e_code": 827,
+        "scryfall_code": "aone",
+        "name": "Phyrexia: All Will Be One Art Series",
+        "date": "2023-02-03"
+    },
+    "828": {
+        "p12e_code": 828,
+        "scryfall_code": "fone",
+        "name": "Phyrexia: All Will Be One Jumpstart Front Cards",
+        "date": "2023-02-03"
+    },
+    "829": {
+        "p12e_code": 829,
+        "scryfall_code": "mone",
+        "name": "Phyrexia: All Will Be One Minigames",
+        "date": "2023-02-03"
+    },
+    "830": {
+        "p12e_code": 830,
+        "scryfall_code": "pone",
+        "name": "Phyrexia: All Will Be One Promos",
+        "date": "2023-02-03"
+    },
+    "831": {
+        "p12e_code": 831,
+        "scryfall_code": "tonc",
+        "name": "Phyrexia: All Will Be One Commander Tokens",
+        "date": "2023-02-03"
+    },
+    "832": {
+        "p12e_code": 832,
+        "scryfall_code": "tone",
+        "name": "Phyrexia: All Will Be One Tokens",
+        "date": "2023-02-03"
+    },
+    "833": {
+        "p12e_code": 833,
+        "scryfall_code": "pl23",
+        "name": "Year of the Rabbit 2023",
+        "date": "2023-02-10"
+    },
+    "834": {
+        "p12e_code": 834,
+        "scryfall_code": "slp",
+        "name": "Secret Lair Showdown",
+        "date": "2023-02-17"
+    },
+    "835": {
+        "p12e_code": 835,
+        "scryfall_code": "yone",
+        "name": "Alchemy: Phyrexia",
+        "date": "2023-02-28"
+    },
+    "836": {
+        "p12e_code": 836,
+        "scryfall_code": "sir",
+        "name": "Shadows over Innistrad Remastered",
+        "date": "2023-03-21"
+    },
+    "837": {
+        "p12e_code": 837,
+        "scryfall_code": "sis",
+        "name": "Shadows of the Past",
+        "date": "2023-03-21"
+    },
+    "838": {
+        "p12e_code": 838,
+        "scryfall_code": "moc",
+        "name": "March of the Machine Commander",
+        "date": "2023-04-21"
+    },
+    "839": {
+        "p12e_code": 839,
+        "scryfall_code": "mom",
+        "name": "March of the Machine",
+        "date": "2023-04-21"
+    },
+    "840": {
+        "p12e_code": 840,
+        "scryfall_code": "mul",
+        "name": "Multiverse Legends",
+        "date": "2023-04-21"
+    },
+    "841": {
+        "p12e_code": 841,
+        "scryfall_code": "tmom",
+        "name": "March of the Machine Tokens",
+        "date": "2023-04-21"
+    },
+    "842": {
+        "p12e_code": 842,
+        "scryfall_code": "mat",
+        "name": "March of the Machine: The Aftermath",
+        "date": "2023-05-12"
+    },
+    "843": {
+        "p12e_code": 843,
+        "scryfall_code": "ltc",
+        "name": "Tales of Middle-earth Commander",
+        "date": "2023-06-23"
+    },
+    "844": {
+        "p12e_code": 844,
+        "scryfall_code": "ltr",
+        "name": "The Lord of the Rings: Tales of Middle-earth",
+        "date": "2023-06-23"
+    },
+    "845": {
+        "p12e_code": 845,
+        "scryfall_code": "cmm",
+        "name": "Commander Masters",
+        "date": "2023-08-04"
+    }
+}
