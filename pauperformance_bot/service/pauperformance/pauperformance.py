@@ -135,14 +135,14 @@ class PauperformanceService:
                         f"Loaded set index from cache: {set_cache_file} "
                         f"({len(set_index)} cards)."
                     )
-            except FileNotFoundError:
+            except (FileNotFoundError, json.decoder.JSONDecodeError):
                 logger.debug(f"Missing cache for set {p12e_code}: querying Scryfall...")
                 scryfall_code = item["scryfall_code"]
                 query = f"set:{scryfall_code} rarity:common legal:pauper"
                 set_index = self.scryfall.search_cards(query)
                 if len(set_index) > 0:
                     with open(set_cache_file, "w") as cache_f:
-                        json.dump(card_index[p12e_code], cache_f)
+                        json.dump(set_index, cache_f)
                         logger.debug(
                             f"Saved set index to cache: {set_cache_file} "
                             f"({len(set_index)} cards)."
