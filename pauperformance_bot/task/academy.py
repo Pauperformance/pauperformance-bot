@@ -19,10 +19,17 @@ async def async_academy_update():
     await pauperformance.discord.wait_until_ready()
 
     # import new content
-    await pauperformance.import_players_videos_from_twitch(send_notification=True)
-    await pauperformance.import_players_videos_from_youtube(send_notification=True)
-    await pauperformance.import_decks_from_deckstats(send_notification=True)
-    await pauperformance.import_decks_from_discord(send_notification=True)
+    send_notification = False
+    await pauperformance.import_players_videos_from_twitch(
+        send_notification=send_notification
+    )
+    await pauperformance.import_players_videos_from_youtube(
+        send_notification=send_notification
+    )
+    await pauperformance.import_decks_from_deckstats(
+        send_notification=send_notification
+    )
+    await pauperformance.import_decks_from_discord(send_notification=send_notification)
 
     # update pages
     academy = AcademyService(pauperformance)
