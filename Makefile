@@ -5,7 +5,7 @@ include ./Makefile.vars
 default: clean install
 
 clean:
-	rm -rf .mypy_cache .pytest_cache/ .tox/ build/ coverage_html/ dist/ pauperformance_bot.egg-info/ .coverage coverage.xml mypy_results.xml
+	rm -rf .mypy_cache .pytest_cache/ .tox/ build/ coverage_html/ dist/ pauperformance_bot.egg-info/ .coverage coverage.xml mypy_result.xml
 .PHONY: clean
 
 uninstall:
