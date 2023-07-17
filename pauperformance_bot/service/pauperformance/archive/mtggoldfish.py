@@ -1,3 +1,4 @@
+import re
 import time
 from datetime import datetime
 from functools import cache, wraps
@@ -10,6 +11,7 @@ from requests import session
 from pauperformance_bot.constant.mtg.mtggoldfish import (
     API_ENDPOINT,
     DECK_API_ENDPOINT,
+    MIN_AUTHENTICITY_TOKEN_LEN,
     MTGGOLDFISH_THROTTLE_ERROR_RESPONSE,
     NO_COOKIE_HEADER,
     REQUESTS_SLEEP_SECONDS,
@@ -93,11 +95,12 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
                 continue
             logger.debug(f"Extracting authenticity_token from line: {line}")
             value_token = "value="
-            authenticity_token = line[
-                line.rfind(value_token) + len(value_token) + 1 : -4
-            ]
-            logger.debug(f"Found authenticity_token: {authenticity_token}")
-            return authenticity_token
+            for match in re.finditer(value_token, line):
+                token = line[match.end() + 1 :]
+                token = token[0 : token.find('"')]
+                if len(token) >= MIN_AUTHENTICITY_TOKEN_LEN:
+                    logger.debug(f"Found authenticity_token: {token}")
+                    return token
         raise MTGGoldfishException("Unable to get authenticity_token from MTGGoldfish.")
 
     @staticmethod
