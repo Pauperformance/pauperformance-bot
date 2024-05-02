@@ -5068,5 +5068,521 @@
         "scryfall_code": "cmm",
         "name": "Commander Masters",
         "date": "2023-08-04"
+    },
+    "846": {
+        "p12e_code": 846,
+        "scryfall_code": "plst",
+        "name": "The List",
+        "date": "2020-09-26"
+    },
+    "847": {
+        "p12e_code": 847,
+        "scryfall_code": "pcmr",
+        "name": "Commander Legends Promos",
+        "date": "2020-11-20"
+    },
+    "848": {
+        "p12e_code": 848,
+        "scryfall_code": "p30m",
+        "name": "30th Anniversary Misc Promos",
+        "date": "2022-09-02"
+    },
+    "849": {
+        "p12e_code": 849,
+        "scryfall_code": "fdmu",
+        "name": "Dominaria United Jumpstart Front Cards",
+        "date": "2022-09-09"
+    },
+    "850": {
+        "p12e_code": 850,
+        "scryfall_code": "ptdmu",
+        "name": "Dominaria United Southeast Asia Tokens",
+        "date": "2022-09-09"
+    },
+    "851": {
+        "p12e_code": 851,
+        "scryfall_code": "ulst",
+        "name": "The List (Unfinity Foil Edition)",
+        "date": "2022-10-07"
+    },
+    "852": {
+        "p12e_code": 852,
+        "scryfall_code": "fbro",
+        "name": "The Brothers' War Jumpstart Front Cards",
+        "date": "2022-11-18"
+    },
+    "853": {
+        "p12e_code": 853,
+        "scryfall_code": "ptbro",
+        "name": "The Brothers' War Southeast Asia Tokens",
+        "date": "2022-11-18"
+    },
+    "854": {
+        "p12e_code": 854,
+        "scryfall_code": "sbro",
+        "name": "The Brothers' War Substitute Cards",
+        "date": "2022-11-18"
+    },
+    "855": {
+        "p12e_code": 855,
+        "scryfall_code": "amom",
+        "name": "March of the Machine Art Series",
+        "date": "2023-04-21"
+    },
+    "856": {
+        "p12e_code": 856,
+        "scryfall_code": "fmom",
+        "name": "March of the Machine Jumpstart Front Cards",
+        "date": "2023-04-21"
+    },
+    "857": {
+        "p12e_code": 857,
+        "scryfall_code": "pmom",
+        "name": "March of the Machine Promos",
+        "date": "2023-04-21"
+    },
+    "858": {
+        "p12e_code": 858,
+        "scryfall_code": "smom",
+        "name": "March of the Machine Substitute Cards",
+        "date": "2023-04-21"
+    },
+    "859": {
+        "p12e_code": 859,
+        "scryfall_code": "tmoc",
+        "name": "March of the Machine Commander Tokens",
+        "date": "2023-04-21"
+    },
+    "860": {
+        "p12e_code": 860,
+        "scryfall_code": "tmul",
+        "name": "Multiverse Legends Tokens",
+        "date": "2023-04-21"
+    },
+    "861": {
+        "p12e_code": 861,
+        "scryfall_code": "wmom",
+        "name": "MOM Japanese Promo Tokens",
+        "date": "2023-04-21"
+    },
+    "862": {
+        "p12e_code": 862,
+        "scryfall_code": "altr",
+        "name": "Tales of Middle-earth Art Series",
+        "date": "2023-06-23"
+    },
+    "863": {
+        "p12e_code": 863,
+        "scryfall_code": "fltr",
+        "name": "Tales of Middle-earth Front Cards",
+        "date": "2023-06-23"
+    },
+    "864": {
+        "p12e_code": 864,
+        "scryfall_code": "pltr",
+        "name": "Tales of Middle-earth Promos",
+        "date": "2023-06-23"
+    },
+    "865": {
+        "p12e_code": 865,
+        "scryfall_code": "tltc",
+        "name": "Tales of Middle-earth Commander Tokens",
+        "date": "2023-06-23"
+    },
+    "866": {
+        "p12e_code": 866,
+        "scryfall_code": "tltr",
+        "name": "Tales of Middle-earth Tokens",
+        "date": "2023-06-23"
+    },
+    "867": {
+        "p12e_code": 867,
+        "scryfall_code": "pf23",
+        "name": "MagicFest 2023",
+        "date": "2023-07-01"
+    },
+    "868": {
+        "p12e_code": 868,
+        "scryfall_code": "ea3",
+        "name": "Explorer Anthology 3",
+        "date": "2023-07-18"
+    },
+    "869": {
+        "p12e_code": 869,
+        "scryfall_code": "ha7",
+        "name": "Historic Anthology 7",
+        "date": "2023-07-18"
+    },
+    "870": {
+        "p12e_code": 870,
+        "scryfall_code": "ph22",
+        "name": "2022 Heroes of the Realm",
+        "date": "2023-08-01"
+    },
+    "871": {
+        "p12e_code": 871,
+        "scryfall_code": "acmm",
+        "name": "Commander Masters Art Series",
+        "date": "2023-08-04"
+    },
+    "872": {
+        "p12e_code": 872,
+        "scryfall_code": "tcmm",
+        "name": "Commander Masters Tokens",
+        "date": "2023-08-04"
+    },
+    "873": {
+        "p12e_code": 873,
+        "scryfall_code": "p30t",
+        "name": "30th Anniversary Celebration Tokyo",
+        "date": "2023-09-01"
+    },
+    "874": {
+        "p12e_code": 874,
+        "scryfall_code": "awoe",
+        "name": "Wilds of Eldraine Art Series",
+        "date": "2023-09-08"
+    },
+    "875": {
+        "p12e_code": 875,
+        "scryfall_code": "pmda",
+        "name": "Magic \u00d7 Duel Masters Promos",
+        "date": "2023-09-08"
+    },
+    "876": {
+        "p12e_code": 876,
+        "scryfall_code": "ptsr",
+        "name": "Time Spiral Remastered Promos",
+        "date": "2023-09-08"
+    },
+    "877": {
+        "p12e_code": 877,
+        "scryfall_code": "pwoe",
+        "name": "Wilds of Eldraine Promos",
+        "date": "2023-09-08"
+    },
+    "878": {
+        "p12e_code": 878,
+        "scryfall_code": "twoc",
+        "name": "Wilds of Eldraine Commander Tokens",
+        "date": "2023-09-08"
+    },
+    "879": {
+        "p12e_code": 879,
+        "scryfall_code": "twoe",
+        "name": "Wilds of Eldraine Tokens",
+        "date": "2023-09-08"
+    },
+    "880": {
+        "p12e_code": 880,
+        "scryfall_code": "woc",
+        "name": "Wilds of Eldraine Commander",
+        "date": "2023-09-08"
+    },
+    "881": {
+        "p12e_code": 881,
+        "scryfall_code": "woe",
+        "name": "Wilds of Eldraine",
+        "date": "2023-09-08"
+    },
+    "882": {
+        "p12e_code": 882,
+        "scryfall_code": "wot",
+        "name": "Wilds of Eldraine: Enchanting Tales",
+        "date": "2023-09-08"
+    },
+    "883": {
+        "p12e_code": 883,
+        "scryfall_code": "wwoe",
+        "name": "WOE Japanese Promo Tokens",
+        "date": "2023-09-08"
+    },
+    "884": {
+        "p12e_code": 884,
+        "scryfall_code": "ywoe",
+        "name": "Alchemy: Wilds of Eldraine",
+        "date": "2023-10-10"
+    },
+    "885": {
+        "p12e_code": 885,
+        "scryfall_code": "twho",
+        "name": "Doctor Who Tokens",
+        "date": "2023-10-13"
+    },
+    "886": {
+        "p12e_code": 886,
+        "scryfall_code": "who",
+        "name": "Doctor Who",
+        "date": "2023-10-13"
+    },
+    "887": {
+        "p12e_code": 887,
+        "scryfall_code": "alci",
+        "name": "The Lost Caverns of Ixalan Art Series",
+        "date": "2023-11-17"
+    },
+    "888": {
+        "p12e_code": 888,
+        "scryfall_code": "lcc",
+        "name": "The Lost Caverns of Ixalan Commander",
+        "date": "2023-11-17"
+    },
+    "889": {
+        "p12e_code": 889,
+        "scryfall_code": "lci",
+        "name": "The Lost Caverns of Ixalan",
+        "date": "2023-11-17"
+    },
+    "890": {
+        "p12e_code": 890,
+        "scryfall_code": "plci",
+        "name": "The Lost Caverns of Ixalan Promos",
+        "date": "2023-11-17"
+    },
+    "891": {
+        "p12e_code": 891,
+        "scryfall_code": "pmat",
+        "name": "March of the Machine: The Aftermath Promos",
+        "date": "2023-11-17"
+    },
+    "892": {
+        "p12e_code": 892,
+        "scryfall_code": "rex",
+        "name": "Jurassic World Collection",
+        "date": "2023-11-17"
+    },
+    "893": {
+        "p12e_code": 893,
+        "scryfall_code": "slci",
+        "name": "The Lost Caverns of Ixalan Substitute Cards",
+        "date": "2023-11-17"
+    },
+    "894": {
+        "p12e_code": 894,
+        "scryfall_code": "spg",
+        "name": "Special Guests",
+        "date": "2023-11-17"
+    },
+    "895": {
+        "p12e_code": 895,
+        "scryfall_code": "tlcc",
+        "name": "The Lost Caverns of Ixalan Commander Tokens",
+        "date": "2023-11-17"
+    },
+    "896": {
+        "p12e_code": 896,
+        "scryfall_code": "tlci",
+        "name": "The Lost Caverns of Ixalan Tokens",
+        "date": "2023-11-17"
+    },
+    "897": {
+        "p12e_code": 897,
+        "scryfall_code": "trex",
+        "name": "Jurassic World Collection Tokens",
+        "date": "2023-11-17"
+    },
+    "898": {
+        "p12e_code": 898,
+        "scryfall_code": "ylci",
+        "name": "Alchemy: Ixalan",
+        "date": "2023-12-05"
+    },
+    "899": {
+        "p12e_code": 899,
+        "scryfall_code": "pf24",
+        "name": "MagicFest 2024",
+        "date": "2024-01-01"
+    },
+    "900": {
+        "p12e_code": 900,
+        "scryfall_code": "pw24",
+        "name": "Wizards Play Network 2024",
+        "date": "2024-01-01"
+    },
+    "901": {
+        "p12e_code": 901,
+        "scryfall_code": "rvr",
+        "name": "Ravnica Remastered",
+        "date": "2024-01-12"
+    },
+    "902": {
+        "p12e_code": 902,
+        "scryfall_code": "trvr",
+        "name": "Ravnica Remastered Tokens",
+        "date": "2024-01-12"
+    },
+    "903": {
+        "p12e_code": 903,
+        "scryfall_code": "pl24",
+        "name": "Year of the Dragon 2024",
+        "date": "2024-02-08"
+    },
+    "904": {
+        "p12e_code": 904,
+        "scryfall_code": "amkm",
+        "name": "Murders at Karlov Manor Art Series",
+        "date": "2024-02-09"
+    },
+    "905": {
+        "p12e_code": 905,
+        "scryfall_code": "mkc",
+        "name": "Murders at Karlov Manor Commander",
+        "date": "2024-02-09"
+    },
+    "906": {
+        "p12e_code": 906,
+        "scryfall_code": "mkm",
+        "name": "Murders at Karlov Manor",
+        "date": "2024-02-09"
+    },
+    "907": {
+        "p12e_code": 907,
+        "scryfall_code": "pmkm",
+        "name": "Murders at Karlov Manor Promos",
+        "date": "2024-02-09"
+    },
+    "908": {
+        "p12e_code": 908,
+        "scryfall_code": "tmkc",
+        "name": "Murders at Karlov Manor Commander Tokens",
+        "date": "2024-02-09"
+    },
+    "909": {
+        "p12e_code": 909,
+        "scryfall_code": "tmkm",
+        "name": "Murders at Karlov Manor Tokens",
+        "date": "2024-02-09"
+    },
+    "910": {
+        "p12e_code": 910,
+        "scryfall_code": "wmkm",
+        "name": "MKM Japanese Promo Tokens",
+        "date": "2024-02-09"
+    },
+    "911": {
+        "p12e_code": 911,
+        "scryfall_code": "pss4",
+        "name": "MKM Standard Showdown",
+        "date": "2024-02-10"
+    },
+    "912": {
+        "p12e_code": 912,
+        "scryfall_code": "clu",
+        "name": "Ravnica: Clue Edition",
+        "date": "2024-02-23"
+    },
+    "913": {
+        "p12e_code": 913,
+        "scryfall_code": "fclu",
+        "name": "Ravnica: Clue Edition Front Cards",
+        "date": "2024-02-23"
+    },
+    "914": {
+        "p12e_code": 914,
+        "scryfall_code": "ymkm",
+        "name": "Alchemy: Murders at Karlov Manor ",
+        "date": "2024-03-05"
+    },
+    "915": {
+        "p12e_code": 915,
+        "scryfall_code": "pip",
+        "name": "Fallout",
+        "date": "2024-03-08"
+    },
+    "916": {
+        "p12e_code": 916,
+        "scryfall_code": "tpip",
+        "name": "Fallout Tokens",
+        "date": "2024-03-08"
+    },
+    "917": {
+        "p12e_code": 917,
+        "scryfall_code": "big",
+        "name": "The Big Score",
+        "date": "2024-04-19"
+    },
+    "918": {
+        "p12e_code": 918,
+        "scryfall_code": "otc",
+        "name": "Outlaws of Thunder Junction Commander",
+        "date": "2024-04-19"
+    },
+    "919": {
+        "p12e_code": 919,
+        "scryfall_code": "otj",
+        "name": "Outlaws of Thunder Junction",
+        "date": "2024-04-19"
+    },
+    "920": {
+        "p12e_code": 920,
+        "scryfall_code": "otp",
+        "name": "Breaking News",
+        "date": "2024-04-19"
+    },
+    "921": {
+        "p12e_code": 921,
+        "scryfall_code": "potj",
+        "name": "Outlaws of Thunder Junction Promos",
+        "date": "2024-04-19"
+    },
+    "922": {
+        "p12e_code": 922,
+        "scryfall_code": "tbig",
+        "name": "The Big Score Tokens",
+        "date": "2024-04-19"
+    },
+    "923": {
+        "p12e_code": 923,
+        "scryfall_code": "totc",
+        "name": "Outlaws of Thunder Junction Commander Tokens",
+        "date": "2024-04-19"
+    },
+    "924": {
+        "p12e_code": 924,
+        "scryfall_code": "totj",
+        "name": "Outlaws of Thunder Junction Tokens",
+        "date": "2024-04-19"
+    },
+    "925": {
+        "p12e_code": 925,
+        "scryfall_code": "totp",
+        "name": "Breaking News Tokens",
+        "date": "2024-04-19"
+    },
+    "926": {
+        "p12e_code": 926,
+        "scryfall_code": "m3c",
+        "name": "Modern Horizons 3 Commander",
+        "date": "2024-06-06"
+    },
+    "927": {
+        "p12e_code": 927,
+        "scryfall_code": "mh3",
+        "name": "Modern Horizons 3",
+        "date": "2024-06-07"
+    },
+    "928": {
+        "p12e_code": 928,
+        "scryfall_code": "acr",
+        "name": "Assassin's Creed",
+        "date": "2024-07-05"
+    },
+    "929": {
+        "p12e_code": 929,
+        "scryfall_code": "blb",
+        "name": "Bloomburrow",
+        "date": "2024-08-02"
+    },
+    "930": {
+        "p12e_code": 930,
+        "scryfall_code": "pcbb",
+        "name": "Cowboy Bebop",
+        "date": "2024-08-02"
+    },
+    "931": {
+        "p12e_code": 931,
+        "scryfall_code": "tblb",
+        "name": "Bloomburrow Tokens",
+        "date": "2024-08-02"
     }
 }

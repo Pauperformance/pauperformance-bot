@@ -7,7 +7,7 @@ APPLICATION_NAME = "pauperformance-bot"
 PAUPERFORMANCE_BOT_DIR = posix_path(
     Path.home().as_posix(), ".pauperformance"
 )  # for user data
-SECRETS_UNTRACKED_FILE = "pauperformance_bot.secrets.py"
+SECRETS_UNTRACKED_FILE = "pauperformance_bot.p13_secrets.py"
 
 # Local storage
 STORAGE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "storage")
