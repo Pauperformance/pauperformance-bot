@@ -44,9 +44,9 @@ class AcademyDataExporter:
         self.pauperformance: PauperformanceService = academy.pauperformance
         self.scryfall = self.pauperformance.scryfall
         self.config_reader: ConfigReader = self.pauperformance.config_reader
-        self.decks: list[
-            AbstractArchivedDeck
-        ] = self.academy.pauperformance.list_archived_decks()
+        self.decks: list[AbstractArchivedDeck] = (
+            self.academy.pauperformance.list_archived_decks()
+        )
         self.silver: SilverService = SilverService(self.pauperformance)
 
     def export_all(self):
@@ -247,9 +247,9 @@ class AcademyDataExporter:
     ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
         # Note: this method assumes all the decks in the training data are available in
         # the academy as .txt to load and parse.
-        archetypes: list[
-            ArchetypeConfig
-        ] = self.pauperformance.config_reader.list_archetypes()
+        archetypes: list[ArchetypeConfig] = (
+            self.pauperformance.config_reader.list_archetypes()
+        )
         known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = []
         training_file = (
             self.config_reader.myr_file_system.MTGGOLDFISH_DECK_TRAINING_DATA

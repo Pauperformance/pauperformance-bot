@@ -203,9 +203,9 @@ class MTGGoldfish:
         while end > start_date:
             end -= delta
             logger.info(f"Processing from {start} to {end}...")
-            results: list[
-                MTGGoldfishTournamentSearchResult
-            ] = self.get_pauper_tournaments(end, start)
+            results: list[MTGGoldfishTournamentSearchResult] = (
+                self.get_pauper_tournaments(end, start)
+            )
             logger.info(f"Found {len(results)} tournaments.")
             for result in results:
                 if f"{result.identifier}" in processed_tournament_ids:

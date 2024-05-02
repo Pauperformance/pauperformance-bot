@@ -28,9 +28,9 @@ class Checker:
         academy_fs: AcademyFileSystem = AcademyFileSystem(),
     ):
         self.pauperformance: PauperformanceService = pauperformance
-        self.archetypes: list[
-            ArchetypeConfig
-        ] = self.pauperformance.config_reader.list_archetypes()
+        self.archetypes: list[ArchetypeConfig] = (
+            self.pauperformance.config_reader.list_archetypes()
+        )
         self.academy_fs: AcademyFileSystem = academy_fs
 
     def check_all(self):
