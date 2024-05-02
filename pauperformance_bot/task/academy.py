@@ -1,7 +1,7 @@
 import asyncio
 
-from retrying import retry
 from tenacity import (
+    retry,
     retry_if_exception_message,
     stop_after_attempt,
     wait_random_exponential,
