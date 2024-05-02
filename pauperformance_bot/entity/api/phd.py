@@ -39,14 +39,14 @@ class PhDSheet:
         self.favorite_pauper_archetype: Optional[str] = favorite_pauper_archetype
         self.favorite_pauper_card_name: Optional[str] = favorite_pauper_card_name
         self.favorite_pauper_card_url: Optional[str] = favorite_pauper_card_url
-        self.favorite_pauper_card_image_url: Optional[
-            str
-        ] = favorite_pauper_card_image_url
+        self.favorite_pauper_card_image_url: Optional[str] = (
+            favorite_pauper_card_image_url
+        )
         self.favorite_flavor_text_name: Optional[str] = favorite_flavor_text_name
         self.favorite_flavor_text_url: Optional[str] = favorite_flavor_text_url
-        self.favorite_flavor_text_image_url: Optional[
-            str
-        ] = favorite_flavor_text_image_url
+        self.favorite_flavor_text_image_url: Optional[str] = (
+            favorite_flavor_text_image_url
+        )
         self.favorite_flavor_text_lines: Optional[str] = favorite_flavor_text_lines
         self.favorite_artwork_name: Optional[str] = favorite_artwork_name
         self.favorite_artwork_url: Optional[str] = favorite_artwork_url

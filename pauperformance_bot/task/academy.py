@@ -1,5 +1,12 @@
 import asyncio
 
+from retrying import retry
+from tenacity import (
+    retry_if_exception_message,
+    stop_after_attempt,
+    wait_random_exponential,
+)
+
 from pauperformance_bot.service.academy.academy import AcademyService
 from pauperformance_bot.service.nexus.async_discord_service import AsyncDiscordService
 from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
@@ -36,6 +43,13 @@ async def async_academy_update():
     academy.update_all(update_dev=False)  # avoid unnecessary changes
 
 
+@retry(
+    retry=retry_if_exception_message(
+        match=r".*Server Error.*|" r".*Internal error encountered.*"
+    ),
+    stop=stop_after_attempt(3),
+    wait=wait_random_exponential(multiplier=1, max=60),
+)
 def main():
     loop = asyncio.get_event_loop()
     try:

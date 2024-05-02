@@ -6,17 +6,21 @@
 #    pip-compile-multi
 #
 -r requirements-test.txt
-build==0.10.0
+build==1.2.1
     # via pip-tools
-pip-compile-multi==2.6.2
-    # via -r requirements/requirements-dev.in
-pip-tools==6.13.0
-    # via pip-compile-multi
-pyproject-hooks==1.0.0
+importlib-metadata==7.1.0
     # via build
+pip-compile-multi==2.6.3
+    # via -r requirements/requirements-dev.in
+pip-tools==7.4.1
+    # via pip-compile-multi
+pyproject-hooks==1.1.0
+    # via
+    #   build
+    #   pip-tools
 toposort==1.10
     # via pip-compile-multi
-wheel==0.40.0
+wheel==0.43.0
     # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:

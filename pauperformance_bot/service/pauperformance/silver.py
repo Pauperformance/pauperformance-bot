@@ -28,9 +28,9 @@ class SilverService:
         known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = None,
     ):
         self.pauperformance: PauperformanceService = pauperformance
-        self.archetypes: list[
-            ArchetypeConfig
-        ] = self.pauperformance.config_reader.list_archetypes()
+        self.archetypes: list[ArchetypeConfig] = (
+            self.pauperformance.config_reader.list_archetypes()
+        )
         self.known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = (
             known_decks if known_decks else []
         )
@@ -226,9 +226,9 @@ class SilverService:
             for reference_deck in archetype.reference_decks:
                 logger.debug(f"Comparing deck with reference list {reference_deck}...")
                 if reference_deck not in self._decks_cache:
-                    self._decks_cache[
-                        reference_deck
-                    ] = self.pauperformance.get_playable_deck(reference_deck)
+                    self._decks_cache[reference_deck] = (
+                        self.pauperformance.get_playable_deck(reference_deck)
+                    )
                 deck2 = self._decks_cache[reference_deck]
                 logger.debug(f"Compared deck with reference list {reference_deck}.")
                 score = self.get_similarity(deck, deck2)
