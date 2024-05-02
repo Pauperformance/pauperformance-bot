@@ -203,8 +203,14 @@ def test_outputs(am: ArchetypeMeta):
     mean_card_freq = mean(card_freqs)
     logger.info(f"stdev: {stdev(card_freqs)} variance: {variance(card_freqs)}")
     logger.info(f"mean {mean_card_freq}")
-    s_card_fqs = sorted(list(map(lambda f: f[0], filter(
-            lambda f: f[1] >= mean_card_freq + stdev(card_freqs), cfq),)))
+    s_card_fqs = sorted(
+        list(
+            map(
+                lambda f: f[0],
+                filter(lambda f: f[1] >= mean_card_freq + stdev(card_freqs), cfq),
+            )
+        )
+    )
     logger.info(f"staples(cards): {s_card_fqs}")
 
 
