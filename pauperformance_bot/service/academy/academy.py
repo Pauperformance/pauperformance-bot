@@ -32,6 +32,7 @@ from pauperformance_bot.constant.pauperformance.myr import (
     TEMPLATES_FAMILIES_DIR,
     TEMPLATES_PAGES_DIR,
 )
+from pauperformance_bot.entity.api.archetype import ArchetypeCard
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
@@ -220,8 +221,8 @@ class AcademyService:
                     f"{archetype_name} doesn't have at least 2 decks to "
                     f"generate staples and frequent cards."
                 )
-            values["staples"] = self._get_rendered_card_info(staples)
-            values["frequents"] = self._get_rendered_card_info(frequents)
+            values["staples"] = self.get_archetype_cards(staples)
+            values["frequents"] = self.get_archetype_cards(frequents)
             sorted_decks = sorted(
                 archetype_decks,
                 key=lambda d: d.p12e_name,
@@ -366,8 +367,8 @@ class AcademyService:
         )
         logger.info(f"Rendered dev to {dev_output_file}.")
 
-    def _get_rendered_card_info(self, cards):
-        rendered_cards = []
+    def get_archetype_cards(self, cards) -> list[ArchetypeCard]:
+        rendered_cards: list[ArchetypeCard] = []
         for card in sorted(cards):
             scryfall_card = self.scryfall.get_card_named(card)
             if "image_uris" not in scryfall_card:  # e.g. Delver of Secrets
@@ -378,13 +379,11 @@ class AcademyService:
             if "?" in image_url:
                 image_url = image_url[: image_url.index("?")]
             rendered_cards.append(
-                {
-                    "name": card,
-                    "image_url": image_url,
-                    "page_url": scryfall_card["scryfall_uri"].replace(
-                        "?utm_source=api", ""
-                    ),
-                }
+                ArchetypeCard(
+                    name=card,
+                    link=scryfall_card["scryfall_uri"].replace("?utm_source=api", ""),
+                    preview=image_url,
+                )
             )
         return rendered_cards
 
