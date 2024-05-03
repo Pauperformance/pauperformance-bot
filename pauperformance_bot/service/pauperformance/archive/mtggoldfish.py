@@ -261,7 +261,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         return decks
 
     def _workaround_retrieve_missing_decks(self, all_decks):
-        logger.warning("Fixing bug in MTGGoldfish pager...")
+        logger.info("Fixing bug in MTGGoldfish pager...")
 
         # Due to a bug in the pagination mechanism, decks are sometimes
         # returned more than once or not returned at all.
@@ -274,7 +274,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         storage_decks = self.storage.list_imported_deckstats_deck_names()
         mtggoldfish_decks = {d.name for d in all_decks}
         for missing_deck in storage_decks - mtggoldfish_decks:
-            logger.warning(f"Found missing deck: {missing_deck}")
+            logger.info(f"Found missing deck: {missing_deck}")
             missing_deck = self._list_decks_in_page(1, missing_deck)
             if len(missing_deck) != 1:
                 raise ValueError(f"Unable to find missing deck {missing_deck}")

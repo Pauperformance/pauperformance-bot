@@ -50,7 +50,9 @@ VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 # ):  # running in GitHub
 #     RESOURCES_DIR = posix_path(os.getenv("pythonLocation"), "SOME/THING/")
 
-if "VIRTUAL_ENV" in os.environ:  # running in venv
+if (
+    "VIRTUAL_ENV" in os.environ and "PYCHARM_HOSTED" not in os.environ
+):  # running in venv, outside PyCharm
     RESOURCES_DIR = posix_path(os.getenv("VIRTUAL_ENV"), "resources")
 else:
     RESOURCES_DIR = posix_path(TOP_PATH.as_posix(), "resources")

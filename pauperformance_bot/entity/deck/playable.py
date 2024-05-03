@@ -2,7 +2,7 @@ from itertools import chain
 from typing import List, Tuple
 
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
-from pauperformance_bot.util.entities import auto_repr
+from pauperformance_bot.util.decorators import auto_repr
 
 
 @auto_repr

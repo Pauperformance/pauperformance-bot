@@ -14,7 +14,7 @@ def academy_update():
     archive = MTGGoldfishArchiveService(storage)
     pauperformance = PauperformanceService(storage, archive)
 
-    # update pages
+    # export data
     academy = AcademyService(pauperformance)
     exporter = AcademyDataExporter(academy)
     exporter.export_all()

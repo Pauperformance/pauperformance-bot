@@ -10,7 +10,7 @@ from pauperformance_bot.constant.pauperformance.academy import (
     TOP_N_ARCHETYPES_PIE_CHART,
     AcademyFileSystem,
 )
-from pauperformance_bot.entity.api.archetype import Archetype, ArchetypeCard
+from pauperformance_bot.entity.api.archetype import Archetype
 from pauperformance_bot.entity.api.deck import Deck, MTGGoldfishTournamentDeck
 from pauperformance_bot.entity.api.miscellanea import Changelog, Metagame, Newspauper
 from pauperformance_bot.entity.api.video import Video
@@ -80,24 +80,8 @@ class AcademyDataExporter:
             staples, frequents = self.academy.pauperformance.analyze_cards_frequency(
                 archetype_decks
             )
-            staples = [
-                ArchetypeCard(
-                    name=card["name"],
-                    link=card["page_url"],
-                    preview=card["image_url"],
-                )
-                # TODO: refactor
-                for card in self.academy._get_rendered_card_info(staples)
-            ]
-            frequents = [
-                ArchetypeCard(
-                    name=card["name"],
-                    link=card["page_url"],
-                    preview=card["image_url"],
-                )
-                # TODO: refactor
-                for card in self.academy._get_rendered_card_info(frequents)
-            ]
+            staples = self.academy.get_archetype_cards(staples)
+            frequents = self.academy.get_archetype_cards(frequents)
             api_archetype = Archetype(
                 name=archetype.name,
                 aliases=archetype.aliases,

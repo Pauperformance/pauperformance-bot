@@ -20,7 +20,7 @@
 <details>
   <summary>Click here to expand</summary>
 {% for staple in staples -%}
-  <a href="{{ staple.page_url }}"><img src="{{ staple.image_url }}" class="archetype-card rounded-image"/></a>
+  <a href="{{ staple.link }}"><img src="{{ staple.preview }}" class="archetype-card rounded-image"/></a>
 {% endfor %}</details><br/>
 {% endif %}
 
@@ -30,7 +30,7 @@
 <details>
   <summary>Click here to expand</summary>
 {% for frequent in frequents -%}
-  <a href="{{ frequent.page_url }}"><img src="{{ frequent.image_url }}" class="archetype-card rounded-image"/></a>
+  <a href="{{ frequent.link }}"><img src="{{ frequent.preview }}" class="archetype-card rounded-image"/></a>
 {% endfor %}</details><br/>
 {% endif %}
 

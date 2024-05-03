@@ -1,4 +1,4 @@
-from pauperformance_bot.util.entities import auto_repr, auto_str
+from pauperformance_bot.util.decorators import auto_repr, auto_str
 
 
 # TODO: try to get rid of this class and just use the API counterpart (Video)
