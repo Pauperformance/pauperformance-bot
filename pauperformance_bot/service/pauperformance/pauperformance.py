@@ -6,8 +6,10 @@ from datetime import datetime
 from pathlib import Path
 from time import sleep
 
+from constant.mtg.scryfall import REQUESTS_SLEEP_SECONDS
 from requests.exceptions import HTTPError
 
+import pauperformance_bot
 from pauperformance_bot.constant.arena.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.arena.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.constant.pauperformance.myr import (
@@ -147,14 +149,20 @@ class PauperformanceService:
                             f"Saved set index to cache: {set_cache_file} "
                             f"({len(set_index)} cards)."
                         )
-                sleep(0.3)
+                sleep(REQUESTS_SLEEP_SECONDS)
             finally:
                 card_index[p12e_code] = set_index
         useless_sets = set(i for i in card_index if len(card_index[i]) == 0)
         to_be_removed_sets = useless_sets - set(KNOWN_SETS_WITH_NO_PAUPER_CARDS)
         if len(to_be_removed_sets) > 0:
+            constant_module = pauperformance_bot.__path__[0]
+            constant_file = (
+                pauperformance_bot.constant.pauperformance.pauperformance.__file__
+            )
+            constant_relative_path = constant_file[len(constant_module) + 1 :]
             logger.warning(
                 f"Please, update the list of known sets with no pauper cards "
+                f"({constant_relative_path}) "
                 f"adding: {sorted(list(to_be_removed_sets))}"
             )
 
@@ -190,9 +198,14 @@ class PauperformanceService:
             logger.debug(f"Found {len(new_cards)} new cards.")
         to_be_removed_sets = useless_sets - set(INCREMENTAL_CARDS_INDEX_SKIP_SETS)
         if len(to_be_removed_sets) > 0:
+            constant_module = pauperformance_bot.__path__[0]
+            constant_file = (
+                pauperformance_bot.constant.pauperformance.pauperformance.__file__
+            )
+            constant_relative_path = constant_file[len(constant_module) + 1 :]
             logger.warning(
                 f"Please, update the list of known sets to be skipped for the "
-                f"incremental cards index adding: "
+                f"incremental cards index ({constant_relative_path}) adding: "
                 f"{sorted(list(to_be_removed_sets))}"
             )
         return incremental_card_index
@@ -202,7 +215,7 @@ class PauperformanceService:
         for player in self.players:
             if not player.deckstats_id:
                 logger.info(
-                    f"Skipping player {player.name} with no Deckstats " f"account..."
+                    f"Skipping player {player.name} with no Deckstats account..."
                 )
                 continue
             logger.info(f"Processing player {player.name}...")

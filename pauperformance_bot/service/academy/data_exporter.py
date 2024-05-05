@@ -1,4 +1,4 @@
-import logging
+import webbrowser
 from pathlib import Path
 
 import jsonpickle
@@ -30,7 +30,6 @@ from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path, safe_dump_json_to_file
 
 logger = get_application_logger()
-logger.setLevel(logging.WARNING)
 
 
 class AcademyDataExporter:
@@ -50,12 +49,12 @@ class AcademyDataExporter:
         self.silver: SilverService = SilverService(self.pauperformance)
 
     def export_all(self):
-        # self.export_archetypes()
-        # self.export_decks()
-        # self.export_miscellanea()
-        # self.export_phd_sheets()
-        # self.export_videos()
-        pass
+        self.export_archetypes()
+        self.export_decks()
+        self.export_intel_decks()
+        self.export_phd_sheets()
+        self.export_videos()
+        self.export_miscellanea()
 
     def export_phd_sheets(self):
         logger.info(f"Exporting phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}...")
@@ -133,10 +132,9 @@ class AcademyDataExporter:
         logger.info(f"Exported decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}.")
 
     def export_miscellanea(self):
-        # self.export_changelog()
-        # self.export_newspauper()
-        # self.export_metagame()
-        pass
+        self.export_changelog()
+        self.export_newspauper()
+        self.export_metagame()
 
     def export_changelog(self):
         logger.info(f"Exporting Changelog to {self.academy_fs.ASSETS_DATA_DIR}...")
@@ -193,17 +191,32 @@ class AcademyDataExporter:
         )
 
     def export_videos(self):
-        # self.export_twitch_videos()
+        self.export_twitch_videos()
         self.export_youtube_videos()
+
+    def export_twitch_videos(self):
+        logger.info(
+            f"Exporting Twitch videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}..."
+        )
+        self._export_videos(self.pauperformance.storage.list_imported_twitch_videos())
+        logger.info(
+            f"Exported Twitch videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}."
+        )
 
     def export_youtube_videos(self):
         logger.info(
             f"Exporting YouTube videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}..."
         )
-        for video_key in self.pauperformance.storage.list_imported_youtube_videos():
+        self._export_videos(self.pauperformance.storage.list_imported_youtube_videos())
+        logger.info(
+            f"Exported YouTube videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}."
+        )
+
+    def _export_videos(self, video_keys):
+        for video_key in video_keys:
             video_path = posix_path(
                 self.pauperformance.storage.youtube_video_path,
-                video_key + ".txt",  # TODO: get rid of this
+                video_key + ".txt",
             )
             video_json = self.pauperformance.storage.get_file(video_path)
             video_id, phd_name, _, date, _ = video_key.split(">")
@@ -222,9 +235,6 @@ class AcademyDataExporter:
                 f"{video.video_id}.json",
                 video,
             )
-        logger.info(
-            f"Exported YouTube videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}."
-        )
 
     def _load_mtggoldfish_tournament_training_data(
         self,
@@ -259,16 +269,21 @@ class AcademyDataExporter:
                     f"id {deck_id}."
                 )
                 raise
-        return known_decks
+        # TODO: remove deck_id as soon as manual classification is done
+        return known_decks, deck_id
 
     def export_intel_decks(self):
         logger.info(
             f"Exporting decks intel to {self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR}..."
         )
         # let's help Silver loading some training data
-        self.silver.add_known_decks(self._load_mtggoldfish_tournament_training_data())
+        known_decks, _ = self._load_mtggoldfish_tournament_training_data()
+        self.silver.add_known_decks(known_decks)
         # we need to classify all unclassified decks
         self._classify_mtggoldfish_tournament_decks()
+        logger.info(
+            f"Exported decks intel to {self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR}."
+        )
 
     def _classify_mtggoldfish_tournament_decks(self):
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
@@ -308,19 +323,21 @@ class AcademyDataExporter:
                 playable_deck = parse_playable_deck_from_lines(
                     [line.strip() for line in open(playable_deck_file).readlines()]
                 )
-            except IndexError:
+            except (IndexError, ValueError):
                 logger.warning(f"Unable to parse deck {playable_deck_file}...")
                 continue
             most_similar_archetype, highest_similarity = self.silver.classify_deck(
                 playable_deck
             )
+            if not most_similar_archetype:
+                logger.warning("Unable to find similar deck...")
+                continue
             logger.debug(
                 f"Deck could be {most_similar_archetype.name} ({highest_similarity})."
             )
             if highest_similarity < 0.80:
                 logger.debug("Similarity score not sufficient. Skipping deck...")
                 unclassified_decks_count += 1
-                # logger.warning(f"https://www.mtggoldfish.com/deck/{deck_id}")
                 continue
             logger.debug("Similarity score sufficient. Storing intel...")
             set_index_entry = self.academy.pauperformance.get_set_index_by_date(
@@ -343,6 +360,111 @@ class AcademyDataExporter:
             )
         logger.info(f"Classified decks: {len(already_classified_deck_ids)}")
         logger.warning(f"Unclassified decks: {unclassified_decks_count}")
-        logger.info(
-            f"Exported decks intel to {self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR}."
+
+    # TODO: this is a temporary function to create the dataset
+    def _label_mtggoldfish_tournament_decks(self, latest_training_sample):
+        banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
+        already_classified_deck_ids = set(
+            p.as_posix().split("/")[-1].replace(".json", "")
+            for p in Path(self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR).rglob("*.json")
         )
+        unclassified_decks_count = 0
+        training_file = (
+            self.config_reader.myr_file_system.MTGGOLDFISH_DECK_TRAINING_DATA
+        )
+        for playable_deck_file in sorted(
+            Path(self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR).glob(
+                "*.txt"
+            ),
+            reverse=True,
+        ):
+            playable_deck_file = playable_deck_file.as_posix()
+            deck_id = playable_deck_file.split("/")[-1].replace(".txt", "")
+            if deck_id in already_classified_deck_ids:
+                logger.debug(
+                    f"Deck {playable_deck_file} already classified. Skipping it..."
+                )
+                continue
+            # A PlayableDeck has no knowledge about the time it was created.
+            # This information is stored in the tournament metadata for the deck.
+            tournament_deck_path = posix_path(
+                self.academy_fs.ASSETS_DATA_TOURNAMENT_MTGGOLDFISH_DECKS_DIR,
+                f"{deck_id}.json",
+            )
+            try:
+                tournament_deck: MTGGoldfishTournamentDeck = jsonpickle.decode(
+                    open(tournament_deck_path).read()
+                )
+            except FileNotFoundError:
+                logger.warning(
+                    f"Unable to find tournament deck metadata: {tournament_deck_path}. "
+                    f"Please, (re)download it first."
+                )
+                continue  # no tournament, no party: skip the deck
+            logger.debug(f"Classifying deck {playable_deck_file}...")
+            try:
+                playable_deck = parse_playable_deck_from_lines(
+                    [line.strip() for line in open(playable_deck_file).readlines()]
+                )
+            except (IndexError, ValueError):
+                logger.warning(f"Unable to parse deck {playable_deck_file}...")
+                continue
+            most_similar_archetype, highest_similarity = self.silver.classify_deck(
+                playable_deck
+            )
+            if not most_similar_archetype:
+                logger.warning("Unable to find similar deck...")
+                continue
+            logger.debug(
+                f"Deck could be {most_similar_archetype.name} ({highest_similarity})."
+            )
+            if highest_similarity < 0.80:
+                logger.debug("Similarity score not sufficient. Skipping deck...")
+                unclassified_decks_count += 1
+                if deck_id < latest_training_sample:
+                    logger.warning(
+                        f"Deck could be {most_similar_archetype.name} "
+                        f"({highest_similarity})."
+                    )
+                    url = f"https://www.mtggoldfish.com/deck/{deck_id}"
+                    logger.warning(url)
+                    webbrowser.open(url, new=0, autoraise=True)
+                    logger.warning("Yes/Almost/Skip? [Yas]")
+                    reply = input()
+                    print(reply)
+                    if reply in ["", "y", "yy"]:
+                        with open(training_file, "a") as out_f:
+                            out_f.write(f"{deck_id},{most_similar_archetype.name}\n")
+                        self.silver.known_decks.append(
+                            (playable_deck, most_similar_archetype)
+                        )
+                    elif reply in ["a", "aa"]:
+                        with open(training_file, "a") as out_f:
+                            out_f.write(
+                                f"{deck_id},"
+                                f"{most_similar_archetype.name.split(' ')[0]} \n"
+                            )
+                    else:
+                        pass
+                continue
+            logger.debug("Similarity score sufficient. Storing intel...")
+            set_index_entry = self.academy.pauperformance.get_set_index_by_date(
+                usa_date=tournament_deck.tournament_date
+            )
+            api_deck: Deck = Deck(
+                name=tournament_deck.archetype,
+                url=tournament_deck.url,
+                archetype=most_similar_archetype.name,
+                set_name=set_index_entry["name"],
+                set_date=set_index_entry["date"],
+                legal=playable_deck.is_legal(banned_cards),
+            )
+            safe_dump_json_to_file(
+                posix_path(
+                    self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR, api_deck.archetype
+                ),
+                f"{deck_id}.json",
+                api_deck,
+            )
+        logger.info(f"Classified decks: {len(already_classified_deck_ids)}")
+        logger.warning(f"Unclassified decks: {unclassified_decks_count}")

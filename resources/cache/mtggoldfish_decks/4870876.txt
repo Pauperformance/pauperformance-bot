@@ -1,0 +1,27 @@
+2 Archaeomancer
+4 Arcum's Astrolabe
+4 Ash Barrens
+2 Brainstorm
+4 Counterspell
+2 Dispel
+2 Ephemerate
+1 Evolving Wilds
+2 Incinerate
+2 Izzet Boilerworks
+4 Kor Skyfisher
+4 Lightning Bolt
+4 Mulldrifter
+4 Preordain
+3 Skred
+9 Snow-Covered Island
+2 Snow-Covered Mountain
+1 Snow-Covered Plains
+2 Spellstutter Sprite
+2 Witching Well
+
+4 Blue Elemental Blast
+1 Circle of Protection: Green
+2 Electrickery
+2 Leave No Trace
+4 Red Elemental Blast
+2 Standard Bearer
