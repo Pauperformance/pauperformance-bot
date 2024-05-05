@@ -21,6 +21,7 @@ class ScryfallService:
         self.website_url = website_url
         self.endpoint = endpoint
 
+    @lru_cache(maxsize=1)
     def get_sets(self):
         url = f"{self.endpoint}/sets"
         method = requests.get
@@ -31,7 +32,7 @@ class ScryfallService:
         self,
         exact_card_name,
         cards_cache_dir=SCRYFALL_CARDS_CACHE_DIR,
-        fuzzy=False,
+        fuzzy=False,  # TODO: check why fuzzy is needed and if it can mess up with cache
     ):
         try:
             with open(

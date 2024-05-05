@@ -1,0 +1,35 @@
+1 Abrade
+3 Ancient Den
+2 Bojuka Bog
+3 Boros Garrison
+1 Cave of Temptation
+4 Galvanic Blast
+4 Glint Hawk
+2 Great Furnace
+2 Guardian of the Guildpact
+2 Journey to Nowhere
+4 Kor Skyfisher
+3 Lightning Bolt
+1 Mountain
+1 Okiba-Gang Shinobi
+2 Palace Sentinels
+2 Plains
+2 Prismatic Strands
+4 Prophetic Prism
+2 Radiant Fountain
+1 Reaping the Graves
+2 Secluded Steppe
+3 Spare Supplies
+1 Suffocating Fumes
+1 Terminate
+4 Thraben Inspector
+2 Thriving Heath
+1 Wind-Scarred Crag
+
+2 Gorilla Shaman
+2 Hallow
+1 Leave No Trace
+2 Molten Rain
+4 Pyroblast
+2 Relic of Progenitus
+2 Standard Bearer

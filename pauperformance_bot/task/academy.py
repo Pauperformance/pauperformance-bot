@@ -45,7 +45,9 @@ async def async_academy_update():
 
 @retry(
     retry=retry_if_exception_message(
-        match=r".*Server Error.*|" r".*Internal error encountered.*"
+        match=r".*Server Error.*|"
+        r".*Internal error encountered.*|"
+        r".*Event loop is closed.*"
     ),
     stop=stop_after_attempt(3),
     wait=wait_random_exponential(multiplier=1, max=60),

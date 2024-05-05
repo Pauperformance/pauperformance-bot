@@ -182,7 +182,7 @@ class SilverService:
         return len([c for c in infect_creatures if c in deck]) >= 3
 
     def _is_walls(self, deck: PlayableDeck) -> bool:
-        walss_creatures = [
+        walls_creatures = [
             "Overgrown Battlement",
             "Axebane Guardian",
             "Valakut Invoker",
@@ -190,7 +190,16 @@ class SilverService:
             "Galvanic Alchemist",
             "Shield-Wall Sentinel",
         ]
-        return len([c for c in walss_creatures if c in deck]) >= 3
+        return len([c for c in walls_creatures if c in deck]) >= 3
+
+    def _is_azorius_prowess(self, deck: PlayableDeck) -> bool:
+        azorius_creatures = [
+            "Seeker of the Way",
+            "Elusive Spellfist",
+            "Jhessian Thief",
+            "Delver of Secrets",
+        ]
+        return len([c for c in azorius_creatures if c in deck]) >= 3
 
     def classify_deck(
         self,
@@ -211,6 +220,7 @@ class SilverService:
             ("MonoB Control", self._is_monob_control),
             ("Infect", self._is_infect),
             ("Walls", self._is_walls),
+            ("Azorius Prowess", self._is_azorius_prowess),
         ]
         for archetype_name, archetype_predicate in archetype_predicates:
             if archetype_predicate(deck):
@@ -241,7 +251,7 @@ class SilverService:
         for deck2, archetype in self.known_decks:
             score = self.get_similarity(deck, deck2)
             logger.debug(f"Similarity: {score}.")
-            if score > highest_similarity:
+            if score > highest_similarity and deck.can_belong_to_archetype(archetype):
                 most_similar_archetype, highest_similarity = archetype, score
         logger.debug("Compared deck with known decks.")
         logger.debug("Classified deck.")

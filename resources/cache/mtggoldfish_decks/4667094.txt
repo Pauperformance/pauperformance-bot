@@ -1,0 +1,28 @@
+3 Blood Fountain
+4 Chromatic Star
+2 Darksteel Citadel
+4 Deadly Dispute
+4 Disciple of the Vault
+4 Drossforge Bridge
+2 Experimental Synthesizer
+4 Frogmite
+4 Galvanic Blast
+4 Great Furnace
+1 Gurmag Angler
+4 Ichor Wellspring
+2 Krark-Clan Shaman
+2 Makeshift Munitions
+2 Mistvault Bridge
+4 Myr Enforcer
+3 Reckoner's Bargain
+2 Silverbluff Bridge
+1 Swamp
+4 Vault of Whispers
+
+2 Cast Down
+3 Chainer's Edict
+4 Duress
+1 Krark-Clan Shaman
+1 Nihil Spellbomb
+3 Pyroblast
+1 Red Elemental Blast

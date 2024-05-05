@@ -1,0 +1,24 @@
+3 Ancient Den
+4 Ardent Recruit
+4 Experimental Synthesizer
+4 Galvanic Blast
+4 Glint Hawk
+3 Great Furnace
+3 Ichor Wellspring
+4 Kor Skyfisher
+4 Lightning Bolt
+2 Makeshift Munitions
+4 Rustvale Bridge
+4 Seeker of the Way
+3 Snow-Covered Mountain
+3 Snow-Covered Plains
+3 Spare Supplies
+4 Thraben Inspector
+4 Wind-Scarred Crag
+
+3 Dawnbringer Cleric
+2 Electrickery
+2 Gorilla Shaman
+2 Krark-Clan Shaman
+3 Pyroblast
+3 Relic of Progenitus

@@ -5584,5 +5584,17 @@
         "scryfall_code": "tblb",
         "name": "Bloomburrow Tokens",
         "date": "2024-08-02"
+    },
+    "932": {
+        "p12e_code": 932,
+        "scryfall_code": "aotj",
+        "name": "Outlaws of Thunder Junction Art Series",
+        "date": "2024-06-02"
+    },
+    "933": {
+        "p12e_code": 933,
+        "scryfall_code": "yotj",
+        "name": "Alchemy: Outlaws of Thunder Junction",
+        "date": "2024-06-07"
     }
 }
