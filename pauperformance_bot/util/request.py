@@ -9,7 +9,7 @@ def _retry_on_connection_error(exc):
 
 
 def _http_request_retry(http_request):
-    # retries a HTTP request in case of ConnectionError with an exponential
+    # retries an HTTP request in case of ConnectionError with an exponential
     # backoff policy and additional random waits between 1 and 2 seconds.
     # It gives up after 5 attempts or after 60 seconds have passed.
     @retry(
