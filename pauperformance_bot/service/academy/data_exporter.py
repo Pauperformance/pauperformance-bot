@@ -277,9 +277,7 @@ class AcademyDataExporter:
             f"Exporting decks intel to {self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR}..."
         )
         # let's help Silver loading some training data
-        known_decks, _ = (
-            self._load_mtggoldfish_tournament_training_data()
-        )
+        known_decks, _ = self._load_mtggoldfish_tournament_training_data()
         self.silver.add_known_decks(known_decks)
         # we need to classify all unclassified decks
         self._classify_mtggoldfish_tournament_decks()
