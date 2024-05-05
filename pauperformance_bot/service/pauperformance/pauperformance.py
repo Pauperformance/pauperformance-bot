@@ -6,12 +6,12 @@ from datetime import datetime
 from pathlib import Path
 from time import sleep
 
-from constant.mtg.scryfall import REQUESTS_SLEEP_SECONDS
 from requests.exceptions import HTTPError
 
 import pauperformance_bot
 from pauperformance_bot.constant.arena.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.arena.youtube import YOUTUBE_VIDEO_URL
+from pauperformance_bot.constant.mtg.scryfall import REQUESTS_SLEEP_SECONDS
 from pauperformance_bot.constant.pauperformance.myr import (
     CONFIG_ARCHETYPES_DIR,
     CONFIG_FAMILIES_DIR,

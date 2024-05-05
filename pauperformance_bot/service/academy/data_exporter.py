@@ -361,6 +361,18 @@ class AcademyDataExporter:
         logger.info(f"Classified decks: {len(already_classified_deck_ids)}")
         logger.warning(f"Unclassified decks: {unclassified_decks_count}")
 
+    def classify_deck(self, playable_deck):
+        most_similar_archetype, highest_similarity = self.silver.classify_deck(
+            playable_deck
+        )
+        if not most_similar_archetype:
+            logger.warning("Unable to find similar deck...")
+            return None, None
+        logger.debug(
+            f"Deck could be {most_similar_archetype.name} ({highest_similarity})."
+        )
+        return most_similar_archetype.name, highest_similarity
+
     # TODO: this is a temporary function to create the dataset
     def _label_mtggoldfish_tournament_decks(self, latest_training_sample):
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
