@@ -12,7 +12,7 @@ black==24.4.2
     # via -r requirements/requirements-test.in
 click==8.1.7
     # via black
-coverage[toml]==7.5.0
+coverage[toml]==7.5.1
     # via pytest-cov
 ddt==1.7.2
     # via -r requirements/requirements-test.in

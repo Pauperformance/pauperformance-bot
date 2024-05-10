@@ -231,8 +231,12 @@ class MTGGoldfish:
                     download_url = deck.url.replace(
                         f"/{DECK_API_TOKEN}", f"/{DECK_DOWNLOAD_TOKEN}"
                     )
-                    deck_downloader = MtgoDeckDownloader(download_url)
-                    playable_deck: PlayableDeck = deck_downloader.download()
+                    try:
+                        deck_downloader = MtgoDeckDownloader(download_url)
+                        playable_deck: PlayableDeck = deck_downloader.download()
+                    except ValueError:
+                        logger.warning(f"Unable to parse deck at {download_url}...")
+                        continue
                     with open(
                         posix_path(
                             academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,

@@ -1,8 +1,10 @@
+import time
 import webbrowser
 from pathlib import Path
 
 import jsonpickle
 import matplotlib.pyplot as plt
+import pyautogui
 import seaborn
 
 from pauperformance_bot.constant.pauperformance.academy import (
@@ -389,6 +391,7 @@ class AcademyDataExporter:
                 "*.txt"
             ),
             reverse=True,
+            key=lambda d: int(d.as_posix().split("/")[-1].replace(".txt", "")),
         ):
             playable_deck_file = playable_deck_file.as_posix()
             deck_id = playable_deck_file.split("/")[-1].replace(".txt", "")
@@ -427,13 +430,18 @@ class AcademyDataExporter:
             if not most_similar_archetype:
                 logger.warning("Unable to find similar deck...")
                 continue
+            if (
+                most_similar_archetype.name == "MonoB Control"
+                and "Pyroblast" in playable_deck
+            ):
+                continue  # TODO: rename Jund Gardens to Jund Tokens first... :(
             logger.debug(
                 f"Deck could be {most_similar_archetype.name} ({highest_similarity})."
             )
-            if highest_similarity < 0.80:
+            if highest_similarity < 0.78:
                 logger.debug("Similarity score not sufficient. Skipping deck...")
                 unclassified_decks_count += 1
-                if deck_id < latest_training_sample:
+                if not latest_training_sample or deck_id < latest_training_sample:
                     logger.warning(
                         f"Deck could be {most_similar_archetype.name} "
                         f"({highest_similarity})."
@@ -441,7 +449,12 @@ class AcademyDataExporter:
                     url = f"https://www.mtggoldfish.com/deck/{deck_id}"
                     logger.warning(url)
                     webbrowser.open(url, new=0, autoraise=True)
-                    logger.warning("Yes/Almost/Skip? [Yas]")
+                    pyautogui.keyDown("alt")
+                    time.sleep(0.2)
+                    pyautogui.press("tab")
+                    time.sleep(0.2)
+                    pyautogui.keyUp("alt")
+                    logger.warning("Yes/Almost/No? [Yan]")
                     reply = input()
                     print(reply)
                     if reply in ["", "y", "yy"]:
@@ -451,6 +464,11 @@ class AcademyDataExporter:
                             (playable_deck, most_similar_archetype)
                         )
                     elif reply in ["a", "aa"]:
+                        self.silver.known_decks = []
+                        known_decks, _ = (
+                            self._load_mtggoldfish_tournament_training_data()
+                        )
+                        self.silver.add_known_decks(known_decks)
                         with open(training_file, "a") as out_f:
                             out_f.write(
                                 f"{deck_id},"
