@@ -223,7 +223,9 @@ class SilverService:
             ("Azorius Prowess", self._is_azorius_prowess),
         ]
         for archetype_name, archetype_predicate in archetype_predicates:
-            if archetype_predicate(deck):
+            if archetype_predicate(deck) and deck.can_belong_to_archetype(
+                next(a for a in self.archetypes if a.name == archetype_name)
+            ):
                 logger.debug(f"Deck is {archetype_name}.")
                 return next(a for a in self.archetypes if a.name == archetype_name), 1.0
 

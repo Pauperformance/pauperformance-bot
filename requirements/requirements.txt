@@ -127,7 +127,7 @@ soupsieve==2.5
     # via beautifulsoup4
 stone==3.3.3
     # via dropbox
-tenacity==8.2.3
+tenacity==8.3.0
     # via -r requirements/requirements.in
 twitchapi==2.5.5
     # via -r requirements/requirements.in
