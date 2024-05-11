@@ -4,7 +4,14 @@ from pathlib import Path
 
 import jsonpickle
 import matplotlib.pyplot as plt
-import pyautogui
+
+try:
+    import pyautogui
+except KeyError:  # fails on GitHub while loading mouseinfo due to no DISPLAY env
+    import os
+
+    os.environ["DISPLAY"] = ":0"
+    import pyautogui
 import seaborn
 
 from pauperformance_bot.constant.pauperformance.academy import (
