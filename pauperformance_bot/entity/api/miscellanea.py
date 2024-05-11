@@ -75,3 +75,38 @@ class Metagame:
 
     def __hash__(self):
         return hash(self.meta_shares)
+
+
+@auto_repr
+@auto_str
+class DPLDeck:
+    def __init__(
+        self, *, name: str, email: str, deck_url: str, archetype: str, accuracy: float
+    ):
+        self.name = name
+        self.email = email
+        self.deck_url = deck_url
+        self.archetype = archetype
+        self.accuracy = accuracy
+
+    @property
+    def identifier(self) -> str:
+        return self.email
+
+    def __hash__(self):
+        return hash(self.identifier)
+
+
+@auto_repr
+@auto_str
+class DPLMeta:
+    def __init__(self, *, name: str, dpl_decks: list[DPLDeck]):
+        self.name = name
+        self.dpl_decks: list[DPLDeck] = dpl_decks
+
+    @property
+    def identifier(self) -> str:
+        return self.name
+
+    def __hash__(self):
+        return hash(self.identifier)

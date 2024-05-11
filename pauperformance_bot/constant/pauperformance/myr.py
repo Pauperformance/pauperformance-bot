@@ -8,6 +8,7 @@ PAUPERFORMANCE_BOT_DIR = posix_path(
     Path.home().as_posix(), ".pauperformance"
 )  # for user data
 SECRETS_UNTRACKED_FILE = "pauperformance_bot.p13_secrets.py"
+HOME_CACHE_DIR = posix_path(Path.home().as_posix(), ".cache", "pauperformance")
 
 # Local storage
 STORAGE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "storage")

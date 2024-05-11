@@ -17,6 +17,9 @@ _VERSION_FILE = "VERSION"
 _PAUPERFORMANCE_BOT_DIR = Path().joinpath(
     Path.home().as_posix(), ".pauperformance"
 ).as_posix()
+_HOME_CACHE_DIR = Path().joinpath(
+    Path.home().as_posix(), ".cache", "pauperformance"
+).as_posix()
 
 _STORAGE_DIR = Path().joinpath(_PAUPERFORMANCE_BOT_DIR, "storage").as_posix()
 _STORAGE_DECKS_SUBDIR = Path().joinpath(_STORAGE_DIR, "decks").as_posix()
@@ -63,6 +66,7 @@ class PostInstallCommand(install):
     def run(self):
         install.run(self)
         os.makedirs(_PAUPERFORMANCE_BOT_DIR, exist_ok=True)
+        os.makedirs(_HOME_CACHE_DIR, exist_ok=True)
         os.makedirs(_STORAGE_DIR, exist_ok=True)
         os.makedirs(_STORAGE_DECKS_SUBDIR, exist_ok=True)
         os.makedirs(_STORAGE_DECKSTATS_DECKS_SUBDIR, exist_ok=True)
