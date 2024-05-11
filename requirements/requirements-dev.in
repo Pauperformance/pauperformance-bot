@@ -1,4 +1,4 @@
 -r requirements-test.in
 
 pip-compile-multi
-pyautogui
+
