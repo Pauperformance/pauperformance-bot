@@ -79,7 +79,7 @@ tomli==2.0.1
     #   mypy
     #   pylint
     #   pytest
-tomlkit==0.12.4
+tomlkit==0.12.5
     # via pylint
 tox==3.25.0
     # via -r requirements/requirements-test.in
