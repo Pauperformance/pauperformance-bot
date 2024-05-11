@@ -1,10 +1,9 @@
 from typing import Dict, Optional, Type
 
-from service.mtg.downloader.moxfield import MoxfieldDeckDownloader
-
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.service.mtg.downloader.abstract import AbstractDeckDownloader
 from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
+from pauperformance_bot.service.mtg.downloader.moxfield import MoxfieldDeckDownloader
 from pauperformance_bot.service.mtg.downloader.mtgdecks import MtgdecksDeckDownloader
 from pauperformance_bot.util.log import get_application_logger
 
