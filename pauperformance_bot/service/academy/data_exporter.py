@@ -4,14 +4,6 @@ from pathlib import Path
 
 import jsonpickle
 import matplotlib.pyplot as plt
-
-try:
-    import pyautogui
-except KeyError:  # fails on GitHub while loading mouseinfo due to no DISPLAY env
-    import os
-
-    os.environ["DISPLAY"] = ":0"
-    import pyautogui
 import seaborn
 
 from pauperformance_bot.constant.pauperformance.academy import (
@@ -456,11 +448,12 @@ class AcademyDataExporter:
                     url = f"https://www.mtggoldfish.com/deck/{deck_id}"
                     logger.warning(url)
                     webbrowser.open(url, new=0, autoraise=True)
-                    pyautogui.keyDown("alt")
+                    # import pyautogui
+                    # pyautogui.keyDown("alt")
                     time.sleep(0.2)
-                    pyautogui.press("tab")
-                    time.sleep(0.2)
-                    pyautogui.keyUp("alt")
+                    # pyautogui.press("tab")
+                    # time.sleep(0.2)
+                    # pyautogui.keyUp("alt")
                     logger.warning("Yes/Almost/No? [Yan]")
                     reply = input()
                     print(reply)

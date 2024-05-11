@@ -363,6 +363,10 @@ class SilverService:
             dpl_decks=dpl_decks,
         )
         logger.info(dpl_meta)
-        out_dir, out_file = output_file.rsplit(os.path.sep, maxsplit=1)
+        try:
+            out_dir, out_file = output_file.rsplit(os.path.sep, maxsplit=1)
+        except ValueError:
+            out_dir = os.getcwd()
+            out_file = output_file
         safe_dump_json_to_file(out_dir, out_file, dpl_meta)
         logger.info(f"Stored DPL meta in {output_file}...")

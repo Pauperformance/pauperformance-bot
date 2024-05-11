@@ -14,4 +14,3 @@ jsonpickle
 Deprecated
 seaborn
 tenacity
-pyautogui  # to speed-up classification task
