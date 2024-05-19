@@ -38,7 +38,7 @@ def load_deck(playable_deck_txt) -> Optional[PlayableDeck]:
 
 
 class AcademyAssetsService:
-    """ Service to load in memory all the known intel regarding decks. """
+    """Service to load in memory all the known intel regarding decks."""
 
     def __init__(self, academy_fs=AcademyFileSystem()):
         if not isinstance(academy_fs, AcademyFileSystem):
@@ -46,7 +46,7 @@ class AcademyAssetsService:
         self._academy_fs = academy_fs
 
     def get_playable_decks(self, archetype) -> List[PlayableDeck]:
-        """ Returns a list of decks for the given archetype. """
+        """Returns a list of decks for the given archetype."""
         deck_dir = posix_path(self._academy_fs.ASSETS_DATA_INTEL_DECK_DIR, archetype)
         if not path.exists(deck_dir):
             logger.error(
@@ -84,13 +84,13 @@ class AcademyAssetsService:
 
 
 class ArchetypeMeta:
-    """ Represents metadata related to an archetype. """
+    """Represents metadata related to an archetype."""
 
     def __init__(
-            self,
-            name: str,
-            playable_decks: List[PlayableDeck],
-            cards: Dict[str, Dict[str, int]],
+        self,
+        name: str,
+        playable_decks: List[PlayableDeck],
+        cards: Dict[str, Dict[str, int]],
     ):
         self.name = name
         self._playable_decks = playable_decks
@@ -109,44 +109,64 @@ class ArchetypeMeta:
         self.played_cards_total = total
 
     def nr_decks(self) -> int:
-        """ Returns the total amount of known decks for the archetype. """
+        """Returns the total amount of known decks for the archetype."""
         return len(self._playable_decks)
 
     def cards(self) -> List[str]:
-        """ Returns the list of all card names which have been played (either main or side) for the archetype. """
+        """Returns the list of all card names which have been played
+        (either main or side) for the archetype."""
         return list(self._cards.keys())
 
     def deck_occurrences_ratio(self) -> List[Tuple[str, float]]:
-        """ Returns a list of all the cards ever played for this archetype
-        and their ratio of decks containing the card over the total count of decks. """
-        return sorted(list(map(
+        """Returns a list of all the cards ever played for this archetype
+        and their ratio of decks containing the card over the total count of decks."""
+        return sorted(
+            list(
+                map(
                     lambda card: (card[0], card[1]["nr_decks"] / self.nr_decks()),
                     self._cards.items(),
-                )), key=lambda x: x[1], reverse=True,)
+                )
+            ),
+            key=lambda x: x[1],
+            reverse=True,
+        )
 
     def card_playing_rate(self) -> List[Tuple[str, float]]:
-        """ Returns a list of all cards ever played for this archetype
+        """Returns a list of all cards ever played for this archetype
         and the corresponding ratio of total quantity and the total nr. of cards
-        in all decks. """
-        total_cards = self.get_played_cards_total()
-        return sorted(list(map(
-                    lambda card: (card[0], card[1]["total_quantity"] / total_cards),
+        in all decks."""
+        return sorted(
+            list(
+                map(
+                    lambda card: (
+                        card[0],
+                        card[1]["total_quantity"] / self.played_cards_total,
+                    ),
                     self._cards.items(),
-                )), key=lambda x: x[1], reverse=True, )
+                )
+            ),
+            key=lambda x: x[1],
+            reverse=True,
+        )
 
-    def cards_breakdown(self) -> List[Tuple[str, List[int]]]:
-        """ Returns a list of all cards ever played for this archetype
+    def cards_breakdown(self) -> Dict[str, List[int]]:
+        """Returns a list of all cards ever played for this archetype
         and the relative list of rate of observations of decks in which this card is
-        played in either 1, 2, 3, or 4 copies. """
-        return list(map(
-            lambda card: (card[0], list(map(
-                lambda x: x / self.nr_decks(),
-                card[1]["quantity_buckets"]))),
-            self._cards.items()))
+        played in either 1, 2, 3, or 4 copies."""
+        return dict(
+            map(
+                lambda card: (
+                    card[0],
+                    list(
+                        map(lambda x: x / self.nr_decks(), card[1]["quantity_buckets"])
+                    ),
+                ),
+                self._cards.items(),
+            )
+        )
 
 
 class ArchetypeMetaFactory:
-
     def __init__(self, academy: AcademyService, assets_service: AcademyAssetsService):
         if not isinstance(academy, AcademyService):
             raise ValueError(f"{type(academy)} is not an AcademyService")
@@ -165,17 +185,20 @@ class ArchetypeMetaFactory:
             occurred_in_deck = set()
             # build a lookup dict for card stats
             for card in pd.mainboard + pd.sideboard:
-                sf_card = self._academy.scryfall.get_card_named(card.card_name,
-                                                                fuzzy=False)
+                sf_card = self._academy.scryfall.get_card_named(
+                    card.card_name, fuzzy=False
+                )
                 if not sf_card:
                     logger.error(f"Card not found in scryfall {card.card_name}")
                     continue
 
                 if card.card_name not in all_cards:
-                    all_cards[card.card_name] = {"nr_decks": 0,
-                                                 "total_quantity": 0,
-                                                 # count decks having 1, 2, 3, 4 copies
-                                                 "quantity_buckets": [0, 0, 0, 0]}
+                    all_cards[card.card_name] = {
+                        "nr_decks": 0,
+                        "total_quantity": 0,
+                        # count decks having 1, 2, 3, 4 copies
+                        "quantity_buckets": [0, 0, 0, 0],
+                    }
 
                 if card.card_name not in occurred_in_deck:
                     all_cards[card.card_name]["nr_decks"] += 1
@@ -191,12 +214,14 @@ class ArchetypeMetaFactory:
 
 
 class ArchetypeCentroid:
-    """ Value class to represent staple cards of an archetype. """
+    """Value class to represent staple cards of an archetype."""
 
     def __init__(self, meta: ArchetypeMeta):
         if not meta or not isinstance(meta, ArchetypeMeta):
             raise ValueError(f"{type(meta)} is not ArchetypeMeta")
-        self._cards = sorted(list(filter(lambda f: f[1] >= 0.9, meta.deck_occurrences_ratio())))
+        self._cards = sorted(
+            list(filter(lambda f: f[1] >= 0.9, meta.deck_occurrences_ratio()))
+        )
 
     @property
     def cards(self) -> List[Tuple[str, float]]:
@@ -207,7 +232,6 @@ class ArchetypeCentroid:
 
     def __str__(self):
         return f"{self._cards}"
-
 
 
 def manual_test_outputs(am: ArchetypeMeta):
