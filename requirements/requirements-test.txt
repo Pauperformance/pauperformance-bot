@@ -6,7 +6,7 @@
 #    pip-compile-multi
 #
 -r requirements.txt
-astroid==3.1.0
+astroid==3.2.1
     # via pylint
 black==24.4.2
     # via -r requirements/requirements-test.in
@@ -44,7 +44,7 @@ mypy==1.10.0
     # via -r requirements/requirements-test.in
 pathspec==0.12.1
     # via black
-platformdirs==4.2.1
+platformdirs==4.2.2
     # via
     #   black
     #   pylint
@@ -59,9 +59,9 @@ pycodestyle==2.11.1
     # via flake8
 pyflakes==3.2.0
     # via flake8
-pylint==3.1.0
+pylint==3.2.1
     # via -r requirements/requirements-test.in
-pytest==8.2.0
+pytest==8.2.1
     # via
     #   -r requirements/requirements-test.in
     #   pytest-cov
@@ -91,9 +91,9 @@ types-pytz==2024.1.0.20240417
     # via -r requirements/requirements-test.in
 types-requests==2.31.0.20240406
     # via -r requirements/requirements-test.in
-types-setuptools==69.5.0.20240423
+types-setuptools==69.5.0.20240519
     # via -r requirements/requirements-test.in
-types-ujson==5.9.0.0
+types-ujson==5.10.0.20240515
     # via -r requirements/requirements-test.in
-virtualenv==20.26.1
+virtualenv==20.26.2
     # via tox
