@@ -5596,5 +5596,35 @@
         "scryfall_code": "yotj",
         "name": "Alchemy: Outlaws of Thunder Junction",
         "date": "2024-06-07"
+    },
+    "934": {
+        "p12e_code": 934,
+        "scryfall_code": "da1",
+        "name": "Unknown Event",
+        "date": "2023-02-15"
+    },
+    "935": {
+        "p12e_code": 935,
+        "scryfall_code": "h2r",
+        "name": "Modern Horizons 2 Timeshifts",
+        "date": "2024-06-07"
+    },
+    "936": {
+        "p12e_code": 936,
+        "scryfall_code": "amh3",
+        "name": "Modern Horizons 3 Art Series",
+        "date": "2024-06-14"
+    },
+    "937": {
+        "p12e_code": 937,
+        "scryfall_code": "tm3c",
+        "name": "Modern Horizons 3 Commander Tokens",
+        "date": "2024-06-14"
+    },
+    "938": {
+        "p12e_code": 938,
+        "scryfall_code": "tmh3",
+        "name": "Modern Horizons 3 Tokens",
+        "date": "2024-06-14"
     }
 }
