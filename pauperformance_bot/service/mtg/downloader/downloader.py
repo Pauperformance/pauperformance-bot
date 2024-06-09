@@ -1,6 +1,6 @@
 from typing import Dict
 
-import requests
+import cloudscraper
 
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.service.mtg.downloader.abstract import AbstractDeckDownloader
@@ -31,10 +31,11 @@ class MtgoDeckDownloader(AbstractDeckDownloader):
         if not headers:
             _headers = {}
         self._headers = _headers
+        self._scraper = cloudscraper.create_scraper()
 
     def download(self) -> PlayableDeck:
         logger.debug(f"fetching deck list from {self._url}")
-        resp = execute_http_request(requests.get, self._url, headers=self._headers)
+        resp = execute_http_request(self._scraper.get, self._url, headers=self._headers)
         pl = "start"
         lines = []
         for ln in resp.text.strip().split("\n"):

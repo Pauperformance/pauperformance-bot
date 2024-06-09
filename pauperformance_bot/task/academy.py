@@ -18,6 +18,11 @@ from pauperformance_bot.service.pauperformance.async_pauperformance import (
 from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 
 
+@retry(
+    retry=retry_if_exception_message(match=r".*Event loop is closed.*"),
+    stop=stop_after_attempt(3),
+    wait=wait_random_exponential(multiplier=1, max=60),
+)
 async def async_academy_update():
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)
@@ -45,9 +50,7 @@ async def async_academy_update():
 
 @retry(
     retry=retry_if_exception_message(
-        match=r".*Server Error.*|"
-        r".*Internal error encountered.*|"
-        r".*Event loop is closed.*"
+        match=r".*Server Error.*|" r".*Internal error encountered.*|"
     ),
     stop=stop_after_attempt(3),
     wait=wait_random_exponential(multiplier=1, max=60),
