@@ -11,8 +11,8 @@ class MtgdecksDeckDownloader(AbstractDeckDownloader):
         self._downloader = MtgoDeckDownloader(
             url,
             headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0)"
-                + " Gecko/20100101 Firefox/101.0"
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0)"
+                + " Gecko/20100101 Firefox/126.0"
             },
         )
 
@@ -21,6 +21,6 @@ class MtgdecksDeckDownloader(AbstractDeckDownloader):
         # User-Agent header is enough to bypass that
         # curl -v \
         # https://mtgdecks.net/Pauper/burn-decklist-by-thormyn-1380435/txt \
-        # -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:101.0) \
-        # Gecko/20100101 Firefox/101.0'
+        # -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) \
+        # Gecko/20100101 Firefox/126.0'
         return self._downloader.download()
