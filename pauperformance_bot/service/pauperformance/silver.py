@@ -363,6 +363,24 @@ class SilverService:
             dpl_decks=dpl_decks,
         )
         logger.info(dpl_meta)
+        archetype_maps = defaultdict(int)
+        for dpl_deck in dpl_meta.dpl_decks:
+            if not dpl_deck.archetype:
+                print(f"WARNING: manually count {dpl_deck}")
+                continue
+            archetype_maps[dpl_deck.archetype] += 1
+        game_types = defaultdict(int)
+        print()
+        for k, v in sorted(archetype_maps.items()):
+            print(f"{v} {k}")
+            for a in self.archetypes:
+                if a.name == k:
+                    # some decks have multiple game styles: let's use the first one
+                    game_types[a.game_type[0]] += 1
+                    break
+        print()
+        for k, v in sorted(game_types.items()):
+            print(f"{v} {k}")
         try:
             out_dir, out_file = output_file.rsplit(os.path.sep, maxsplit=1)
         except ValueError:

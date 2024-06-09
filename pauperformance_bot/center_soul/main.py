@@ -182,7 +182,7 @@ class ArchetypeCentroid:
         return f"{self._cards}"
 
 
-def test_outputs(am: ArchetypeMeta):
+def _test_outputs(am: ArchetypeMeta):
     logger.info(am.cards)
     logger.info(f"nr. decks: {am.nr_decks} max: {am.most_played}")
     dfq = am.deck_frequencies
