@@ -16,6 +16,9 @@ from pauperformance_bot.service.pauperformance.async_pauperformance import (
     AsyncPauperformanceService,
 )
 from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
+from pauperformance_bot.util.log import get_application_logger
+
+logger = get_application_logger()
 
 
 @retry(
@@ -59,6 +62,8 @@ def main():
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(async_academy_update())
+    except RuntimeError as exc:
+        logger.exception(exc)
     finally:
         loop.close()
 
