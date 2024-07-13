@@ -251,6 +251,9 @@ class PauperformanceService:
         )
 
     def analyze_cards_frequency(self, archetype_decks):
+        # Note: this method uses archived decks to compute frequent and staples.
+        # An alternative approach is to use a larger pool of classified decks,
+        # by leveraging silver.deckstatistics.
         if len(archetype_decks) < 2:
             return [], []
         lands = set(land["name"] for land in self.scryfall.get_legal_lands())

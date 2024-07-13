@@ -2,6 +2,8 @@ import glob
 from collections import defaultdict
 from pathlib import Path
 
+from deprecated import deprecated
+
 from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.pauperformance.academy import (
     ARCHETYPES_DIR,
@@ -32,9 +34,12 @@ from pauperformance_bot.constant.pauperformance.myr import (
     TEMPLATES_FAMILIES_DIR,
     TEMPLATES_PAGES_DIR,
 )
-from pauperformance_bot.entity.api.archetype import ArchetypeCard
+from pauperformance_bot.service.academy.data_loader import AcademyDataLoader
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
+)
+from pauperformance_bot.service.pauperformance.silver.deckstatistics import (
+    DeckstatisticsFactory,
 )
 from pauperformance_bot.util.config import (
     read_archetype_config,
@@ -49,6 +54,7 @@ from pauperformance_bot.util.time import now_utc, pretty_str
 logger = get_application_logger()
 
 
+@deprecated(reason="Migrated")
 class AcademyService:
     def __init__(
         self,
@@ -194,6 +200,7 @@ class AcademyService:
         all_decks = self.pauperformance.list_archived_decks()
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
         videos = self.pauperformance.list_videos()
+        loader = AcademyDataLoader()
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
             config = read_archetype_config(archetype_config_file)
@@ -213,16 +220,29 @@ class AcademyService:
                 deck.set_name = p12e_set["name"]
                 deck.set_date = p12e_set["date"]
 
-            staples, frequents = self.pauperformance.analyze_cards_frequency(
-                archetype_decks
-            )
-            if len(archetype_decks) < 2:
-                logger.warning(
-                    f"{archetype_name} doesn't have at least 2 decks to "
-                    f"generate staples and frequent cards."
-                )
-            values["staples"] = self.get_archetype_cards(staples)
-            values["frequents"] = self.get_archetype_cards(frequents)
+            # Staples and frequents can be built:
+            # a) from archived decks
+            # b) from classified decks
+
+            # method a:
+            # staples, frequents = self.pauperformance.analyze_cards_frequency(
+            #     archetype_decks
+            # )
+            # if len(archetype_decks) < 2:
+            #     logger.warning(
+            #         f"{archetype_name} doesn't have at least 2 decks to "
+            #         f"generate staples and frequent cards."
+            #     )
+
+            # method b:
+            statistics = DeckstatisticsFactory(
+                self.scryfall,
+                loader,
+            ).build_metadata_for(archetype_name)
+            staples, frequents = statistics.get_staple_and_frequent_cards()
+
+            values["staples"] = self.scryfall.get_archetype_cards(staples)
+            values["frequents"] = self.scryfall.get_archetype_cards(frequents)
             sorted_decks = sorted(
                 archetype_decks,
                 key=lambda d: d.p12e_name,
@@ -366,26 +386,6 @@ class AcademyService:
             },
         )
         logger.info(f"Rendered dev to {dev_output_file}.")
-
-    def get_archetype_cards(self, cards) -> list[ArchetypeCard]:
-        rendered_cards: list[ArchetypeCard] = []
-        for card in sorted(cards):
-            scryfall_card = self.scryfall.get_card_named(card)
-            if "image_uris" not in scryfall_card:  # e.g. Delver of Secrets
-                image_uris = scryfall_card["card_faces"][0]["image_uris"]
-            else:
-                image_uris = scryfall_card["image_uris"]
-            image_url = image_uris["normal"]
-            if "?" in image_url:
-                image_url = image_url[: image_url.index("?")]
-            rendered_cards.append(
-                ArchetypeCard(
-                    name=card,
-                    link=scryfall_card["scryfall_uri"].replace("?utm_source=api", ""),
-                    preview=image_url,
-                )
-            )
-        return rendered_cards
 
     def _boldify_sets_with_new_cards(self):
         card_index = self.pauperformance.incremental_card_index
