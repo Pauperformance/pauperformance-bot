@@ -12,8 +12,8 @@ LOG_FORMAT = (
     # "%(message)s"
 )
 # configure root logger
-logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
-# logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
+# logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
+logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
 # configure app logger
 logger = logging.getLogger(APPLICATION_NAME)
 # logger.setLevel(logging.DEBUG)
