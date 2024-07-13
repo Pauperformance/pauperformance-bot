@@ -5626,5 +5626,53 @@
         "scryfall_code": "tmh3",
         "name": "Modern Horizons 3 Tokens",
         "date": "2024-06-14"
+    },
+    "939": {
+        "p12e_code": 939,
+        "scryfall_code": "pmh3",
+        "name": "Modern Horizons 3 Promos",
+        "date": "2024-06-14"
+    },
+    "940": {
+        "p12e_code": 940,
+        "scryfall_code": "tacr",
+        "name": "Assassin's Creed Tokens",
+        "date": "2024-07-05"
+    },
+    "941": {
+        "p12e_code": 941,
+        "scryfall_code": "blc",
+        "name": "Bloomburrow Commander",
+        "date": "2024-08-02"
+    },
+    "942": {
+        "p12e_code": 942,
+        "scryfall_code": "tblc",
+        "name": "Bloomburrow Commander Tokens",
+        "date": "2024-08-02"
+    },
+    "943": {
+        "p12e_code": 943,
+        "scryfall_code": "plg24",
+        "name": "Love Your LGS 2024",
+        "date": "2024-08-06"
+    },
+    "944": {
+        "p12e_code": 944,
+        "scryfall_code": "dsc",
+        "name": "Duskmourn: House of Horror Commander",
+        "date": "2024-09-27"
+    },
+    "945": {
+        "p12e_code": 945,
+        "scryfall_code": "dsk",
+        "name": "Duskmourn: House of Horror",
+        "date": "2024-09-27"
+    },
+    "946": {
+        "p12e_code": 946,
+        "scryfall_code": "fdn",
+        "name": "Foundations",
+        "date": "2024-11-15"
     }
 }

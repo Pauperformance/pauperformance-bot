@@ -71,6 +71,7 @@ def read_family_config(config_file_path):
     return values
 
 
+@deprecated(reason="Migrated")
 def read_config_with_sequential_resources(config_file_path):
     config = read_config(config_file_path)
     return {

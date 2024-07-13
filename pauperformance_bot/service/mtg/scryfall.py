@@ -7,6 +7,7 @@ import requests
 
 from pauperformance_bot.constant.mtg.scryfall import API_ENDPOINT, WEBSITE_URL
 from pauperformance_bot.constant.pauperformance.myr import SCRYFALL_CARDS_CACHE_DIR
+from pauperformance_bot.entity.api.archetype import ArchetypeCard
 from pauperformance_bot.exceptions import CardNotFoundException
 from pauperformance_bot.util.cache import to_pkl_name
 from pauperformance_bot.util.log import get_application_logger
@@ -117,3 +118,23 @@ class ScryfallService:
         card = self.get_card_named(card_name)
         logger.debug(f"Retrieved card from url: {card_url}.")
         return card
+
+    def get_archetype_cards(self, cards) -> list[ArchetypeCard]:
+        rendered_cards: list[ArchetypeCard] = []
+        for card in sorted(cards):
+            scryfall_card = self.get_card_named(card)
+            if "image_uris" not in scryfall_card:  # e.g. Delver of Secrets
+                image_uris = scryfall_card["card_faces"][0]["image_uris"]
+            else:
+                image_uris = scryfall_card["image_uris"]
+            image_url = image_uris["normal"]
+            if "?" in image_url:
+                image_url = image_url[: image_url.index("?")]
+            rendered_cards.append(
+                ArchetypeCard(
+                    name=card,
+                    link=scryfall_card["scryfall_uri"].replace("?utm_source=api", ""),
+                    preview=image_url,
+                )
+            )
+        return rendered_cards

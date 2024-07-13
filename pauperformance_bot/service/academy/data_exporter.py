@@ -1,5 +1,3 @@
-import time
-import webbrowser
 from pathlib import Path
 
 import jsonpickle
@@ -21,12 +19,15 @@ from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.service.academy.academy import AcademyService
+from pauperformance_bot.service.academy.data_loader import AcademyDataLoader
 from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
-from pauperformance_bot.service.pauperformance.silver import SilverService
+from pauperformance_bot.service.pauperformance.silver.decklassifier import Decklassifier
+from pauperformance_bot.service.pauperformance.silver.deckstatistics import (
+    DeckstatisticsFactory,
+)
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path, safe_dump_json_to_file
 
@@ -36,18 +37,18 @@ logger = get_application_logger()
 class AcademyDataExporter:
     def __init__(
         self,
-        academy: AcademyService,
+        pauperformance: PauperformanceService,
         academy_fs: AcademyFileSystem = ACADEMY_FILE_SYSTEM,
     ):
-        self.academy: AcademyService = academy
         self.academy_fs: AcademyFileSystem = academy_fs
-        self.pauperformance: PauperformanceService = academy.pauperformance
+        self.pauperformance: PauperformanceService = pauperformance
         self.scryfall = self.pauperformance.scryfall
         self.config_reader: ConfigReader = self.pauperformance.config_reader
         self.decks: list[AbstractArchivedDeck] = (
-            self.academy.pauperformance.list_archived_decks()
+            self.pauperformance.list_archived_decks()
         )
-        self.silver: SilverService = SilverService(self.pauperformance)
+        self.silver: Decklassifier = Decklassifier(self.pauperformance)
+        self.academy_loader: AcademyDataLoader = AcademyDataLoader()
 
     def export_all(self):
         self.export_archetypes()
@@ -73,15 +74,27 @@ class AcademyDataExporter:
         logger.info(
             f"Exporting archetypes to {self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR}..."
         )
-        for archetype in self.academy.pauperformance.config_reader.list_archetypes():
-            archetype_decks = [
-                deck for deck in self.decks if deck.archetype == archetype.name
-            ]
-            staples, frequents = self.academy.pauperformance.analyze_cards_frequency(
-                archetype_decks
-            )
-            staples = self.academy.get_archetype_cards(staples)
-            frequents = self.academy.get_archetype_cards(frequents)
+        for archetype in self.pauperformance.config_reader.list_archetypes():
+            # Staples and frequents can be built:
+            # a) from archived decks
+            # b) from classified decks
+
+            # method a:
+            # archetype_decks = [
+            #     deck for deck in self.decks if deck.archetype == archetype.name
+            # ]
+            # staples, frequents = self.pauperformance.analyze_cards_frequency(
+            #     archetype_decks
+            # )
+
+            # method b:
+            statistics = DeckstatisticsFactory(
+                self.scryfall, self.academy_loader
+            ).build_metadata_for(archetype.name)
+            staples, frequents = statistics.get_staple_and_frequent_cards()
+
+            staples = self.scryfall.get_archetype_cards(staples)
+            frequents = self.scryfall.get_archetype_cards(frequents)
             api_archetype = Archetype(
                 name=archetype.name,
                 aliases=archetype.aliases,
@@ -111,7 +124,7 @@ class AcademyDataExporter:
         logger.info(f"Exporting decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}...")
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
         for deck in self.decks:
-            set_index_entry = self.academy.pauperformance.set_index[int(deck.p12e_code)]
+            set_index_entry = self.pauperformance.set_index[int(deck.p12e_code)]
             playable_deck: PlayableDeck = self.pauperformance.archive.to_playable_deck(
                 deck
             )
@@ -252,6 +265,7 @@ class AcademyDataExporter:
         training_data = [
             tuple(line.split(","))
             for line in open(training_file, "r").read().splitlines()
+            if line != ""
         ]
         for deck_id, archetype_name in training_data:
             playable_deck_path = posix_path(
@@ -341,7 +355,7 @@ class AcademyDataExporter:
                 unclassified_decks_count += 1
                 continue
             logger.debug("Similarity score sufficient. Storing intel...")
-            set_index_entry = self.academy.pauperformance.get_set_index_by_date(
+            set_index_entry = self.pauperformance.get_set_index_by_date(
                 usa_date=tournament_deck.tournament_date
             )
             api_deck: Deck = Deck(
@@ -385,6 +399,11 @@ class AcademyDataExporter:
         training_file = (
             self.config_reader.myr_file_system.MTGGOLDFISH_DECK_TRAINING_DATA
         )
+        # TODO: get rid of skip_f and skip_list
+        skip_f = training_file.replace(".csv", "_skip.csv")
+        skip_list = set(
+            line for line in open(skip_f, "r").read().splitlines() if line != ""
+        )
         for playable_deck_file in sorted(
             Path(self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR).glob(
                 "*.txt"
@@ -398,6 +417,9 @@ class AcademyDataExporter:
                 logger.debug(
                     f"Deck {playable_deck_file} already classified. Skipping it..."
                 )
+                continue
+            if deck_id in skip_list:
+                logger.debug(f"Deck {playable_deck_file} to be skipped. Skipping it...")
                 continue
             # A PlayableDeck has no knowledge about the time it was created.
             # This information is stored in the tournament metadata for the deck.
@@ -429,56 +451,67 @@ class AcademyDataExporter:
             if not most_similar_archetype:
                 logger.warning("Unable to find similar deck...")
                 continue
-            if (
-                most_similar_archetype.name == "MonoB Control"
-                and "Pyroblast" in playable_deck
-            ):
-                continue  # TODO: rename Jund Gardens to Jund Tokens first... :(
             logger.debug(
                 f"Deck could be {most_similar_archetype.name} ({highest_similarity})."
             )
-            if highest_similarity < 0.78:
+            if highest_similarity < 0.75:
                 logger.debug("Similarity score not sufficient. Skipping deck...")
                 unclassified_decks_count += 1
-                if not latest_training_sample or deck_id < latest_training_sample:
-                    logger.warning(
-                        f"Deck could be {most_similar_archetype.name} "
-                        f"({highest_similarity})."
-                    )
-                    url = f"https://www.mtggoldfish.com/deck/{deck_id}"
-                    logger.warning(url)
-                    webbrowser.open(url, new=0, autoraise=True)
-                    # import pyautogui
-                    # pyautogui.keyDown("alt")
-                    time.sleep(0.2)
-                    # pyautogui.press("tab")
-                    # time.sleep(0.2)
-                    # pyautogui.keyUp("alt")
-                    logger.warning("Yes/Almost/No? [Yan]")
-                    reply = input()
-                    print(reply)
-                    if reply in ["", "y", "yy"]:
-                        with open(training_file, "a") as out_f:
-                            out_f.write(f"{deck_id},{most_similar_archetype.name}\n")
-                        self.silver.known_decks.append(
-                            (playable_deck, most_similar_archetype)
-                        )
-                    elif reply in ["a", "aa"]:
-                        self.silver.known_decks = []
-                        known_decks, _ = (
-                            self._load_mtggoldfish_tournament_training_data()
-                        )
-                        self.silver.add_known_decks(known_decks)
-                        with open(training_file, "a") as out_f:
-                            out_f.write(
-                                f"{deck_id},"
-                                f"{most_similar_archetype.name.split(' ')[0]} \n"
-                            )
-                    else:
-                        pass
+                # continue
+                # if "Gorilla Shaman" in playable_deck:
+                #     continue
+                # if "Ancient Grudge" in playable_deck:
+                #     continue
+                # if not latest_training_sample or deck_id < latest_training_sample:
+                #     logger.warning(
+                #         f"Deck could be {most_similar_archetype.name} "
+                #         f"({highest_similarity})."
+                #     )
+                #     url = f"https://www.mtggoldfish.com/deck/{deck_id}"
+                #     logger.warning(url)
+                # webbrowser.open(url, new=0, autoraise=True)
+                # import pyautogui
+                # import time
+                # import webbrowser
+                # pyautogui.keyDown("alt")
+                # time.sleep(0.2)
+                # pyautogui.press("tab")
+                # time.sleep(0.2)
+                # pyautogui.keyUp("alt")
+                # logger.warning("Yes/Skip/Almost/Brew/No? [Ysabn]")
+                # reply = input()
+                # print(reply)
+                # if reply in ["", "y", "yy"]:
+                #     with open(training_file, "a") as out_f:
+                #         out_f.write(f"{deck_id},{most_similar_archetype.name}\n")
+                #     self.silver.known_decks.append(
+                #         (playable_deck, most_similar_archetype)
+                #     )
+                # elif reply in ["b", "bb", "bbb"]:
+                #     with open(training_file, "a") as out_f:
+                #         out_f.write(
+                #             f"{deck_id},Brew "
+                #             f"{most_similar_archetype.name.split(' ')[0]}\n"
+                #         )
+                # elif reply in ["s", "ss", "sss"]:
+                #     with open(skip_f, "a") as out_f:
+                #         out_f.write(f"{deck_id}\n")
+                # elif reply in ["a", "aa"]:
+                #     self.silver.known_decks = []
+                #     known_decks, _ = (
+                #         self._load_mtggoldfish_tournament_training_data()
+                #     )
+                #     self.silver.add_known_decks(known_decks)
+                #     with open(training_file, "a") as out_f:
+                #         out_f.write(
+                #             f"{deck_id},"
+                #             f"{most_similar_archetype.name.split(' ')[0]} \n"
+                #         )
+                # else:
+                #     pass
                 continue
             logger.debug("Similarity score sufficient. Storing intel...")
-            set_index_entry = self.academy.pauperformance.get_set_index_by_date(
+            set_index_entry = self.pauperformance.get_set_index_by_date(
                 usa_date=tournament_deck.tournament_date
             )
             api_deck: Deck = Deck(

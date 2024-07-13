@@ -606,6 +606,16 @@ KNOWN_SETS_WITH_NO_PAUPER_CARDS = [
     931,
     932,
     933,
+    934,
+    936,
+    937,
+    938,
+    939,
+    940,
+    941,
+    942,
+    943,
+    944,
 ]
 
 INCREMENTAL_CARDS_INDEX_SKIP_SETS = [
@@ -756,4 +766,5 @@ INCREMENTAL_CARDS_INDEX_SKIP_SETS = [
     891,
     907,
     921,
+    939,
 ]
