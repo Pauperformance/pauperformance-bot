@@ -15,7 +15,7 @@ def safe_posix_path(name: str) -> str:
     Converts spaces or repeated dashes to single dashes. Also strips leading and
     trailing whitespace, dashes, and underscores."""
     res = unicodedata.normalize("NFKC", name).encode("ASCII").lower()
-    res = res.replace("//", "_or_")
+    res = str(res).replace("//", "_or_")
     # remove all  except for word characters (letters, digits, and underscores),
     # whitespace characters, and hyphens.
     res = re.sub(r"[^\w\s-]", "", res)
