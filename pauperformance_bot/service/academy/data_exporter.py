@@ -29,7 +29,12 @@ from pauperformance_bot.service.pauperformance.silver.deckstatistics import (
     DeckstatisticsFactory,
 )
 from pauperformance_bot.util.log import get_application_logger
-from pauperformance_bot.util.path import posix_path, safe_dump_json_to_file
+from pauperformance_bot.util.path import (
+    posix_path,
+    safe_dump_json_to_file,
+    safe_posix_path,
+)
+
 
 logger = get_application_logger()
 
@@ -44,9 +49,9 @@ class AcademyDataExporter:
         self.pauperformance: PauperformanceService = pauperformance
         self.scryfall = self.pauperformance.scryfall
         self.config_reader: ConfigReader = self.pauperformance.config_reader
-        self.decks: list[AbstractArchivedDeck] = (
-            self.pauperformance.list_archived_decks()
-        )
+        self.decks: list[
+            AbstractArchivedDeck
+        ] = self.pauperformance.list_archived_decks()
         self.silver: Decklassifier = Decklassifier(self.pauperformance)
         self.academy_loader: AcademyDataLoader = AcademyDataLoader()
 
@@ -54,9 +59,10 @@ class AcademyDataExporter:
         self.export_archetypes()
         self.export_decks()
         self.export_intel_decks()
-        self.export_phd_sheets()
-        self.export_videos()
-        self.export_miscellanea()
+        self.export_intel_cards()
+        # self.export_phd_sheets()
+        # self.export_videos()
+        # self.export_miscellanea()
 
     def export_phd_sheets(self):
         logger.info(f"Exporting phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}...")
@@ -144,6 +150,32 @@ class AcademyDataExporter:
                 api_deck,
             )
         logger.info(f"Exported decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}.")
+
+    # DRAFT
+    def export_intel_cards(self):
+        logger.info(
+            f"Exporting cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}..."
+        )
+        cards_intel = {}
+
+        for kd in self.silver.known_decks:
+            deck = kd[0]
+            arch = kd[1]
+            for played_card in deck.mainboard + deck.sideboard:
+                if played_card.card_name not in cards_intel:
+                    cards_intel[played_card.card_name] = {"archetypes": set()}
+                cards_intel[played_card.card_name]["archetypes"].add(arch)
+        # TODO enrich card data
+        for card_name, card_data in cards_intel.items():
+            safe_dump_json_to_file(
+                self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR,
+                f"{safe_posix_path(card_name)}.json",
+                card_data,
+            )
+
+        logger.info(
+            f"Exported cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}."
+        )
 
     def export_miscellanea(self):
         self.export_changelog()
@@ -255,9 +287,9 @@ class AcademyDataExporter:
     ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
         # Note: this method assumes all the decks in the training data are available in
         # the academy as .txt to load and parse.
-        archetypes: list[ArchetypeConfig] = (
-            self.pauperformance.config_reader.list_archetypes()
-        )
+        archetypes: list[
+            ArchetypeConfig
+        ] = self.pauperformance.config_reader.list_archetypes()
         known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = []
         training_file = (
             self.config_reader.myr_file_system.MTGGOLDFISH_DECK_TRAINING_DATA
