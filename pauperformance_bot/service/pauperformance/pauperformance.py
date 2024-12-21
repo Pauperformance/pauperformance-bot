@@ -132,7 +132,7 @@ class PauperformanceService:
             set_cache_file = posix_path(cards_index_cache_dir, f"{p12e_code}.json")
             set_index = []
             try:
-                with open(set_cache_file, "r", encoding='utf-8') as cache_f:
+                with open(set_cache_file, "r", encoding="utf-8") as cache_f:
                     set_index = json.load(cache_f)
                     logger.debug(
                         f"Loaded set index from cache: {set_cache_file} "

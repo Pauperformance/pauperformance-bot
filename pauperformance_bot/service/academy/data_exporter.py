@@ -35,7 +35,6 @@ from pauperformance_bot.util.path import (
     safe_posix_path,
 )
 
-
 logger = get_application_logger()
 
 
@@ -49,9 +48,9 @@ class AcademyDataExporter:
         self.pauperformance: PauperformanceService = pauperformance
         self.scryfall = self.pauperformance.scryfall
         self.config_reader: ConfigReader = self.pauperformance.config_reader
-        self.decks: list[
-            AbstractArchivedDeck
-        ] = self.pauperformance.list_archived_decks()
+        self.decks: list[AbstractArchivedDeck] = (
+            self.pauperformance.list_archived_decks()
+        )
         self.silver: Decklassifier = Decklassifier(self.pauperformance)
         self.academy_loader: AcademyDataLoader = AcademyDataLoader()
 
@@ -287,9 +286,9 @@ class AcademyDataExporter:
     ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
         # Note: this method assumes all the decks in the training data are available in
         # the academy as .txt to load and parse.
-        archetypes: list[
-            ArchetypeConfig
-        ] = self.pauperformance.config_reader.list_archetypes()
+        archetypes: list[ArchetypeConfig] = (
+            self.pauperformance.config_reader.list_archetypes()
+        )
         known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = []
         training_file = (
             self.config_reader.myr_file_system.MTGGOLDFISH_DECK_TRAINING_DATA
