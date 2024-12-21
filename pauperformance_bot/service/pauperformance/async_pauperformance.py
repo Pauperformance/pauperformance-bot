@@ -2,6 +2,7 @@ from pauperformance_bot.constant.mtg.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.constant.pauperformance.nexus import (
     DISCORD_MAX_HISTORY_LIMIT,
     DISCORD_MYR_REACTION_KO,
+    DISCORD_MYR_REACTION_OK,
     DISCORD_MYR_REACTION_SEEN,
 )
 from pauperformance_bot.entity.config.phd import PhDConfig
@@ -141,7 +142,15 @@ class AsyncPauperformanceService(PauperformanceService):
             f"({message.author.name})..."
         )
         logger.info(f"Discord message {message.id}: {message.content}")
-        await message.add_reaction(DISCORD_MYR_REACTION_SEEN)
+        if not any(r.emoji == DISCORD_MYR_REACTION_OK for r in message.reactions):
+            # If a DISCORD_MYR_REACTION_OK is found in the reactions, that means the
+            # message may have been already processed, and nothing else
+            # needs to be done.
+            # In this case, we would *not* apply the DISCORD_MYR_REACTION_SEEN reaction
+            # to avoid spam.
+            # Here, DISCORD_MYR_REACTION_OK is not found, so we add the
+            # DISCORD_MYR_REACTION_SEEN reaction.
+            await message.add_reaction(DISCORD_MYR_REACTION_SEEN)
         if message.content.strip().startswith(DECK_API_ENDPOINT):
             logger.info("Detected MTGGoldfish deck.")
             await self._try_import_mtggoldfish_deck_from_discord(

@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 from time import sleep
+from typing import Any, Dict, List
 
 from requests.exceptions import HTTPError
 
@@ -120,7 +121,7 @@ class PauperformanceService:
         self,
         skip_sets=KNOWN_SETS_WITH_NO_PAUPER_CARDS,
         cards_index_cache_dir=PAUPER_CARDS_INDEX_CACHE_DIR,
-    ):
+    ) -> Dict[str, List[Dict[str, Any]]]:
         card_index = {}
         os.makedirs(cards_index_cache_dir, exist_ok=True)
         for item in self.set_index.values():
@@ -131,7 +132,7 @@ class PauperformanceService:
             set_cache_file = posix_path(cards_index_cache_dir, f"{p12e_code}.json")
             set_index = []
             try:
-                with open(set_cache_file, "r") as cache_f:
+                with open(set_cache_file, "r", encoding="utf-8") as cache_f:
                     set_index = json.load(cache_f)
                     logger.debug(
                         f"Loaded set index from cache: {set_cache_file} "

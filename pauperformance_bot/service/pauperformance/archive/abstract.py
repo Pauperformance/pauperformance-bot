@@ -355,14 +355,22 @@ class AbstractArchiveService(metaclass=ABCMeta):
         original_deck_id = url.rsplit("/")[-1]
 
         if original_deck_id in imported_mtggoldfish_decks:
-            logger.debug(
+            logger.info(
                 f"Deck {original_deck_id} already stored on "
                 f"Storage (and Archive). Skipping it."
             )
-            await discord_message.remove_reaction(
-                DISCORD_MYR_REACTION_SEEN, discord.user
-            )
-            await discord_message.add_reaction(DISCORD_MYR_REACTION_OK)
+            if any(
+                r.emoji == DISCORD_MYR_REACTION_SEEN for r in discord_message.reactions
+            ):
+                # If DISCORD_MYR_REACTION_SEEN was added, now we can remove it.
+                await discord_message.remove_reaction(
+                    DISCORD_MYR_REACTION_SEEN, discord.user
+                )
+            if not any(
+                r.emoji == DISCORD_MYR_REACTION_OK for r in discord_message.reactions
+            ):
+                # If DISCORD_MYR_REACTION_OK is missing, now we can add it.
+                await discord_message.add_reaction(DISCORD_MYR_REACTION_OK)
             return
 
         # it's a new deck: start importing!
