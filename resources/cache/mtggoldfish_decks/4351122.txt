@@ -1,0 +1,42 @@
+1 Abrade
+1 Bojuka Bog
+4 Bonder's Ornament
+1 Cave of Temptation
+1 Crop Rotation
+1 Dinrova Horror
+1 Ephemerate
+1 Exclude
+1 Fiery Cannonade
+2 Ghostly Flicker
+4 Impulse
+3 Mnemonic Wall
+2 Moment's Peace
+4 Mulldrifter
+2 Mystical Teachings
+1 Prohibit
+4 Prophetic Prism
+1 Pulse of Murasa
+1 Pyroblast
+1 Rolling Thunder
+2 Snow-Covered Island
+1 Stonehorn Dignitary
+2 Thornwood Falls
+4 Thriving Isle
+1 Unwind
+4 Urza's Mine
+4 Urza's Power Plant
+4 Urza's Tower
+1 Weather the Storm
+
+1 Ancient Grudge
+1 Blue Elemental Blast
+2 Cast Down
+1 Dispel
+1 Gorilla Shaman
+1 Hydroblast
+2 Pyroblast
+1 Reaping the Graves
+2 Red Elemental Blast
+1 Serene Heart
+1 Stonehorn Dignitary
+1 Weather the Storm
