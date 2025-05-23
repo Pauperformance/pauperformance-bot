@@ -1,22 +1,37 @@
+import csv
 import itertools
+import os
+import time
 from collections import defaultdict
 from typing import DefaultDict, Tuple
 
 from scipy import spatial
 
+from pauperformance_bot.constant.pauperformance.myr import HOME_CACHE_DIR
 from pauperformance_bot.constant.pauperformance.silver import (
     MAINBOARD_WEIGHT,
     SIDEBOARD_WEIGHT,
 )
-from pauperformance_bot.entity.api.miscellanea import Metagame, MetaShare
+from pauperformance_bot.entity.api.miscellanea import (
+    DPLDeck,
+    DPLMeta,
+    Metagame,
+    MetaShare,
+)
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
 from pauperformance_bot.entity.deck.playable import PlayableDeck
+from pauperformance_bot.service.mtg.downloader.service import DeckDownloaderService
 from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.math import truncate
+from pauperformance_bot.util.path import (
+    load_json_from_file,
+    posix_path,
+    safe_dump_json_to_file,
+)
 
 logger = get_application_logger()
 
@@ -28,13 +43,16 @@ class SilverService:
         known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = None,
     ):
         self.pauperformance: PauperformanceService = pauperformance
-        self.archetypes: list[
-            ArchetypeConfig
-        ] = self.pauperformance.config_reader.list_archetypes()
+        self.archetypes: list[ArchetypeConfig] = (
+            self.pauperformance.config_reader.list_archetypes()
+        )
         self.known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = (
             known_decks if known_decks else []
         )
         self._decks_cache: dict[str, PlayableDeck] = {}
+
+    def add_known_decks(self, known_decks: list[tuple[PlayableDeck, ArchetypeConfig]]):
+        self.known_decks += known_decks
 
     @staticmethod
     def _cosine_similarity(v1, v2, w=1.0):
@@ -44,10 +62,9 @@ class SilverService:
 
     @staticmethod
     def _vectorize(cards_map1, cards_map2):
-        # In Pauper, only few decks take advantage of Snow-Covered lands.
-        # However, Snow-Covered lands are often used.
-        # For better similarity results, we want Snow-Covered lands to be treated as
-        # normal lands.
+        # In Pauper, only few decks truly take advantage of Snow-Covered lands.
+        # However, Snow-Covered lands are often used instead of basics for no reason.
+        # For better similarity results, we treat Snow-Covered lands as basics.
         basic_lands = ["Forest", "Island", "Mountain", "Plains", "Swamp"]
         for card_map in (cards_map1, cards_map2):
             for land in basic_lands:
@@ -93,7 +110,11 @@ class SilverService:
         logger.debug(f"Mainboard similarity: {sim_main}")
         sim_side = self._cosine_similarity(vector_side1, vector_side2, SIDEBOARD_WEIGHT)
         logger.debug(f"sideboard similarity: {sim_side}")
-        sim = (sim_main + sim_side) / 2
+        # sim = (sim_main + sim_side) / 2
+        # alternatively, give different weights
+        w_sim_main = 3
+        w_sim_side = 1
+        sim = (w_sim_main * sim_main + w_sim_side * sim_side) / (w_sim_main + w_sim_side)
         logger.debug(f"Computed similarity between decks: {sim}.")
         return sim
 
@@ -168,6 +189,36 @@ class SilverService:
         ]
         return len([c for c in monob_control_cards if c in deck]) >= 3
 
+    def _is_infect(self, deck: PlayableDeck) -> bool:
+        infect_creatures = [
+            "Glistener Elf",
+            "Llanowar Augur",
+            "Blight Mamba",
+            "Ichorclaw Myr",
+            "Rot Wolf",
+        ]
+        return len([c for c in infect_creatures if c in deck]) >= 3
+
+    def _is_walls(self, deck: PlayableDeck) -> bool:
+        walls_creatures = [
+            "Overgrown Battlement",
+            "Axebane Guardian",
+            "Valakut Invoker",
+            "Secret Door",
+            "Galvanic Alchemist",
+            "Shield-Wall Sentinel",
+        ]
+        return len([c for c in walls_creatures if c in deck]) >= 3
+
+    def _is_azorius_prowess(self, deck: PlayableDeck) -> bool:
+        azorius_creatures = [
+            "Seeker of the Way",
+            "Elusive Spellfist",
+            "Jhessian Thief",
+            "Delver of Secrets",
+        ]
+        return len([c for c in azorius_creatures if c in deck]) >= 3
+
     def classify_deck(
         self,
         deck: PlayableDeck,
@@ -185,9 +236,14 @@ class SilverService:
             ("MonoW Heroic", self._is_monow_heroic),
             ("Izzet Blitz", self._is_izzet_blitz),
             ("MonoB Control", self._is_monob_control),
+            ("Infect", self._is_infect),
+            ("Walls", self._is_walls),
+            ("Azorius Prowess", self._is_azorius_prowess),
         ]
         for archetype_name, archetype_predicate in archetype_predicates:
-            if archetype_predicate(deck):
+            if archetype_predicate(deck) and deck.can_belong_to_archetype(
+                next(a for a in self.archetypes if a.name == archetype_name)
+            ):
                 logger.debug(f"Deck is {archetype_name}.")
                 return next(a for a in self.archetypes if a.name == archetype_name), 1.0
 
@@ -200,9 +256,9 @@ class SilverService:
             for reference_deck in archetype.reference_decks:
                 logger.debug(f"Comparing deck with reference list {reference_deck}...")
                 if reference_deck not in self._decks_cache:
-                    self._decks_cache[
-                        reference_deck
-                    ] = self.pauperformance.get_playable_deck(reference_deck)
+                    self._decks_cache[reference_deck] = (
+                        self.pauperformance.get_playable_deck(reference_deck)
+                    )
                 deck2 = self._decks_cache[reference_deck]
                 logger.debug(f"Compared deck with reference list {reference_deck}.")
                 score = self.get_similarity(deck, deck2)
@@ -215,7 +271,7 @@ class SilverService:
         for deck2, archetype in self.known_decks:
             score = self.get_similarity(deck, deck2)
             logger.debug(f"Similarity: {score}.")
-            if score > highest_similarity:
+            if score > highest_similarity and deck.can_belong_to_archetype(archetype):
                 most_similar_archetype, highest_similarity = archetype, score
         logger.debug("Compared deck with known decks.")
         logger.debug("Classified deck.")
@@ -259,3 +315,79 @@ class SilverService:
                 )
             )
         return Metagame(meta_shares=grouped_meta_shares)
+
+    def get_dpl_metagame(self, leg_file, output_file):
+        logger.info(f"Getting Dutch Pauper League meta from {leg_file}...")
+        dpl_decks = []
+
+        with open(leg_file, newline="") as csvfile:
+            reader = csv.reader(csvfile, delimiter=",")
+            next(reader, None)  # skip header
+            for row in reader:
+                try:
+                    name, email, deck = row
+                except ValueError:
+                    name, email, deck, _, _ = row
+                logger.debug(f"{name}: {deck}")
+                deck_id = deck.split("/")[-1]
+                cached_deck_file = f"moxfield_{deck_id}.json"
+                cached_deck_path = posix_path(HOME_CACHE_DIR, cached_deck_file)
+                if os.path.isfile(cached_deck_path):
+                    logger.debug("Loading deck from cache...")
+                    playable_deck = load_json_from_file(cached_deck_path)
+                else:
+                    logger.debug("Downloading deck from Moxfield...")
+                    playable_deck = DeckDownloaderService.from_url(deck)
+                    time.sleep(3)  # prevent Moxfield soft-ban
+                    safe_dump_json_to_file(
+                        HOME_CACHE_DIR, cached_deck_file, playable_deck
+                    )
+                most_similar_archetype, highest_similarity = self.classify_deck(
+                    playable_deck
+                )
+                logger.info(f"{deck} | {most_similar_archetype} {highest_similarity}")
+                if highest_similarity < 0.76:
+                    most_similar_archetype = None
+                dpl_decks.append(
+                    DPLDeck(
+                        name=name,
+                        email=email,
+                        deck_url=deck,
+                        archetype=(
+                            most_similar_archetype.name
+                            if most_similar_archetype
+                            else None
+                        ),
+                        accuracy=float(highest_similarity),
+                    )
+                )
+        dpl_meta = DPLMeta(
+            name=leg_file,
+            dpl_decks=dpl_decks,
+        )
+        logger.info(dpl_meta)
+        archetype_maps = defaultdict(int)
+        for dpl_deck in dpl_meta.dpl_decks:
+            if not dpl_deck.archetype:
+                print(f"WARNING: manually count {dpl_deck}")
+                continue
+            archetype_maps[dpl_deck.archetype] += 1
+        game_types = defaultdict(int)
+        print()
+        for k, v in sorted(archetype_maps.items()):
+            print(f"{v} {k}")
+            for a in self.archetypes:
+                if a.name == k:
+                    # some decks have multiple game styles: let's use the first one
+                    game_types[a.game_type[0]] += 1
+                    break
+        print()
+        for k, v in sorted(game_types.items()):
+            print(f"{v} {k}")
+        try:
+            out_dir, out_file = output_file.rsplit(os.path.sep, maxsplit=1)
+        except ValueError:
+            out_dir = os.getcwd()
+            out_file = output_file
+        safe_dump_json_to_file(out_dir, out_file, dpl_meta)
+        logger.info(f"Stored DPL meta in {output_file}...")
