@@ -1,3 +1,5 @@
+import re
+import time
 from datetime import datetime
 from functools import cache, wraps
 from itertools import count
@@ -9,12 +11,13 @@ from requests import session
 from pauperformance_bot.constant.mtg.mtggoldfish import (
     API_ENDPOINT,
     DECK_API_ENDPOINT,
+    MIN_AUTHENTICITY_TOKEN_LEN,
+    MTGGOLDFISH_THROTTLE_ERROR_RESPONSE,
     NO_COOKIE_HEADER,
+    REQUESTS_SLEEP_SECONDS,
 )
-from pauperformance_bot.constant.pauperformance.myr import (
-    MTGGOLDFISH_DECKS_CACHE_DIR,
-    USA_DATE_FORMAT,
-)
+from pauperformance_bot.constant.pauperformance.academy import AcademyFileSystem
+from pauperformance_bot.constant.pauperformance.myr import USA_DATE_FORMAT
 from pauperformance_bot.credentials import (
     MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
     MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
@@ -92,11 +95,12 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
                 continue
             logger.debug(f"Extracting authenticity_token from line: {line}")
             value_token = "value="
-            authenticity_token = line[
-                line.rfind(value_token) + len(value_token) + 1 : -4
-            ]
-            logger.debug(f"Found authenticity_token: {authenticity_token}")
-            return authenticity_token
+            for match in re.finditer(value_token, line):
+                token = line[match.end() + 1 :]
+                token = token[0 : token.find('"')]
+                if len(token) >= MIN_AUTHENTICITY_TOKEN_LEN:
+                    logger.debug(f"Found authenticity_token: {token}")
+                    return token
         raise MTGGoldfishException("Unable to get authenticity_token from MTGGoldfish.")
 
     @staticmethod
@@ -257,25 +261,25 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         return decks
 
     def _workaround_retrieve_missing_decks(self, all_decks):
-        logger.warning("Fixing bug in MTGGoldfish pager...")
+        logger.debug("Fixing bug in MTGGoldfish pager...")
 
         # Due to a bug in the pagination mechanism, decks are sometimes
         # returned more than once or not returned at all.
 
         # first, let's remove duplicates
-        logger.info(f"Initial number of decks: {len(all_decks)}")
+        logger.debug(f"Initial number of decks: {len(all_decks)}")
         all_decks = list(set(all_decks))
-        logger.info(f"Without duplicates: {len(all_decks)}")
+        logger.debug(f"Without duplicates: {len(all_decks)}")
         # then, grab one-by-one all the missing decks from storage
         storage_decks = self.storage.list_imported_deckstats_deck_names()
         mtggoldfish_decks = {d.name for d in all_decks}
         for missing_deck in storage_decks - mtggoldfish_decks:
-            logger.warning(f"Found missing deck: {missing_deck}")
+            logger.debug(f"Found missing deck: {missing_deck}")
             missing_deck = self._list_decks_in_page(1, missing_deck)
             if len(missing_deck) != 1:
                 raise ValueError(f"Unable to find missing deck {missing_deck}")
             all_decks += missing_deck
-        logger.info(f"Final number of decks: {len(all_decks)}")
+        logger.debug(f"Final number of decks: {len(all_decks)}")
         return all_decks
 
     @with_login
@@ -320,9 +324,10 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
     @staticmethod
     def to_playable_deck(
         listed_deck: AbstractArchivedDeck,
-        decks_cache_dir=MTGGOLDFISH_DECKS_CACHE_DIR,
+        decks_cache_dir=AcademyFileSystem().ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
         use_cache=True,
     ) -> PlayableDeck:
+        # TODO: fix ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR
         lines = None
         to_be_cached = True
         if use_cache:
@@ -338,8 +343,12 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             except FileNotFoundError:
                 pass
         if not lines:
-            content = urlopen(listed_deck.download_txt_url).read()
-            lines = content.decode("utf-8").split("\r\n")
+            lines = [MTGGOLDFISH_THROTTLE_ERROR_RESPONSE]
+            while MTGGOLDFISH_THROTTLE_ERROR_RESPONSE in lines:
+                content = urlopen(listed_deck.download_txt_url).read()
+                lines = content.decode("utf-8")
+                time.sleep(REQUESTS_SLEEP_SECONDS)
+            lines = lines.split("\r\n")
         if to_be_cached:
             with open(
                 posix_path(decks_cache_dir, f"{listed_deck.deck_id}.txt"),

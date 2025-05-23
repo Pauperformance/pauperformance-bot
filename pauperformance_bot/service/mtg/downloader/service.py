@@ -1,9 +1,9 @@
-from msilib.schema import Error
 from typing import Dict, Optional, Type
 
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.service.mtg.downloader.abstract import AbstractDeckDownloader
 from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
+from pauperformance_bot.service.mtg.downloader.moxfield import MoxfieldDeckDownloader
 from pauperformance_bot.service.mtg.downloader.mtgdecks import MtgdecksDeckDownloader
 from pauperformance_bot.util.log import get_application_logger
 
@@ -14,7 +14,8 @@ class DeckDownloaderService:
     """Service to download a deck from different sources given an input url"""
 
     _downloaders: Dict[str, Type[AbstractDeckDownloader]] = {
-        "mtgdecks.net": MtgdecksDeckDownloader
+        "mtgdecks.net": MtgdecksDeckDownloader,
+        "moxfield.com": MoxfieldDeckDownloader,
     }
 
     @classmethod
@@ -36,5 +37,5 @@ class DeckDownloaderService:
         try:
             logger.debug(f"Using mtgo downloader for {url}")
             return MtgoDeckDownloader(url).download()
-        except Error:
+        except Exception:
             return None
