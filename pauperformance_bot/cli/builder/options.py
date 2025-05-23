@@ -67,3 +67,39 @@ class QuietCLIOption(FlagCLIOption):
 class VerboseCLIOption(FlagCLIOption):
     def __init__(self):
         super().__init__("verbose", "verbose logging")
+
+
+class InputFileCLIOption(ValuedCLIOption):
+    def __init__(
+        self,
+        choices=None,
+        default_value=None,
+        required=False,
+        multiple_allowed=False,
+    ):
+        super().__init__(
+            "input-file",
+            choices,
+            default_value,
+            required,
+            multiple_allowed,
+            "input file",
+        )
+
+
+class OutputFileCLIOption(ValuedCLIOption):
+    def __init__(
+        self,
+        choices=None,
+        default_value=None,
+        required=False,
+        multiple_allowed=False,
+    ):
+        super().__init__(
+            "output-file",
+            choices,
+            default_value,
+            required,
+            multiple_allowed,
+            "output file",
+        )

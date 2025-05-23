@@ -55,6 +55,9 @@ class AcademyFileSystem:
         self.ASSETS_DATA_INTEL_DECK_DIR: str = posix_path(
             self.ASSETS_DATA_INTEL_DIR, "deck"
         )
+        self.ASSETS_DATA_INTEL_CARD_DIR: str = posix_path(
+            self.ASSETS_DATA_INTEL_DIR, "card"
+        )
         self.ASSETS_DATA_PHD_DIR: str = posix_path(self.ASSETS_DATA_DIR, "phd")
         self.ASSETS_DATA_TOURNAMENT_DIR: str = posix_path(
             self.ASSETS_DATA_DIR, "tournament"

@@ -6,7 +6,7 @@ from pauperformance_bot.entity.config.archetype import (
     Resource,
     SideboardResource,
 )
-from pauperformance_bot.util.entities import auto_repr, auto_str
+from pauperformance_bot.util.decorators import auto_repr, auto_str
 
 
 @auto_repr
@@ -39,6 +39,8 @@ class Archetype(ArchetypeConfig):
         dominant_mana: list[str],
         game_type: list[str],
         description: str,
+        must_have_cards: list[str],
+        must_not_have_cards: list[str],
         reference_decks: list[str],
         resource_sideboard: Optional[SideboardResource],
         resources_discord: list[DiscordResource],
@@ -53,6 +55,8 @@ class Archetype(ArchetypeConfig):
             dominant_mana=dominant_mana,
             game_type=game_type,
             description=description,
+            must_have_cards=must_have_cards,
+            must_not_have_cards=must_not_have_cards,
             reference_decks=reference_decks,
             resource_sideboard=resource_sideboard,
             resources_discord=resources_discord,

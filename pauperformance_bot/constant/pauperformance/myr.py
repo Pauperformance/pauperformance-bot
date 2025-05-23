@@ -7,7 +7,8 @@ APPLICATION_NAME = "pauperformance-bot"
 PAUPERFORMANCE_BOT_DIR = posix_path(
     Path.home().as_posix(), ".pauperformance"
 )  # for user data
-SECRETS_UNTRACKED_FILE = "pauperformance_bot.secrets.py"
+SECRETS_UNTRACKED_FILE = "pauperformance_bot.p13_secrets.py"
+HOME_CACHE_DIR = posix_path(Path.home().as_posix(), ".cache", "pauperformance")
 
 # Local storage
 STORAGE_DIR = posix_path(PAUPERFORMANCE_BOT_DIR, "storage")
@@ -39,6 +40,7 @@ VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 # resources/
 # | cache/
 # | config/
+# | silver/
 # | templates/
 # | last_set_index.pkl
 
@@ -49,19 +51,17 @@ VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 # ):  # running in GitHub
 #     RESOURCES_DIR = posix_path(os.getenv("pythonLocation"), "SOME/THING/")
 
-if "VIRTUAL_ENV" in os.environ:  # running in venv
+if (
+    "VIRTUAL_ENV" in os.environ and "PYCHARM_HOSTED" not in os.environ
+):  # running in venv, outside PyCharm
     RESOURCES_DIR = posix_path(os.getenv("VIRTUAL_ENV"), "resources")
 else:
     RESOURCES_DIR = posix_path(TOP_PATH.as_posix(), "resources")
 
 CACHE_DIR = posix_path(RESOURCES_DIR, "cache")
+PAUPER_CARDS_INDEX_CACHE_DIR = posix_path(CACHE_DIR, "cards_index")
 DECKSTATS_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "deckstats_decks")
-MTGGOLDFISH_DECKS_CACHE_DIR = posix_path(CACHE_DIR, "mtggoldfish_decks")
 SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
-PAUPER_CARDS_INDEX_CACHE_FILE = posix_path(
-    CACHE_DIR,
-    "pauper_cards_index.pkl.tgz",
-)
 
 CONFIG_DIR = posix_path(RESOURCES_DIR, "config")
 CONFIG_ARCHETYPES_DIR = posix_path(CONFIG_DIR, "archetypes")
@@ -81,7 +81,7 @@ HOME_TEMPLATE_FILE = "index.md.j2"
 PAUPER_POOL_TEMPLATE_FILE = "pauper_pool.md.j2"
 SET_INDEX_TEMPLATE_FILE = "set_index.md.j2"
 
-LAST_SET_INDEX_FILE = posix_path(RESOURCES_DIR, "last_set_index.json")
+SET_INDEX_FILE = posix_path(RESOURCES_DIR, "set_index.json")
 
 
 class MyrFileSystem:
@@ -112,6 +112,15 @@ class MyrFileSystem:
         )
         self.RESOURCES_CONFIG_CHANGELOG: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "changelog.ini"
+        )
+
+        self.RESOURCES_SILVER_DIR: str = posix_path(self.RESOURCES_DIR, "silver")
+        self.RESOURCES_SILVER_TRAINING_DATA_ARCHETYPES_DIR: str = posix_path(
+            self.RESOURCES_SILVER_DIR, "training_data_archetypes"
+        )
+        self.MTGGOLDFISH_DECK_TRAINING_DATA: str = posix_path(
+            self.RESOURCES_SILVER_TRAINING_DATA_ARCHETYPES_DIR,
+            "mtggoldfish_tournament_decks.csv",
         )
 
 
