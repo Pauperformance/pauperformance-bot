@@ -1,6 +1,7 @@
 import datetime
 import time
 import urllib.parse
+from pathlib import Path
 from urllib.request import urlopen
 
 import requests
@@ -10,6 +11,7 @@ from pyquery import PyQuery
 from pauperformance_bot.constant.mtg.mtggoldfish import (
     API_ENDPOINT,
     DECK_API_TOKEN,
+    DECK_DOWNLOAD_TOKEN,
     DECK_TOOLS_CONTAINER_CLASS,
     FULL_PAUPER_METAGAME_URL,
     METAGAME_ARCHETYPE_TITLE_URL_CLASS,
@@ -17,6 +19,7 @@ from pauperformance_bot.constant.mtg.mtggoldfish import (
     REQUESTS_SLEEP_SECONDS,
 )
 from pauperformance_bot.entity.api.deck import MTGGoldfishTournamentDeck
+from pauperformance_bot.entity.api.tournament import Tournament
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
 from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
@@ -24,7 +27,9 @@ from pauperformance_bot.entity.deck.playable import (
 )
 from pauperformance_bot.entity.mtg.mtggoldfish import MTGGoldfishTournamentSearchResult
 from pauperformance_bot.exceptions import MTGGoldfishException
+from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
 from pauperformance_bot.util.log import get_application_logger
+from pauperformance_bot.util.path import posix_path, safe_dump_json_to_file
 from pauperformance_bot.util.time import now_utc
 
 logger = get_application_logger()
@@ -178,8 +183,86 @@ class MTGGoldfish:
                 mtgo_price=mtgo_price,
                 tournament_id=tournament_result.identifier,
                 tournament_name=tournament_result.name,
+                tournament_date=tournament_result.date,
             )
             logger.debug(f"Extracted deck {tournament_deck}.")
             tournament_decks.append(tournament_deck)
         logger.debug(f"Extracted tournament decks from {url}.")
         return tournament_decks
+
+    def download_mtggoldfish_tournaments(self, start_date, end_date, academy_fs):
+        processed_tournament_ids = {
+            tournament_id.name.rstrip(".json")
+            for tournament_id in Path(
+                academy_fs.ASSETS_DATA_TOURNAMENT_MTGGOLDFISH_DIR
+            ).glob("*.json")
+        }
+        start = end_date
+        end = end_date
+        delta = datetime.timedelta(days=10)  # prevents some tournaments to be skipped
+        while end > start_date:
+            end -= delta
+            logger.info(f"Processing from {start} to {end}...")
+            results: list[MTGGoldfishTournamentSearchResult] = (
+                self.get_pauper_tournaments(end, start)
+            )
+            logger.info(f"Found {len(results)} tournaments.")
+            for result in results:
+                if f"{result.identifier}" in processed_tournament_ids:
+                    logger.debug(
+                        f"Skipping already processed tournament {result.identifier}..."
+                    )
+                    continue
+
+                logger.debug(f"Fetching data from {result.url}...")
+                decks: list[MTGGoldfishTournamentDeck] = self.get_tournament_decks(
+                    result
+                )
+                for deck in decks:
+                    logger.debug(f"Storing deck metadata {deck.identifier}...")
+                    safe_dump_json_to_file(
+                        academy_fs.ASSETS_DATA_TOURNAMENT_MTGGOLDFISH_DECKS_DIR,
+                        f"{deck.identifier}.json",
+                        deck,
+                    )
+                    logger.debug(f"Stored deck metadata {deck.identifier}...")
+                    time.sleep(REQUESTS_SLEEP_SECONDS)
+                    logger.debug(f"Storing deck list {deck.identifier}...")
+                    download_url = deck.url.replace(
+                        f"/{DECK_API_TOKEN}", f"/{DECK_DOWNLOAD_TOKEN}"
+                    )
+                    try:
+                        deck_downloader = MtgoDeckDownloader(download_url)
+                        playable_deck: PlayableDeck = deck_downloader.download()
+                    except ValueError:
+                        logger.warning(f"Unable to parse deck at {download_url}...")
+                        continue
+                    with open(
+                        posix_path(
+                            academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
+                            f"{deck.identifier}.txt",
+                        ),
+                        "w",
+                    ) as out_f:
+                        out_f.write(playable_deck.mainboard_mtggoldfish)
+                        out_f.write("\n\n")
+                        out_f.write(playable_deck.sideboard_mtggoldfish)
+                        out_f.write("\n")
+                    logger.debug(f"Stored deck list {deck.identifier}...")
+
+                tournament_api = Tournament(
+                    url=result.url,
+                    name=result.name,
+                    date=result.date,
+                    deck_ids=[d.identifier for d in decks],
+                )
+                logger.debug(f"Storing tournament {result.identifier}...")
+                safe_dump_json_to_file(
+                    academy_fs.ASSETS_DATA_TOURNAMENT_MTGGOLDFISH_DIR,
+                    f"{result.identifier}.json",
+                    tournament_api,
+                )
+                logger.debug(f"Stored tournament {result.identifier}.")
+                time.sleep(REQUESTS_SLEEP_SECONDS)
+            time.sleep(REQUESTS_SLEEP_SECONDS)
+            start -= delta

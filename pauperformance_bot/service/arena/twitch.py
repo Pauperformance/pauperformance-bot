@@ -1,5 +1,5 @@
-from twitchAPI import TimePeriod
 from twitchAPI.twitch import Twitch
+from twitchAPI.types import TimePeriod
 
 from pauperformance_bot.credentials import (
     TWITCH_APP_CLIENT_ID,

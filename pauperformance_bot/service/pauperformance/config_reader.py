@@ -17,7 +17,7 @@ from pauperformance_bot.entity.config.phd import PhDConfig
 from pauperformance_bot.exceptions import PauperformanceException
 from pauperformance_bot.service.mtg.scryfall import ScryfallService
 from pauperformance_bot.util.config import read_config_with_sequential_resources
-from pauperformance_bot.util.entities import auto_repr, auto_str
+from pauperformance_bot.util.decorators import auto_repr, auto_str
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
@@ -245,7 +245,6 @@ class ConfigReader:
             for resource in self._read_sequential_resources(config, "resource")
         ]
 
-        logger.debug(f"We should now parse this {config}...")
         return ArchetypeConfig(
             name=config["values"]["name"],
             aliases=self._parse_list_value(config["values"]["aliases"]),

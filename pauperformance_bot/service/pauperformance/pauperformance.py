@@ -2,21 +2,22 @@ import collections
 import glob
 import json
 import os
-import pickle
-import tarfile
 from datetime import datetime
 from pathlib import Path
 from time import sleep
+from typing import Any, Dict, List
 
 from requests.exceptions import HTTPError
 
+import pauperformance_bot
 from pauperformance_bot.constant.arena.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.arena.youtube import YOUTUBE_VIDEO_URL
+from pauperformance_bot.constant.mtg.scryfall import REQUESTS_SLEEP_SECONDS
 from pauperformance_bot.constant.pauperformance.myr import (
     CONFIG_ARCHETYPES_DIR,
     CONFIG_FAMILIES_DIR,
-    LAST_SET_INDEX_FILE,
-    PAUPER_CARDS_INDEX_CACHE_FILE,
+    PAUPER_CARDS_INDEX_CACHE_DIR,
+    SET_INDEX_FILE,
     USA_DATE_FORMAT,
 )
 from pauperformance_bot.constant.pauperformance.pauperformance import (
@@ -69,7 +70,7 @@ class PauperformanceService:
         self.card_index = self._build_card_index()
         self.incremental_card_index = self._build_incremental_card_index()
 
-    def _build_set_index(self, last_set_index_file=LAST_SET_INDEX_FILE):
+    def _build_set_index(self, set_index_file=SET_INDEX_FILE):
         try:
             logger.info("Building Scryfall set index...")
             scryfall_sets = self.scryfall.get_sets()
@@ -84,7 +85,7 @@ class PauperformanceService:
             scryfall_sets = []
 
         logger.info("Building Pauperformance set index...")
-        with open(last_set_index_file, "r") as index_f:
+        with open(set_index_file, "r") as index_f:
             content_str = index_f.read()
             json_set_index = json.loads(
                 content_str,
@@ -95,7 +96,7 @@ class PauperformanceService:
         )
         known_sets = {s["scryfall_code"] for s in set_index.values()}
         p12e_code = max(set_index.keys()) + 1
-        need_to_update_cache = False
+        need_to_update_file = False
         for s in scryfall_sets:
             if s["code"] in known_sets:
                 continue
@@ -105,13 +106,13 @@ class PauperformanceService:
                 "name": s["name"],
                 "date": s["released_at"],
             }
-            need_to_update_cache = True
+            need_to_update_file = True
             p12e_code += 1
         logger.info("Built Pauperformance set index.")
 
-        if need_to_update_cache:
+        if need_to_update_file:
             logger.info("Saving Pauperformance set index...")
-            with open(last_set_index_file, "w") as index_f:
+            with open(set_index_file, "w") as index_f:
                 index_f.write(json.dumps(set_index, indent=4))
             logger.info("Saved Pauperformance set index.")
         return set_index
@@ -119,53 +120,53 @@ class PauperformanceService:
     def _build_card_index(
         self,
         skip_sets=KNOWN_SETS_WITH_NO_PAUPER_CARDS,
-        cards_index_cache_file=PAUPER_CARDS_INDEX_CACHE_FILE,
-    ):
+        cards_index_cache_dir=PAUPER_CARDS_INDEX_CACHE_DIR,
+    ) -> Dict[str, List[Dict[str, Any]]]:
         card_index = {}
-        extracted_file = cards_index_cache_file.rstrip(".tgz")
-        try:
-            logger.debug(
-                f"Trying to load card index from cache: " f"{cards_index_cache_file}"
-            )
-            with tarfile.open(cards_index_cache_file, "r:gz") as tar:
-                tar.extractall(path=os.path.dirname(cards_index_cache_file))
-            with open(extracted_file, "rb") as cache_f:
-                card_index = pickle.load(cache_f)
-                logger.debug(f"Loaded card index from cache: {extracted_file}")
-        except FileNotFoundError:
-            logger.debug("No cache found for card index.")
-
+        os.makedirs(cards_index_cache_dir, exist_ok=True)
         for item in self.set_index.values():
             p12e_code = item["p12e_code"]
-            if p12e_code in card_index:
-                continue  # cached
             if p12e_code in skip_sets:
                 card_index[p12e_code] = []
                 continue
-            scryfall_code = item["scryfall_code"]
-            query = f"set:{scryfall_code} rarity:common legal:pauper"
-            cards = self.scryfall.search_cards(query)
-            card_index[p12e_code] = cards
-            sleep(0.3)
+            set_cache_file = posix_path(cards_index_cache_dir, f"{p12e_code}.json")
+            set_index = []
+            try:
+                with open(set_cache_file, "r", encoding="utf-8") as cache_f:
+                    set_index = json.load(cache_f)
+                    logger.debug(
+                        f"Loaded set index from cache: {set_cache_file} "
+                        f"({len(set_index)} cards)."
+                    )
+            except (FileNotFoundError, json.decoder.JSONDecodeError):
+                logger.debug(f"Missing cache for set {p12e_code}: querying Scryfall...")
+                scryfall_code = item["scryfall_code"]
+                query = f"set:{scryfall_code} rarity:common legal:pauper"
+                set_index = self.scryfall.search_cards(query)
+                if len(set_index) > 0:
+                    with open(set_cache_file, "w") as cache_f:
+                        json.dump(set_index, cache_f)
+                        logger.debug(
+                            f"Saved set index to cache: {set_cache_file} "
+                            f"({len(set_index)} cards)."
+                        )
+                sleep(REQUESTS_SLEEP_SECONDS)
+            finally:
+                card_index[p12e_code] = set_index
         useless_sets = set(i for i in card_index if len(card_index[i]) == 0)
         to_be_removed_sets = useless_sets - set(KNOWN_SETS_WITH_NO_PAUPER_CARDS)
         if len(to_be_removed_sets) > 0:
+            constant_module = pauperformance_bot.__path__[0]
+            constant_file = (
+                pauperformance_bot.constant.pauperformance.pauperformance.__file__
+            )
+            constant_relative_path = constant_file[len(constant_module) + 1 :]
             logger.warning(
                 f"Please, update the list of known sets with no pauper cards "
+                f"({constant_relative_path}) "
                 f"adding: {sorted(list(to_be_removed_sets))}"
             )
 
-        logger.debug(f"Updating cache file {extracted_file}...")
-        with open(extracted_file, "wb") as cache_f:
-            pickle.dump(card_index, cache_f)
-        logger.debug(f"Updated cache file {extracted_file}.")
-        logger.debug(f"Archiving cache file {cards_index_cache_file}...")
-        with tarfile.open(cards_index_cache_file, "w:gz") as tar:
-            tar.add(
-                extracted_file,
-                arcname=os.path.basename(extracted_file),
-            )
-        logger.debug(f"Archived cache file {cards_index_cache_file}.")
         return card_index
 
     def _build_incremental_card_index(
@@ -198,9 +199,14 @@ class PauperformanceService:
             logger.debug(f"Found {len(new_cards)} new cards.")
         to_be_removed_sets = useless_sets - set(INCREMENTAL_CARDS_INDEX_SKIP_SETS)
         if len(to_be_removed_sets) > 0:
+            constant_module = pauperformance_bot.__path__[0]
+            constant_file = (
+                pauperformance_bot.constant.pauperformance.pauperformance.__file__
+            )
+            constant_relative_path = constant_file[len(constant_module) + 1 :]
             logger.warning(
                 f"Please, update the list of known sets to be skipped for the "
-                f"incremental cards index adding: "
+                f"incremental cards index ({constant_relative_path}) adding: "
                 f"{sorted(list(to_be_removed_sets))}"
             )
         return incremental_card_index
@@ -210,7 +216,7 @@ class PauperformanceService:
         for player in self.players:
             if not player.deckstats_id:
                 logger.info(
-                    f"Skipping player {player.name} with no Deckstats " f"account..."
+                    f"Skipping player {player.name} with no Deckstats account..."
                 )
                 continue
             logger.info(f"Processing player {player.name}...")
@@ -246,6 +252,9 @@ class PauperformanceService:
         )
 
     def analyze_cards_frequency(self, archetype_decks):
+        # Note: this method uses archived decks to compute frequent and staples.
+        # An alternative approach is to use a larger pool of classified decks,
+        # by leveraging silver.deckstatistics.
         if len(archetype_decks) < 2:
             return [], []
         lands = set(land["name"] for land in self.scryfall.get_legal_lands())
