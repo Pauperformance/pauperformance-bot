@@ -3,6 +3,7 @@ dev/
 dist/
 
 # Python
+.venv/
 venv/
 *.py[co]
 */__pycache__/
@@ -25,4 +26,5 @@ mypy_result.xml
 
 # Myr
 pauperformance_bot/secrets.py
+pauperformance_bot/p13_secrets.py
 pauperformance_bot/task/dev.py
