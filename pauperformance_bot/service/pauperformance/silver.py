@@ -114,7 +114,9 @@ class SilverService:
         # alternatively, give different weights
         w_sim_main = 3
         w_sim_side = 1
-        sim = (w_sim_main * sim_main + w_sim_side * sim_side) / (w_sim_main + w_sim_side)
+        sim = (w_sim_main * sim_main + w_sim_side * sim_side) / (
+            w_sim_main + w_sim_side
+        )
         logger.debug(f"Computed similarity between decks: {sim}.")
         return sim
 

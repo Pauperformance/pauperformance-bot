@@ -3,14 +3,13 @@ import time
 import requests
 
 from pauperformance_bot.constant.mtg.moxfield import REQUESTS_SLEEP_SECONDS
+from pauperformance_bot.credentials import MOXFIELD_USER_AGENT
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.service.mtg.downloader.abstract import AbstractDeckDownloader
 from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
 from pauperformance_bot.util.decklist_parser import MtgoDeckListParser
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.request import execute_http_request
-from pauperformance_bot.credentials import MOXFIELD_USER_AGENT
-
 
 logger = get_application_logger()
 
