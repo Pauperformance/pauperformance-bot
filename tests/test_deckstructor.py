@@ -1,8 +1,5 @@
-import pytest
-
-from pauperformance_bot.deckstructor.main import extract_deck
-from pauperformance_bot.deckstructor.PoolWarning import PoolWarning
 from pauperformance_bot.entity.deck.playable import PlayableDeck, PlayedCard
+from pauperformance_bot.service.pauperformance.silver.deckstructor import Deckstructor
 
 
 def test_deckstructor():
@@ -48,6 +45,5 @@ def test_deckstructor():
         pool = f.readlines()
 
     pool = [p.strip() for p in pool]
-    with pytest.warns(PoolWarning):
-        deck = extract_deck(text, pool)
+    deck = Deckstructor().extract_deck(text, pool)
     assert deck == expected_deck

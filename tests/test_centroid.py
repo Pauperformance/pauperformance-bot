@@ -1,12 +1,13 @@
 from statistics import mean, stdev, variance
 
-from service.pauperformance.silver.deckstatistics import DeckstatisticsFactory
-
 from pauperformance_bot.service.academy.academy import AcademyService
 from pauperformance_bot.service.academy.data_loader import AcademyDataLoader
 from pauperformance_bot.service.pauperformance.archive.local import LocalArchiveService
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
+)
+from pauperformance_bot.service.pauperformance.silver.deckstatistics import (
+    DeckstatisticsFactory,
 )
 from pauperformance_bot.service.pauperformance.storage.local import LocalStorageService
 from pauperformance_bot.util.log import get_application_logger
@@ -23,7 +24,7 @@ def test_centroid():
     # index = academy.set_index
     # logger.info(index)
     loader = AcademyDataLoader()
-    am = DeckstatisticsFactory(academy, loader).build_metadata_for(archetype)
+    am = DeckstatisticsFactory(academy.scryfall, loader).build_metadata_for(archetype)
     logger.info(am.cards)
     logger.info(f"nr. decks: {am.nr_decks} max: {am.most_played_card}")
     dfq = am.deck_occurrences_ratio()

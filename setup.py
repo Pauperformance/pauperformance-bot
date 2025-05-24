@@ -90,7 +90,7 @@ setup(
     description="Myr",
     long_description=readme,
     long_description_content_type="text/markdown",
-    python_requires=">=3.9",
+    python_requires=">=3.12",
     packages=find_packages(exclude=["tests"]),
     install_requires=read_requirements(os.path.join(_REQUIREMENTS_DIR, "requirements.txt")),
     extras_require={
@@ -113,7 +113,6 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Libraries",
         # "Typing :: Typed",

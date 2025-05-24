@@ -1,5 +1,5 @@
-dropbox<12.0.0
-jinja2<3
+dropbox==11.36.2
+jinja2==2.11.3
 pyquery
 requests
 retrying
