@@ -2,27 +2,27 @@ from statistics import mean, stdev, variance
 
 from pauperformance_bot.service.academy.academy import AcademyService
 from pauperformance_bot.service.academy.data_loader import AcademyDataLoader
-from pauperformance_bot.service.pauperformance.archive.local import LocalArchiveService
+from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
+    MTGGoldfishArchiveService,
+)
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
 from pauperformance_bot.service.pauperformance.silver.deckstatistics import (
     DeckstatisticsFactory,
 )
-from pauperformance_bot.service.pauperformance.storage.local import LocalStorageService
+from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
 
 
 def test_centroid():
-    storage = LocalStorageService()
-    archive = LocalArchiveService()
+    storage = DropboxService()
+    archive = MTGGoldfishArchiveService(storage)
     pauperformance = PauperformanceService(storage, archive)
     academy = AcademyService(pauperformance)
     archetype = "Burn"
-    # index = academy.set_index
-    # logger.info(index)
     loader = AcademyDataLoader()
     am = DeckstatisticsFactory(academy.scryfall, loader).build_metadata_for(archetype)
     logger.info(am.cards)
@@ -54,4 +54,5 @@ def test_centroid():
         )
     )
     logger.info(f"staples(cards): {s_card_fqs}")
-    assert True
+    assert "Mountain" in s_card_fqs
+    assert "Lightning Bolt" in s_card_fqs
