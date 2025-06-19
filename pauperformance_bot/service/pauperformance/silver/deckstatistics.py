@@ -124,7 +124,7 @@ class DeckstatisticsFactory:
             # build a lookup dict for card stats
             for card in pd.mainboard + pd.sideboard:
                 try:
-                    self._scryfall.get_card_named(card.card_name, fuzzy=False)
+                    self._scryfall.get_card_named(card.card_name)
                 except CardNotFoundException:
                     logger.error(f"Card not found in scryfall {card.card_name}")
                     continue

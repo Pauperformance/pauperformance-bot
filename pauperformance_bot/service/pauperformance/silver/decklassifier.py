@@ -330,7 +330,15 @@ class Decklassifier:
                 try:
                     name, email, deck = row
                 except ValueError:
-                    name, email, deck, _, _ = row
+                    # try:
+                    #    name, email, deck, _, _ = row
+                    # except ValueError:
+                    (
+                        _,
+                        name,
+                        email,
+                        deck,
+                    ) = row
                 logger.debug(f"{name}: {deck}")
                 deck_id = deck.split("/")[-1]
                 cached_deck_file = f"moxfield_{deck_id}.json"

@@ -1,0 +1,29 @@
+1 Ash Barrens
+2 Bojuka Bog
+4 Bonder's Ornament
+4 Cast Down
+4 Castigate
+4 Chainer's Edict
+1 Crypt Rats
+2 Dead Weight
+2 Duress
+4 Guardian of the Guildpact
+1 Kabira Crossroads
+3 Night's Whisper
+4 Orzhov Basilica
+4 Pestilence
+1 Plains
+3 Pristine Talisman
+2 Radiant Fountain
+4 Scoured Barrens
+2 Silverquill Campus
+1 Suffocating Fumes
+5 Swamp
+2 Thorn of the Black Rose
+
+1 Crypt Rats
+2 Divest
+2 Duress
+4 Dust to Dust
+4 Lone Missionary
+2 Revoke Existence

@@ -150,7 +150,7 @@ class AcademyDataExporter:
             )
         logger.info(f"Exported decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}.")
 
-    # DRAFT
+    # TODO: clean up this: below it's just a draft
     def export_intel_cards(self):
         logger.info(
             f"Exporting cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}..."
@@ -164,7 +164,7 @@ class AcademyDataExporter:
                 if played_card.card_name not in cards_intel:
                     cards_intel[played_card.card_name] = {"archetypes": set()}
                 cards_intel[played_card.card_name]["archetypes"].add(arch)
-        # TODO enrich card data
+        # TODO: enrich card data
         for card_name, card_data in cards_intel.items():
             safe_dump_json_to_file(
                 self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR,

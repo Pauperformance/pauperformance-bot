@@ -38,7 +38,7 @@ def main(input_file, output_file):
 if __name__ == "__main__":
     main(
         posix_path(
-            TOP_PATH, "dev", "Dutch Pauper League – 6° Leg – 2024 - Command Tower.csv"
+            TOP_PATH, "dev", "Dutch Pauper League – 2° Leg – 2025 - Command Tower.csv"
         ),
-        posix_path(TOP_PATH, "dev", "dpl_meta.json"),
+        posix_path(TOP_PATH, "dev", "dpl_latest_meta.json"),
     )

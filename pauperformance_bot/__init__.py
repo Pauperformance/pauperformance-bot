@@ -1,3 +1,3 @@
-import pkg_resources
+from importlib.metadata import version
 
-version = pkg_resources.get_distribution(__package__).version
+version = version("pauperformance_bot")

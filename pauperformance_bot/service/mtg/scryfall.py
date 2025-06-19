@@ -33,7 +33,6 @@ class ScryfallService:
         self,
         exact_card_name,
         cards_cache_dir=SCRYFALL_CARDS_CACHE_DIR,
-        fuzzy=False,  # TODO: check why fuzzy is needed and if it can mess up with cache
     ):
         try:
             with open(
@@ -47,10 +46,7 @@ class ScryfallService:
             logger.debug(f"No cache found for card {exact_card_name}.")
             url = f"{self.endpoint}/cards/named"
             method = requests.get
-            if fuzzy:
-                params = {"fuzzy": exact_card_name}
-            else:
-                params = {"exact": exact_card_name}
+            params = {"exact": exact_card_name}
             method = partial(method, params=params)
             try:
                 response = execute_http_request(method, url)
