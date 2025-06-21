@@ -37,11 +37,11 @@ def main(input_file, output_file):
 
 def dpl_classifier(environ, start_response):
     """Simplest possible application object"""
-    data = b'Hello, World!\n'
-    status = '200 OK'
+    data = b"Hello, World!\n"
+    status = "200 OK"
     response_headers = [
-        ('Content-type', 'text/plain'),
-        ('Content-Length', str(len(data)))
+        ("Content-type", "text/plain"),
+        ("Content-Length", str(len(data))),
     ]
     start_response(status, response_headers)
     return iter([data])
@@ -49,8 +49,6 @@ def dpl_classifier(environ, start_response):
 
 if __name__ == "__main__":
     main(
-        posix_path(
-            TOP_PATH, "dev", "Dutch Pauper League – 2° Leg – 2025 - Command Tower.csv"
-        ),
-        posix_path(TOP_PATH, "dev", "dpl_latest_meta.json"),
+        posix_path(TOP_PATH, "dev", "decks-all-tournaments.json"),
+        posix_path(TOP_PATH, "dev", "decks-all-tournaments-classified.json"),
     )

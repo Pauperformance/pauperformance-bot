@@ -1,5 +1,6 @@
 import csv
 import itertools
+import json
 import os
 import time
 from collections import defaultdict
@@ -19,7 +20,10 @@ from pauperformance_bot.entity.api.miscellanea import (
     MetaShare,
 )
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
-from pauperformance_bot.entity.deck.playable import PlayableDeck
+from pauperformance_bot.entity.deck.playable import (
+    PlayableDeck,
+    parse_playable_deck_from_lines,
+)
 from pauperformance_bot.service.mtg.downloader.service import DeckDownloaderService
 from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
 from pauperformance_bot.service.pauperformance.pauperformance import (
@@ -320,58 +324,35 @@ class Decklassifier:
         return Metagame(meta_shares=grouped_meta_shares)
 
     def get_dpl_metagame(self, leg_file, output_file):
-        logger.info(f"Getting DPL meta from {leg_file}...")
+        logger.info(f"Getting DPL decks from {leg_file}...")
         dpl_decks = []
 
-        with open(leg_file, newline="") as csvfile:
-            reader = csv.reader(csvfile, delimiter=",")
-            next(reader, None)  # skip header
-            for row in reader:
-                try:
-                    name, email, deck = row
-                except ValueError:
-                    # try:
-                    #    name, email, deck, _, _ = row
-                    # except ValueError:
-                    (
-                        _,
-                        name,
-                        email,
-                        deck,
-                    ) = row
-                logger.debug(f"{name}: {deck}")
-                deck_id = deck.split("/")[-1]
-                cached_deck_file = f"moxfield_{deck_id}.json"
-                cached_deck_path = posix_path(HOME_CACHE_DIR, cached_deck_file)
-                if os.path.isfile(cached_deck_path):
-                    logger.debug("Loading deck from cache...")
-                    playable_deck = load_json_from_file(cached_deck_path)
-                else:
-                    logger.debug("Downloading deck from Moxfield...")
-                    playable_deck = DeckDownloaderService.from_url(deck)
-                    time.sleep(3)  # prevent Moxfield soft-ban
-                    safe_dump_json_to_file(
-                        HOME_CACHE_DIR, cached_deck_file, playable_deck
-                    )
-                most_similar_archetype, highest_similarity = self.classify_deck(
-                    playable_deck
+        decks = json.load(open(leg_file))
+        for deck in decks:
+            deck_id = deck["id"]
+            lines = [
+                f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["mainboard"]
+            ]
+            lines += [""]
+            lines += [
+                f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["sideboard"]
+            ]
+            playable_deck = parse_playable_deck_from_lines(lines)
+            most_similar_archetype, highest_similarity = self.classify_deck(
+                playable_deck
+            )
+            logger.info(f"{deck} | {most_similar_archetype} {highest_similarity}")
+            if highest_similarity < 0.76:
+                most_similar_archetype = None
+            dpl_decks.append(
+                DPLDeck(
+                    identifier=deck_id,
+                    archetype=(
+                        most_similar_archetype.name if most_similar_archetype else None
+                    ),
+                    accuracy=float(highest_similarity),
                 )
-                logger.info(f"{deck} | {most_similar_archetype} {highest_similarity}")
-                if highest_similarity < 0.76:
-                    most_similar_archetype = None
-                dpl_decks.append(
-                    DPLDeck(
-                        name=name,
-                        email=email,
-                        deck_url=deck,
-                        archetype=(
-                            most_similar_archetype.name
-                            if most_similar_archetype
-                            else None
-                        ),
-                        accuracy=float(highest_similarity),
-                    )
-                )
+            )
         dpl_meta = DPLMeta(
             name=leg_file,
             dpl_decks=dpl_decks,
