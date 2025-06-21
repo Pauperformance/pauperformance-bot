@@ -1,14 +1,9 @@
-import csv
 import itertools
-import json
-import os
-import time
 from collections import defaultdict
 from typing import DefaultDict, Tuple
 
 from scipy import spatial
 
-from pauperformance_bot.constant.pauperformance.myr import HOME_CACHE_DIR
 from pauperformance_bot.constant.pauperformance.silver import (
     MAINBOARD_WEIGHT,
     SIDEBOARD_WEIGHT,
@@ -24,18 +19,12 @@ from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.service.mtg.downloader.service import DeckDownloaderService
 from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.math import truncate
-from pauperformance_bot.util.path import (
-    load_json_from_file,
-    posix_path,
-    safe_dump_json_to_file,
-)
 
 logger = get_application_logger()
 
@@ -323,11 +312,8 @@ class Decklassifier:
             )
         return Metagame(meta_shares=grouped_meta_shares)
 
-    def get_dpl_metagame(self, leg_file, output_file):
-        logger.info(f"Getting DPL decks from {leg_file}...")
+    def get_dpl_metagame(self, decks, name="DPL metagame"):
         dpl_decks = []
-
-        decks = json.load(open(leg_file))
         for deck in decks:
             deck_id = deck["id"]
             lines = [
@@ -354,7 +340,7 @@ class Decklassifier:
                 )
             )
         dpl_meta = DPLMeta(
-            name=leg_file,
+            name=name,
             dpl_decks=dpl_decks,
         )
         logger.info(dpl_meta)
@@ -376,10 +362,4 @@ class Decklassifier:
         print()
         for k, v in sorted(game_types.items()):
             print(f"{v} {k}")
-        try:
-            out_dir, out_file = output_file.rsplit(os.path.sep, maxsplit=1)
-        except ValueError:
-            out_dir = os.getcwd()
-            out_file = output_file
-        safe_dump_json_to_file(out_dir, out_file, dpl_meta)
-        logger.info(f"Stored DPL meta in {output_file}...")
+        return dpl_meta
