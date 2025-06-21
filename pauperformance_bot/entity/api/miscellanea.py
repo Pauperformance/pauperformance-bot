@@ -80,18 +80,10 @@ class Metagame:
 @auto_repr
 @auto_str
 class DPLDeck:
-    def __init__(
-        self, *, name: str, email: str, deck_url: str, archetype: str, accuracy: float
-    ):
-        self.name = name
-        self.email = email
-        self.deck_url = deck_url
+    def __init__(self, *, identifier: str, archetype: str, accuracy: float):
+        self.identifier = identifier
         self.archetype = archetype
         self.accuracy = accuracy
-
-    @property
-    def identifier(self) -> str:
-        return self.email
 
     def __hash__(self):
         return hash(self.identifier)
