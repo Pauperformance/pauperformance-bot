@@ -22,7 +22,7 @@ from pauperformance_bot.util.path import (
 logger = get_application_logger()
 
 
-def generate_dpl_meta(data, name="DPL metagame"):
+def get_dpl_classifier():
     # from pauperformance_bot.service.pauperformance.archive.local import (
     #     LocalArchiveService
     # )
@@ -40,8 +40,14 @@ def generate_dpl_meta(data, name="DPL metagame"):
     known_decks, _ = exporter._load_mtggoldfish_tournament_training_data()
     other_known_decks, _ = exporter._load_dpl_training_data()
     known_decks += other_known_decks
-    silver = Decklassifier(pauperformance, known_decks)
-    return silver.get_dpl_metagame(data, name=name)
+    return Decklassifier(pauperformance, known_decks)
+
+
+DPL_SILVER = get_dpl_classifier()
+
+
+def generate_dpl_meta(data, name="DPL metagame"):
+    return DPL_SILVER.get_dpl_metagame(data, name=name)
 
 
 def main(input_file, output_file):
