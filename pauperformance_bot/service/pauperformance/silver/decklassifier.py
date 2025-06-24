@@ -317,7 +317,9 @@ class Decklassifier:
         lines = [f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["mainboard"]]
         lines += [""]
         lines += [f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["sideboard"]]
-        playable_deck = parse_playable_deck_from_lines(lines)
+        playable_deck = parse_playable_deck_from_lines(
+            lines, raise_error_if_invalid=False
+        )
         return deck_id, playable_deck
 
     def get_dpl_metagame(self, decks, name="DPL metagame"):

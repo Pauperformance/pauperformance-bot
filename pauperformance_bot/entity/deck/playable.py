@@ -64,9 +64,10 @@ class PlayableDeck:
         self,
         mainboard: list[PlayedCard],
         sideboard: list[PlayedCard],
+        raise_error_if_invalid=True,
     ):
         valid, errors = PlayableDeck.validate_boards(mainboard, sideboard)
-        if not valid:
+        if raise_error_if_invalid and not valid:
             raise ValueError("\n".join(errors))
         self.mainboard: list[PlayedCard] = mainboard
         self.sideboard: list[PlayedCard] = sideboard
@@ -145,7 +146,7 @@ class PlayableDeck:
         return True
 
 
-def parse_playable_deck_from_lines(lines) -> PlayableDeck:
+def parse_playable_deck_from_lines(lines, raise_error_if_invalid=True) -> PlayableDeck:
     separator = lines.index("")
     maindeck = lines[:separator]
     maindeck.sort(key=lambda pc: pc.split(" ", maxsplit=1)[1])
@@ -154,6 +155,7 @@ def parse_playable_deck_from_lines(lines) -> PlayableDeck:
     return PlayableDeck(
         [PlayedCard(*(line.split(" ", maxsplit=1))) for line in maindeck],
         [PlayedCard(*(line.split(" ", maxsplit=1))) for line in sideboard],
+        raise_error_if_invalid,
     )
 
 
