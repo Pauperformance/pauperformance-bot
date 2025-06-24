@@ -281,8 +281,8 @@ class AcademyDataExporter:
                 video,
             )
 
-    def _load_mtggoldfish_tournament_training_data(
-        self,
+    def _load_training_data(
+        self, training_file, assets_data_deck_dir
     ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
         # Note: this method assumes all the decks in the training data are available in
         # the academy as .txt to load and parse.
@@ -290,9 +290,6 @@ class AcademyDataExporter:
             self.pauperformance.config_reader.list_archetypes()
         )
         known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = []
-        training_file = (
-            self.config_reader.myr_file_system.MTGGOLDFISH_DECK_TRAINING_DATA
-        )
         training_data = [
             tuple(line.split(","))
             for line in open(training_file, "r").read().splitlines()
@@ -300,7 +297,7 @@ class AcademyDataExporter:
         ]
         for deck_id, archetype_name in training_data:
             playable_deck_path = posix_path(
-                self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
+                assets_data_deck_dir,
                 f"{deck_id}.txt",
             )
             playable_deck: PlayableDeck = parse_playable_deck_from_lines(
@@ -317,6 +314,22 @@ class AcademyDataExporter:
                 raise
         # TODO: remove deck_id as soon as manual classification is done
         return known_decks, deck_id
+
+    def _load_mtggoldfish_tournament_training_data(
+        self,
+    ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
+        return self._load_training_data(
+            self.config_reader.myr_file_system.MTGGOLDFISH_DECK_TRAINING_DATA,
+            self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
+        )
+
+    def _load_dpl_training_data(
+        self,
+    ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
+        return self._load_training_data(
+            self.config_reader.myr_file_system.DPL_DECK_TRAINING_DATA,
+            self.academy_fs.ASSETS_DATA_DECK_DPL_DIR,
+        )
 
     def export_intel_decks(self):
         logger.info(

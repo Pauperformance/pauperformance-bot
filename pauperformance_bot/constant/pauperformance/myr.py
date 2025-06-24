@@ -122,6 +122,10 @@ class MyrFileSystem:
             self.RESOURCES_SILVER_TRAINING_DATA_ARCHETYPES_DIR,
             "mtggoldfish_tournament_decks.csv",
         )
+        self.DPL_DECK_TRAINING_DATA: str = posix_path(
+            self.RESOURCES_SILVER_TRAINING_DATA_ARCHETYPES_DIR,
+            "dpl_decks.csv",
+        )
 
 
 MYR_FILE_SYSTEM = MyrFileSystem()

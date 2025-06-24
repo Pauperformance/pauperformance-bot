@@ -38,6 +38,8 @@ def generate_dpl_meta(data, name="DPL metagame"):
     exporter = AcademyDataExporter(pauperformance)
     # TODO: improve
     known_decks, _ = exporter._load_mtggoldfish_tournament_training_data()
+    other_known_decks, _ = exporter._load_dpl_training_data()
+    known_decks += other_known_decks
     silver = Decklassifier(pauperformance, known_decks)
     return silver.get_dpl_metagame(data, name=name)
 
@@ -53,7 +55,6 @@ def main(input_file, output_file):
         out_file = output_file
     safe_dump_json_to_file(out_dir, out_file, dpl_meta)
     logger.info(f"Stored DPL meta in {output_file}...")
-    return dpl_meta
 
 
 def dpl_classifier(environ, start_response):
