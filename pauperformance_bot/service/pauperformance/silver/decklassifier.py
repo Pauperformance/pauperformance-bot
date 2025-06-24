@@ -312,18 +312,18 @@ class Decklassifier:
             )
         return Metagame(meta_shares=grouped_meta_shares)
 
+    def parse_dpl_deck(self, deck):
+        deck_id = deck["id"]
+        lines = [f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["mainboard"]]
+        lines += [""]
+        lines += [f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["sideboard"]]
+        playable_deck = parse_playable_deck_from_lines(lines)
+        return deck_id, playable_deck
+
     def get_dpl_metagame(self, decks, name="DPL metagame"):
         dpl_decks = []
         for deck in decks:
-            deck_id = deck["id"]
-            lines = [
-                f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["mainboard"]
-            ]
-            lines += [""]
-            lines += [
-                f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["sideboard"]
-            ]
-            playable_deck = parse_playable_deck_from_lines(lines)
+            deck_id, playable_deck = self.parse_dpl_deck(deck)
             most_similar_archetype, highest_similarity = self.classify_deck(
                 playable_deck
             )
