@@ -5674,5 +5674,401 @@
         "scryfall_code": "fdn",
         "name": "Foundations",
         "date": "2024-11-15"
+    },
+    "947": {
+        "p12e_code": 947,
+        "scryfall_code": "jp1",
+        "name": "Hobby Japan Promos",
+        "date": "2002-07-01"
+    },
+    "948": {
+        "p12e_code": 948,
+        "scryfall_code": "dci",
+        "name": "DCI Promos",
+        "date": "2006-01-01"
+    },
+    "949": {
+        "p12e_code": 949,
+        "scryfall_code": "unk",
+        "name": "Unknown Event",
+        "date": "2023-02-15"
+    },
+    "950": {
+        "p12e_code": 950,
+        "scryfall_code": "altc",
+        "name": "Tales of Middle-earth Scene Box",
+        "date": "2023-11-04"
+    },
+    "951": {
+        "p12e_code": 951,
+        "scryfall_code": "smh3",
+        "name": "Modern Horizons 3 Substitute Cards",
+        "date": "2024-06-14"
+    },
+    "952": {
+        "p12e_code": 952,
+        "scryfall_code": "aacr",
+        "name": "Assassin's Creed Art Series",
+        "date": "2024-07-05"
+    },
+    "953": {
+        "p12e_code": 953,
+        "scryfall_code": "macr",
+        "name": "Assassin's Creed Minigames",
+        "date": "2024-07-05"
+    },
+    "954": {
+        "p12e_code": 954,
+        "scryfall_code": "ablb",
+        "name": "Bloomburrow Art Series",
+        "date": "2024-08-02"
+    },
+    "955": {
+        "p12e_code": 955,
+        "scryfall_code": "mb2",
+        "name": "Mystery Booster 2",
+        "date": "2024-08-02"
+    },
+    "956": {
+        "p12e_code": 956,
+        "scryfall_code": "pblb",
+        "name": "Bloomburrow Promos",
+        "date": "2024-08-02"
+    },
+    "957": {
+        "p12e_code": 957,
+        "scryfall_code": "yblb",
+        "name": "Alchemy: Bloomburrow",
+        "date": "2024-08-20"
+    },
+    "958": {
+        "p12e_code": 958,
+        "scryfall_code": "adsk",
+        "name": "Duskmourn: House of Horror Art Series",
+        "date": "2024-09-27"
+    },
+    "959": {
+        "p12e_code": 959,
+        "scryfall_code": "pdsk",
+        "name": "Duskmourn: House of Horror Promos",
+        "date": "2024-09-27"
+    },
+    "960": {
+        "p12e_code": 960,
+        "scryfall_code": "tdsc",
+        "name": "Duskmourn Commander Tokens",
+        "date": "2024-09-27"
+    },
+    "961": {
+        "p12e_code": 961,
+        "scryfall_code": "tdsk",
+        "name": "Duskmourn: House of Horror Tokens",
+        "date": "2024-09-27"
+    },
+    "962": {
+        "p12e_code": 962,
+        "scryfall_code": "ydsk",
+        "name": "Alchemy: Duskmourn",
+        "date": "2024-10-15"
+    },
+    "963": {
+        "p12e_code": 963,
+        "scryfall_code": "pltc",
+        "name": "Tales of Middle-earth Deluxe Commander Kit",
+        "date": "2024-10-16"
+    },
+    "964": {
+        "p12e_code": 964,
+        "scryfall_code": "afdn",
+        "name": "Foundations Art Series",
+        "date": "2024-11-15"
+    },
+    "965": {
+        "p12e_code": 965,
+        "scryfall_code": "fdc",
+        "name": "Foundations Commander",
+        "date": "2024-11-15"
+    },
+    "966": {
+        "p12e_code": 966,
+        "scryfall_code": "ffdn",
+        "name": "Foundations Front Cards",
+        "date": "2024-11-15"
+    },
+    "967": {
+        "p12e_code": 967,
+        "scryfall_code": "fj25",
+        "name": "Foundations Jumpstart Front Cards",
+        "date": "2024-11-15"
+    },
+    "968": {
+        "p12e_code": 968,
+        "scryfall_code": "j25",
+        "name": "Foundations Jumpstart",
+        "date": "2024-11-15"
+    },
+    "969": {
+        "p12e_code": 969,
+        "scryfall_code": "pfdn",
+        "name": "Foundations Promos",
+        "date": "2024-11-15"
+    },
+    "970": {
+        "p12e_code": 970,
+        "scryfall_code": "tfdn",
+        "name": "Foundations Tokens",
+        "date": "2024-11-15"
+    },
+    "971": {
+        "p12e_code": 971,
+        "scryfall_code": "pio",
+        "name": "Pioneer Masters",
+        "date": "2024-12-10"
+    },
+    "972": {
+        "p12e_code": 972,
+        "scryfall_code": "pw25",
+        "name": "Wizards Play Network 2025",
+        "date": "2025-01-01"
+    },
+    "973": {
+        "p12e_code": 973,
+        "scryfall_code": "pspl",
+        "name": "Spotlight Series",
+        "date": "2025-01-03"
+    },
+    "974": {
+        "p12e_code": 974,
+        "scryfall_code": "ainr",
+        "name": "Innistrad Remastered Art Series",
+        "date": "2025-01-24"
+    },
+    "975": {
+        "p12e_code": 975,
+        "scryfall_code": "inr",
+        "name": "Innistrad Remastered",
+        "date": "2025-01-24"
+    },
+    "976": {
+        "p12e_code": 976,
+        "scryfall_code": "tinr",
+        "name": "Innistrad Remastered Tokens",
+        "date": "2025-01-24"
+    },
+    "977": {
+        "p12e_code": 977,
+        "scryfall_code": "pf25",
+        "name": "MagicFest 2025",
+        "date": "2025-02-03"
+    },
+    "978": {
+        "p12e_code": 978,
+        "scryfall_code": "pjsc",
+        "name": "Japan Standard Cup",
+        "date": "2025-02-09"
+    },
+    "979": {
+        "p12e_code": 979,
+        "scryfall_code": "adft",
+        "name": "Aetherdrift Art Series",
+        "date": "2025-02-14"
+    },
+    "980": {
+        "p12e_code": 980,
+        "scryfall_code": "dft",
+        "name": "Aetherdrift",
+        "date": "2025-02-14"
+    },
+    "981": {
+        "p12e_code": 981,
+        "scryfall_code": "drc",
+        "name": "Aetherdrift Commander",
+        "date": "2025-02-14"
+    },
+    "982": {
+        "p12e_code": 982,
+        "scryfall_code": "pdft",
+        "name": "Aetherdrift Promos",
+        "date": "2025-02-14"
+    },
+    "983": {
+        "p12e_code": 983,
+        "scryfall_code": "pl25",
+        "name": "Year of the Snake 2025",
+        "date": "2025-02-14"
+    },
+    "984": {
+        "p12e_code": 984,
+        "scryfall_code": "tdft",
+        "name": "Aetherdrift Tokens",
+        "date": "2025-02-14"
+    },
+    "985": {
+        "p12e_code": 985,
+        "scryfall_code": "tdrc",
+        "name": "Aetherdrift Commander Tokens",
+        "date": "2025-02-14"
+    },
+    "986": {
+        "p12e_code": 986,
+        "scryfall_code": "pssc",
+        "name": "Secret Lair Showcase Planes",
+        "date": "2025-02-21"
+    },
+    "987": {
+        "p12e_code": 987,
+        "scryfall_code": "ydft",
+        "name": "Alchemy: Aetherdrift",
+        "date": "2025-03-04"
+    },
+    "988": {
+        "p12e_code": 988,
+        "scryfall_code": "plg25",
+        "name": "Love Your LGS 2025",
+        "date": "2025-03-26"
+    },
+    "989": {
+        "p12e_code": 989,
+        "scryfall_code": "atdm",
+        "name": "Tarkir: Dragonstorm Art Series",
+        "date": "2025-04-11"
+    },
+    "990": {
+        "p12e_code": 990,
+        "scryfall_code": "ptdm",
+        "name": "Tarkir: Dragonstorm Promos",
+        "date": "2025-04-11"
+    },
+    "991": {
+        "p12e_code": 991,
+        "scryfall_code": "tdc",
+        "name": "Tarkir: Dragonstorm Commander",
+        "date": "2025-04-11"
+    },
+    "992": {
+        "p12e_code": 992,
+        "scryfall_code": "tdm",
+        "name": "Tarkir: Dragonstorm",
+        "date": "2025-04-11"
+    },
+    "993": {
+        "p12e_code": 993,
+        "scryfall_code": "ttdc",
+        "name": "Tarkir: Dragonstorm Commander Tokens",
+        "date": "2025-04-11"
+    },
+    "994": {
+        "p12e_code": 994,
+        "scryfall_code": "ttdm",
+        "name": "Tarkir: Dragonstorm Tokens",
+        "date": "2025-04-11"
+    },
+    "995": {
+        "p12e_code": 995,
+        "scryfall_code": "ytdm",
+        "name": "Alchemy: Tarkir",
+        "date": "2025-04-29"
+    },
+    "996": {
+        "p12e_code": 996,
+        "scryfall_code": "afin",
+        "name": "Final Fantasy Art Series",
+        "date": "2025-06-13"
+    },
+    "997": {
+        "p12e_code": 997,
+        "scryfall_code": "fca",
+        "name": "Final Fantasy: Through the Ages",
+        "date": "2025-06-13"
+    },
+    "998": {
+        "p12e_code": 998,
+        "scryfall_code": "fic",
+        "name": "Final Fantasy Commander",
+        "date": "2025-06-13"
+    },
+    "999": {
+        "p12e_code": 999,
+        "scryfall_code": "fin",
+        "name": "Final Fantasy",
+        "date": "2025-06-13"
+    },
+    "1000": {
+        "p12e_code": 1000,
+        "scryfall_code": "pfin",
+        "name": "Final Fantasy Promos",
+        "date": "2025-06-13"
+    },
+    "1001": {
+        "p12e_code": 1001,
+        "scryfall_code": "pss5",
+        "name": "FIN Standard Showdown",
+        "date": "2025-06-13"
+    },
+    "1002": {
+        "p12e_code": 1002,
+        "scryfall_code": "rfin",
+        "name": "Final Fantasy Regional Promos",
+        "date": "2025-06-13"
+    },
+    "1003": {
+        "p12e_code": 1003,
+        "scryfall_code": "tfic",
+        "name": "Final Fantasy Commander Tokens",
+        "date": "2025-06-13"
+    },
+    "1004": {
+        "p12e_code": 1004,
+        "scryfall_code": "tfin",
+        "name": "Final Fantasy Tokens",
+        "date": "2025-06-13"
+    },
+    "1005": {
+        "p12e_code": 1005,
+        "scryfall_code": "eoe",
+        "name": "Edge of Eternities",
+        "date": "2025-08-01"
+    },
+    "1006": {
+        "p12e_code": 1006,
+        "scryfall_code": "mar",
+        "name": "Marvel Universe",
+        "date": "2025-09-26"
+    },
+    "1007": {
+        "p12e_code": 1007,
+        "scryfall_code": "spe",
+        "name": "Marvel's Spider-Man Eternal",
+        "date": "2025-09-26"
+    },
+    "1008": {
+        "p12e_code": 1008,
+        "scryfall_code": "spm",
+        "name": "Marvel's Spider-Man",
+        "date": "2025-09-26"
+    },
+    "1009": {
+        "p12e_code": 1009,
+        "scryfall_code": "tspm",
+        "name": "Marvel's Spider-Man Tokens",
+        "date": "2025-09-26"
+    },
+    "1010": {
+        "p12e_code": 1010,
+        "scryfall_code": "eoc",
+        "name": "Edge of Eternities Commander",
+        "date": "2025-08-01"
+    },
+    "1011": {
+        "p12e_code": 1011,
+        "scryfall_code": "eos",
+        "name": "Edge of Eternities: Stellar Sights",
+        "date": "2025-08-01"
+    },
+    "1012": {
+        "p12e_code": 1012,
+        "scryfall_code": "tla",
+        "name": "Avatar: The Last Airbender",
+        "date": "2025-11-21"
     }
 }

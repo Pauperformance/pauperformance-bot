@@ -293,7 +293,7 @@ class AcademyDataExporter:
         training_data = [
             tuple(line.split(","))
             for line in open(training_file, "r").read().splitlines()
-            if line != ""
+            if line != "" and not line.startswith("#")
         ]
         for deck_id, archetype_name in training_data:
             playable_deck_path = posix_path(
