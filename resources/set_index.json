@@ -6070,5 +6070,11 @@
         "scryfall_code": "tla",
         "name": "Avatar: The Last Airbender",
         "date": "2025-11-21"
+    },
+    "1013": {
+        "p12e_code": 1013,
+        "scryfall_code": "pa1",
+        "name": "Pioneer Anthology 1",
+        "date": "2025-05-05"
     }
 }
