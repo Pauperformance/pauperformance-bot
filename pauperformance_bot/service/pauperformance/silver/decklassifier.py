@@ -336,7 +336,9 @@ class Decklassifier:
                 DPLDeck(
                     identifier=deck_id,
                     archetype=(
-                        most_similar_archetype.name if most_similar_archetype else None
+                        most_similar_archetype.name
+                        if most_similar_archetype
+                        else "Brew"
                     ),
                     accuracy=float(highest_similarity),
                 )
