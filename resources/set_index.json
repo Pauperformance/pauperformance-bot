@@ -6076,5 +6076,23 @@
         "scryfall_code": "pa1",
         "name": "Pioneer Anthology 1",
         "date": "2025-05-05"
+    },
+    "1014": {
+        "p12e_code": 1014,
+        "scryfall_code": "teoc",
+        "name": "Edge of Eternities Commander Tokens",
+        "date": "2025-08-01"
+    },
+    "1015": {
+        "p12e_code": 1015,
+        "scryfall_code": "teoe",
+        "name": "Edge of Eternities Tokens",
+        "date": "2025-08-01"
+    },
+    "1016": {
+        "p12e_code": 1016,
+        "scryfall_code": "mltr",
+        "name": "The Lord of the Rings: Tales of Middle-earth Minigames",
+        "date": "2023-06-23"
     }
 }
