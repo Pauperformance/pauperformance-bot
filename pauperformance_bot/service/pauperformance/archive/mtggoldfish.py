@@ -242,6 +242,9 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             headers=NO_COOKIE_HEADER,
             params=params,
         )
+        if response.status_code == 400 and "Invalid page number" in response.text:
+            # reached end of pagination: no more decks
+            return []
         if response.status_code != 200:
             raise MTGGoldfishException(f"Failed to list decks for {self.email}")
         logger.debug(f"Parsing page with decks for {self.email}...")
