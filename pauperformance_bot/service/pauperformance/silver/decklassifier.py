@@ -5,6 +5,7 @@ from typing import DefaultDict, Tuple
 from scipy import spatial
 
 from pauperformance_bot.constant.pauperformance.silver import (
+    BREW_CLASSIFICATION_THRESHOLD,
     MAINBOARD_WEIGHT,
     SIDEBOARD_WEIGHT,
 )
@@ -317,21 +318,29 @@ class Decklassifier:
         lines = [f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["mainboard"]]
         lines += [""]
         lines += [f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["sideboard"]]
+        lines += [""]
         playable_deck = parse_playable_deck_from_lines(
             lines, raise_error_if_invalid=False
         )
         return deck_id, playable_deck
 
-    def get_dpl_metagame(self, decks, name="DPL metagame"):
+    def get_dpl_metagame(
+        self,
+        decks,
+        name="DPL metagame",
+        brew_threshold=BREW_CLASSIFICATION_THRESHOLD,
+        learn_on_the_fly=True,
+    ):
         dpl_decks = []
         for deck in decks:
             deck_id, playable_deck = self.parse_dpl_deck(deck)
             most_similar_archetype, highest_similarity = self.classify_deck(
                 playable_deck
             )
-            logger.info(f"{deck} | {most_similar_archetype} {highest_similarity}")
-            if highest_similarity < 0.76:
+            if highest_similarity < brew_threshold:
                 most_similar_archetype = None
+            elif learn_on_the_fly:
+                self.known_decks.append((playable_deck, most_similar_archetype))
             dpl_decks.append(
                 DPLDeck(
                     identifier=deck_id,
