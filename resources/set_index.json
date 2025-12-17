@@ -6094,5 +6094,227 @@
         "scryfall_code": "mltr",
         "name": "The Lord of the Rings: Tales of Middle-earth Minigames",
         "date": "2023-06-23"
+    },
+    "1017": {
+        "p12e_code": 1017,
+        "scryfall_code": "oafr",
+        "name": "Forgotten Realms Oversized Cards",
+        "date": "2021-07-23"
+    },
+    "1018": {
+        "p12e_code": 1018,
+        "scryfall_code": "oclb",
+        "name": "Battle for Baldur's Gate Oversized Cards",
+        "date": "2022-06-10"
+    },
+    "1019": {
+        "p12e_code": 1019,
+        "scryfall_code": "punk",
+        "name": "Black Lotus Unknown Planechase",
+        "date": "2024-02-24"
+    },
+    "1020": {
+        "p12e_code": 1020,
+        "scryfall_code": "wfin",
+        "name": "FIN Asia WPN Promo Tokens",
+        "date": "2025-06-13"
+    },
+    "1021": {
+        "p12e_code": 1021,
+        "scryfall_code": "aeoe",
+        "name": "Edge of Eternities Art Series",
+        "date": "2025-08-01"
+    },
+    "1022": {
+        "p12e_code": 1022,
+        "scryfall_code": "pbig",
+        "name": "The Big Score Promos",
+        "date": "2025-08-01"
+    },
+    "1023": {
+        "p12e_code": 1023,
+        "scryfall_code": "peoe",
+        "name": "Edge of Eternities Promos",
+        "date": "2025-08-01"
+    },
+    "1024": {
+        "p12e_code": 1024,
+        "scryfall_code": "aa1",
+        "name": "Arena Anthology 1",
+        "date": "2025-08-19"
+    },
+    "1025": {
+        "p12e_code": 1025,
+        "scryfall_code": "aa2",
+        "name": "Arena Anthology 2",
+        "date": "2025-08-19"
+    },
+    "1026": {
+        "p12e_code": 1026,
+        "scryfall_code": "yeoe",
+        "name": "Alchemy: Edge of Eternities",
+        "date": "2025-08-19"
+    },
+    "1027": {
+        "p12e_code": 1027,
+        "scryfall_code": "ph23",
+        "name": "2023 Heroes of the Realm",
+        "date": "2025-08-24"
+    },
+    "1028": {
+        "p12e_code": 1028,
+        "scryfall_code": "aa3",
+        "name": "Arena Anthology 3",
+        "date": "2025-09-23"
+    },
+    "1029": {
+        "p12e_code": 1029,
+        "scryfall_code": "aa4",
+        "name": "Arena Anthology 4",
+        "date": "2025-09-23"
+    },
+    "1030": {
+        "p12e_code": 1030,
+        "scryfall_code": "om1",
+        "name": "Through the Omenpaths",
+        "date": "2025-09-23"
+    },
+    "1031": {
+        "p12e_code": 1031,
+        "scryfall_code": "omb",
+        "name": "Through the Omenpaths Bonus Sheet",
+        "date": "2025-09-23"
+    },
+    "1032": {
+        "p12e_code": 1032,
+        "scryfall_code": "pspm",
+        "name": "Marvel's Spider-Man Promos",
+        "date": "2025-09-26"
+    },
+    "1033": {
+        "p12e_code": 1033,
+        "scryfall_code": "lmar",
+        "name": "Marvel Legends Series Inserts",
+        "date": "2025-09-30"
+    },
+    "1034": {
+        "p12e_code": 1034,
+        "scryfall_code": "atla",
+        "name": "Avatar: the Last Airbender Art Cards",
+        "date": "2025-11-21"
+    },
+    "1035": {
+        "p12e_code": 1035,
+        "scryfall_code": "atle",
+        "name": "Avatar: the Last Airbender Eternal Art Cards",
+        "date": "2025-11-21"
+    },
+    "1036": {
+        "p12e_code": 1036,
+        "scryfall_code": "ftla",
+        "name": "Avatar: The Last Airbender Beginner Box Front Cards",
+        "date": "2025-11-21"
+    },
+    "1037": {
+        "p12e_code": 1037,
+        "scryfall_code": "jtla",
+        "name": "Avatar: The Last Airbender Jumpstart Front Cards",
+        "date": "2025-11-21"
+    },
+    "1038": {
+        "p12e_code": 1038,
+        "scryfall_code": "ptla",
+        "name": "Avatar: The Last Airbender Promos",
+        "date": "2025-11-21"
+    },
+    "1039": {
+        "p12e_code": 1039,
+        "scryfall_code": "tle",
+        "name": "Avatar: The Last Airbender Eternal",
+        "date": "2025-11-21"
+    },
+    "1040": {
+        "p12e_code": 1040,
+        "scryfall_code": "ttla",
+        "name": "Avatar: The Last Airbender Tokens",
+        "date": "2025-11-21"
+    },
+    "1041": {
+        "p12e_code": 1041,
+        "scryfall_code": "ttle",
+        "name": "Avatar: The Last Airbender Eternal Tokens",
+        "date": "2025-11-21"
+    },
+    "1042": {
+        "p12e_code": 1042,
+        "scryfall_code": "afic",
+        "name": "Final Fantasy Commander Art Series",
+        "date": "2025-12-05"
+    },
+    "1043": {
+        "p12e_code": 1043,
+        "scryfall_code": "pf26",
+        "name": "MagicFest 2026",
+        "date": "2026-01-01"
+    },
+    "1044": {
+        "p12e_code": 1044,
+        "scryfall_code": "ecl",
+        "name": "Lorwyn Eclipsed",
+        "date": "2026-01-23"
+    },
+    "1045": {
+        "p12e_code": 1045,
+        "scryfall_code": "pza",
+        "name": "Teenage Mutant Ninja Turtles Source Material",
+        "date": "2026-03-06"
+    },
+    "1046": {
+        "p12e_code": 1046,
+        "scryfall_code": "tmc",
+        "name": "Teenage Mutant Ninja Turtles Eternal",
+        "date": "2026-03-06"
+    },
+    "1047": {
+        "p12e_code": 1047,
+        "scryfall_code": "tmt",
+        "name": "Teenage Mutant Ninja Turtles",
+        "date": "2026-03-06"
+    },
+    "1048": {
+        "p12e_code": 1048,
+        "scryfall_code": "ttmc",
+        "name": "Teenage Mutant Ninja Turtles Eternal Tokens",
+        "date": "2026-03-06"
+    },
+    "1049": {
+        "p12e_code": 1049,
+        "scryfall_code": "ttmt",
+        "name": "Teenage Mutant Ninja Turtles Tokens",
+        "date": "2026-03-06"
+    },
+    "1050": {
+        "p12e_code": 1050,
+        "scryfall_code": "msc",
+        "name": "Marvel Super Heroes Commander",
+        "date": "2026-06-26"
+    },
+    "1051": {
+        "p12e_code": 1051,
+        "scryfall_code": "msh",
+        "name": "Marvel Super Heroes",
+        "date": "2026-06-26"
+    },
+    "1052": {
+        "p12e_code": 1052,
+        "scryfall_code": "om2",
+        "name": "Through the Omenpaths 2",
+        "date": "2026-06-26"
+    },
+    "1053": {
+        "p12e_code": 1053,
+        "scryfall_code": "tmsh",
+        "name": "Marvel Super Heroes Tokens",
+        "date": "2026-06-26"
     }
 }
