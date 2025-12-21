@@ -2,6 +2,7 @@ import datetime
 import time
 import urllib.parse
 from pathlib import Path
+from urllib.error import HTTPError
 from urllib.request import urlopen
 
 import requests
@@ -118,25 +119,29 @@ class MTGGoldfish:
             else:
                 url += "&tournament_search%5Bname%5D="
             logger.debug(f"Collecting results from page: {url}")
-            html_page = urllib.request.urlopen(url)
-            bs = BeautifulSoup(html_page.read(), features="lxml")
-            rows = bs.findAll("tr")[1:]  # skip header
-            i = 0
-            for a in bs.findAll("a"):
-                if (
-                    "tournament" in a["href"]
-                    and "/new" not in a["href"]
-                    and "tournament_searches" not in a["href"]
-                ):
-                    result = MTGGoldfishTournamentSearchResult(
-                        url=f"{API_ENDPOINT}{a['href']}",
-                        name=a.text,
-                        date=rows[i].text.split()[0],
-                    )
-                    tournaments.append(result)
-                    i += 1
-                    logger.debug(f"Added result {result}")
-            time.sleep(REQUESTS_SLEEP_SECONDS)  # avoid flooding (and soft-ban)
+            try:
+                html_page = urllib.request.urlopen(url)
+                bs = BeautifulSoup(html_page.read(), features="lxml")
+                rows = bs.findAll("tr")[1:]  # skip header
+                i = 0
+                for a in bs.findAll("a"):
+                    if (
+                        "href" in a.attrs
+                        and "tournament" in a["href"]
+                        and "/new" not in a["href"]
+                        and "tournament_searches" not in a["href"]
+                    ):
+                        result = MTGGoldfishTournamentSearchResult(
+                            url=f"{API_ENDPOINT}{a['href']}",
+                            name=a.text,
+                            date=rows[i].text.split()[0],
+                        )
+                        tournaments.append(result)
+                        i += 1
+                        logger.debug(f"Added result {result}")
+                time.sleep(REQUESTS_SLEEP_SECONDS)  # avoid flooding (and soft-ban)
+            except HTTPError:  # 400: Bad Request if we exceed pages
+                break
             if any("No tournaments found." == x.text.strip() for x in bs.findAll("p")):
                 break
             if page == 4:
