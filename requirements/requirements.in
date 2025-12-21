@@ -1,5 +1,5 @@
-dropbox==11.36.2
-jinja2==2.11.3
+dropbox==12.0.2
+jinja2<3
 pyquery
 requests
 retrying
@@ -16,4 +16,4 @@ seaborn
 tenacity
 cloudscraper
 gunicorn
-stone==3.3.8  # v3.3.9 requires Jinja2 too new
+# stone==3.3.8  # v3.3.9 requires Jinja2 too new
