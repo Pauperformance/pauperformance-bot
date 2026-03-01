@@ -2,10 +2,12 @@ import os
 
 import pytest
 
-REQUIRED_SECRETS = "RUN_TESTS_WITH_SECRETS"
+REQUIRED_SECRETS: str = "RUN_TESTS_WITH_SECRETS"
 
 
-def pytest_collection_modifyitems(config, items):
+def pytest_collection_modifyitems(
+    config: pytest.Config, items: list[pytest.Item]
+) -> None:
     if os.getenv(REQUIRED_SECRETS):
         return
 

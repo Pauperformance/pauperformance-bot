@@ -2,8 +2,8 @@ from pauperformance_bot.entity.deck.playable import PlayableDeck, PlayedCard
 from pauperformance_bot.service.pauperformance.silver.deckstructor import Deckstructor
 
 
-def test_servitor():
-    expected_deck = PlayableDeck(
+def test_servitor() -> None:
+    expected_deck: PlayableDeck = PlayableDeck(
         mainboard=[
             PlayedCard(2, "Boseiju, Who Endures"),
             PlayedCard(4, "Cavern of Souls"),
@@ -39,11 +39,11 @@ def test_servitor():
     )
 
     with open("tests/mock_data/modern_mtg_elves.txt", "r") as f:
-        text = f.read()
+        text: str = f.read()
 
     with open("tests/mock_data/pool.txt", "r") as f:
-        pool = f.readlines()
+        pool_lines: list[str] = f.readlines()
 
-    pool = [p.strip() for p in pool]
-    deck = Deckstructor.extract_deck(text, pool)
+    pool: list[str] = [p.strip() for p in pool_lines]
+    deck: PlayableDeck = Deckstructor.extract_deck(text, pool)
     assert deck == expected_deck
