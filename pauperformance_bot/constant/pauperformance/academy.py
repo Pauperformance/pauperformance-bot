@@ -37,7 +37,7 @@ RESOURCES_IMAGES_MANA_RELATIVE_URL = posix_path("resources", "images", "mana")
 
 
 class AcademyFileSystem:
-    def __init__(self, root_dir=ACADEMY_PATH):
+    def __init__(self, root_dir: str = ACADEMY_PATH) -> None:
         self.ROOT_DIR: str = root_dir
         self.ASSETS_DIR: str = posix_path(self.ROOT_DIR, "assets")
         self.ASSETS_DATA_DIR: str = posix_path(self.ASSETS_DIR, "data")

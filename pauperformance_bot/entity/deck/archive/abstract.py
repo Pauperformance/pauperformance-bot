@@ -9,10 +9,10 @@ logger = get_application_logger()
 class AbstractArchivedDeck(metaclass=ABCMeta):
     def __init__(
         self,
-        name,
-        creation_date,
-        deck_id,
-    ):
+        name: str,
+        creation_date: int,
+        deck_id: str,
+    ) -> None:
         # The format of the name in the Archive is:
         # Archetype name p12e_code.revision.player | Name of the set (set_code)
         self.name = name
@@ -20,38 +20,38 @@ class AbstractArchivedDeck(metaclass=ABCMeta):
         self.deck_id = deck_id
 
     @property
-    def p12e_name(self):
+    def p12e_name(self) -> str:
         p12e_name, friendly_name = self.name.split(" | ")
         return p12e_name
 
     @property
-    def archetype(self):
+    def archetype(self) -> str:
         p12e_name, friendly_name = self.name.split(" | ")
         archetype_and_p12e_code = p12e_name.split(".")[0]
         return archetype_and_p12e_code.rsplit(" ", maxsplit=1)[0]
 
     @property
-    def owner_name(self):
+    def owner_name(self) -> str:
         p12e_name, friendly_name = self.name.split(" | ")
         return ".".join(p12e_name.rsplit(".")[2:])
 
     @property
-    def p12e_code(self):
+    def p12e_code(self) -> str:
         p12e_name, friendly_name = self.name.split(" | ")
         archetype_and_p12e_code = p12e_name.split(".")[0]
         return archetype_and_p12e_code.rsplit(" ", maxsplit=1)[1]
 
     @property
-    def revision(self):
+    def revision(self) -> str:
         p12e_name, _ = self.name.split(" | ")
         return p12e_name.split(".")[1]
 
     @property
     @abstractmethod
-    def url(self):  # TODO: rename to URI
+    def url(self) -> str:  # TODO: rename to URI
         pass
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"name: {self.name}; "
             f"creation_date: {pretty_str(self.creation_date)}; "
@@ -59,11 +59,13 @@ class AbstractArchivedDeck(metaclass=ABCMeta):
             f"url: {self.url}"
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.deck_id)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, AbstractArchivedDeck):
+            return NotImplemented
         return self.deck_id == other.deck_id

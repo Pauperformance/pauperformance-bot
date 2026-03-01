@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Any
 from urllib.parse import quote
 
 from deprecated import deprecated
@@ -15,12 +16,12 @@ logger = get_application_logger()
 
 
 @deprecated(reason="Migrated")
-def tagify(name):
+def tagify(name: str) -> str:
     return f"`{name}`"
 
 
 @deprecated(reason="Migrated")
-def to_archetype_page_mana(mana):
+def to_archetype_page_mana(mana: str) -> str:
     return (
         f'<img src="../{RESOURCES_IMAGES_MANA_RELATIVE_URL}/{mana}.png" '
         f'class="dominant-mana-icon"/>'
@@ -28,17 +29,19 @@ def to_archetype_page_mana(mana):
 
 
 @deprecated(reason="Migrated")
-def to_github_anchor(name):
+def to_github_anchor(name: str) -> str:
     return name.lower().replace(" ", "-").replace(".", "").replace(":", "")
 
 
 @deprecated(reason="Migrated")
-def to_url_encoded(name):
+def to_url_encoded(name: str) -> str:
     return quote(name)
 
 
 @deprecated(reason="Migrated")
-def render_template(template_dir, template_file, output_file, values):
+def render_template(
+    template_dir: str, template_file: str, output_file: str, values: dict[str, Any]
+) -> None:
     os.makedirs(Path(output_file).parent.as_posix(), exist_ok=True)
     env = Environment(
         loader=FileSystemLoader(template_dir),

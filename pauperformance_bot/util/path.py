@@ -2,6 +2,7 @@ import os
 import re
 import unicodedata
 from pathlib import Path
+from typing import Any
 
 import jsonpickle
 
@@ -28,12 +29,12 @@ def posix_path(*args: str) -> str:
     return Path().joinpath(*args).as_posix()
 
 
-def safe_dump_json_to_file(path, file_name, obj):
+def safe_dump_json_to_file(path: str, file_name: str, obj: Any) -> None:
     os.makedirs(path, exist_ok=True)
     with open(posix_path(path, file_name), "w") as out_f:
         out_f.write(jsonpickle.encode(obj, make_refs=False, warn=True))
 
 
-def load_json_from_file(file_path):
+def load_json_from_file(file_path: str) -> Any:
     with open(file_path, "r") as in_f:
         return jsonpickle.decode(in_f.read())

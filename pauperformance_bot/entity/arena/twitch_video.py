@@ -7,20 +7,20 @@ from pauperformance_bot.util.decorators import auto_repr, auto_str
 class TwitchVideo(IndexableVideo):
     def __init__(
         self,
-        video_id,
-        stream_id,
-        user_id,
-        user_login_name,
-        user_display_name,
-        title,
-        description,
-        created_at,
-        published_at,
-        url,
-        viewable,
-        language,
-        duration,
-    ):
+        video_id: str,
+        stream_id: str,
+        user_id: str,
+        user_login_name: str,
+        user_display_name: str,
+        title: str,
+        description: str,
+        created_at: str,
+        published_at: str,
+        url: str,
+        viewable: str,
+        language: str,
+        duration: str,
+    ) -> None:
         super().__init__(description)
         self.video_id = video_id
         self.stream_id = stream_id

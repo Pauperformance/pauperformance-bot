@@ -24,7 +24,7 @@ file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
 logger.addHandler(file_handler)
 
 
-def get_application_logger(cli_group=None):
+def get_application_logger(cli_group: str | None = None) -> logging.Logger:
     return (
         logging.getLogger("{}.{}".format(APPLICATION_NAME, cli_group))
         if cli_group

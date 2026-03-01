@@ -1,4 +1,4 @@
-def is_valid_p12e_deckstats_name(deck_name):
+def is_valid_p12e_deckstats_name(deck_name: str) -> bool:
     # A valid name for a deckstats deck has the following format:
     # Archetype Name magic_set_id.revision_id
     tokens = deck_name.rsplit(" ", maxsplit=1)
@@ -14,7 +14,7 @@ def is_valid_p12e_deckstats_name(deck_name):
     return len(deck_number) == 3
 
 
-def is_valid_p12e_deck_name(deck_name):
+def is_valid_p12e_deck_name(deck_name: str) -> bool:
     # A valid name for a deck has the following format:
     # Archetype Name magic_set_id.revision_id.player_id
     tokens = deck_name.rsplit(" ", maxsplit=1)

@@ -10,10 +10,10 @@ class Newspauper:
         self,
         *,
         news: list[Resource],
-    ):
-        self.news: list[Resource] = news
+    ) -> None:
+        self.news = news
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.news)
 
 
@@ -24,10 +24,10 @@ class Changelog:
         self,
         *,
         changes: list[ChangelogEntry],
-    ):
-        self.changes: list[ChangelogEntry] = changes
+    ) -> None:
+        self.changes = changes
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.changes)
 
 
@@ -41,23 +41,23 @@ class MetaShare:
         meta_share: float,
         archetype_name: str,
         accuracy: float,
-    ):
-        self.mtggolfish_urls: list[str] = mtggolfish_urls
-        self.meta_share: float = meta_share
-        self.archetype_name: str = archetype_name
-        self.accuracy: float = accuracy
+    ) -> None:
+        self.mtggolfish_urls = mtggolfish_urls
+        self.meta_share = meta_share
+        self.archetype_name = archetype_name
+        self.accuracy = accuracy
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.mtggolfish_urls)
 
-    def __lt__(self, other):
+    def __lt__(self, other: object) -> bool:
         if isinstance(other, MetaShare):
             return self.meta_share < other.meta_share
         raise ValueError(
             f"Cannot compare instance of MetaShare with instance of {type(other)}"
         )
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, MetaShare):
             return self.archetype_name == other.archetype_name
         return False
@@ -70,35 +70,35 @@ class Metagame:
         self,
         *,
         meta_shares: list[MetaShare],
-    ):
-        self.meta_shares: list[MetaShare] = meta_shares
+    ) -> None:
+        self.meta_shares = meta_shares
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.meta_shares)
 
 
 @auto_repr
 @auto_str
 class DPLDeck:
-    def __init__(self, *, identifier: str, archetype: str, accuracy: float):
+    def __init__(self, *, identifier: str, archetype: str, accuracy: float) -> None:
         self.identifier = identifier
         self.archetype = archetype
         self.accuracy = accuracy
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.identifier)
 
 
 @auto_repr
 @auto_str
 class DPLMeta:
-    def __init__(self, *, name: str, dpl_decks: list[DPLDeck]):
+    def __init__(self, *, name: str, dpl_decks: list[DPLDeck]) -> None:
         self.name = name
-        self.dpl_decks: list[DPLDeck] = dpl_decks
+        self.dpl_decks = dpl_decks
 
     @property
     def identifier(self) -> str:
         return self.name
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.identifier)

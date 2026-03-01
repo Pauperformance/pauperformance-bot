@@ -9,11 +9,11 @@ logger = get_application_logger()
 @auto_repr
 @auto_str
 class IndexableVideo:
-    def __init__(self, description):
+    def __init__(self, description: str) -> None:
         self.description = description
 
     @property
-    def deck_name(self):
+    def deck_name(self) -> str | None:
         deck_name = None
         for line in self.description.split("\n"):
             line = line.strip()
@@ -27,7 +27,7 @@ class IndexableVideo:
         return deck_name
 
     @property
-    def archetype(self):
+    def archetype(self) -> str | None:
         archetype = None
         for line in self.description.split("\n"):
             line = line.strip()

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pauperformance_bot.entity.config.archetype import (
     ArchetypeConfig,
     DiscordResource,
@@ -18,12 +16,12 @@ class ArchetypeCard:
         name: str,
         link: str,
         preview: str,
-    ):
-        self.name: str = name
-        self.link: str = link
-        self.preview: str = preview
+    ) -> None:
+        self.name = name
+        self.link = link
+        self.preview = preview
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.name)
 
 
@@ -34,20 +32,20 @@ class Archetype(ArchetypeConfig):
         self,
         *,
         name: str,
-        aliases: Optional[list[str]],
-        family: Optional[str],
+        aliases: list[str] | None,
+        family: str | None,
         dominant_mana: list[str],
         game_type: list[str],
         description: str,
         must_have_cards: list[str],
         must_not_have_cards: list[str],
         reference_decks: list[str],
-        resource_sideboard: Optional[SideboardResource],
+        resource_sideboard: SideboardResource | None,
         resources_discord: list[DiscordResource],
         resources: list[Resource],
         staples: list[ArchetypeCard],
         frequent: list[ArchetypeCard],
-    ):
+    ) -> None:
         super().__init__(
             name=name,
             aliases=aliases,
@@ -62,8 +60,8 @@ class Archetype(ArchetypeConfig):
             resources_discord=resources_discord,
             resources=resources,
         )
-        self.staples: list[ArchetypeCard] = staples
-        self.frequent: list[ArchetypeCard] = frequent
+        self.staples = staples
+        self.frequent = frequent
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.name)

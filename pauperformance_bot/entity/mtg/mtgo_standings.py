@@ -5,19 +5,19 @@ from pauperformance_bot.util.decorators import auto_repr
 class MTGOStandingMatch:
     def __init__(
         self,
-        player1,
-        player1_ranking,
-        player2,
-        player2_ranking,
-        match_score,
-    ):
+        player1: str,
+        player1_ranking: int,
+        player2: str,
+        player2_ranking: int,
+        match_score: str,
+    ) -> None:
         self.player1 = player1
         self.player1_ranking = player1_ranking
         self.player2 = player2
         self.player2_ranking = player2_ranking
         self.match_score = match_score
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"{self.player1} ({self.player1_ranking}) vs "
             f"{self.player2} ({self.player2_ranking}) ({self.match_score}))"
@@ -29,12 +29,17 @@ class MTGOStandingMatch:
 
 @auto_repr
 class MTGOStandings:
-    def __init__(self, quarterfinals, semifinals, finals):
+    def __init__(
+        self,
+        quarterfinals: list[MTGOStandingMatch],
+        semifinals: list[MTGOStandingMatch],
+        finals: list[MTGOStandingMatch],
+    ) -> None:
         self.quarterfinals = quarterfinals
         self.semifinals = semifinals
         self.finals = finals
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"Quarterfinals: {self.quarterfinals}. "
             f"Semifinals: {self.semifinals}. "

@@ -89,7 +89,7 @@ class MyrFileSystem:
         self,
         root_dir: str = TOP_PATH.as_posix(),
         resources_dir: str = RESOURCES_DIR,
-    ):
+    ) -> None:
         self.ROOT_DIR: str = root_dir
 
         self.SOURCE_DIR: str = posix_path(self.ROOT_DIR, "pauperformance_bot")

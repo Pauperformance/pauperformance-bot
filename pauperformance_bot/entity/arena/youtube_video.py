@@ -7,21 +7,21 @@ from pauperformance_bot.util.decorators import auto_repr, auto_str
 class YouTubeVideo(IndexableVideo):
     def __init__(
         self,
-        video_id,  # YouTube internals
-        etag,
-        content_video_id,  # as displayed in the URL
-        published_at,
-        channel_id,
-        channel_title,
-        description,
-        playlist_id,
-        position,
-        created_at,
-        title,
-        privacy_status,
-        url,
-        language,
-    ):
+        video_id: str,  # YouTube internals
+        etag: str,
+        content_video_id: str,  # as displayed in the URL
+        published_at: str,
+        channel_id: str,
+        channel_title: str,
+        description: str,
+        playlist_id: str,
+        position: int,
+        created_at: str,
+        title: str,
+        privacy_status: str,
+        url: str,
+        language: str,
+    ) -> None:
         super().__init__(description)
         self.video_id = video_id
         self.etag = etag

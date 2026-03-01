@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pauperformance_bot.util.decorators import auto_repr, auto_str
 
 
@@ -16,16 +14,16 @@ class Video:
         date: str,
         archetype: str,
         video_id: str,
-        deck_name: Optional[str],
-    ):
-        self.name: str = name
-        self.link: str = link
-        self.language: str = language
-        self.phd_name: str = phd_name
-        self.date: str = date
-        self.archetype: str = archetype
-        self.video_id: str = video_id
-        self.deck_name: Optional[str] = deck_name
+        deck_name: str | None,
+    ) -> None:
+        self.name = name
+        self.link = link
+        self.language = language
+        self.phd_name = phd_name
+        self.date = date
+        self.archetype = archetype
+        self.video_id = video_id
+        self.deck_name = deck_name
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.video_id)

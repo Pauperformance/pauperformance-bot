@@ -7,7 +7,7 @@ from pauperformance_bot.constant.pauperformance.myr import (
 )
 
 
-def now():
+def now() -> int:
     return int(round(time.time() * 1000))
 
 
@@ -17,15 +17,15 @@ def now_utc() -> int:
     return datetime_to_ms(datetime.utcnow())
 
 
-def datetime_to_ms(dt):
+def datetime_to_ms(dt: datetime) -> int:
     return int(dt.timestamp() * 1000)
 
 
-def pretty_str(now_ms: int, date_format=DEFAULT_DATE_FORMAT):
+def pretty_str(now_ms: int, date_format: str = DEFAULT_DATE_FORMAT) -> str:
     now_dt = datetime.fromtimestamp(now_ms / 1000.0)
     return now_dt.strftime(date_format)
 
 
-def simple_str(now_ms: int, date_format=USA_DATE_FORMAT):
+def simple_str(now_ms: int, date_format: str = USA_DATE_FORMAT) -> str:
     now_dt = datetime.fromtimestamp(now_ms / 1000.0)
     return now_dt.strftime(date_format)

@@ -10,15 +10,15 @@ from pauperformance_bot.util.time import pretty_str
 class DeckstatsDeck:
     def __init__(
         self,
-        owner_id,
-        owner_name,
-        saved_id,
-        folder_id,
-        name,
-        added,
-        updated,
-        url,
-    ):
+        owner_id: str,
+        owner_name: str,
+        saved_id: str,
+        folder_id: str,
+        name: str,
+        added: int,
+        updated: int,
+        url: str,
+    ) -> None:
         self.owner_id = owner_id
         self.owner_name = owner_name
         self.saved_id = saved_id
@@ -29,15 +29,15 @@ class DeckstatsDeck:
         self.url = url
 
     @property
-    def archetype(self):
+    def archetype(self) -> str:
         return self.name.rsplit(" ", maxsplit=1)[0]
 
     @property
-    def p12e_code(self):
+    def p12e_code(self) -> str:
         return self.name.rsplit(" ", maxsplit=1)[1].split(".")[0]
 
     @property
-    def description(self):
+    def description(self) -> str:
         url = self.url
         method = requests.get
         response = execute_http_request(method, url)
@@ -54,7 +54,7 @@ class DeckstatsDeck:
         except StopIteration:  # no description
             return ""
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"owner_id: {self.owner_id}; "
             f"owner_name: {self.name}; "
