@@ -26,14 +26,14 @@ class Checker:
         self,
         pauperformance: PauperformanceService,
         academy_fs: AcademyFileSystem = AcademyFileSystem(),
-    ):
+    ) -> None:
         self.pauperformance: PauperformanceService = pauperformance
         self.archetypes: list[ArchetypeConfig] = (
             self.pauperformance.config_reader.list_archetypes()
         )
         self.academy_fs: AcademyFileSystem = academy_fs
 
-    def check_all(self):
+    def check_all(self) -> bool:
         return all(
             (
                 self.check_archetypes_rules_for_archived_decks(),
@@ -100,7 +100,7 @@ class Checker:
         # print("\n".join(rm_cmds))
         return True
 
-    def check_mtg_tournament_decks_are_downloaded(self):
+    def check_mtg_tournament_decks_are_downloaded(self) -> bool:
         fs = self.academy_fs
         goldfish_tournaments_dir = fs.ASSETS_DATA_TOURNAMENT_MTGGOLDFISH_DIR
         json_goldfish_decks_dir = fs.ASSETS_DATA_TOURNAMENT_MTGGOLDFISH_DECKS_DIR

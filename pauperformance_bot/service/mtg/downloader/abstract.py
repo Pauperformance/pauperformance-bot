@@ -1,13 +1,12 @@
 from abc import ABCMeta, abstractmethod
-from typing import Optional
 
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 
 
 class AbstractDeckDownloader(metaclass=ABCMeta):
-    def __init__(self, url) -> None:
+    def __init__(self, url: str) -> None:
         self._url = url
 
     @abstractmethod
-    def download(self) -> Optional[PlayableDeck]:
+    def download(self) -> PlayableDeck | None:
         pass

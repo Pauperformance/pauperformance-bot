@@ -1,5 +1,3 @@
-from typing import Dict, List, Tuple
-
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.exceptions import CardNotFoundException
 from pauperformance_bot.service.academy.data_loader import AcademyDataLoader
@@ -15,13 +13,13 @@ class Deckstatistics:
     def __init__(
         self,
         name: str,
-        playable_decks: List[PlayableDeck],
-        cards: Dict[str, Dict[str, int]],
-    ):
+        playable_decks: list[PlayableDeck],
+        cards: dict[str, dict[str, int]],
+    ) -> None:
         self.name = name
         self._playable_decks = playable_decks
         self._cards = cards
-        self.most_played_card = None
+        self.most_played_card: str | None = None
 
         total = 0
         most_played = 0
@@ -38,12 +36,12 @@ class Deckstatistics:
         """Returns the total amount of known decks for the archetype."""
         return len(self._playable_decks)
 
-    def cards(self) -> List[str]:
+    def cards(self) -> list[str]:
         """Returns the list of all card names which have been played
         (either main or side) for the archetype."""
         return list(self._cards.keys())
 
-    def deck_occurrences_ratio(self) -> List[Tuple[str, float]]:
+    def deck_occurrences_ratio(self) -> list[tuple[str, float]]:
         """Returns a list of all the cards ever played for this archetype
         and their ratio of decks containing the card over the total count of decks."""
         return sorted(
@@ -57,7 +55,7 @@ class Deckstatistics:
             reverse=True,
         )
 
-    def card_playing_rate(self) -> List[Tuple[str, float]]:
+    def card_playing_rate(self) -> list[tuple[str, float]]:
         """Returns a list of all cards ever played for this archetype
         and the corresponding ratio of total quantity and the total nr. of cards
         in all decks."""
@@ -75,7 +73,7 @@ class Deckstatistics:
             reverse=True,
         )
 
-    def cards_breakdown(self) -> Dict[str, List[int]]:
+    def cards_breakdown(self) -> dict[str, list[float]]:
         """Returns a list of all cards ever played for this archetype
         and the relative list of rate of observations of decks in which this card is
         played in either 1, 2, 3, or 4 copies."""
@@ -91,14 +89,14 @@ class Deckstatistics:
             )
         )
 
-    def get_cards_above_frequency(self, threshold: float):
+    def get_cards_above_frequency(self, threshold: float) -> list[tuple[str, float]]:
         return sorted(
             list(filter(lambda f: f[1] >= threshold, self.deck_occurrences_ratio()))
         )
 
     def get_staple_and_frequent_cards(
-        self, staple_threshold=0.9, frequent_threshold=0.7
-    ):
+        self, staple_threshold: float = 0.9, frequent_threshold: float = 0.7
+    ) -> tuple[list[str], list[str]]:
         staple_cards = set(
             c[0] for c in self.get_cards_above_frequency(staple_threshold)
         )
@@ -109,7 +107,9 @@ class Deckstatistics:
 
 
 class DeckstatisticsFactory:
-    def __init__(self, scryfall: ScryfallService, academy_loader: AcademyDataLoader):
+    def __init__(
+        self, scryfall: ScryfallService, academy_loader: AcademyDataLoader
+    ) -> None:
         self._scryfall: ScryfallService = scryfall
         self._academy_loader = academy_loader
 

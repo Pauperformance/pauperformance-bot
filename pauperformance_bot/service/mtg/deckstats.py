@@ -1,6 +1,7 @@
 import json
 import pickle
 from functools import partial
+from typing import Any
 
 import requests
 
@@ -23,13 +24,13 @@ logger = get_application_logger()
 class DeckstatsService:
     def __init__(
         self,
-        owner_id,
-        endpoint=API_ENDPOINT,
-    ):
+        owner_id: str,
+        endpoint: str = API_ENDPOINT,
+    ) -> None:
         self.owner_id = owner_id
         self.endpoint = endpoint
 
-    def list_user_folders_id(self):
+    def list_user_folders_id(self) -> dict[str, str]:
         url = self.endpoint
         method = requests.get
         params = {
@@ -43,15 +44,17 @@ class DeckstatsService:
         method = partial(method, params=params)
         response = execute_http_request(method, url)
         response = json.loads(response.content)
-        folders = {"<root>": "0"}
+        folders: dict[str, str] = {"<root>": "0"}
         for subfolder in response["folder"].get("subfolders", []):
             folders[subfolder["name"]] = str(subfolder["id"])
         return folders
 
-    def list_public_decks_in_folder(self, owner_name, folder_id):
+    def list_public_decks_in_folder(
+        self, owner_name: str, folder_id: str
+    ) -> list[DeckstatsDeck]:
         url = self.endpoint
         method = requests.get
-        fetched_decks = []
+        fetched_decks: list[DeckstatsDeck] = []
         decks_total = -1
         curr_page = 1
         while len(fetched_decks) != decks_total:
@@ -91,7 +94,7 @@ class DeckstatsService:
             curr_page += 1
         return sorted(fetched_decks, key=lambda d: d.added)
 
-    def list_pauperformance_decks(self, owner_name):
+    def list_pauperformance_decks(self, owner_name: str) -> list[DeckstatsDeck]:
         folders = self.list_user_folders_id()
         if MONITORED_PAUPERFORMANCE_FOLDER not in folders:
             return []
@@ -105,10 +108,10 @@ class DeckstatsService:
 
     def get_deck(
         self,
-        deck_id,
-        decks_cache_dir=DECKSTATS_DECKS_CACHE_DIR,
-        use_cache=True,
-    ):
+        deck_id: str,
+        decks_cache_dir: str = DECKSTATS_DECKS_CACHE_DIR,
+        use_cache: bool = True,
+    ) -> dict[str, Any]:
         if use_cache:
             try:
                 with open(
@@ -136,12 +139,12 @@ class DeckstatsService:
             pickle.dump(deck, cache_f)
         return deck
 
-    def to_playable_deck(self, deckstats_deck):
+    def to_playable_deck(self, deckstats_deck: dict[str, Any]) -> PlayableDeck:
         logger.info(f"Parsing deckstats deck {deckstats_deck['saved_id']} list...")
         main_section = next(
             s for s in deckstats_deck["sections"] if s["name"] == "Main"
         )
-        playable_main = []
+        playable_main: list[PlayedCard] = []
         for c in main_section["cards"]:
             if not c["valid"]:
                 raise DeckstatsException(
@@ -150,7 +153,7 @@ class DeckstatsService:
                     f"{c['amount']} {c['name']}"
                 )
             playable_main.append(PlayedCard(c["amount"], c["name"]))
-        playable_sideboard = []
+        playable_sideboard: list[PlayedCard] = []
         for c in deckstats_deck["sideboard"]:
             if not c["valid"]:
                 raise DeckstatsException(

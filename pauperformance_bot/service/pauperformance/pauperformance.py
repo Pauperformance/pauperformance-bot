@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 from time import sleep
-from typing import Any, Dict, List
+from typing import Any
 
 from requests.exceptions import HTTPError
 
@@ -52,13 +52,13 @@ logger = get_application_logger()
 class PauperformanceService:
     def __init__(
         self,
-        storage,
-        archive,
-        scryfall=ScryfallService(),
-        twitch=TwitchService(),
-        youtube=YouTubeService(),
-        config_reader=ConfigReader(),
-    ):
+        storage: AbstractStorageService,
+        archive: AbstractArchiveService,
+        scryfall: ScryfallService = ScryfallService(),
+        twitch: TwitchService = TwitchService(),
+        youtube: YouTubeService = YouTubeService(),
+        config_reader: ConfigReader = ConfigReader(),
+    ) -> None:
         self.storage: AbstractStorageService = storage
         self.archive: AbstractArchiveService = archive
         self.scryfall = scryfall
@@ -70,7 +70,9 @@ class PauperformanceService:
         self.card_index = self._build_card_index()
         self.incremental_card_index = self._build_incremental_card_index()
 
-    def _build_set_index(self, set_index_file=SET_INDEX_FILE):
+    def _build_set_index(
+        self, set_index_file: str = SET_INDEX_FILE
+    ) -> collections.OrderedDict[int, dict[str, Any]]:
         try:
             logger.info("Building Scryfall set index...")
             scryfall_sets = self.scryfall.get_sets()
@@ -119,9 +121,9 @@ class PauperformanceService:
 
     def _build_card_index(
         self,
-        skip_sets=KNOWN_SETS_WITH_NO_PAUPER_CARDS,
-        cards_index_cache_dir=PAUPER_CARDS_INDEX_CACHE_DIR,
-    ) -> Dict[str, List[Dict[str, Any]]]:
+        skip_sets: list[int] = KNOWN_SETS_WITH_NO_PAUPER_CARDS,
+        cards_index_cache_dir: str = PAUPER_CARDS_INDEX_CACHE_DIR,
+    ) -> dict[int, list[dict[str, Any]]]:
         card_index = {}
         os.makedirs(cards_index_cache_dir, exist_ok=True)
         for item in self.set_index.values():
@@ -171,8 +173,8 @@ class PauperformanceService:
 
     def _build_incremental_card_index(
         self,
-        skip_sets=INCREMENTAL_CARDS_INDEX_SKIP_SETS,
-    ):
+        skip_sets: list[int] = INCREMENTAL_CARDS_INDEX_SKIP_SETS,
+    ) -> dict[int, list[dict[str, Any]]]:
         incremental_card_index = {}
         existing_card_names = set()
         useless_sets = set()
@@ -211,7 +213,7 @@ class PauperformanceService:
             )
         return incremental_card_index
 
-    def list_deckstats_decks(self):
+    def list_deckstats_decks(self) -> list[Any]:
         all_decks = []
         for player in self.players:
             if not player.deckstats_id:
@@ -238,20 +240,22 @@ class PauperformanceService:
         return self.archive.list_decks()
 
     @staticmethod
-    def get_archetypes(config_pages_dir=CONFIG_ARCHETYPES_DIR):
+    def get_archetypes(config_pages_dir: str = CONFIG_ARCHETYPES_DIR) -> set[str]:
         return set(
             Path(a).name.replace(".ini", "")
             for a in glob.glob(f"{config_pages_dir}/*.ini")
         )
 
     @staticmethod
-    def get_families(config_pages_dir=CONFIG_FAMILIES_DIR):
+    def get_families(config_pages_dir: str = CONFIG_FAMILIES_DIR) -> set[str]:
         return set(
             Path(a).name.replace(".ini", "")
             for a in glob.glob(f"{config_pages_dir}/*.ini")
         )
 
-    def analyze_cards_frequency(self, archetype_decks):
+    def analyze_cards_frequency(
+        self, archetype_decks: list[AbstractArchivedDeck]
+    ) -> tuple[list[str], list[str]]:
         # Note: this method uses archived decks to compute frequent and staples.
         # An alternative approach is to use a larger pool of classified decks,
         # by leveraging silver.deckstatistics.
@@ -272,7 +276,7 @@ class PauperformanceService:
         frequents = all_cards - staples - lands
         return list(staples), list(frequents)
 
-    def get_set_index_by_date(self, usa_date):
+    def get_set_index_by_date(self, usa_date: str) -> dict[str, Any]:
         logger.debug(f"Getting set index for USA date {usa_date}")
         return [
             s
@@ -281,10 +285,10 @@ class PauperformanceService:
             and len(self.incremental_card_index.get(s["p12e_code"])) > 0
         ][-1]
 
-    def get_current_set_index(self):
+    def get_current_set_index(self) -> dict[str, Any]:
         return self.get_set_index_by_date(datetime.today().strftime(USA_DATE_FORMAT))
 
-    def delete_deck(self, deck_name):
+    def delete_deck(self, deck_name: str) -> None:
         # a deck needs to be deleted both from the archive and from the storage
         archived_deck_id = None
         for deck in self.list_archived_decks():
@@ -308,7 +312,7 @@ class PauperformanceService:
         discord_logger = DiscordMessagesSenderSyncService([message])
         discord_logger.run_task()
 
-    def _list_twitch_videos(self):
+    def _list_twitch_videos(self) -> list[AcademyVideo]:
         logger.debug("Retrieving stored Twitch videos...")
         academy_videos = []
         for video in self.storage.list_imported_twitch_videos():
@@ -335,7 +339,7 @@ class PauperformanceService:
         logger.debug("Retrieved stored Twitch videos.")
         return academy_videos
 
-    def _list_youtube_videos(self):
+    def _list_youtube_videos(self) -> list[AcademyVideo]:
         logger.debug("Retrieving stored YouTube videos...")
         academy_videos = []
         for video in self.storage.list_imported_youtube_videos():
@@ -367,8 +371,8 @@ class PauperformanceService:
 
     def print_stats(
         self,
-        archetypes_config_dir=CONFIG_ARCHETYPES_DIR,
-    ):
+        archetypes_config_dir: str = CONFIG_ARCHETYPES_DIR,
+    ) -> None:
         print(f"PhDs: {len(self.players) - 1}")
         print(f"Archetypes: {len(self.get_archetypes())}")
         print(f"Families: {len(self.get_families())}")

@@ -1,3 +1,4 @@
+import collections
 import glob
 from collections import defaultdict
 from pathlib import Path
@@ -35,6 +36,7 @@ from pauperformance_bot.constant.pauperformance.myr import (
     TEMPLATES_PAGES_DIR,
 )
 from pauperformance_bot.service.academy.data_loader import AcademyDataLoader
+from pauperformance_bot.service.mtg.scryfall import ScryfallService
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
@@ -59,12 +61,14 @@ class AcademyService:
     def __init__(
         self,
         pauperformance: PauperformanceService,
-    ):
+    ) -> None:
         self.pauperformance: PauperformanceService = pauperformance
-        self.scryfall = pauperformance.scryfall
-        self.set_index = pauperformance.set_index
+        self.scryfall: ScryfallService = pauperformance.scryfall
+        self.set_index: collections.OrderedDict[int, dict[str, str]] = (
+            pauperformance.set_index
+        )
 
-    def update_all(self, update_dev=True):
+    def update_all(self, update_dev: bool = True) -> None:
         self.update_home()
         self.update_archetypes_index()
         self.update_set_index()
@@ -76,12 +80,12 @@ class AcademyService:
 
     def update_home(
         self,
-        config_dir=CONFIG_DIR,
-        templates_pages_dir=TEMPLATES_PAGES_DIR,
-        newspauper_file=CONFIG_NEWSPAUPER_FILE,
-        home_template_file=HOME_TEMPLATE_FILE,
-        home_output_file=HOME_OUTPUT_FILE,
-    ):
+        config_dir: str = CONFIG_DIR,
+        templates_pages_dir: str = TEMPLATES_PAGES_DIR,
+        newspauper_file: str = CONFIG_NEWSPAUPER_FILE,
+        home_template_file: str = HOME_TEMPLATE_FILE,
+        home_output_file: str = HOME_OUTPUT_FILE,
+    ) -> None:
         logger.info(
             f"Rendering home in {templates_pages_dir} from " f"{home_template_file}..."
         )
@@ -106,13 +110,13 @@ class AcademyService:
 
     def update_archetypes_index(
         self,
-        config_pages_dir=CONFIG_ARCHETYPES_DIR,
-        templates_pages_dir=TEMPLATES_PAGES_DIR,
-        archetypes_dir=ARCHETYPES_DIR_RELATIVE_URL,
-        families_dir=FAMILIES_DIR_RELATIVE_URL,
-        archetypes_index_template_file=ARCHETYPES_INDEX_TEMPLATE_FILE,
-        archetypes_index_output_file=ARCHETYPES_INDEX_OUTPUT_FILE,
-    ):
+        config_pages_dir: str = CONFIG_ARCHETYPES_DIR,
+        templates_pages_dir: str = TEMPLATES_PAGES_DIR,
+        archetypes_dir: str = ARCHETYPES_DIR_RELATIVE_URL,
+        families_dir: str = FAMILIES_DIR_RELATIVE_URL,
+        archetypes_index_template_file: str = ARCHETYPES_INDEX_TEMPLATE_FILE,
+        archetypes_index_output_file: str = ARCHETYPES_INDEX_OUTPUT_FILE,
+    ) -> None:
         logger.info(
             f"Rendering archetype index in {templates_pages_dir} from "
             f"{archetypes_index_template_file}..."
@@ -145,10 +149,10 @@ class AcademyService:
 
     def update_set_index(
         self,
-        templates_pages_dir=TEMPLATES_PAGES_DIR,
-        set_index_template_file=SET_INDEX_TEMPLATE_FILE,
-        set_index_output_file=SET_INDEX_OUTPUT_FILE,
-    ):
+        templates_pages_dir: str = TEMPLATES_PAGES_DIR,
+        set_index_template_file: str = SET_INDEX_TEMPLATE_FILE,
+        set_index_output_file: str = SET_INDEX_OUTPUT_FILE,
+    ) -> None:
         logger.info(
             f"Rendering set index in {templates_pages_dir} from "
             f"{set_index_template_file}..."
@@ -167,10 +171,10 @@ class AcademyService:
 
     def update_pauper_pool(
         self,
-        templates_pages_dir=TEMPLATES_PAGES_DIR,
-        pauper_pool_template_file=PAUPER_POOL_TEMPLATE_FILE,
-        pauper_pool_output_file=PAUPER_POOL_OUTPUT_FILE,
-    ):
+        templates_pages_dir: str = TEMPLATES_PAGES_DIR,
+        pauper_pool_template_file: str = PAUPER_POOL_TEMPLATE_FILE,
+        pauper_pool_output_file: str = PAUPER_POOL_OUTPUT_FILE,
+    ) -> None:
         logger.info(
             f"Rendering pauper pool in {templates_pages_dir} from "
             f"{pauper_pool_template_file}..."
@@ -191,11 +195,11 @@ class AcademyService:
 
     def update_archetypes(
         self,
-        config_pages_dir=CONFIG_ARCHETYPES_DIR,
-        templates_archetypes_dir=TEMPLATES_ARCHETYPES_DIR,
-        archetype_template_file=ARCHETYPE_TEMPLATE_FILE,
-        pauperformance_archetypes_dir=ARCHETYPES_DIR,
-    ):
+        config_pages_dir: str = CONFIG_ARCHETYPES_DIR,
+        templates_archetypes_dir: str = TEMPLATES_ARCHETYPES_DIR,
+        archetype_template_file: str = ARCHETYPE_TEMPLATE_FILE,
+        pauperformance_archetypes_dir: str = ARCHETYPES_DIR,
+    ) -> None:
         logger.info("Generating archetypes...")
         all_decks = self.pauperformance.list_archived_decks()
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
@@ -316,13 +320,13 @@ class AcademyService:
 
     def update_families(
         self,
-        config_families_dir=CONFIG_FAMILIES_DIR,
-        config_archetypes_dir=CONFIG_ARCHETYPES_DIR,
-        templates_families_dir=TEMPLATES_FAMILIES_DIR,
-        archetypes_dir=ARCHETYPES_DIR_RELATIVE_URL,
-        family_template_file=FAMILY_TEMPLATE_FILE,
-        pauperformance_families_dir=FAMILIES_DIR,
-    ):
+        config_families_dir: str = CONFIG_FAMILIES_DIR,
+        config_archetypes_dir: str = CONFIG_ARCHETYPES_DIR,
+        templates_families_dir: str = TEMPLATES_FAMILIES_DIR,
+        archetypes_dir: str = ARCHETYPES_DIR_RELATIVE_URL,
+        family_template_file: str = FAMILY_TEMPLATE_FILE,
+        pauperformance_families_dir: str = FAMILIES_DIR,
+    ) -> None:
         logger.info("Generating families...")
         logger.debug("Building families-archetypes map...")
         families_map = defaultdict(list)
@@ -370,10 +374,10 @@ class AcademyService:
 
     def update_dev(
         self,
-        templates_pages_dir=TEMPLATES_PAGES_DIR,
-        dev_template_file=DEV_TEMPLATE_FILE,
-        dev_output_file=DEV_OUTPUT_FILE,
-    ):
+        templates_pages_dir: str = TEMPLATES_PAGES_DIR,
+        dev_template_file: str = DEV_TEMPLATE_FILE,
+        dev_output_file: str = DEV_OUTPUT_FILE,
+    ) -> None:
         logger.info(
             f"Rendering dev in {templates_pages_dir} from " f"{dev_template_file}..."
         )
@@ -387,7 +391,7 @@ class AcademyService:
         )
         logger.info(f"Rendered dev to {dev_output_file}.")
 
-    def _boldify_sets_with_new_cards(self):
+    def _boldify_sets_with_new_cards(self) -> list[dict[str, str]]:
         card_index = self.pauperformance.incremental_card_index
         bolded_index = []
         for item in self.set_index.values():

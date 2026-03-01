@@ -1,6 +1,6 @@
 import itertools
 from collections import defaultdict
-from typing import DefaultDict, Tuple
+from typing import Any
 
 from scipy import spatial
 
@@ -34,8 +34,8 @@ class Decklassifier:
     def __init__(
         self,
         pauperformance: PauperformanceService,
-        known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = None,
-    ):
+        known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] | None = None,
+    ) -> None:
         self.pauperformance: PauperformanceService = pauperformance
         self.archetypes: list[ArchetypeConfig] = (
             self.pauperformance.config_reader.list_archetypes()
@@ -45,17 +45,21 @@ class Decklassifier:
         )
         self._decks_cache: dict[str, PlayableDeck] = {}
 
-    def add_known_decks(self, known_decks: list[tuple[PlayableDeck, ArchetypeConfig]]):
+    def add_known_decks(
+        self, known_decks: list[tuple[PlayableDeck, ArchetypeConfig]]
+    ) -> None:
         self.known_decks += known_decks
 
     @staticmethod
-    def _cosine_similarity(v1, v2, w=1.0):
+    def _cosine_similarity(v1: list[float], v2: list[float], w: float = 1.0) -> float:
         if w == 0:
             return 1
         return 1 - spatial.distance.cosine(v1, v2, w=len(v1) * [w])
 
     @staticmethod
-    def _vectorize(cards_map1, cards_map2):
+    def _vectorize(
+        cards_map1: dict[str, int], cards_map2: dict[str, int]
+    ) -> tuple[list[int], list[int]]:
         # In Pauper, only few decks take advantage of Snow-Covered lands.
         # However, Snow-Covered lands are often used.
         # For better similarity results, we want Snow-Covered lands to be treated as
@@ -219,7 +223,7 @@ class Decklassifier:
     def classify_deck(
         self,
         deck: PlayableDeck,
-    ) -> Tuple[ArchetypeConfig, float]:
+    ) -> tuple[ArchetypeConfig, float]:
         logger.debug("Classifying deck...")
         most_similar_archetype, highest_similarity = None, 0
 
@@ -277,7 +281,7 @@ class Decklassifier:
     def get_metagame(self) -> Metagame:
         mtggoldfish = MTGGoldfish()
         mtggoldfish_meta = mtggoldfish.get_pauper_meta()
-        meta_shares: DefaultDict[str, list[MetaShare]] = defaultdict(list)
+        meta_shares: defaultdict[str, list[MetaShare]] = defaultdict(list)
         for link, values in mtggoldfish_meta.items():
             share, playable_deck = values
             similar_archetype, similarity_score = self.classify_deck(playable_deck)
@@ -313,7 +317,7 @@ class Decklassifier:
             )
         return Metagame(meta_shares=grouped_meta_shares)
 
-    def parse_dpl_deck(self, deck):
+    def parse_dpl_deck(self, deck: dict[str, Any]) -> tuple[str, PlayableDeck]:
         deck_id = deck["id"]
         lines = [f"{pc['quantity']} {pc['name']}" for pc in deck["cards"]["mainboard"]]
         lines += [""]
@@ -326,11 +330,11 @@ class Decklassifier:
 
     def get_dpl_metagame(
         self,
-        decks,
-        name="DPL metagame",
-        brew_threshold=BREW_CLASSIFICATION_THRESHOLD,
-        learn_on_the_fly=True,
-    ):
+        decks: list[dict[str, Any]],
+        name: str = "DPL metagame",
+        brew_threshold: float = BREW_CLASSIFICATION_THRESHOLD,
+        learn_on_the_fly: bool = True,
+    ) -> DPLMeta:
         dpl_decks = []
         for deck in decks:
             deck_id, playable_deck = self.parse_dpl_deck(deck)

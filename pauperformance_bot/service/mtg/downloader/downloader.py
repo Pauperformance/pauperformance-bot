@@ -1,5 +1,3 @@
-from typing import Dict
-
 import cloudscraper
 
 from pauperformance_bot.entity.deck.playable import PlayableDeck
@@ -25,7 +23,7 @@ class MtgoDeckDownloader(AbstractDeckDownloader):
     - https://www.mtgtop8.com/mtgo?d=473002
     """
 
-    def __init__(self, url, headers: Dict = None) -> None:
+    def __init__(self, url: str, headers: dict[str, str] | None = None) -> None:
         super().__init__(url)
         _headers = headers
         if not headers:
@@ -37,7 +35,7 @@ class MtgoDeckDownloader(AbstractDeckDownloader):
         logger.debug(f"fetching deck list from {self._url}")
         resp = execute_http_request(self._scraper.get, self._url, headers=self._headers)
         pl = "start"
-        lines = []
+        lines: list[str] = []
         for ln in resp.text.strip().split("\n"):
             sl = ln.strip()
             sbl = sl.lower().startswith("sideboard")

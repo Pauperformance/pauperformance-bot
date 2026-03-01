@@ -6,7 +6,7 @@ from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloa
 class MtgdecksDeckDownloader(AbstractDeckDownloader):
     """Downloads a deck from mtgdecks.net"""
 
-    def __init__(self, url) -> None:
+    def __init__(self, url: str) -> None:
         super().__init__(url)
         self._downloader = MtgoDeckDownloader(
             url,

@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Type
+from typing import Type
 
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.service.mtg.downloader.abstract import AbstractDeckDownloader
@@ -13,13 +13,13 @@ logger = get_application_logger()
 class DeckDownloaderService:
     """Service to download a deck from different sources given an input url"""
 
-    _downloaders: Dict[str, Type[AbstractDeckDownloader]] = {
+    _downloaders: dict[str, Type[AbstractDeckDownloader]] = {
         "mtgdecks.net": MtgdecksDeckDownloader,
         "moxfield.com": MoxfieldDeckDownloader,
     }
 
     @classmethod
-    def from_url(cls, url: str) -> Optional[PlayableDeck]:
+    def from_url(cls, url: str) -> PlayableDeck | None:
         """Downloads a deck from a given url.
 
         Args:
@@ -27,7 +27,7 @@ class DeckDownloaderService:
             "https://www.mtgtop8.com/mtgo?d=473002"
 
         Returns:
-            Optional[PlayableDeck]: the representation of the deck or None.
+            PlayableDeck | None: the representation of the deck or None.
         """
         for domain, cls in DeckDownloaderService._downloaders.items():
             if domain in url:

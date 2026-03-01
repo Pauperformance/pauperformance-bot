@@ -17,7 +17,7 @@ logger = get_application_logger()
 class MoxfieldDeckDownloader(AbstractDeckDownloader):
     """Downloads a deck from https://www.moxfield.com/"""
 
-    def __init__(self, url) -> None:
+    def __init__(self, url: str) -> None:
         super().__init__(url)
         self._downloader = MtgoDeckDownloader(
             url,
@@ -38,7 +38,7 @@ class MoxfieldDeckDownloader(AbstractDeckDownloader):
         logger.debug("Fetched deck.")
         deck = resp.json()
         logger.debug(f"Author name: {deck['name']}")
-        lines = []
+        lines: list[str] = []
         for card in deck["boards"]["mainboard"]["cards"].values():
             quantity = card["quantity"]
             name = card["card"]["name"]

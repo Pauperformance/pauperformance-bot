@@ -1,7 +1,6 @@
 import os
 import re
 from os import path
-from typing import List, Optional
 
 import jsonpickle
 
@@ -20,10 +19,10 @@ logger = get_application_logger()
 class AcademyDataLoader:
     """Service to load in memory all the Academy assets."""
 
-    def __init__(self, academy_fs=AcademyFileSystem()):
+    def __init__(self, academy_fs: AcademyFileSystem = AcademyFileSystem()) -> None:
         self._academy_fs = academy_fs
 
-    def load_classified_decks(self, archetype: str) -> List[PlayableDeck]:
+    def load_classified_decks(self, archetype: str) -> list[PlayableDeck]:
         """Returns a list of decks for the given archetype."""
         deck_dir = posix_path(self._academy_fs.ASSETS_DATA_INTEL_DECK_DIR, archetype)
         if not path.exists(deck_dir):
@@ -42,7 +41,7 @@ class AcademyDataLoader:
         return playable_decks
 
     @staticmethod
-    def __load_deck(playable_deck_txt) -> Optional[PlayableDeck]:
+    def __load_deck(playable_deck_txt: str) -> PlayableDeck | None:
         playable_deck = None
         try:
             with open(playable_deck_txt) as playable_f:
@@ -53,7 +52,7 @@ class AcademyDataLoader:
         finally:
             return playable_deck
 
-    def __load_all(self, deck_dir):
+    def __load_all(self, deck_dir: str) -> tuple[list[PlayableDeck], list[str]]:
         missing = []
         playable_decks = []
         for deck_file in os.listdir(deck_dir):

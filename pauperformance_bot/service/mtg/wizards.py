@@ -1,5 +1,4 @@
 import re
-from typing import List
 
 import requests
 from pyquery import PyQuery
@@ -15,7 +14,7 @@ from pauperformance_bot.util.log import get_application_logger
 logger = get_application_logger()
 
 
-def _parse_match_result(player1_line, player2_line) -> MTGOStandingMatch:
+def _parse_match_result(player1_line: str, player2_line: str) -> MTGOStandingMatch:
     result = re.search(r"\(([0-9]+)\) (\w+), ([0-9-]+)", player1_line)
     player1_ranking, player1, match_score = result.groups()
     result = re.search(r"\(([0-9]+)\) (\w+)", player2_line)
@@ -29,10 +28,10 @@ def _parse_match_result(player1_line, player2_line) -> MTGOStandingMatch:
     )
 
 
-def _parse_round_results(pq, round_class) -> List[MTGOStandingMatch]:
+def _parse_round_results(pq: PyQuery, round_class: str) -> list[MTGOStandingMatch]:
     logger.debug(f"Inspecting class: {round_class}...")
-    matches: List[MTGOStandingMatch] = []
-    buffer = []
+    matches: list[MTGOStandingMatch] = []
+    buffer: list[str] = []
     for player in pq(round_class).items():
         logger.debug(f"Parsing: {player.text()}")
         buffer.append(player.text())
@@ -45,7 +44,7 @@ def _parse_round_results(pq, round_class) -> List[MTGOStandingMatch]:
 
 
 class WizardsService:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def parse_mtgo_pauper_challenge(self, url: str) -> MTGOStandings:

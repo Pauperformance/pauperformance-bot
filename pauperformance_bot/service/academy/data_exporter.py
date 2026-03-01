@@ -20,6 +20,7 @@ from pauperformance_bot.entity.deck.playable import (
     parse_playable_deck_from_lines,
 )
 from pauperformance_bot.service.academy.data_loader import AcademyDataLoader
+from pauperformance_bot.service.mtg.scryfall import ScryfallService
 from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
@@ -43,10 +44,10 @@ class AcademyDataExporter:
         self,
         pauperformance: PauperformanceService,
         academy_fs: AcademyFileSystem = ACADEMY_FILE_SYSTEM,
-    ):
+    ) -> None:
         self.academy_fs: AcademyFileSystem = academy_fs
         self.pauperformance: PauperformanceService = pauperformance
-        self.scryfall = self.pauperformance.scryfall
+        self.scryfall: ScryfallService = self.pauperformance.scryfall
         self.config_reader: ConfigReader = self.pauperformance.config_reader
         self.decks: list[AbstractArchivedDeck] = (
             self.pauperformance.list_archived_decks()
@@ -54,7 +55,7 @@ class AcademyDataExporter:
         self.silver: Decklassifier = Decklassifier(self.pauperformance)
         self.academy_loader: AcademyDataLoader = AcademyDataLoader()
 
-    def export_all(self):
+    def export_all(self) -> None:
         self.export_archetypes()
         self.export_decks()
         self.export_intel_decks()
@@ -63,7 +64,7 @@ class AcademyDataExporter:
         # self.export_videos()
         # self.export_miscellanea()
 
-    def export_phd_sheets(self):
+    def export_phd_sheets(self) -> None:
         logger.info(f"Exporting phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}...")
         for phd_sheet in self.config_reader.list_phd_sheets(
             scryfall_service=self.scryfall
@@ -75,7 +76,7 @@ class AcademyDataExporter:
             )
         logger.info(f"Exported phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}.")
 
-    def export_archetypes(self):
+    def export_archetypes(self) -> None:
         logger.info(
             f"Exporting archetypes to {self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR}..."
         )
@@ -125,7 +126,7 @@ class AcademyDataExporter:
             f"Exported archetypes to {self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR}."
         )
 
-    def export_decks(self):
+    def export_decks(self) -> None:
         logger.info(f"Exporting decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}...")
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
         for deck in self.decks:
@@ -151,7 +152,7 @@ class AcademyDataExporter:
         logger.info(f"Exported decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}.")
 
     # TODO: clean up this: below it's just a draft
-    def export_intel_cards(self):
+    def export_intel_cards(self) -> None:
         logger.info(
             f"Exporting cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}..."
         )
@@ -176,12 +177,12 @@ class AcademyDataExporter:
             f"Exported cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}."
         )
 
-    def export_miscellanea(self):
+    def export_miscellanea(self) -> None:
         self.export_changelog()
         self.export_newspauper()
         self.export_metagame()
 
-    def export_changelog(self):
+    def export_changelog(self) -> None:
         logger.info(f"Exporting Changelog to {self.academy_fs.ASSETS_DATA_DIR}...")
         changelog: Changelog = self.config_reader.get_changelog()
         safe_dump_json_to_file(
@@ -191,7 +192,7 @@ class AcademyDataExporter:
         )
         logger.info(f"Exported Changelog to {self.academy_fs.ASSETS_DATA_DIR}.")
 
-    def export_newspauper(self):
+    def export_newspauper(self) -> None:
         logger.info(f"Exporting Newspauper to {self.academy_fs.ASSETS_DATA_DIR}...")
         newspauper: Newspauper = self.config_reader.get_newspauper()
         safe_dump_json_to_file(
@@ -201,7 +202,7 @@ class AcademyDataExporter:
         )
         logger.info(f"Exported Newspauper to {self.academy_fs.ASSETS_DATA_DIR}.")
 
-    def export_metagame(self, top_n_chart=TOP_N_ARCHETYPES_PIE_CHART):
+    def export_metagame(self, top_n_chart: int = TOP_N_ARCHETYPES_PIE_CHART) -> None:
         logger.info(
             f"Exporting Metagame data to {self.academy_fs.ASSETS_DATA_INTEL_DIR}..."
         )
@@ -235,11 +236,11 @@ class AcademyDataExporter:
             f"Exported Metagame picture to {self.academy_fs.ASSETS_DATA_INTEL_DIR}."
         )
 
-    def export_videos(self):
+    def export_videos(self) -> None:
         self.export_twitch_videos()
         self.export_youtube_videos()
 
-    def export_twitch_videos(self):
+    def export_twitch_videos(self) -> None:
         logger.info(
             f"Exporting Twitch videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}..."
         )
@@ -248,7 +249,7 @@ class AcademyDataExporter:
             f"Exported Twitch videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}."
         )
 
-    def export_youtube_videos(self):
+    def export_youtube_videos(self) -> None:
         logger.info(
             f"Exporting YouTube videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}..."
         )
@@ -257,7 +258,7 @@ class AcademyDataExporter:
             f"Exported YouTube videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}."
         )
 
-    def _export_videos(self, video_keys):
+    def _export_videos(self, video_keys: list[str]) -> None:
         for video_key in video_keys:
             video_path = posix_path(
                 self.pauperformance.storage.youtube_video_path,
@@ -282,8 +283,8 @@ class AcademyDataExporter:
             )
 
     def _load_training_data(
-        self, training_file, assets_data_deck_dir
-    ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
+        self, training_file: str, assets_data_deck_dir: str
+    ) -> tuple[list[tuple[PlayableDeck, ArchetypeConfig]], str]:
         # Note: this method assumes all the decks in the training data are available in
         # the academy as .txt to load and parse.
         archetypes: list[ArchetypeConfig] = (
@@ -317,7 +318,7 @@ class AcademyDataExporter:
 
     def _load_mtggoldfish_tournament_training_data(
         self,
-    ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
+    ) -> tuple[list[tuple[PlayableDeck, ArchetypeConfig]], str]:
         return self._load_training_data(
             self.config_reader.myr_file_system.MTGGOLDFISH_DECK_TRAINING_DATA,
             self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
@@ -325,13 +326,13 @@ class AcademyDataExporter:
 
     def _load_dpl_training_data(
         self,
-    ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
+    ) -> tuple[list[tuple[PlayableDeck, ArchetypeConfig]], str]:
         return self._load_training_data(
             self.config_reader.myr_file_system.DPL_DECK_TRAINING_DATA,
             self.academy_fs.ASSETS_DATA_DECK_DPL_DIR,
         )
 
-    def export_intel_decks(self):
+    def export_intel_decks(self) -> None:
         logger.info(
             f"Exporting decks intel to {self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR}..."
         )
@@ -344,7 +345,7 @@ class AcademyDataExporter:
             f"Exported decks intel to {self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR}."
         )
 
-    def _classify_mtggoldfish_tournament_decks(self):
+    def _classify_mtggoldfish_tournament_decks(self) -> None:
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
         already_classified_deck_ids = set(
             p.as_posix().split("/")[-1].replace(".json", "")
@@ -420,7 +421,9 @@ class AcademyDataExporter:
         logger.info(f"Classified decks: {len(already_classified_deck_ids)}")
         logger.warning(f"Unclassified decks: {unclassified_decks_count}")
 
-    def classify_deck(self, playable_deck):
+    def classify_deck(
+        self, playable_deck: PlayableDeck
+    ) -> tuple[str | None, float | None]:
         most_similar_archetype, highest_similarity = self.silver.classify_deck(
             playable_deck
         )
@@ -433,7 +436,9 @@ class AcademyDataExporter:
         return most_similar_archetype.name, highest_similarity
 
     # TODO: this is a temporary function to create the dataset
-    def _label_mtggoldfish_tournament_decks(self, latest_training_sample):
+    def _label_mtggoldfish_tournament_decks(
+        self, latest_training_sample: str | None
+    ) -> None:
         banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
         already_classified_deck_ids = set(
             p.as_posix().split("/")[-1].replace(".json", "")

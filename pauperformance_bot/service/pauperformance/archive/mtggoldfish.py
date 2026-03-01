@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 from functools import cache, wraps
 from itertools import count
+from typing import Any, Callable
 from urllib.request import urlopen
 
 from pyquery import PyQuery
@@ -38,9 +39,9 @@ from pauperformance_bot.util.path import posix_path
 logger = get_application_logger()
 
 
-def with_login(func):
+def with_login(func: Callable[..., Any]) -> Callable[..., Any]:
     @wraps(func)
-    def maybe_login(*args, **kwargs):
+    def maybe_login(*args: Any, **kwargs: Any) -> Any:
         mtggoldfish = args[0]  # "self" is the 1st argument of method calls
         if not mtggoldfish.logged:
             mtggoldfish.login()
@@ -53,12 +54,12 @@ def with_login(func):
 class MTGGoldfishArchiveService(AbstractArchiveService):
     def __init__(
         self,
-        storage,
-        email=MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
-        password=MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
-        endpoint=API_ENDPOINT,
-        deck_api_endpoint=DECK_API_ENDPOINT,
-    ):
+        storage: Any,
+        email: str = MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
+        password: str = MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
+        endpoint: str = API_ENDPOINT,
+        deck_api_endpoint: str = DECK_API_ENDPOINT,
+    ) -> None:
         self.email = email
         self.password = password
         self.endpoint = endpoint
@@ -84,7 +85,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         self._decks_cache: list[AbstractArchivedDeck] = []  # will act as a cache
 
     @staticmethod
-    def _parse_login_authenticity_token(response):
+    def _parse_login_authenticity_token(response: Any) -> str:
         for line in response.text.split("\n"):
             if "authenticity_token" not in line:
                 continue
@@ -104,7 +105,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         raise MTGGoldfishException("Unable to get authenticity_token from MTGGoldfish.")
 
     @staticmethod
-    def _parse_meta_authenticity_token(response):
+    def _parse_meta_authenticity_token(response: Any) -> str:
         for line in response.text.split("\n"):
             if "meta" not in line or "csrf-token" not in line:
                 continue
@@ -117,7 +118,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             return authenticity_token
         raise MTGGoldfishException("Unable to get authenticity_token from MTGGoldfish.")
 
-    def _get_login_info(self):
+    def _get_login_info(self) -> tuple[str, str]:
         logger.info("Getting dynamic login info from MTGGoldfish...")
         response = self.session.get(f"{self.endpoint}")
         if "_mtg_session" not in response.cookies.get_dict():
@@ -128,7 +129,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         logger.debug(f"Found mtg_session_cookie: {mtg_session_cookie}")
         return mtg_session_cookie, self._parse_login_authenticity_token(response)
 
-    def login(self):
+    def login(self) -> None:
         mtg_session_cookie, authenticity_token = self._get_login_info()
         logger.info(f"Logging to MTGGoldfish as {self.email}...")
         header = {
@@ -156,14 +157,18 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         )
         logger.info(f"Logged to MTGGoldfish as {self.email}.")
 
-    def get_uri(self, deck_id):
+    def get_uri(self, deck_id: str) -> str:
         return f"{self.deck_api_endpoint}/{deck_id}"
 
     @with_login
-    def create_deck(self, name, description, playable_deck):
+    def create_deck(
+        self, name: str, description: str, playable_deck: PlayableDeck
+    ) -> str:
         return self._create_deck(name, description, playable_deck, format_="pauper")
 
-    def _create_deck(self, name, description, playable_deck, format_):
+    def _create_deck(
+        self, name: str, description: str, playable_deck: PlayableDeck, format_: str
+    ) -> str:
         logger.info(f"Creating deck {name} for {self.email}...")
         # we need to perform a dummy request to parse the authenticity_token
         response = self.session.get(f"{self.endpoint}/decks/new")
@@ -205,7 +210,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         self._update_decks_cache()
         return self._decks_cache
 
-    def _update_decks_cache(self):
+    def _update_decks_cache(self) -> None:
         all_decks = []
         for page in count(1):
             new_decks = self._list_decks_in_page(page)
@@ -227,8 +232,12 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
 
     @with_login
     def _list_decks_in_page(
-        self, page, filter_name="", mtg_format="pauper", visibility="public"
-    ):
+        self,
+        page: int,
+        filter_name: str = "",
+        mtg_format: str = "pauper",
+        visibility: str = "public",
+    ) -> list[AbstractArchivedDeck]:
         # possible filter_visibility values: '', 'private', 'public'
         logger.info(f"Listing decks for {self.email} in page {page}...")
         params = {
@@ -263,7 +272,9 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         logger.info(f"Listed decks for {self.email}.")
         return decks
 
-    def _workaround_retrieve_missing_decks(self, all_decks):
+    def _workaround_retrieve_missing_decks(
+        self, all_decks: list[AbstractArchivedDeck]
+    ) -> list[AbstractArchivedDeck]:
         logger.debug("Fixing bug in MTGGoldfish pager...")
 
         # Due to a bug in the pagination mechanism, decks are sometimes
@@ -286,7 +297,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         return all_decks
 
     @with_login
-    def delete_deck(self, deck_id):
+    def delete_deck(self, deck_id: str) -> None:
         logger.info(f"Deleting deck with id {deck_id} for {self.email}...")
         # we need to perform a dummy request to parse the authenticity_token
         params = {
@@ -327,8 +338,10 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
     @staticmethod
     def to_playable_deck(
         listed_deck: AbstractArchivedDeck,
-        decks_cache_dir=AcademyFileSystem().ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
-        use_cache=True,
+        decks_cache_dir: (
+            str | None
+        ) = AcademyFileSystem().ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
+        use_cache: bool = True,
     ) -> PlayableDeck:
         # TODO: fix ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR
         lines = None

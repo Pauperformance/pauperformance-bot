@@ -2,6 +2,7 @@ import json
 import time
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
+from typing import Any
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
@@ -39,11 +40,13 @@ logger = get_application_logger()
 
 class AbstractArchiveService(metaclass=ABCMeta):
     @abstractmethod
-    def get_uri(self, deck_id):
+    def get_uri(self, deck_id: str) -> str:
         pass
 
     @abstractmethod
-    def create_deck(self, name, description, playable_deck):
+    def create_deck(
+        self, name: str, description: str, playable_deck: PlayableDeck
+    ) -> str:
         pass
 
     @abstractmethod
@@ -51,13 +54,15 @@ class AbstractArchiveService(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def delete_deck(self, deck_id):
+    def delete_deck(self, deck_id: str) -> None:
         pass
 
     @staticmethod
     @abstractmethod
     def to_playable_deck(
-        listed_deck: AbstractArchivedDeck, decks_cache_dir=None, use_cache=True
+        listed_deck: AbstractArchivedDeck,
+        decks_cache_dir: str | None = None,
+        use_cache: bool = True,
     ) -> PlayableDeck:
         pass
 
@@ -67,14 +72,14 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
     async def import_player_decks_from_deckstats(
         self,
-        player,
-        storage,
-        players_by_deckstats_id,
-        set_index,
-        discord,
-        warning_player,
-        send_notification=True,
-    ):  # TODO: get rid of players_by_deckstats_id
+        player: PhDConfig,
+        storage: Any,
+        players_by_deckstats_id: dict[int, PhDConfig],
+        set_index: dict[int, dict[str, Any]],
+        discord: Any,
+        warning_player: PhDConfig,
+        send_notification: bool = True,
+    ) -> None:  # TODO: get rid of players_by_deckstats_id
         logger.info(f"Updating archive decks for {player.name}...")
         deckstats = DeckstatsService(owner_id=player.deckstats_id)
         imported_deckstats_deck = storage.list_imported_deckstats_deck_ids()
@@ -153,12 +158,12 @@ class AbstractArchiveService(metaclass=ABCMeta):
     async def archive_player_videos_from_twitch(
         self,
         player: PhDConfig,
-        videos,
-        storage,
-        discord,
-        warning_player,
-        send_notification=True,
-    ):
+        videos: list[Any],
+        storage: Any,
+        discord: Any,
+        warning_player: PhDConfig,
+        send_notification: bool = True,
+    ) -> None:
         logger.info(f"Updating Archive videos for {player.name}...")
         imported_twitch_videos = storage.list_imported_twitch_videos_ids()
         config_reader = ConfigReader()
@@ -246,11 +251,11 @@ class AbstractArchiveService(metaclass=ABCMeta):
         self,
         player: PhDConfig,
         videos: list[YouTubeVideo],
-        storage,
-        discord,
-        warning_player,
-        send_notification=True,
-    ):
+        storage: Any,
+        discord: Any,
+        warning_player: PhDConfig,
+        send_notification: bool = True,
+    ) -> None:
         logger.info(f"Updating Archive videos for {player.name}...")
         imported_youtube_videos = storage.list_imported_youtube_videos_ids()
         config_reader = ConfigReader()
@@ -337,13 +342,13 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
     async def import_player_deck_from_mtggoldfish(
         self,
-        url,
+        url: str,
         player: PhDConfig,
-        pauperformance,
-        discord_message,
-        p12e_name=None,
-        send_notification=True,
-    ):
+        pauperformance: Any,
+        discord_message: Any,
+        p12e_name: str | None = None,
+        send_notification: bool = True,
+    ) -> None:
         author = discord_message.author
         discord = pauperformance.discord
         storage = pauperformance.storage
