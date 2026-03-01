@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import itertools
 from collections import defaultdict
-from typing import DefaultDict, Tuple
+from typing import TYPE_CHECKING, DefaultDict, Tuple
 
 from scipy import spatial
 
@@ -20,12 +22,13 @@ from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
-from pauperformance_bot.service.pauperformance.pauperformance import (
-    PauperformanceService,
-)
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.math import truncate
+
+if TYPE_CHECKING:
+    from pauperformance_bot.service.pauperformance.pauperformance import (
+        PauperformanceService,
+    )
 
 logger = get_application_logger()
 
@@ -44,6 +47,23 @@ class Decklassifier:
             known_decks if known_decks else []
         )
         self._decks_cache: dict[str, PlayableDeck] = {}
+        self._artifact_land_names: list[str] | None = None
+
+    @classmethod
+    def from_snapshot_data(
+        cls,
+        archetypes: list[ArchetypeConfig],
+        known_decks: list[tuple[PlayableDeck, ArchetypeConfig]],
+        decks_cache: dict[str, PlayableDeck],
+        artifact_land_names: list[str],
+    ) -> Decklassifier:
+        instance = cls.__new__(cls)
+        instance.pauperformance = None
+        instance.archetypes = archetypes
+        instance.known_decks = known_decks if known_decks else []
+        instance._decks_cache = decks_cache if decks_cache else {}
+        instance._artifact_land_names = artifact_land_names
+        return instance
 
     def add_known_decks(self, known_decks: list[tuple[PlayableDeck, ArchetypeConfig]]):
         self.known_decks += known_decks
@@ -116,8 +136,11 @@ class Decklassifier:
         return sim
 
     def _is_affinity(self, deck: PlayableDeck) -> bool:
-        artifact_lands = self.pauperformance.scryfall.get_legal_artifact_lands()
-        artifact_lands_names = [c["name"] for c in artifact_lands]
+        if self._artifact_land_names is not None:
+            artifact_lands_names = self._artifact_land_names
+        else:
+            artifact_lands = self.pauperformance.scryfall.get_legal_artifact_lands()
+            artifact_lands_names = [c["name"] for c in artifact_lands]
         affinity_creatures = [
             "Frogmite",
             "Atog",
@@ -275,6 +298,8 @@ class Decklassifier:
         return most_similar_archetype, highest_similarity
 
     def get_metagame(self) -> Metagame:
+        from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
+
         mtggoldfish = MTGGoldfish()
         mtggoldfish_meta = mtggoldfish.get_pauper_meta()
         meta_shares: DefaultDict[str, list[MetaShare]] = defaultdict(list)
