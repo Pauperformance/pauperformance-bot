@@ -76,3 +76,32 @@ def test_is_affinity_with_preloaded_artifact_lands():
     )
 
     assert classifier._is_affinity(deck) is True
+
+
+def test_classify_deck_with_known_decks():
+    """Classifier should find the most similar archetype from known_decks."""
+    burn_archetype = _make_archetype("Burn")
+    elves_archetype = _make_archetype("Elves")
+
+    known_burn = _make_deck({
+        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
+        "Fireblast": 2, "Searing Blaze": 4, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
+        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
+    })
+
+    new_burn = _make_deck({
+        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
+        "Fireblast": 4, "Searing Blaze": 2, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
+        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
+    })
+
+    classifier = Decklassifier.from_snapshot_data(
+        archetypes=[burn_archetype, elves_archetype],
+        known_decks=[(known_burn, burn_archetype)],
+        decks_cache={},
+        artifact_land_names=[],
+    )
+
+    archetype, similarity = classifier.classify_deck(new_burn)
+    assert archetype.name == "Burn"
+    assert similarity > 0.9

@@ -70,7 +70,7 @@ class Decklassifier:
 
     @staticmethod
     def _cosine_similarity(v1, v2, w=1.0):
-        if w == 0:
+        if w == 0 or len(v1) == 0:
             return 1
         return 1 - spatial.distance.cosine(v1, v2, w=len(v1) * [w])
 
