@@ -65,6 +65,20 @@ class Decklassifier:
         instance._artifact_land_names = artifact_land_names
         return instance
 
+    @classmethod
+    def from_snapshot(cls, snapshot_path):
+        import pickle
+
+        logger.info(f"Loading classifier snapshot from {snapshot_path}...")
+        with open(snapshot_path, "rb") as f:
+            snapshot = pickle.load(f)
+        logger.info(
+            f"Loaded snapshot: {len(snapshot['archetypes'])} archetypes, "
+            f"{len(snapshot['known_decks'])} known decks, "
+            f"{len(snapshot['decks_cache'])} cached reference decks."
+        )
+        return cls.from_snapshot_data(**snapshot)
+
     def add_known_decks(self, known_decks: list[tuple[PlayableDeck, ArchetypeConfig]]):
         self.known_decks += known_decks
 

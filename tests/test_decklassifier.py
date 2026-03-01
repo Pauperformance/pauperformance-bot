@@ -1,3 +1,7 @@
+import os
+import pickle
+import tempfile
+
 from pauperformance_bot.entity.deck.playable import PlayableDeck, PlayedCard
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
 from pauperformance_bot.service.pauperformance.silver.decklassifier import Decklassifier
@@ -161,3 +165,34 @@ def test_classify_deck_skips_uncached_reference_when_no_pauperformance():
     archetype, similarity = classifier.classify_deck(new_burn)
     assert archetype.name == "Burn"
     assert similarity > 0.9
+
+
+def test_from_snapshot_loads_from_file():
+    """Decklassifier.from_snapshot should load classifier state from a pickle file."""
+    burn_archetype = _make_archetype("Burn")
+    known_burn = _make_deck({
+        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
+        "Fireblast": 2, "Searing Blaze": 4, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
+        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
+    })
+
+    snapshot = {
+        "archetypes": [burn_archetype],
+        "known_decks": [(known_burn, burn_archetype)],
+        "decks_cache": {},
+        "artifact_land_names": ["Ancient Den", "Great Furnace"],
+    }
+
+    with tempfile.NamedTemporaryFile(suffix=".pkl", delete=False) as f:
+        pickle.dump(snapshot, f)
+        snapshot_path = f.name
+
+    try:
+        classifier = Decklassifier.from_snapshot(snapshot_path)
+        assert len(classifier.archetypes) == 1
+        assert classifier.archetypes[0].name == "Burn"
+        assert len(classifier.known_decks) == 1
+        assert classifier._artifact_land_names == ["Ancient Den", "Great Furnace"]
+        assert classifier.pauperformance is None
+    finally:
+        os.unlink(snapshot_path)
