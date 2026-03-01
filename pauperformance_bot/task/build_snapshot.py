@@ -1,6 +1,7 @@
+import os
 import pickle
 
-from pauperformance_bot.constant.pauperformance.myr import RESOURCES_DIR
+from pauperformance_bot.constant.pauperformance.silver import CLASSIFIER_SNAPSHOT_PATH
 from pauperformance_bot.service.academy.data_exporter import AcademyDataExporter
 from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
     MTGGoldfishArchiveService,
@@ -11,12 +12,8 @@ from pauperformance_bot.service.pauperformance.pauperformance import (
 from pauperformance_bot.service.pauperformance.silver.decklassifier import Decklassifier
 from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 from pauperformance_bot.util.log import get_application_logger
-from pauperformance_bot.util.path import posix_path
 
 logger = get_application_logger()
-
-SILVER_DIR = posix_path(RESOURCES_DIR, "silver")
-SNAPSHOT_PATH = posix_path(SILVER_DIR, "classifier_snapshot.pkl")
 
 
 def _get_dpl_classifier():
@@ -37,7 +34,7 @@ def _get_dpl_classifier():
     return Decklassifier(pauperformance, known_decks)
 
 
-def build_snapshot(output_path=SNAPSHOT_PATH):
+def build_snapshot(output_path=CLASSIFIER_SNAPSHOT_PATH):
     logger.info("Building classifier snapshot...")
 
     logger.info("Running full classifier initialization...")
@@ -64,6 +61,7 @@ def build_snapshot(output_path=SNAPSHOT_PATH):
     }
 
     logger.info(f"Serializing snapshot to {output_path}...")
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "wb") as f:
         pickle.dump(snapshot, f)
 

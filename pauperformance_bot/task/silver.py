@@ -3,18 +3,16 @@ import os
 
 import jsonpickle
 
-from pauperformance_bot.constant.pauperformance.myr import RESOURCES_DIR, TOP_PATH
+from pauperformance_bot.constant.pauperformance.myr import TOP_PATH
+from pauperformance_bot.constant.pauperformance.silver import (
+    CLASSIFIER_SNAPSHOT_PATH,
+)
 from pauperformance_bot.service.pauperformance.silver.decklassifier import Decklassifier
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import (
     posix_path,
     safe_dump_json_to_file,
 )
-
-logger = get_application_logger()
-
-# Path to pre-built snapshot (see build_snapshot.py)
-SNAPSHOT_PATH = posix_path(RESOURCES_DIR, "silver", "classifier_snapshot.pkl")
 
 
 def get_dpl_classifier():
@@ -41,11 +39,11 @@ def get_dpl_classifier():
 
 
 def load_dpl_classifier():
-    if os.path.exists(SNAPSHOT_PATH):
-        logger.info(f"Loading classifier from snapshot: {SNAPSHOT_PATH}")
-        return Decklassifier.from_snapshot(SNAPSHOT_PATH)
+    if os.path.exists(CLASSIFIER_SNAPSHOT_PATH):
+        logger.info(f"Loading classifier from snapshot: {CLASSIFIER_SNAPSHOT_PATH}")
+        return Decklassifier.from_snapshot(CLASSIFIER_SNAPSHOT_PATH)
     logger.warning(
-        f"Snapshot not found at {SNAPSHOT_PATH}. "
+        f"Snapshot not found at {CLASSIFIER_SNAPSHOT_PATH}. "
         f"Falling back to full initialization (this will be slow)."
     )
     return get_dpl_classifier()

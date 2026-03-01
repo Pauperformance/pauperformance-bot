@@ -84,6 +84,38 @@ def test_is_affinity_with_preloaded_artifact_lands():
     assert classifier._is_affinity(deck) is True
 
 
+def test_is_not_affinity_with_preloaded_artifact_lands():
+    """_is_affinity should return False for a non-Affinity deck."""
+    artifact_land_names = ["Ancient Den", "Great Furnace", "Seat of the Synod"]
+
+    # A Burn deck - no artifact lands, no affinity creatures
+    deck = _make_deck(
+        {
+            "Lightning Bolt": 4,
+            "Lava Spike": 4,
+            "Rift Bolt": 4,
+            "Chain Lightning": 4,
+            "Fireblast": 2,
+            "Searing Blaze": 4,
+            "Ghitu Lavarunner": 4,
+            "Thermo-Alchemist": 4,
+            "Mountain": 18,
+            "Needle Drop": 4,
+            "Skewer the Critics": 4,
+            "Shard Volley": 4,
+        }
+    )
+
+    classifier = Decklassifier.from_snapshot_data(
+        archetypes=[],
+        known_decks=[],
+        decks_cache={},
+        artifact_land_names=artifact_land_names,
+    )
+
+    assert classifier._is_affinity(deck) is False
+
+
 def test_classify_deck_with_known_decks():
     """Classifier should find the most similar archetype from known_decks."""
     burn_archetype = _make_archetype("Burn")
