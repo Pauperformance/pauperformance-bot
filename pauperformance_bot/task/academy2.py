@@ -8,7 +8,7 @@ from pauperformance_bot.service.pauperformance.pauperformance import (
 from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 
 
-def academy_update():
+def academy_update() -> None:
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)
     pauperformance = PauperformanceService(storage, archive)
@@ -16,7 +16,7 @@ def academy_update():
     exporter.export_all()
 
 
-def main():
+def main() -> None:
     academy_update()
 
 

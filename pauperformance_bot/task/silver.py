@@ -1,9 +1,11 @@
 import json
 import os
+from typing import Any
 
 import jsonpickle
 
 from pauperformance_bot.constant.pauperformance.myr import TOP_PATH
+from pauperformance_bot.entity.api.miscellanea import DPLMeta
 from pauperformance_bot.service.academy.data_exporter import AcademyDataExporter
 from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
     MTGGoldfishArchiveService,
@@ -22,7 +24,7 @@ from pauperformance_bot.util.path import (
 logger = get_application_logger()
 
 
-def get_dpl_classifier():
+def get_dpl_classifier() -> Decklassifier:
     # from pauperformance_bot.service.pauperformance.archive.local import (
     #     LocalArchiveService
     # )
@@ -46,11 +48,13 @@ def get_dpl_classifier():
 DPL_SILVER = get_dpl_classifier()
 
 
-def generate_dpl_meta(data, name="DPL metagame"):
+def generate_dpl_meta(
+    data: list[dict[str, Any]], name: str = "DPL metagame"
+) -> DPLMeta:
     return DPL_SILVER.get_dpl_metagame(data, name=name)
 
 
-def main(input_file, output_file):
+def main(input_file: str, output_file: str) -> None:
     logger.info(f"Getting DPL decks from {input_file}...")
     data = json.load(open(input_file))
     dpl_meta = generate_dpl_meta(data, name=input_file)
@@ -63,7 +67,7 @@ def main(input_file, output_file):
     logger.info(f"Stored DPL meta in {output_file}...")
 
 
-def dpl_classifier(environ, start_response):
+def dpl_classifier(environ: dict[str, Any], start_response: Any) -> list[bytes]:
     try:
         method = environ["REQUEST_METHOD"]
         if method != "POST":
