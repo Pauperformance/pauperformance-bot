@@ -14,7 +14,7 @@ logger = get_application_logger()
 class YouTubeService:
     def __init__(
         self,
-        myr_client_id: str = YOUTUBE_API_KEY,
+        myr_client_id: str | None = YOUTUBE_API_KEY,
     ) -> None:
         self._service = Api(api_key=myr_client_id)
 

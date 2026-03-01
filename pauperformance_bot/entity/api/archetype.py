@@ -1,7 +1,9 @@
 from pauperformance_bot.entity.config.archetype import (
     ArchetypeConfig,
     DiscordResource,
-    Resource,
+)
+from pauperformance_bot.entity.config.archetype import Resource as Resource
+from pauperformance_bot.entity.config.archetype import (
     SideboardResource,
 )
 from pauperformance_bot.util.decorators import auto_repr, auto_str
@@ -32,7 +34,7 @@ class Archetype(ArchetypeConfig):
         self,
         *,
         name: str,
-        aliases: list[str] | None,
+        aliases: list[str],
         family: str | None,
         dominant_mana: list[str],
         game_type: list[str],

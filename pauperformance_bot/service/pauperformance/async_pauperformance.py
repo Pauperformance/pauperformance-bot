@@ -94,6 +94,7 @@ class AsyncPauperformanceService(PauperformanceService):
         self, player: PhDConfig, send_notification: bool = True
     ) -> None:
         logger.info(f"Processing videos from Twitch user {player.twitch_login_name}...")
+        assert player.twitch_login_name is not None
         twitch_user = self.twitch.get_user(player.twitch_login_name)
         warning_player: PhDConfig = self.config_reader.get_pauperformance_phd()
         await self.archive.archive_player_videos_from_twitch(
@@ -127,6 +128,8 @@ class AsyncPauperformanceService(PauperformanceService):
         logger.info(
             f"Processing videos from YouTube user " f"{player.youtube_channel_id}..."
         )
+        assert player.youtube_channel_id is not None
+        assert player.default_youtube_language is not None
         warning_player: PhDConfig = self.config_reader.get_pauperformance_phd()
         await self.archive.archive_player_videos_from_youtube(
             player,

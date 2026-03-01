@@ -10,6 +10,7 @@ from typing import Any
 from requests.exceptions import HTTPError
 
 import pauperformance_bot
+import pauperformance_bot.constant.pauperformance.pauperformance as p12e_constant
 from pauperformance_bot.constant.arena.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.arena.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.constant.mtg.scryfall import REQUESTS_SLEEP_SECONDS
@@ -75,9 +76,10 @@ class PauperformanceService:
     ) -> collections.OrderedDict[int, dict[str, Any]]:
         try:
             logger.info("Building Scryfall set index...")
-            scryfall_sets = self.scryfall.get_sets()
-            scryfall_sets = sorted(
-                scryfall_sets["data"], key=lambda s: s["released_at"] + s["code"]
+            scryfall_sets_response = self.scryfall.get_sets()
+            scryfall_sets: list[dict[str, Any]] = sorted(
+                scryfall_sets_response["data"],
+                key=lambda s: s["released_at"] + s["code"],
             )
             logger.info("Built Scryfall set index.")
         except HTTPError:  # Scryfall may be unreachable
@@ -124,7 +126,7 @@ class PauperformanceService:
         skip_sets: list[int] = KNOWN_SETS_WITH_NO_PAUPER_CARDS,
         cards_index_cache_dir: str = PAUPER_CARDS_INDEX_CACHE_DIR,
     ) -> dict[int, list[dict[str, Any]]]:
-        card_index = {}
+        card_index: dict[int, list[dict[str, Any]]] = {}
         os.makedirs(cards_index_cache_dir, exist_ok=True)
         for item in self.set_index.values():
             p12e_code = item["p12e_code"]
@@ -132,7 +134,7 @@ class PauperformanceService:
                 card_index[p12e_code] = []
                 continue
             set_cache_file = posix_path(cards_index_cache_dir, f"{p12e_code}.json")
-            set_index = []
+            set_index: list[dict[str, Any]] = []
             try:
                 with open(set_cache_file, "r", encoding="utf-8") as cache_f:
                     set_index = json.load(cache_f)
@@ -144,7 +146,7 @@ class PauperformanceService:
                 logger.debug(f"Missing cache for set {p12e_code}: querying Scryfall...")
                 scryfall_code = item["scryfall_code"]
                 query = f"set:{scryfall_code} rarity:common legal:pauper"
-                set_index = self.scryfall.search_cards(query)
+                set_index = self.scryfall.search_cards(query)  # type: ignore[assignment]
                 if len(set_index) > 0:
                     with open(set_cache_file, "w") as cache_f:
                         json.dump(set_index, cache_f)
@@ -159,9 +161,7 @@ class PauperformanceService:
         to_be_removed_sets = useless_sets - set(KNOWN_SETS_WITH_NO_PAUPER_CARDS)
         if len(to_be_removed_sets) > 0:
             constant_module = pauperformance_bot.__path__[0]
-            constant_file = (
-                pauperformance_bot.constant.pauperformance.pauperformance.__file__
-            )
+            constant_file = p12e_constant.__file__
             constant_relative_path = constant_file[len(constant_module) + 1 :]
             logger.warning(
                 f"Please, update the list of known sets with no pauper cards "
@@ -175,8 +175,8 @@ class PauperformanceService:
         self,
         skip_sets: list[int] = INCREMENTAL_CARDS_INDEX_SKIP_SETS,
     ) -> dict[int, list[dict[str, Any]]]:
-        incremental_card_index = {}
-        existing_card_names = set()
+        incremental_card_index: dict[int, list[dict[str, Any]]] = {}
+        existing_card_names: set[str] = set()
         useless_sets = set()
         for p12e_code, cards in self.card_index.items():
             logger.debug(f"Processing set with p12e_code: {p12e_code}...")
@@ -202,9 +202,7 @@ class PauperformanceService:
         to_be_removed_sets = useless_sets - set(INCREMENTAL_CARDS_INDEX_SKIP_SETS)
         if len(to_be_removed_sets) > 0:
             constant_module = pauperformance_bot.__path__[0]
-            constant_file = (
-                pauperformance_bot.constant.pauperformance.pauperformance.__file__
-            )
+            constant_file = p12e_constant.__file__
             constant_relative_path = constant_file[len(constant_module) + 1 :]
             logger.warning(
                 f"Please, update the list of known sets to be skipped for the "
@@ -222,6 +220,7 @@ class PauperformanceService:
                 )
                 continue
             logger.info(f"Processing player {player.name}...")
+            assert player.deckstats_name is not None
             deckstats = DeckstatsService(owner_id=player.deckstats_id)
             player_decks = deckstats.list_pauperformance_decks(player.deckstats_name)
             logger.info(f"Found {len(player_decks)} decks.")
@@ -261,7 +260,8 @@ class PauperformanceService:
         # by leveraging silver.deckstatistics.
         if len(archetype_decks) < 2:
             return [], []
-        lands = set(land["name"] for land in self.scryfall.get_legal_lands())
+        legal_lands: list[dict[str, Any]] = self.scryfall.get_legal_lands()  # type: ignore[assignment]
+        lands = set(land["name"] for land in legal_lands)
         decks_cards = {}
         all_cards = set()
         for deck in archetype_decks:
@@ -282,7 +282,7 @@ class PauperformanceService:
             s
             for s in self.set_index.values()
             if s["date"] <= usa_date
-            and len(self.incremental_card_index.get(s["p12e_code"])) > 0
+            and len(self.incremental_card_index.get(s["p12e_code"], [])) > 0
         ][-1]
 
     def get_current_set_index(self) -> dict[str, Any]:

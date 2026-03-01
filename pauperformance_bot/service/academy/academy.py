@@ -2,6 +2,7 @@ import collections
 import glob
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 from deprecated import deprecated
 
@@ -64,7 +65,7 @@ class AcademyService:
     ) -> None:
         self.pauperformance: PauperformanceService = pauperformance
         self.scryfall: ScryfallService = pauperformance.scryfall
-        self.set_index: collections.OrderedDict[int, dict[str, str]] = (
+        self.set_index: collections.OrderedDict[int, dict[str, Any]] = (
             pauperformance.set_index
         )
 
@@ -124,8 +125,8 @@ class AcademyService:
         archetypes = []
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
-            config = read_archetype_config(archetype_config_file)
-            values = config["values"]
+            config: dict[str, Any] = read_archetype_config(archetype_config_file)
+            values: dict[str, Any] = config["values"]
             archetypes.append(
                 {
                     "name": values["name"],
@@ -202,13 +203,14 @@ class AcademyService:
     ) -> None:
         logger.info("Generating archetypes...")
         all_decks = self.pauperformance.list_archived_decks()
-        banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
+        banned_cards_data: list[dict[str, Any]] = self.scryfall.get_banned_cards()  # type: ignore[assignment]
+        banned_cards: list[str] = [c["name"] for c in banned_cards_data]
         videos = self.pauperformance.list_videos()
         loader = AcademyDataLoader()
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
-            config = read_archetype_config(archetype_config_file)
-            values = config["values"]
+            config: dict[str, Any] = read_archetype_config(archetype_config_file)
+            values: dict[str, Any] = config["values"]
             resources = config["resources"]
             archetype_name = values["name"]
             archetype_decks = [
@@ -217,12 +219,12 @@ class AcademyService:
 
             for deck in archetype_decks:
                 playable_deck = self.pauperformance.archive.to_playable_deck(deck)
-                deck.legality = (
+                deck.legality = (  # type: ignore[attr-defined]
                     "✅" if playable_deck.is_legal(banned_cards) else "Ban 🔨"
                 )
                 p12e_set = self.pauperformance.set_index[int(deck.p12e_code)]
-                deck.set_name = p12e_set["name"]
-                deck.set_date = p12e_set["date"]
+                deck.set_name = p12e_set["name"]  # type: ignore[attr-defined]
+                deck.set_date = p12e_set["date"]  # type: ignore[attr-defined]
 
             # Staples and frequents can be built:
             # a) from archived decks
@@ -331,16 +333,16 @@ class AcademyService:
         logger.debug("Building families-archetypes map...")
         families_map = defaultdict(list)
         for archetype_config_file in glob.glob(f"{config_archetypes_dir}/*.ini"):
-            config = read_archetype_config(archetype_config_file)
-            values = config["values"]
-            if values["family"]:
-                families_map[values["family"]].append(values["name"])
+            config_data: dict[str, Any] = read_archetype_config(archetype_config_file)
+            arch_values: dict[str, Any] = config_data["values"]
+            if arch_values["family"]:
+                families_map[arch_values["family"]].append(arch_values["name"])
         logger.info(f"Families map: {families_map}")
 
         for family_name in families_map.keys():
             family_config_file = posix_path(config_families_dir, f"{family_name}.ini")
             logger.info(f"Processing {family_config_file}")
-            values = read_family_config(family_config_file)
+            values: dict[str, Any] = read_family_config(family_config_file)
             if values["name"] != family_name:
                 raise ValueError()
             values["archetypes"] = [
@@ -396,7 +398,7 @@ class AcademyService:
         bolded_index = []
         for item in self.set_index.values():
             p12e_code = item["p12e_code"]
-            if len(card_index[p12e_code]) == 0:
+            if len(card_index[int(p12e_code)]) == 0:
                 bolded_index.append(item)
             else:
                 bolded_index.append({k: f"**{v}**" for k, v in item.items()})

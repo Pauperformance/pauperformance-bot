@@ -34,7 +34,7 @@ class ConfigReader:
     def _read_config_file(config_file_path: str) -> configparser.ConfigParser:
         logger.debug(f"Reading configuration file {config_file_path}...")
         config = configparser.ConfigParser(allow_no_value=True)
-        config.optionxform = lambda option: option  # preserve case
+        config.optionxform = lambda option: option  # type: ignore[method-assign, assignment]  # preserve case
         config.read(config_file_path)
         logger.debug(f"Read configuration file {config_file_path}.")
         return config

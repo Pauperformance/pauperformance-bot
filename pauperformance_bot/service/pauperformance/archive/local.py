@@ -60,7 +60,7 @@ class LocalArchiveService(AbstractArchiveService):
 
     def list_decks(self) -> list[AbstractArchivedDeck]:
         logger.info(f"Listing decks in {self._root_dir}...")
-        decks = []
+        decks: list[AbstractArchivedDeck] = []
         for file in (
             join(self._root_dir, f)
             for f in listdir(self._root_dir)

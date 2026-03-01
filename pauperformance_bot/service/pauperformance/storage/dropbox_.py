@@ -24,9 +24,9 @@ class DropboxService(AbstractStorageService):
     def __init__(
         self,
         root_dir: str = MYR_ROOT_DIR,
-        refresh_token: str = DROPBOX_REFRESH_TOKEN,
-        app_key: str = DROPBOX_APP_KEY,
-        app_secret: str = DROPBOX_APP_SECRET,
+        refresh_token: str | None = DROPBOX_REFRESH_TOKEN,
+        app_key: str | None = DROPBOX_APP_KEY,
+        app_secret: str | None = DROPBOX_APP_SECRET,
     ) -> None:
         self._root_dir = root_dir
         self.app_key = app_key
@@ -56,8 +56,8 @@ class DropboxService(AbstractStorageService):
             results = self._service.files_list_folder_continue(cursor)
         items = results.entries
         if not results.has_more:
-            return items
-        return items + self._list_files(path, results.cursor)
+            return items  # type: ignore[no-any-return]
+        return items + self._list_files(path, results.cursor)  # type: ignore[no-any-return]
 
     def create_file(self, name: str, content: str = "") -> None:
         logger.info(f"Storing file {name}...")

@@ -29,10 +29,10 @@ class DeckDownloaderService:
         Returns:
             PlayableDeck | None: the representation of the deck or None.
         """
-        for domain, cls in DeckDownloaderService._downloaders.items():
+        for domain, downloader_cls in DeckDownloaderService._downloaders.items():
             if domain in url:
                 logger.debug(f"Found specific downloader for {url}")
-                return cls(url).download()
+                return downloader_cls(url).download()
         # TODO check if we want to catch only specific errors here
         try:
             logger.debug(f"Using mtgo downloader for {url}")

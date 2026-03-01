@@ -17,8 +17,8 @@ logger = get_application_logger()
 class TwitchService:
     def __init__(
         self,
-        myr_client_id: str = TWITCH_APP_CLIENT_ID,
-        myr_client_secret: str = TWITCH_APP_CLIENT_SECRET,
+        myr_client_id: str | None = TWITCH_APP_CLIENT_ID,
+        myr_client_secret: str | None = TWITCH_APP_CLIENT_SECRET,
     ) -> None:
         self._service = Twitch(myr_client_id, myr_client_secret)
 

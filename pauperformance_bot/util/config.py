@@ -13,7 +13,7 @@ logger = get_application_logger()
 @deprecated(reason="Migrated")
 def read_config(config_file_path: str) -> configparser.ConfigParser:
     config = configparser.ConfigParser(allow_no_value=True)
-    config.optionxform = lambda option: option  # preserve case
+    config.optionxform = lambda option: option  # type: ignore[assignment]  # preserve case
     config.read(config_file_path)
     logger.debug(f"Read configuration file: {config_file_path}")
     return config
@@ -30,7 +30,7 @@ def read_archetype_config(
     }
     list_fields = ["aliases", "mana", "type"]
     for field in list_fields:
-        values[field] = _parse_list_value(config["values"][field])
+        values[field] = _parse_list_value(config["values"][field])  # type: ignore[assignment]
     # read references
     references = {**config["references"]}
     # quick integrity check

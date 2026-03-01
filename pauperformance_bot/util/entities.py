@@ -9,7 +9,7 @@ def auto_repr(cls: type[_C]) -> type[_C]:
         class_attributes = ", ".join(f"{k}={v}" for k, v in vars(self).items())
         return f"{fq_class_name}({class_attributes})"
 
-    cls.__repr__ = __repr__  # type: ignore[attr-defined]
+    cls.__repr__ = __repr__  # type: ignore[method-assign, assignment]
     return cls
 
 
@@ -19,5 +19,5 @@ def auto_str(cls: type[_C]) -> type[_C]:
         class_attributes = ", ".join(f"{k}={v}" for k, v in vars(self).items())
         return f"{class_name}({class_attributes})"
 
-    cls.__str__ = __str__  # type: ignore[attr-defined]
+    cls.__str__ = __str__  # type: ignore[method-assign, assignment]
     return cls

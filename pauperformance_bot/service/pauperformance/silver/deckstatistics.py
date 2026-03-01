@@ -1,3 +1,5 @@
+from typing import Any
+
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.exceptions import CardNotFoundException
 from pauperformance_bot.service.academy.data_loader import AcademyDataLoader
@@ -14,7 +16,7 @@ class Deckstatistics:
         self,
         name: str,
         playable_decks: list[PlayableDeck],
-        cards: dict[str, dict[str, int]],
+        cards: dict[str, dict[str, Any]],
     ) -> None:
         self.name = name
         self._playable_decks = playable_decks
@@ -117,7 +119,7 @@ class DeckstatisticsFactory:
     def build_metadata_for(self, archetype: str) -> Deckstatistics:
         playable_decks = self._academy_loader.load_classified_decks(archetype)
         logger.debug(f"Found {len(playable_decks)} decks for {archetype}")
-        all_cards = {}
+        all_cards: dict[str, dict[str, Any]] = {}
 
         for pd in playable_decks:
             occurred_in_deck = set()

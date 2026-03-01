@@ -94,6 +94,6 @@ def dpl_classifier(environ: dict[str, Any], start_response: Any) -> list[bytes]:
 
 if __name__ == "__main__":
     main(
-        posix_path(TOP_PATH, "dev", "decks-all-tournaments.json"),
-        posix_path(TOP_PATH, "dev", "decks-all-tournaments-classified.json"),
+        posix_path(TOP_PATH.as_posix(), "dev", "decks-all-tournaments.json"),
+        posix_path(TOP_PATH.as_posix(), "dev", "decks-all-tournaments-classified.json"),
     )

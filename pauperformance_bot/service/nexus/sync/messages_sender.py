@@ -18,7 +18,7 @@ class DiscordMessagesSenderSyncService(AbstractSyncDiscordService):
     def __init__(
         self,
         messages: list[str],
-        myr_bot_token: str = DISCORD_BOT_TOKEN,
+        myr_bot_token: str | None = DISCORD_BOT_TOKEN,
         import_deck_channel_id: int = DISCORD_CHANNEL_IMPORT_DECK_ID,
         welcome_channel_id: int = DISCORD_CHANNEL_WELCOME_ID,
         myr_log_channel_id: int = DISCORD_CHANNEL_MYR_LOG_ID,

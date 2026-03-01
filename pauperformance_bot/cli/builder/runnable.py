@@ -11,6 +11,9 @@ class CLIRunnable:
     def name(self) -> str:
         return self._name
 
+    def add_parser_argument(self, tool_parser: ArgumentParser) -> None:
+        pass
+
     @abstractmethod
     def get_cli_parser(self) -> ArgumentParser:
         pass

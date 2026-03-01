@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any
 
 import jsonpickle
 import matplotlib.pyplot as plt
@@ -99,8 +100,8 @@ class AcademyDataExporter:
             ).build_metadata_for(archetype.name)
             staples, frequents = statistics.get_staple_and_frequent_cards()
 
-            staples = self.scryfall.get_archetype_cards(staples)
-            frequents = self.scryfall.get_archetype_cards(frequents)
+            staples_cards = self.scryfall.get_archetype_cards(staples)
+            frequents_cards = self.scryfall.get_archetype_cards(frequents)
             api_archetype = Archetype(
                 name=archetype.name,
                 aliases=archetype.aliases,
@@ -114,8 +115,8 @@ class AcademyDataExporter:
                 resource_sideboard=archetype.resource_sideboard,
                 resources_discord=archetype.resources_discord,
                 resources=archetype.resources,
-                staples=staples,
-                frequent=frequents,
+                staples=staples_cards,
+                frequent=frequents_cards,
             )
             safe_dump_json_to_file(
                 self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR,
@@ -128,7 +129,8 @@ class AcademyDataExporter:
 
     def export_decks(self) -> None:
         logger.info(f"Exporting decks to {self.academy_fs.ASSETS_DATA_DECK_DIR}...")
-        banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
+        banned_cards_data: list[dict[str, Any]] = self.scryfall.get_banned_cards()  # type: ignore[assignment]
+        banned_cards = [c["name"] for c in banned_cards_data]
         for deck in self.decks:
             set_index_entry = self.pauperformance.set_index[int(deck.p12e_code)]
             playable_deck: PlayableDeck = self.pauperformance.archive.to_playable_deck(
@@ -156,7 +158,7 @@ class AcademyDataExporter:
         logger.info(
             f"Exporting cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}..."
         )
-        cards_intel = {}
+        cards_intel: dict[str, dict[str, Any]] = {}
 
         for kd in self.silver.known_decks:
             deck = kd[0]
@@ -258,7 +260,7 @@ class AcademyDataExporter:
             f"Exported YouTube videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}."
         )
 
-    def _export_videos(self, video_keys: list[str]) -> None:
+    def _export_videos(self, video_keys: set[str] | list[str]) -> None:
         for video_key in video_keys:
             video_path = posix_path(
                 self.pauperformance.storage.youtube_video_path,
@@ -346,16 +348,17 @@ class AcademyDataExporter:
         )
 
     def _classify_mtggoldfish_tournament_decks(self) -> None:
-        banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
+        banned_cards_data: list[dict[str, Any]] = self.scryfall.get_banned_cards()  # type: ignore[assignment]
+        banned_cards = [c["name"] for c in banned_cards_data]
         already_classified_deck_ids = set(
             p.as_posix().split("/")[-1].replace(".json", "")
             for p in Path(self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR).rglob("*.json")
         )
         unclassified_decks_count = 0
-        for playable_deck_file in Path(
+        for playable_deck_path_obj in Path(
             self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR
         ).glob("*.txt"):
-            playable_deck_file = playable_deck_file.as_posix()
+            playable_deck_file = playable_deck_path_obj.as_posix()
             deck_id = playable_deck_file.split("/")[-1].replace(".txt", "")
             if deck_id in already_classified_deck_ids:
                 logger.debug(
@@ -439,7 +442,8 @@ class AcademyDataExporter:
     def _label_mtggoldfish_tournament_decks(
         self, latest_training_sample: str | None
     ) -> None:
-        banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
+        banned_cards_data2: list[dict[str, Any]] = self.scryfall.get_banned_cards()  # type: ignore[assignment]
+        banned_cards = [c["name"] for c in banned_cards_data2]
         already_classified_deck_ids = set(
             p.as_posix().split("/")[-1].replace(".json", "")
             for p in Path(self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR).rglob("*.json")
@@ -453,14 +457,14 @@ class AcademyDataExporter:
         skip_list = set(
             line for line in open(skip_f, "r").read().splitlines() if line != ""
         )
-        for playable_deck_file in sorted(
+        for playable_deck_path_obj2 in sorted(
             Path(self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR).glob(
                 "*.txt"
             ),
             reverse=True,
             key=lambda d: int(d.as_posix().split("/")[-1].replace(".txt", "")),
         ):
-            playable_deck_file = playable_deck_file.as_posix()
+            playable_deck_file = playable_deck_path_obj2.as_posix()
             deck_id = playable_deck_file.split("/")[-1].replace(".txt", "")
             if deck_id in already_classified_deck_ids:
                 logger.debug(

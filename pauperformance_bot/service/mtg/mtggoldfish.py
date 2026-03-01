@@ -123,9 +123,9 @@ class MTGGoldfish:
             try:
                 html_page = urllib.request.urlopen(url)
                 bs = BeautifulSoup(html_page.read(), features="lxml")
-                rows = bs.findAll("tr")[1:]  # skip header
+                rows = bs.find_all("tr")[1:]  # skip header
                 i = 0
-                for a in bs.findAll("a"):
+                for a in bs.find_all("a"):
                     if (
                         "href" in a.attrs
                         and "tournament" in a["href"]
@@ -143,7 +143,7 @@ class MTGGoldfish:
                 time.sleep(REQUESTS_SLEEP_SECONDS)  # avoid flooding (and soft-ban)
             except HTTPError:  # 400: Bad Request if we exceed pages
                 break
-            if any("No tournaments found." == x.text.strip() for x in bs.findAll("p")):
+            if any("No tournaments found." == x.text.strip() for x in bs.find_all("p")):
                 break
             if page == 4:
                 logger.warning(
@@ -161,7 +161,7 @@ class MTGGoldfish:
         tournament_decks: list[MTGGoldfishTournamentDeck] = []
         html_page = urllib.request.urlopen(url)
         bs = BeautifulSoup(html_page.read(), features="lxml")
-        for tr in bs.findAll("tr")[1:]:  # skip header
+        for tr in bs.find_all("tr")[1:]:  # skip header
             columns = tr.contents
             if len(columns) < 10:
                 continue
@@ -181,7 +181,7 @@ class MTGGoldfish:
             except (ValueError, IndexError):
                 mtgo_price = None
             tournament_deck = MTGGoldfishTournamentDeck(
-                url=f"{API_ENDPOINT}{list(columns[3].children)[1]['href']}",
+                url=f"{API_ENDPOINT}{list(columns[3].children)[1]['href']}",  # type: ignore[attr-defined]
                 archetype=archetype,
                 place=place,
                 pilot=pilot,

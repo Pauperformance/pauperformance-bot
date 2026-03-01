@@ -81,6 +81,8 @@ class AbstractArchiveService(metaclass=ABCMeta):
         send_notification: bool = True,
     ) -> None:  # TODO: get rid of players_by_deckstats_id
         logger.info(f"Updating archive decks for {player.name}...")
+        assert player.deckstats_id is not None
+        assert player.deckstats_name is not None
         deckstats = DeckstatsService(owner_id=player.deckstats_id)
         imported_deckstats_deck = storage.list_imported_deckstats_deck_ids()
         for deckstats_deck in deckstats.list_pauperformance_decks(
@@ -91,7 +93,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 f"({deckstats_deck.saved_id}) "
                 f"from {deckstats_deck.owner_name}, "
                 f"uploaded by "
-                f"{players_by_deckstats_id[deckstats_deck.owner_id].name} "
+                f"{players_by_deckstats_id[int(deckstats_deck.owner_id)].name} "
                 f"({deckstats_deck.owner_id})..."
             )
             if str(deckstats_deck.saved_id) in imported_deckstats_deck:
@@ -309,7 +311,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
             logger.info(f"Archiving information on storage in file {storage_key}...")
             try:
                 base_archetype_name = config_reader.get_archetype_name_from_alias(
-                    video.archetype
+                    video.archetype  # type: ignore[arg-type]
                 )
             except PauperformanceException:
                 base_archetype_name = "Brew"
@@ -448,9 +450,9 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 if len(deck_group) == 0:
                     revision = "001"
                 else:
-                    revision = int(max((d.revision for d in deck_group)))
-                    revision += 1
-                    revision = str(revision).zfill(3)
+                    revision_num = int(max((d.revision for d in deck_group)))
+                    revision_num += 1
+                    revision = str(revision_num).zfill(3)
                 logger.debug(f"Computed revision: {revision}.")
                 p12e_name = (
                     f"{p12e_name} " f"{set_id['p12e_code']}.{revision}.{player.name}"

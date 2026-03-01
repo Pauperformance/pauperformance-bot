@@ -15,8 +15,8 @@ def safe_posix_path(name: str) -> str:
     underscores, or hyphens. Converts to lowercase. Converts '//' to '_or_'.
     Converts spaces or repeated dashes to single dashes. Also strips leading and
     trailing whitespace, dashes, and underscores."""
-    res = unicodedata.normalize("NFKC", name).encode("ASCII").lower()
-    res = str(res).replace("//", "_or_")
+    res_bytes = unicodedata.normalize("NFKC", name).encode("ASCII").lower()
+    res = str(res_bytes).replace("//", "_or_")
     # remove all  except for word characters (letters, digits, and underscores),
     # whitespace characters, and hyphens.
     res = re.sub(r"[^\w\s-]", "", res)

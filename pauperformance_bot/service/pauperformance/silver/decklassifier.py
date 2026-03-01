@@ -51,7 +51,9 @@ class Decklassifier:
         self.known_decks += known_decks
 
     @staticmethod
-    def _cosine_similarity(v1: list[float], v2: list[float], w: float = 1.0) -> float:
+    def _cosine_similarity(
+        v1: list[int] | list[float], v2: list[int] | list[float], w: float = 1.0
+    ) -> float:
         if w == 0:
             return 1
         return 1 - spatial.distance.cosine(v1, v2, w=len(v1) * [w])
@@ -121,7 +123,7 @@ class Decklassifier:
 
     def _is_affinity(self, deck: PlayableDeck) -> bool:
         artifact_lands = self.pauperformance.scryfall.get_legal_artifact_lands()
-        artifact_lands_names = [c["name"] for c in artifact_lands]
+        artifact_lands_names = [c["name"] for c in artifact_lands]  # type: ignore[index]
         affinity_creatures = [
             "Frogmite",
             "Atog",
@@ -223,9 +225,10 @@ class Decklassifier:
     def classify_deck(
         self,
         deck: PlayableDeck,
-    ) -> tuple[ArchetypeConfig, float]:
+    ) -> tuple[ArchetypeConfig | None, float]:
         logger.debug("Classifying deck...")
-        most_similar_archetype, highest_similarity = None, 0
+        most_similar_archetype: ArchetypeConfig | None = None
+        highest_similarity: float = 0.0
 
         # TODO: remove this block in the future if it becomes useless
         # First, check if archetype can be detected with rules.
@@ -285,7 +288,7 @@ class Decklassifier:
         for link, values in mtggoldfish_meta.items():
             share, playable_deck = values
             similar_archetype, similarity_score = self.classify_deck(playable_deck)
-            archetype_name = similar_archetype.name
+            archetype_name = similar_archetype.name if similar_archetype else "Unknown"
             if similarity_score < 0.30:
                 archetype_name = "Brew"
                 similarity_score = 1 - similarity_score
@@ -343,7 +346,7 @@ class Decklassifier:
             )
             if highest_similarity < brew_threshold:
                 most_similar_archetype = None
-            elif learn_on_the_fly:
+            elif learn_on_the_fly and most_similar_archetype is not None:
                 self.known_decks.append((playable_deck, most_similar_archetype))
             dpl_decks.append(
                 DPLDeck(
@@ -361,13 +364,13 @@ class Decklassifier:
             dpl_decks=dpl_decks,
         )
         logger.info(dpl_meta)
-        archetype_maps = defaultdict(int)
+        archetype_maps: defaultdict[str, int] = defaultdict(int)
         for dpl_deck in dpl_meta.dpl_decks:
             if not dpl_deck.archetype:
                 print(f"WARNING: manually count {dpl_deck}")
                 continue
             archetype_maps[dpl_deck.archetype] += 1
-        game_types = defaultdict(int)
+        game_types: defaultdict[str, int] = defaultdict(int)
         print()
         for k, v in sorted(archetype_maps.items()):
             print(f"{v} {k}")

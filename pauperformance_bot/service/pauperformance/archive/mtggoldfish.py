@@ -55,8 +55,8 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
     def __init__(
         self,
         storage: Any,
-        email: str = MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
-        password: str = MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
+        email: str | None = MTGGOLDFISH_PAUPERFORMANCE_USERNAME,
+        password: str | None = MTGGOLDFISH_PAUPERFORMANCE_PASSWORD,
         endpoint: str = API_ENDPOINT,
         deck_api_endpoint: str = DECK_API_ENDPOINT,
     ) -> None:
@@ -101,7 +101,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
                 token = token[0 : token.find('"')]
                 if len(token) >= MIN_AUTHENTICITY_TOKEN_LEN:
                     logger.debug(f"Found authenticity_token: {token}")
-                    return token
+                    return token  # type: ignore[no-any-return]
         raise MTGGoldfishException("Unable to get authenticity_token from MTGGoldfish.")
 
     @staticmethod
@@ -115,7 +115,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
                 line.rfind(content_token) + len(content_token) + 1 : -4
             ]
             logger.debug(f"Found authenticity_token: {authenticity_token}")
-            return authenticity_token
+            return authenticity_token  # type: ignore[no-any-return]
         raise MTGGoldfishException("Unable to get authenticity_token from MTGGoldfish.")
 
     def _get_login_info(self) -> tuple[str, str]:
@@ -201,6 +201,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         )
         if response.status_code != 200:
             raise MTGGoldfishException(f"Failed to create deck {name} for {self.email}")
+        assert response.request.url is not None
         deck_id = response.request.url.split("/")[-1]
         logger.info(f"Created deck {name} for {self.email}. Id: {deck_id}")
         return deck_id
@@ -258,7 +259,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             raise MTGGoldfishException(f"Failed to list decks for {self.email}")
         logger.debug(f"Parsing page with decks for {self.email}...")
         pq = PyQuery(response.content)
-        decks = []
+        decks: list[AbstractArchivedDeck] = []
         for c in pq("table tbody tr").items():
             row = c.text()
             _, name, _, format_, creation_date, visibility, _, _ = row.split("\n")
@@ -344,6 +345,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         use_cache: bool = True,
     ) -> PlayableDeck:
         # TODO: fix ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR
+        assert decks_cache_dir is not None
         lines = None
         to_be_cached = True
         if use_cache:
@@ -359,12 +361,12 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             except FileNotFoundError:
                 pass
         if not lines:
-            lines = [MTGGOLDFISH_THROTTLE_ERROR_RESPONSE]
-            while MTGGOLDFISH_THROTTLE_ERROR_RESPONSE in lines:
-                content = urlopen(listed_deck.download_txt_url).read()
-                lines = content.decode("utf-8")
+            raw_content = MTGGOLDFISH_THROTTLE_ERROR_RESPONSE
+            while MTGGOLDFISH_THROTTLE_ERROR_RESPONSE in raw_content:
+                content = urlopen(listed_deck.download_txt_url).read()  # type: ignore[attr-defined]
+                raw_content = content.decode("utf-8")
                 time.sleep(REQUESTS_SLEEP_SECONDS)
-            lines = lines.split("\r\n")
+            lines = raw_content.split("\r\n")
         if to_be_cached:
             with open(
                 posix_path(decks_cache_dir, f"{listed_deck.deck_id}.txt"),
@@ -377,5 +379,5 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
     def get_deck(self, deck_name: str) -> AbstractArchivedDeck:
         for deck in self.list_decks():
             if deck.p12e_name == deck_name:
-                return deck
+                return deck  # type: ignore[no-any-return]
         raise ArchiveException(f"Unable to find deck with name {deck_name}.")

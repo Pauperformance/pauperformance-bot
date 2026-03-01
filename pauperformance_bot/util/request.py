@@ -16,7 +16,7 @@ def _http_request_retry(
     # retries an HTTP request in case of ConnectionError with an exponential
     # backoff policy and additional random waits between 1 and 2 seconds.
     # It gives up after 5 attempts or after 60 seconds have passed.
-    @retry(
+    @retry(  # type: ignore[untyped-decorator]
         retry_on_exception=_retry_on_connection_error,
         stop_max_attempt_number=5,
         stop_max_delay=60 * 1000,

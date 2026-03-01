@@ -119,7 +119,7 @@ class DeckstatsService:
                 ) as cache_f:
                     deck = pickle.load(cache_f)
                     logger.debug(f"Loaded deck from cache: {deck}")
-                    return deck
+                    return deck  # type: ignore[no-any-return]
             except FileNotFoundError:
                 pass
         logger.debug("No cache found for deck.")
@@ -137,7 +137,7 @@ class DeckstatsService:
         deck = json.loads(response.content)
         with open(posix_path(decks_cache_dir, f"{deck_id}.pkl"), "wb") as cache_f:
             pickle.dump(deck, cache_f)
-        return deck
+        return deck  # type: ignore[no-any-return]
 
     def to_playable_deck(self, deckstats_deck: dict[str, Any]) -> PlayableDeck:
         logger.info(f"Parsing deckstats deck {deckstats_deck['saved_id']} list...")

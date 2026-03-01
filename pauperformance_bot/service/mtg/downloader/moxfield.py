@@ -21,7 +21,7 @@ class MoxfieldDeckDownloader(AbstractDeckDownloader):
         super().__init__(url)
         self._downloader = MtgoDeckDownloader(
             url,
-            headers={"User-Agent": MOXFIELD_USER_AGENT},
+            headers={"User-Agent": MOXFIELD_USER_AGENT or ""},
         )
 
     def download(self) -> PlayableDeck:

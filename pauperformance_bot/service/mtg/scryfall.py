@@ -30,7 +30,7 @@ class ScryfallService:
         url = f"{self.endpoint}/sets"
         method = requests.get
         response = execute_http_request(method, url)
-        return json.loads(response.content)
+        return json.loads(response.content)  # type: ignore[no-any-return]
 
     def get_card_named(
         self,
@@ -44,7 +44,7 @@ class ScryfallService:
                 card = pickle.load(cache_f)
                 logger.debug(f"Loaded card from cache: {exact_card_name}")
                 # logger.debug(f"Card: {card}")
-                return card
+                return card  # type: ignore[no-any-return]
         except FileNotFoundError:
             logger.debug(f"No cache found for card {exact_card_name}.")
             url = f"{self.endpoint}/cards/named"
@@ -58,7 +58,7 @@ class ScryfallService:
                     posix_path(cards_cache_dir, to_pkl_name(exact_card_name)), "wb"
                 ) as cache_f:
                     pickle.dump(card, cache_f)
-                return card
+                return card  # type: ignore[no-any-return]
             except requests.exceptions.HTTPError as exc:
                 if exc.response.status_code == 404:
                     message = f"Absent card in Scryfall: {exact_card_name}."
@@ -87,6 +87,7 @@ class ScryfallService:
             response = json.loads(exc.response.content)
             if exc.response.status_code == 404 and response["code"] == "not_found":
                 return {}
+            raise
 
     @lru_cache(maxsize=1)
     def get_legal_lands(self) -> list[dict[str, Any]] | dict[str, Any]:

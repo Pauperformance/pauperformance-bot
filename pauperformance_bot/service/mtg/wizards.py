@@ -16,14 +16,16 @@ logger = get_application_logger()
 
 def _parse_match_result(player1_line: str, player2_line: str) -> MTGOStandingMatch:
     result = re.search(r"\(([0-9]+)\) (\w+), ([0-9-]+)", player1_line)
+    assert result is not None, f"Failed to parse player1 line: {player1_line}"
     player1_ranking, player1, match_score = result.groups()
     result = re.search(r"\(([0-9]+)\) (\w+)", player2_line)
+    assert result is not None, f"Failed to parse player2 line: {player2_line}"
     player2_ranking, player2 = result.groups()
     return MTGOStandingMatch(
         player1,
-        player1_ranking,
+        int(player1_ranking),
         player2,
-        player2_ranking,
+        int(player2_ranking),
         match_score,
     )
 

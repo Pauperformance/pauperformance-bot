@@ -54,7 +54,7 @@ VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 if (
     "VIRTUAL_ENV" in os.environ and "PYCHARM_HOSTED" not in os.environ
 ):  # running in venv, outside PyCharm
-    RESOURCES_DIR = posix_path(os.getenv("VIRTUAL_ENV"), "resources")
+    RESOURCES_DIR = posix_path(os.environ["VIRTUAL_ENV"], "resources")
 else:
     RESOURCES_DIR = posix_path(TOP_PATH.as_posix(), "resources")
 
