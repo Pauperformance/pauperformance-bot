@@ -25,7 +25,9 @@ def get_dpl_classifier():
     from pauperformance_bot.service.pauperformance.pauperformance import (
         PauperformanceService,
     )
-    from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
+    from pauperformance_bot.service.pauperformance.storage.dropbox_ import (
+        DropboxService,
+    )
 
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)

@@ -2,8 +2,8 @@ import os
 import pickle
 import tempfile
 
-from pauperformance_bot.entity.deck.playable import PlayableDeck, PlayedCard
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
+from pauperformance_bot.entity.deck.playable import PlayableDeck, PlayedCard
 from pauperformance_bot.service.pauperformance.silver.decklassifier import Decklassifier
 
 
@@ -54,23 +54,25 @@ def test_is_affinity_with_preloaded_artifact_lands():
     ]
 
     # Build an Affinity deck
-    deck = _make_deck({
-        "Ancient Den": 4,
-        "Great Furnace": 4,
-        "Seat of the Synod": 4,
-        "Tree of Tales": 4,
-        "Frogmite": 4,
-        "Myr Enforcer": 4,
-        "Galvanic Blast": 4,
-        "Thoughtcast": 4,
-        "Chromatic Star": 4,
-        "Springleaf Drum": 4,
-        "Island": 4,
-        "Ornithopter": 4,
-        "Somber Hoverguard": 4,
-        "Atog": 4,
-        "Disciple of the Vault": 4,
-    })
+    deck = _make_deck(
+        {
+            "Ancient Den": 4,
+            "Great Furnace": 4,
+            "Seat of the Synod": 4,
+            "Tree of Tales": 4,
+            "Frogmite": 4,
+            "Myr Enforcer": 4,
+            "Galvanic Blast": 4,
+            "Thoughtcast": 4,
+            "Chromatic Star": 4,
+            "Springleaf Drum": 4,
+            "Island": 4,
+            "Ornithopter": 4,
+            "Somber Hoverguard": 4,
+            "Atog": 4,
+            "Disciple of the Vault": 4,
+        }
+    )
 
     classifier = Decklassifier.from_snapshot_data(
         archetypes=archetypes,
@@ -87,17 +89,39 @@ def test_classify_deck_with_known_decks():
     burn_archetype = _make_archetype("Burn")
     elves_archetype = _make_archetype("Elves")
 
-    known_burn = _make_deck({
-        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
-        "Fireblast": 2, "Searing Blaze": 4, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
-        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
-    })
+    known_burn = _make_deck(
+        {
+            "Lightning Bolt": 4,
+            "Lava Spike": 4,
+            "Rift Bolt": 4,
+            "Chain Lightning": 4,
+            "Fireblast": 2,
+            "Searing Blaze": 4,
+            "Ghitu Lavarunner": 4,
+            "Thermo-Alchemist": 4,
+            "Mountain": 18,
+            "Needle Drop": 4,
+            "Skewer the Critics": 4,
+            "Shard Volley": 4,
+        }
+    )
 
-    new_burn = _make_deck({
-        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
-        "Fireblast": 4, "Searing Blaze": 2, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
-        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
-    })
+    new_burn = _make_deck(
+        {
+            "Lightning Bolt": 4,
+            "Lava Spike": 4,
+            "Rift Bolt": 4,
+            "Chain Lightning": 4,
+            "Fireblast": 4,
+            "Searing Blaze": 2,
+            "Ghitu Lavarunner": 4,
+            "Thermo-Alchemist": 4,
+            "Mountain": 18,
+            "Needle Drop": 4,
+            "Skewer the Critics": 4,
+            "Shard Volley": 4,
+        }
+    )
 
     classifier = Decklassifier.from_snapshot_data(
         archetypes=[burn_archetype, elves_archetype],
@@ -115,17 +139,39 @@ def test_classify_deck_with_precached_reference_decks():
     """Classifier should use _decks_cache for reference decks without calling pauperformance."""
     burn_archetype = _make_archetype("Burn", reference_decks=["burn_ref_1"])
 
-    burn_ref_deck = _make_deck({
-        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
-        "Fireblast": 2, "Searing Blaze": 4, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
-        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
-    })
+    burn_ref_deck = _make_deck(
+        {
+            "Lightning Bolt": 4,
+            "Lava Spike": 4,
+            "Rift Bolt": 4,
+            "Chain Lightning": 4,
+            "Fireblast": 2,
+            "Searing Blaze": 4,
+            "Ghitu Lavarunner": 4,
+            "Thermo-Alchemist": 4,
+            "Mountain": 18,
+            "Needle Drop": 4,
+            "Skewer the Critics": 4,
+            "Shard Volley": 4,
+        }
+    )
 
-    new_burn = _make_deck({
-        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
-        "Fireblast": 4, "Searing Blaze": 2, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
-        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
-    })
+    new_burn = _make_deck(
+        {
+            "Lightning Bolt": 4,
+            "Lava Spike": 4,
+            "Rift Bolt": 4,
+            "Chain Lightning": 4,
+            "Fireblast": 4,
+            "Searing Blaze": 2,
+            "Ghitu Lavarunner": 4,
+            "Thermo-Alchemist": 4,
+            "Mountain": 18,
+            "Needle Drop": 4,
+            "Skewer the Critics": 4,
+            "Shard Volley": 4,
+        }
+    )
 
     classifier = Decklassifier.from_snapshot_data(
         archetypes=[burn_archetype],
@@ -143,17 +189,39 @@ def test_classify_deck_skips_uncached_reference_when_no_pauperformance():
     """When pauperformance is None and reference deck is not cached, skip it gracefully."""
     burn_archetype = _make_archetype("Burn", reference_decks=["missing_ref_1"])
 
-    known_burn = _make_deck({
-        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
-        "Fireblast": 2, "Searing Blaze": 4, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
-        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
-    })
+    known_burn = _make_deck(
+        {
+            "Lightning Bolt": 4,
+            "Lava Spike": 4,
+            "Rift Bolt": 4,
+            "Chain Lightning": 4,
+            "Fireblast": 2,
+            "Searing Blaze": 4,
+            "Ghitu Lavarunner": 4,
+            "Thermo-Alchemist": 4,
+            "Mountain": 18,
+            "Needle Drop": 4,
+            "Skewer the Critics": 4,
+            "Shard Volley": 4,
+        }
+    )
 
-    new_burn = _make_deck({
-        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
-        "Fireblast": 4, "Searing Blaze": 2, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
-        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
-    })
+    new_burn = _make_deck(
+        {
+            "Lightning Bolt": 4,
+            "Lava Spike": 4,
+            "Rift Bolt": 4,
+            "Chain Lightning": 4,
+            "Fireblast": 4,
+            "Searing Blaze": 2,
+            "Ghitu Lavarunner": 4,
+            "Thermo-Alchemist": 4,
+            "Mountain": 18,
+            "Needle Drop": 4,
+            "Skewer the Critics": 4,
+            "Shard Volley": 4,
+        }
+    )
 
     classifier = Decklassifier.from_snapshot_data(
         archetypes=[burn_archetype],
@@ -170,11 +238,22 @@ def test_classify_deck_skips_uncached_reference_when_no_pauperformance():
 def test_from_snapshot_loads_from_file():
     """Decklassifier.from_snapshot should load classifier state from a pickle file."""
     burn_archetype = _make_archetype("Burn")
-    known_burn = _make_deck({
-        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
-        "Fireblast": 2, "Searing Blaze": 4, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
-        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
-    })
+    known_burn = _make_deck(
+        {
+            "Lightning Bolt": 4,
+            "Lava Spike": 4,
+            "Rift Bolt": 4,
+            "Chain Lightning": 4,
+            "Fireblast": 2,
+            "Searing Blaze": 4,
+            "Ghitu Lavarunner": 4,
+            "Thermo-Alchemist": 4,
+            "Mountain": 18,
+            "Needle Drop": 4,
+            "Skewer the Critics": 4,
+            "Shard Volley": 4,
+        }
+    )
 
     snapshot = {
         "archetypes": [burn_archetype],
