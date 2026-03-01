@@ -105,3 +105,59 @@ def test_classify_deck_with_known_decks():
     archetype, similarity = classifier.classify_deck(new_burn)
     assert archetype.name == "Burn"
     assert similarity > 0.9
+
+
+def test_classify_deck_with_precached_reference_decks():
+    """Classifier should use _decks_cache for reference decks without calling pauperformance."""
+    burn_archetype = _make_archetype("Burn", reference_decks=["burn_ref_1"])
+
+    burn_ref_deck = _make_deck({
+        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
+        "Fireblast": 2, "Searing Blaze": 4, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
+        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
+    })
+
+    new_burn = _make_deck({
+        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
+        "Fireblast": 4, "Searing Blaze": 2, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
+        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
+    })
+
+    classifier = Decklassifier.from_snapshot_data(
+        archetypes=[burn_archetype],
+        known_decks=[],
+        decks_cache={"burn_ref_1": burn_ref_deck},
+        artifact_land_names=[],
+    )
+
+    archetype, similarity = classifier.classify_deck(new_burn)
+    assert archetype.name == "Burn"
+    assert similarity > 0.9
+
+
+def test_classify_deck_skips_uncached_reference_when_no_pauperformance():
+    """When pauperformance is None and reference deck is not cached, skip it gracefully."""
+    burn_archetype = _make_archetype("Burn", reference_decks=["missing_ref_1"])
+
+    known_burn = _make_deck({
+        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
+        "Fireblast": 2, "Searing Blaze": 4, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
+        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
+    })
+
+    new_burn = _make_deck({
+        "Lightning Bolt": 4, "Lava Spike": 4, "Rift Bolt": 4, "Chain Lightning": 4,
+        "Fireblast": 4, "Searing Blaze": 2, "Ghitu Lavarunner": 4, "Thermo-Alchemist": 4,
+        "Mountain": 18, "Needle Drop": 4, "Skewer the Critics": 4, "Shard Volley": 4,
+    })
+
+    classifier = Decklassifier.from_snapshot_data(
+        archetypes=[burn_archetype],
+        known_decks=[(known_burn, burn_archetype)],
+        decks_cache={},
+        artifact_land_names=[],
+    )
+
+    archetype, similarity = classifier.classify_deck(new_burn)
+    assert archetype.name == "Burn"
+    assert similarity > 0.9
