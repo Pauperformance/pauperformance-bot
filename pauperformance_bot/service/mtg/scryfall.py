@@ -59,7 +59,7 @@ class ScryfallService:
             except requests.exceptions.HTTPError as exc:
                 if exc.response.status_code == 404:
                     message = f"Absent card in Scryfall: {exact_card_name}."
-                    logger.error(message)
+                    logger.warning(message)
                     raise CardNotFoundException(message)
                 else:
                     raise

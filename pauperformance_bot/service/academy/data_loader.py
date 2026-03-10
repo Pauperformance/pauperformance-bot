@@ -27,10 +27,11 @@ class AcademyDataLoader:
         """Returns a list of decks for the given archetype."""
         deck_dir = posix_path(self._academy_fs.ASSETS_DATA_INTEL_DECK_DIR, archetype)
         if not path.exists(deck_dir):
-            logger.error(
+            logger.warning(
                 f"No dir for archetype {archetype} found in "
                 + f"{self._academy_fs.ASSETS_DATA_INTEL_DECK_DIR}"
             )
+            os.makedirs(deck_dir)
             return []
         playable_decks, missing = self.__load_all(deck_dir)
         if missing:

@@ -126,7 +126,7 @@ class DeckstatisticsFactory:
                 try:
                     self._scryfall.get_card_named(card.card_name)
                 except CardNotFoundException:
-                    logger.error(f"Card not found in scryfall {card.card_name}")
+                    logger.warning(f"Card not found in scryfall {card.card_name}")
                     continue
 
                 if card.card_name not in all_cards:
