@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # PYTHON_ARGCOMPLETE_OK
 from argparse import ArgumentParser
+from typing import Any
 
 import argcomplete
 
@@ -14,12 +15,16 @@ from pauperformance_bot.constant.pauperformance.myr import APPLICATION_NAME
 
 
 class MyrCLI(CLIRunnable):
-    _cli_tools = [academy.AcademyGroup(), test.TestGroup(), silver.SilverGroup()]
+    _cli_tools: list[CLIRunnable] = [
+        academy.AcademyGroup(),
+        test.TestGroup(),
+        silver.SilverGroup(),
+    ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(APPLICATION_NAME)
 
-    def get_cli_parser(self):
+    def get_cli_parser(self) -> ArgumentParser:
         parser = ArgumentParser(description="A collection of Myr tasks")
         add_default_options(parser)
 
@@ -39,13 +44,13 @@ class MyrCLI(CLIRunnable):
         argcomplete.autocomplete(parser)
         return parser
 
-    def dispatch_cmd(self, tool, *args, **kwargs):
+    def dispatch_cmd(self, tool: str, *args: Any, **kwargs: Any) -> None:
         handle_default_cli_options(*args, **kwargs)
         dispatcher = next(filter(lambda t: t.name == tool, MyrCLI._cli_tools))
         dispatcher.dispatch_cmd(*args, **kwargs)
 
 
-def main():
+def main() -> None:
     MyrCLI().run()
 
 

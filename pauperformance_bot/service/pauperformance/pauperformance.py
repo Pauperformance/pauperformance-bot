@@ -5,11 +5,12 @@ import os
 from datetime import datetime
 from pathlib import Path
 from time import sleep
-from typing import Any, Dict, List
+from typing import Any
 
 from requests.exceptions import HTTPError
 
 import pauperformance_bot
+import pauperformance_bot.constant.pauperformance.pauperformance as p12e_constant
 from pauperformance_bot.constant.arena.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.arena.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.constant.mtg.scryfall import REQUESTS_SLEEP_SECONDS
@@ -52,13 +53,13 @@ logger = get_application_logger()
 class PauperformanceService:
     def __init__(
         self,
-        storage,
-        archive,
-        scryfall=ScryfallService(),
-        twitch=TwitchService(),
-        youtube=YouTubeService(),
-        config_reader=ConfigReader(),
-    ):
+        storage: AbstractStorageService,
+        archive: AbstractArchiveService,
+        scryfall: ScryfallService = ScryfallService(),
+        twitch: TwitchService = TwitchService(),
+        youtube: YouTubeService = YouTubeService(),
+        config_reader: ConfigReader = ConfigReader(),
+    ) -> None:
         self.storage: AbstractStorageService = storage
         self.archive: AbstractArchiveService = archive
         self.scryfall = scryfall
@@ -70,12 +71,15 @@ class PauperformanceService:
         self.card_index = self._build_card_index()
         self.incremental_card_index = self._build_incremental_card_index()
 
-    def _build_set_index(self, set_index_file=SET_INDEX_FILE):
+    def _build_set_index(
+        self, set_index_file: str = SET_INDEX_FILE
+    ) -> collections.OrderedDict[int, dict[str, Any]]:
         try:
             logger.info("Building Scryfall set index...")
-            scryfall_sets = self.scryfall.get_sets()
-            scryfall_sets = sorted(
-                scryfall_sets["data"], key=lambda s: s["released_at"] + s["code"]
+            scryfall_sets_response = self.scryfall.get_sets()
+            scryfall_sets: list[dict[str, Any]] = sorted(
+                scryfall_sets_response["data"],
+                key=lambda s: s["released_at"] + s["code"],
             )
             logger.info("Built Scryfall set index.")
         except HTTPError:  # Scryfall may be unreachable
@@ -119,10 +123,10 @@ class PauperformanceService:
 
     def _build_card_index(
         self,
-        skip_sets=KNOWN_SETS_WITH_NO_PAUPER_CARDS,
-        cards_index_cache_dir=PAUPER_CARDS_INDEX_CACHE_DIR,
-    ) -> Dict[str, List[Dict[str, Any]]]:
-        card_index = {}
+        skip_sets: list[int] = KNOWN_SETS_WITH_NO_PAUPER_CARDS,
+        cards_index_cache_dir: str = PAUPER_CARDS_INDEX_CACHE_DIR,
+    ) -> dict[int, list[dict[str, Any]]]:
+        card_index: dict[int, list[dict[str, Any]]] = {}
         os.makedirs(cards_index_cache_dir, exist_ok=True)
         for item in self.set_index.values():
             p12e_code = item["p12e_code"]
@@ -130,7 +134,7 @@ class PauperformanceService:
                 card_index[p12e_code] = []
                 continue
             set_cache_file = posix_path(cards_index_cache_dir, f"{p12e_code}.json")
-            set_index = []
+            set_index: list[dict[str, Any]] = []
             try:
                 with open(set_cache_file, "r", encoding="utf-8") as cache_f:
                     set_index = json.load(cache_f)
@@ -142,7 +146,7 @@ class PauperformanceService:
                 logger.debug(f"Missing cache for set {p12e_code}: querying Scryfall...")
                 scryfall_code = item["scryfall_code"]
                 query = f"set:{scryfall_code} rarity:common legal:pauper"
-                set_index = self.scryfall.search_cards(query)
+                set_index = self.scryfall.search_cards(query)  # type: ignore[assignment]
                 if len(set_index) > 0:
                     with open(set_cache_file, "w") as cache_f:
                         json.dump(set_index, cache_f)
@@ -157,9 +161,7 @@ class PauperformanceService:
         to_be_removed_sets = useless_sets - set(KNOWN_SETS_WITH_NO_PAUPER_CARDS)
         if len(to_be_removed_sets) > 0:
             constant_module = pauperformance_bot.__path__[0]
-            constant_file = (
-                pauperformance_bot.constant.pauperformance.pauperformance.__file__
-            )
+            constant_file = p12e_constant.__file__
             constant_relative_path = constant_file[len(constant_module) + 1 :]
             logger.warning(
                 f"Please, update the list of known sets with no pauper cards "
@@ -171,10 +173,10 @@ class PauperformanceService:
 
     def _build_incremental_card_index(
         self,
-        skip_sets=INCREMENTAL_CARDS_INDEX_SKIP_SETS,
-    ):
-        incremental_card_index = {}
-        existing_card_names = set()
+        skip_sets: list[int] = INCREMENTAL_CARDS_INDEX_SKIP_SETS,
+    ) -> dict[int, list[dict[str, Any]]]:
+        incremental_card_index: dict[int, list[dict[str, Any]]] = {}
+        existing_card_names: set[str] = set()
         useless_sets = set()
         for p12e_code, cards in self.card_index.items():
             logger.debug(f"Processing set with p12e_code: {p12e_code}...")
@@ -200,9 +202,7 @@ class PauperformanceService:
         to_be_removed_sets = useless_sets - set(INCREMENTAL_CARDS_INDEX_SKIP_SETS)
         if len(to_be_removed_sets) > 0:
             constant_module = pauperformance_bot.__path__[0]
-            constant_file = (
-                pauperformance_bot.constant.pauperformance.pauperformance.__file__
-            )
+            constant_file = p12e_constant.__file__
             constant_relative_path = constant_file[len(constant_module) + 1 :]
             logger.warning(
                 f"Please, update the list of known sets to be skipped for the "
@@ -211,7 +211,7 @@ class PauperformanceService:
             )
         return incremental_card_index
 
-    def list_deckstats_decks(self):
+    def list_deckstats_decks(self) -> list[Any]:
         all_decks = []
         for player in self.players:
             if not player.deckstats_id:
@@ -220,6 +220,7 @@ class PauperformanceService:
                 )
                 continue
             logger.info(f"Processing player {player.name}...")
+            assert player.deckstats_name is not None
             deckstats = DeckstatsService(owner_id=player.deckstats_id)
             player_decks = deckstats.list_pauperformance_decks(player.deckstats_name)
             logger.info(f"Found {len(player_decks)} decks.")
@@ -238,26 +239,29 @@ class PauperformanceService:
         return self.archive.list_decks()
 
     @staticmethod
-    def get_archetypes(config_pages_dir=CONFIG_ARCHETYPES_DIR):
+    def get_archetypes(config_pages_dir: str = CONFIG_ARCHETYPES_DIR) -> set[str]:
         return set(
             Path(a).name.replace(".ini", "")
             for a in glob.glob(f"{config_pages_dir}/*.ini")
         )
 
     @staticmethod
-    def get_families(config_pages_dir=CONFIG_FAMILIES_DIR):
+    def get_families(config_pages_dir: str = CONFIG_FAMILIES_DIR) -> set[str]:
         return set(
             Path(a).name.replace(".ini", "")
             for a in glob.glob(f"{config_pages_dir}/*.ini")
         )
 
-    def analyze_cards_frequency(self, archetype_decks):
+    def analyze_cards_frequency(
+        self, archetype_decks: list[AbstractArchivedDeck]
+    ) -> tuple[list[str], list[str]]:
         # Note: this method uses archived decks to compute frequent and staples.
         # An alternative approach is to use a larger pool of classified decks,
         # by leveraging silver.deckstatistics.
         if len(archetype_decks) < 2:
             return [], []
-        lands = set(land["name"] for land in self.scryfall.get_legal_lands())
+        legal_lands: list[dict[str, Any]] = self.scryfall.get_legal_lands()  # type: ignore[assignment]
+        lands = set(land["name"] for land in legal_lands)
         decks_cards = {}
         all_cards = set()
         for deck in archetype_decks:
@@ -272,19 +276,19 @@ class PauperformanceService:
         frequents = all_cards - staples - lands
         return list(staples), list(frequents)
 
-    def get_set_index_by_date(self, usa_date):
+    def get_set_index_by_date(self, usa_date: str) -> dict[str, Any]:
         logger.debug(f"Getting set index for USA date {usa_date}")
         return [
             s
             for s in self.set_index.values()
             if s["date"] <= usa_date
-            and len(self.incremental_card_index.get(s["p12e_code"])) > 0
+            and len(self.incremental_card_index.get(s["p12e_code"], [])) > 0
         ][-1]
 
-    def get_current_set_index(self):
+    def get_current_set_index(self) -> dict[str, Any]:
         return self.get_set_index_by_date(datetime.today().strftime(USA_DATE_FORMAT))
 
-    def delete_deck(self, deck_name):
+    def delete_deck(self, deck_name: str) -> None:
         # a deck needs to be deleted both from the archive and from the storage
         archived_deck_id = None
         for deck in self.list_archived_decks():
@@ -308,7 +312,7 @@ class PauperformanceService:
         discord_logger = DiscordMessagesSenderSyncService([message])
         discord_logger.run_task()
 
-    def _list_twitch_videos(self):
+    def _list_twitch_videos(self) -> list[AcademyVideo]:
         logger.debug("Retrieving stored Twitch videos...")
         academy_videos = []
         for video in self.storage.list_imported_twitch_videos():
@@ -335,7 +339,7 @@ class PauperformanceService:
         logger.debug("Retrieved stored Twitch videos.")
         return academy_videos
 
-    def _list_youtube_videos(self):
+    def _list_youtube_videos(self) -> list[AcademyVideo]:
         logger.debug("Retrieving stored YouTube videos...")
         academy_videos = []
         for video in self.storage.list_imported_youtube_videos():
@@ -367,8 +371,8 @@ class PauperformanceService:
 
     def print_stats(
         self,
-        archetypes_config_dir=CONFIG_ARCHETYPES_DIR,
-    ):
+        archetypes_config_dir: str = CONFIG_ARCHETYPES_DIR,
+    ) -> None:
         print(f"PhDs: {len(self.players) - 1}")
         print(f"Archetypes: {len(self.get_archetypes())}")
         print(f"Families: {len(self.get_families())}")

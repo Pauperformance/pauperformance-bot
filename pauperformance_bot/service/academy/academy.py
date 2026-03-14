@@ -1,6 +1,8 @@
+import collections
 import glob
 from collections import defaultdict
 from pathlib import Path
+from typing import Any
 
 from deprecated import deprecated
 
@@ -35,6 +37,7 @@ from pauperformance_bot.constant.pauperformance.myr import (
     TEMPLATES_PAGES_DIR,
 )
 from pauperformance_bot.service.academy.data_loader import AcademyDataLoader
+from pauperformance_bot.service.mtg.scryfall import ScryfallService
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
@@ -59,12 +62,14 @@ class AcademyService:
     def __init__(
         self,
         pauperformance: PauperformanceService,
-    ):
+    ) -> None:
         self.pauperformance: PauperformanceService = pauperformance
-        self.scryfall = pauperformance.scryfall
-        self.set_index = pauperformance.set_index
+        self.scryfall: ScryfallService = pauperformance.scryfall
+        self.set_index: collections.OrderedDict[int, dict[str, Any]] = (
+            pauperformance.set_index
+        )
 
-    def update_all(self, update_dev=True):
+    def update_all(self, update_dev: bool = True) -> None:
         self.update_home()
         self.update_archetypes_index()
         self.update_set_index()
@@ -76,12 +81,12 @@ class AcademyService:
 
     def update_home(
         self,
-        config_dir=CONFIG_DIR,
-        templates_pages_dir=TEMPLATES_PAGES_DIR,
-        newspauper_file=CONFIG_NEWSPAUPER_FILE,
-        home_template_file=HOME_TEMPLATE_FILE,
-        home_output_file=HOME_OUTPUT_FILE,
-    ):
+        config_dir: str = CONFIG_DIR,
+        templates_pages_dir: str = TEMPLATES_PAGES_DIR,
+        newspauper_file: str = CONFIG_NEWSPAUPER_FILE,
+        home_template_file: str = HOME_TEMPLATE_FILE,
+        home_output_file: str = HOME_OUTPUT_FILE,
+    ) -> None:
         logger.info(
             f"Rendering home in {templates_pages_dir} from " f"{home_template_file}..."
         )
@@ -106,13 +111,13 @@ class AcademyService:
 
     def update_archetypes_index(
         self,
-        config_pages_dir=CONFIG_ARCHETYPES_DIR,
-        templates_pages_dir=TEMPLATES_PAGES_DIR,
-        archetypes_dir=ARCHETYPES_DIR_RELATIVE_URL,
-        families_dir=FAMILIES_DIR_RELATIVE_URL,
-        archetypes_index_template_file=ARCHETYPES_INDEX_TEMPLATE_FILE,
-        archetypes_index_output_file=ARCHETYPES_INDEX_OUTPUT_FILE,
-    ):
+        config_pages_dir: str = CONFIG_ARCHETYPES_DIR,
+        templates_pages_dir: str = TEMPLATES_PAGES_DIR,
+        archetypes_dir: str = ARCHETYPES_DIR_RELATIVE_URL,
+        families_dir: str = FAMILIES_DIR_RELATIVE_URL,
+        archetypes_index_template_file: str = ARCHETYPES_INDEX_TEMPLATE_FILE,
+        archetypes_index_output_file: str = ARCHETYPES_INDEX_OUTPUT_FILE,
+    ) -> None:
         logger.info(
             f"Rendering archetype index in {templates_pages_dir} from "
             f"{archetypes_index_template_file}..."
@@ -120,8 +125,8 @@ class AcademyService:
         archetypes = []
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
-            config = read_archetype_config(archetype_config_file)
-            values = config["values"]
+            config: dict[str, Any] = read_archetype_config(archetype_config_file)
+            values: dict[str, Any] = config["values"]
             archetypes.append(
                 {
                     "name": values["name"],
@@ -145,10 +150,10 @@ class AcademyService:
 
     def update_set_index(
         self,
-        templates_pages_dir=TEMPLATES_PAGES_DIR,
-        set_index_template_file=SET_INDEX_TEMPLATE_FILE,
-        set_index_output_file=SET_INDEX_OUTPUT_FILE,
-    ):
+        templates_pages_dir: str = TEMPLATES_PAGES_DIR,
+        set_index_template_file: str = SET_INDEX_TEMPLATE_FILE,
+        set_index_output_file: str = SET_INDEX_OUTPUT_FILE,
+    ) -> None:
         logger.info(
             f"Rendering set index in {templates_pages_dir} from "
             f"{set_index_template_file}..."
@@ -167,10 +172,10 @@ class AcademyService:
 
     def update_pauper_pool(
         self,
-        templates_pages_dir=TEMPLATES_PAGES_DIR,
-        pauper_pool_template_file=PAUPER_POOL_TEMPLATE_FILE,
-        pauper_pool_output_file=PAUPER_POOL_OUTPUT_FILE,
-    ):
+        templates_pages_dir: str = TEMPLATES_PAGES_DIR,
+        pauper_pool_template_file: str = PAUPER_POOL_TEMPLATE_FILE,
+        pauper_pool_output_file: str = PAUPER_POOL_OUTPUT_FILE,
+    ) -> None:
         logger.info(
             f"Rendering pauper pool in {templates_pages_dir} from "
             f"{pauper_pool_template_file}..."
@@ -191,20 +196,21 @@ class AcademyService:
 
     def update_archetypes(
         self,
-        config_pages_dir=CONFIG_ARCHETYPES_DIR,
-        templates_archetypes_dir=TEMPLATES_ARCHETYPES_DIR,
-        archetype_template_file=ARCHETYPE_TEMPLATE_FILE,
-        pauperformance_archetypes_dir=ARCHETYPES_DIR,
-    ):
+        config_pages_dir: str = CONFIG_ARCHETYPES_DIR,
+        templates_archetypes_dir: str = TEMPLATES_ARCHETYPES_DIR,
+        archetype_template_file: str = ARCHETYPE_TEMPLATE_FILE,
+        pauperformance_archetypes_dir: str = ARCHETYPES_DIR,
+    ) -> None:
         logger.info("Generating archetypes...")
         all_decks = self.pauperformance.list_archived_decks()
-        banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
+        banned_cards_data: list[dict[str, Any]] = self.scryfall.get_banned_cards()  # type: ignore[assignment]
+        banned_cards: list[str] = [c["name"] for c in banned_cards_data]
         videos = self.pauperformance.list_videos()
         loader = AcademyDataLoader()
         for archetype_config_file in glob.glob(f"{config_pages_dir}/*.ini"):
             logger.info(f"Processing {archetype_config_file}")
-            config = read_archetype_config(archetype_config_file)
-            values = config["values"]
+            config: dict[str, Any] = read_archetype_config(archetype_config_file)
+            values: dict[str, Any] = config["values"]
             resources = config["resources"]
             archetype_name = values["name"]
             archetype_decks = [
@@ -213,12 +219,12 @@ class AcademyService:
 
             for deck in archetype_decks:
                 playable_deck = self.pauperformance.archive.to_playable_deck(deck)
-                deck.legality = (
+                deck.legality = (  # type: ignore[attr-defined]
                     "✅" if playable_deck.is_legal(banned_cards) else "Ban 🔨"
                 )
                 p12e_set = self.pauperformance.set_index[int(deck.p12e_code)]
-                deck.set_name = p12e_set["name"]
-                deck.set_date = p12e_set["date"]
+                deck.set_name = p12e_set["name"]  # type: ignore[attr-defined]
+                deck.set_date = p12e_set["date"]  # type: ignore[attr-defined]
 
             # Staples and frequents can be built:
             # a) from archived decks
@@ -316,27 +322,27 @@ class AcademyService:
 
     def update_families(
         self,
-        config_families_dir=CONFIG_FAMILIES_DIR,
-        config_archetypes_dir=CONFIG_ARCHETYPES_DIR,
-        templates_families_dir=TEMPLATES_FAMILIES_DIR,
-        archetypes_dir=ARCHETYPES_DIR_RELATIVE_URL,
-        family_template_file=FAMILY_TEMPLATE_FILE,
-        pauperformance_families_dir=FAMILIES_DIR,
-    ):
+        config_families_dir: str = CONFIG_FAMILIES_DIR,
+        config_archetypes_dir: str = CONFIG_ARCHETYPES_DIR,
+        templates_families_dir: str = TEMPLATES_FAMILIES_DIR,
+        archetypes_dir: str = ARCHETYPES_DIR_RELATIVE_URL,
+        family_template_file: str = FAMILY_TEMPLATE_FILE,
+        pauperformance_families_dir: str = FAMILIES_DIR,
+    ) -> None:
         logger.info("Generating families...")
         logger.debug("Building families-archetypes map...")
         families_map = defaultdict(list)
         for archetype_config_file in glob.glob(f"{config_archetypes_dir}/*.ini"):
-            config = read_archetype_config(archetype_config_file)
-            values = config["values"]
-            if values["family"]:
-                families_map[values["family"]].append(values["name"])
+            config_data: dict[str, Any] = read_archetype_config(archetype_config_file)
+            arch_values: dict[str, Any] = config_data["values"]
+            if arch_values["family"]:
+                families_map[arch_values["family"]].append(arch_values["name"])
         logger.info(f"Families map: {families_map}")
 
         for family_name in families_map.keys():
             family_config_file = posix_path(config_families_dir, f"{family_name}.ini")
             logger.info(f"Processing {family_config_file}")
-            values = read_family_config(family_config_file)
+            values: dict[str, Any] = read_family_config(family_config_file)
             if values["name"] != family_name:
                 raise ValueError()
             values["archetypes"] = [
@@ -370,10 +376,10 @@ class AcademyService:
 
     def update_dev(
         self,
-        templates_pages_dir=TEMPLATES_PAGES_DIR,
-        dev_template_file=DEV_TEMPLATE_FILE,
-        dev_output_file=DEV_OUTPUT_FILE,
-    ):
+        templates_pages_dir: str = TEMPLATES_PAGES_DIR,
+        dev_template_file: str = DEV_TEMPLATE_FILE,
+        dev_output_file: str = DEV_OUTPUT_FILE,
+    ) -> None:
         logger.info(
             f"Rendering dev in {templates_pages_dir} from " f"{dev_template_file}..."
         )
@@ -387,12 +393,12 @@ class AcademyService:
         )
         logger.info(f"Rendered dev to {dev_output_file}.")
 
-    def _boldify_sets_with_new_cards(self):
+    def _boldify_sets_with_new_cards(self) -> list[dict[str, str]]:
         card_index = self.pauperformance.incremental_card_index
         bolded_index = []
         for item in self.set_index.values():
             p12e_code = item["p12e_code"]
-            if len(card_index[p12e_code]) == 0:
+            if len(card_index[int(p12e_code)]) == 0:
                 bolded_index.append(item)
             else:
                 bolded_index.append({k: f"**{v}**" for k, v in item.items()})

@@ -4,15 +4,15 @@ from importlib import import_module
 from pauperformance_bot.constant.pauperformance.myr import SECRETS_UNTRACKED_FILE
 
 
-def _get_credential_from_secrets(credential_key):
+def _get_credential_from_secrets(credential_key: str) -> str | None:
     try:  # will succeed locally if secret.py file is available
         secret_module = import_module(SECRETS_UNTRACKED_FILE.rstrip(".py"))
-        return getattr(secret_module, credential_key)
+        return getattr(secret_module, credential_key)  # type: ignore[no-any-return]
     except ModuleNotFoundError:  # will fail on Heroku after deployments
         return None
 
 
-def get_credential(credential_key):
+def get_credential(credential_key: str) -> str | None:
     return os.environ.get(credential_key, _get_credential_from_secrets(credential_key))
 
 

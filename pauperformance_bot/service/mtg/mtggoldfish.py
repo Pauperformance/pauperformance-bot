@@ -19,6 +19,7 @@ from pauperformance_bot.constant.mtg.mtggoldfish import (
     METAGAME_SHARE_CLASS,
     REQUESTS_SLEEP_SECONDS,
 )
+from pauperformance_bot.constant.pauperformance.academy import AcademyFileSystem
 from pauperformance_bot.entity.api.deck import MTGGoldfishTournamentDeck
 from pauperformance_bot.entity.api.tournament import Tournament
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
@@ -63,7 +64,7 @@ class MTGGoldfish:
             raise MTGGoldfishException(
                 "Mismatch with archetype shares after parsing meta."
             )
-        meta_decks = {}
+        meta_decks: dict[str, tuple[str, PlayableDeck]] = {}
         for share, link in zip(archetype_shares, archetype_links):
             logger.info(f"Archetype {link}: {share}.")
             logger.debug(f"Retrieving sample deck for archetype {link}...")
@@ -99,9 +100,9 @@ class MTGGoldfish:
     def get_pauper_tournaments(
         from_date: datetime.datetime,
         to_date: datetime.datetime,
-        tournament_name="",
+        tournament_name: str = "",
     ) -> list[MTGGoldfishTournamentSearchResult]:
-        tournaments = []
+        tournaments: list[MTGGoldfishTournamentSearchResult] = []
         for page in range(1, 5):  # MTGGoldfish returns at most 4 results pages
             from_param = f"{from_date.month}%2F{from_date.day}%2F{from_date.year}"
             to_param = f"{to_date.month}%2F{to_date.day}%2F{to_date.year}"
@@ -122,9 +123,9 @@ class MTGGoldfish:
             try:
                 html_page = urllib.request.urlopen(url)
                 bs = BeautifulSoup(html_page.read(), features="lxml")
-                rows = bs.findAll("tr")[1:]  # skip header
+                rows = bs.find_all("tr")[1:]  # skip header
                 i = 0
-                for a in bs.findAll("a"):
+                for a in bs.find_all("a"):
                     if (
                         "href" in a.attrs
                         and "tournament" in a["href"]
@@ -142,7 +143,7 @@ class MTGGoldfish:
                 time.sleep(REQUESTS_SLEEP_SECONDS)  # avoid flooding (and soft-ban)
             except HTTPError:  # 400: Bad Request if we exceed pages
                 break
-            if any("No tournaments found." == x.text.strip() for x in bs.findAll("p")):
+            if any("No tournaments found." == x.text.strip() for x in bs.find_all("p")):
                 break
             if page == 4:
                 logger.warning(
@@ -160,14 +161,14 @@ class MTGGoldfish:
         tournament_decks: list[MTGGoldfishTournamentDeck] = []
         html_page = urllib.request.urlopen(url)
         bs = BeautifulSoup(html_page.read(), features="lxml")
-        for tr in bs.findAll("tr")[1:]:  # skip header
+        for tr in bs.find_all("tr")[1:]:  # skip header
             columns = tr.contents
             if len(columns) < 10:
                 continue
-            # sometimes the special ' ' character is used instead of ' ': fix it
-            place = columns[1].text.strip().replace(" ", " ")
-            archetype = columns[3].text.strip().replace(" ", " ")
-            pilot = columns[5].text.strip().replace(" ", " ")
+            # sometimes the special '\xa0' character is used instead of ' ': fix it
+            place = columns[1].text.strip().replace("\xa0", " ")
+            archetype = columns[3].text.strip().replace("\xa0", " ")
+            pilot = columns[5].text.strip().replace("\xa0", " ")
             # Sometimes MTGGoldfish does not report deck prices.
             # Maybe in the past they could not get this info.
             # Let's take into account missing values.
@@ -180,7 +181,7 @@ class MTGGoldfish:
             except (ValueError, IndexError):
                 mtgo_price = None
             tournament_deck = MTGGoldfishTournamentDeck(
-                url=f"{API_ENDPOINT}{list(columns[3].children)[1]['href']}",
+                url=f"{API_ENDPOINT}{list(columns[3].children)[1]['href']}",  # type: ignore[attr-defined]
                 archetype=archetype,
                 place=place,
                 pilot=pilot,
@@ -195,7 +196,12 @@ class MTGGoldfish:
         logger.debug(f"Extracted tournament decks from {url}.")
         return tournament_decks
 
-    def download_mtggoldfish_tournaments(self, start_date, end_date, academy_fs):
+    def download_mtggoldfish_tournaments(
+        self,
+        start_date: datetime.datetime,
+        end_date: datetime.datetime,
+        academy_fs: AcademyFileSystem,
+    ) -> None:
         processed_tournament_ids = {
             tournament_id.name.rstrip(".json")
             for tournament_id in Path(

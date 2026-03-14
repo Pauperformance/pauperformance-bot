@@ -4,7 +4,9 @@ from pauperformance_bot.util.decorators import auto_repr, auto_str
 @auto_repr
 @auto_str
 class TwitchUser:
-    def __init__(self, user_id, login_name, display_name, description):
+    def __init__(
+        self, user_id: str, login_name: str, display_name: str, description: str
+    ) -> None:
         self.user_id = user_id
         self.login_name = login_name
         self.display_name = display_name

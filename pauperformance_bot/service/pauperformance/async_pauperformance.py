@@ -1,3 +1,5 @@
+from typing import Any
+
 from pauperformance_bot.constant.mtg.mtggoldfish import DECK_API_ENDPOINT
 from pauperformance_bot.constant.pauperformance.nexus import (
     DISCORD_MAX_HISTORY_LIMIT,
@@ -13,9 +15,15 @@ from pauperformance_bot.service.nexus.async_discord_service import AsyncDiscordS
 from pauperformance_bot.service.nexus.sync.messages_sender import (
     DiscordMessagesSenderSyncService,
 )
+from pauperformance_bot.service.pauperformance.archive.abstract import (
+    AbstractArchiveService,
+)
 from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
+)
+from pauperformance_bot.service.pauperformance.storage.abstract import (
+    AbstractStorageService,
 )
 from pauperformance_bot.util.log import get_application_logger
 
@@ -25,14 +33,14 @@ logger = get_application_logger()
 class AsyncPauperformanceService(PauperformanceService):
     def __init__(
         self,
-        discord,
-        storage,
-        archive,
-        scryfall=ScryfallService(),
-        twitch=TwitchService(),
-        youtube=YouTubeService(),
-        config_reader=ConfigReader(),
-    ):
+        discord: AsyncDiscordService,
+        storage: AbstractStorageService,
+        archive: AbstractArchiveService,
+        scryfall: ScryfallService = ScryfallService(),
+        twitch: TwitchService = TwitchService(),
+        youtube: YouTubeService = YouTubeService(),
+        config_reader: ConfigReader = ConfigReader(),
+    ) -> None:
         super().__init__(
             storage,
             archive,
@@ -43,7 +51,7 @@ class AsyncPauperformanceService(PauperformanceService):
         )
         self.discord: AsyncDiscordService = discord
 
-    async def import_decks_from_deckstats(self, send_notification=True):
+    async def import_decks_from_deckstats(self, send_notification: bool = True) -> None:
         logger.info("Updating Archive decks for all users...")
         players_by_deckstats_id = {
             int(p.deckstats_id): p for p in self.players if p.deckstats_id
@@ -67,7 +75,9 @@ class AsyncPauperformanceService(PauperformanceService):
             )
         logger.info("Updated Archive decks for all users.")
 
-    async def import_players_videos_from_twitch(self, send_notification=True):
+    async def import_players_videos_from_twitch(
+        self, send_notification: bool = True
+    ) -> None:
         logger.info("Updating Twitch videos for all users...")
         for player in self.players:
             if not player.twitch_login_name:
@@ -80,8 +90,11 @@ class AsyncPauperformanceService(PauperformanceService):
             )
         logger.info("Updated Twitch videos for all users.")
 
-    async def import_player_videos_from_twitch(self, player, send_notification=True):
+    async def import_player_videos_from_twitch(
+        self, player: PhDConfig, send_notification: bool = True
+    ) -> None:
         logger.info(f"Processing videos from Twitch user {player.twitch_login_name}...")
+        assert player.twitch_login_name is not None
         twitch_user = self.twitch.get_user(player.twitch_login_name)
         warning_player: PhDConfig = self.config_reader.get_pauperformance_phd()
         await self.archive.archive_player_videos_from_twitch(
@@ -94,7 +107,9 @@ class AsyncPauperformanceService(PauperformanceService):
         )
         logger.info(f"Processed videos from Twitch user {player.twitch_login_name}.")
 
-    async def import_players_videos_from_youtube(self, send_notification=True):
+    async def import_players_videos_from_youtube(
+        self, send_notification: bool = True
+    ) -> None:
         logger.info("Updating YouTube videos for all users...")
         for player in self.players:
             if not player.youtube_channel_id:
@@ -107,10 +122,14 @@ class AsyncPauperformanceService(PauperformanceService):
             )
         logger.info("Updated YouTube videos for all users.")
 
-    async def import_player_videos_from_youtube(self, player, send_notification=True):
+    async def import_player_videos_from_youtube(
+        self, player: PhDConfig, send_notification: bool = True
+    ) -> None:
         logger.info(
             f"Processing videos from YouTube user " f"{player.youtube_channel_id}..."
         )
+        assert player.youtube_channel_id is not None
+        assert player.default_youtube_language is not None
         warning_player: PhDConfig = self.config_reader.get_pauperformance_phd()
         await self.archive.archive_player_videos_from_youtube(
             player,
@@ -125,7 +144,7 @@ class AsyncPauperformanceService(PauperformanceService):
         )
         logger.info(f"Processed videos from YouTube user {player.youtube_channel_id}.")
 
-    async def import_decks_from_discord(self, send_notification=True):
+    async def import_decks_from_discord(self, send_notification: bool = True) -> None:
         import_deck_channel_id = self.discord.import_deck_channel_id
         logger.info(f"Importing new decks from channel {import_deck_channel_id}...")
         import_deck_channel = self.discord.get_channel(import_deck_channel_id)
@@ -136,7 +155,9 @@ class AsyncPauperformanceService(PauperformanceService):
             await self._process_discord_import_deck_message(message, send_notification)
         logger.info(f"Imported new decks from channel {import_deck_channel_id}.")
 
-    async def _process_discord_import_deck_message(self, message, send_notification):
+    async def _process_discord_import_deck_message(
+        self, message: Any, send_notification: bool
+    ) -> None:
         logger.debug(
             f"Processing message {message.id} by {message.author.id} "
             f"({message.author.name})..."
@@ -171,8 +192,8 @@ class AsyncPauperformanceService(PauperformanceService):
         )
 
     async def _try_import_mtggoldfish_deck_from_discord(
-        self, message, send_notification
-    ):
+        self, message: Any, send_notification: bool
+    ) -> None:
         url = message.content.strip()
         if "#" in url:
             url = url[: url.index("#")]

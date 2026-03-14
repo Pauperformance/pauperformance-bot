@@ -1,3 +1,5 @@
+from typing import Any
+
 from twitchAPI.twitch import Twitch
 from twitchAPI.types import TimePeriod
 
@@ -15,13 +17,13 @@ logger = get_application_logger()
 class TwitchService:
     def __init__(
         self,
-        myr_client_id=TWITCH_APP_CLIENT_ID,
-        myr_client_secret=TWITCH_APP_CLIENT_SECRET,
-    ):
+        myr_client_id: str | None = TWITCH_APP_CLIENT_ID,
+        myr_client_secret: str | None = TWITCH_APP_CLIENT_SECRET,
+    ) -> None:
         self._service = Twitch(myr_client_id, myr_client_secret)
 
-    def get_user(self, login_name):
-        user = self._service.get_users(logins=[login_name])["data"][0]
+    def get_user(self, login_name: str) -> TwitchUser:
+        user: dict[str, Any] = self._service.get_users(logins=[login_name])["data"][0]
         return TwitchUser(
             user["id"],
             user["login"],
@@ -29,7 +31,7 @@ class TwitchService:
             user["description"],
         )
 
-    def get_users(self, login_names):
+    def get_users(self, login_names: list[str]) -> list[TwitchUser]:
         return [
             TwitchUser(
                 user["id"],
@@ -40,7 +42,7 @@ class TwitchService:
             for user in self._service.get_users(logins=login_names)["data"]
         ]
 
-    def get_user_videos(self, user_id):
+    def get_user_videos(self, user_id: str) -> list[TwitchVideo]:
         return [
             TwitchVideo(
                 video["id"],

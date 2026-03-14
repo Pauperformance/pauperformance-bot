@@ -7,17 +7,17 @@ from pauperformance_bot.util.decorators import auto_repr, auto_str
 class AcademyVideo:
     def __init__(
         self,
-        video_id,
-        user_name,
-        title,
-        language,
-        published_at,
-        deck_name,
-        archetype,
-        phd,
-        url,
-        fa_icon,
-    ):
+        video_id: str,
+        user_name: str,
+        title: str,
+        language: str,
+        published_at: str,
+        deck_name: str,
+        archetype: str,
+        phd: str,
+        url: str,
+        fa_icon: str,
+    ) -> None:
         self.video_id = video_id
         self.user_name = user_name
         self.title = title

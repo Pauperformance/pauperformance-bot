@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pauperformance_bot.util.decorators import auto_repr, auto_str
 
 
@@ -15,15 +13,15 @@ class Deck:
         set_name: str,
         set_date: str,
         legal: bool,
-    ):
-        self.name: str = name
-        self.url: str = url
-        self.archetype: str = archetype
-        self.set_name: str = set_name
-        self.set_date: str = set_date
-        self.legal: bool = legal
+    ) -> None:
+        self.name = name
+        self.url = url
+        self.archetype = archetype
+        self.set_name = set_name
+        self.set_date = set_date
+        self.legal = legal
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.name)
 
 
@@ -37,25 +35,25 @@ class MTGGoldfishTournamentDeck:
         archetype: str,
         place: str,
         pilot: str,
-        tabletop_price: Optional[int],
-        mtgo_price: Optional[int],
+        tabletop_price: int | None,
+        mtgo_price: int | None,
         tournament_id: str,
         tournament_name: str,
         tournament_date: str,
-    ):
-        self.url: str = url
-        self.archetype: str = archetype
-        self.place: str = place
-        self.pilot: str = pilot
-        self.tabletop_price: Optional[int] = tabletop_price
-        self.mtgo_price: Optional[int] = mtgo_price
-        self.tournament_id: str = tournament_id
-        self.tournament_name: str = tournament_name
-        self.tournament_date: str = tournament_date
+    ) -> None:
+        self.url = url
+        self.archetype = archetype
+        self.place = place
+        self.pilot = pilot
+        self.tabletop_price = tabletop_price
+        self.mtgo_price = mtgo_price
+        self.tournament_id = tournament_id
+        self.tournament_name = tournament_name
+        self.tournament_date = tournament_date
 
     @property
     def identifier(self) -> str:
         return self.url.rsplit("/", maxsplit=1)[-1]
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.identifier)

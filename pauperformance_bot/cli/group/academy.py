@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from typing import Any
+
 from pauperformance_bot.cli.builder.command import CLICommand
 from pauperformance_bot.cli.builder.group import CLIGroup
 from pauperformance_bot.constant.cli import (
@@ -14,35 +16,35 @@ logger = get_application_logger(ACADEMY_CLI_GROUP)
 
 
 class UpdateCommand(CLICommand):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             UPDATE_ACADEMY_CMD,
             "Update Academy web site (old version).",
             [],
         )
 
-    def dispatch_cmd(self, *args, **kwargs):
+    def dispatch_cmd(self, *args: Any, **kwargs: Any) -> None:
         super().dispatch_cmd(*args, **kwargs)
         main_v1()
 
 
 class UpdateCommand2(CLICommand):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             UPDATE2_ACADEMY_CMD,
             "Update Academy web site (new version).",
             [],
         )
 
-    def dispatch_cmd(self, *args, **kwargs):
+    def dispatch_cmd(self, *args: Any, **kwargs: Any) -> None:
         super().dispatch_cmd(*args, **kwargs)
         main_v2()
 
 
 class AcademyGroup(CLIGroup):
-    _cli_commands = [UpdateCommand(), UpdateCommand2()]
+    _cli_commands: list[CLICommand] = [UpdateCommand(), UpdateCommand2()]
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(ACADEMY_CLI_GROUP, self._cli_commands)
 
 

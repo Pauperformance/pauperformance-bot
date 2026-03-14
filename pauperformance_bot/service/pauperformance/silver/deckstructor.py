@@ -9,7 +9,9 @@ logger = get_application_logger()
 class Deckstructor:
 
     @staticmethod
-    def __merge_deck_sideboard(deck, sideboard):
+    def __merge_deck_sideboard(
+        deck: dict[str, int], sideboard: dict[str, int]
+    ) -> dict[str, int]:
         cards = deck.copy()
 
         for key, value in sideboard.items():
@@ -21,13 +23,13 @@ class Deckstructor:
         return cards
 
     @staticmethod
-    def __validate_pool(cards, pool):
+    def __validate_pool(cards: dict[str, int], pool: set[str]) -> None:
         for card in cards:
             if card not in pool:
                 logger.warning(f"{card} not in pool")
 
     @staticmethod
-    def extract_deck(text, pool) -> PlayableDeck:
+    def extract_deck(text: str, pool: set[str]) -> PlayableDeck:
         # TODO: autogenerate pool from Scryfall with all pauper cards (legal and banned)
         mainboard = {}
         sideboard = {}

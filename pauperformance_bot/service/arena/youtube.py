@@ -1,3 +1,5 @@
+from typing import Any
+
 from pyyoutube import Api
 
 from pauperformance_bot.constant.arena.youtube import YOUTUBE_VIDEO_URL
@@ -12,27 +14,29 @@ logger = get_application_logger()
 class YouTubeService:
     def __init__(
         self,
-        myr_client_id=YOUTUBE_API_KEY,
-    ):
+        myr_client_id: str | None = YOUTUBE_API_KEY,
+    ) -> None:
         self._service = Api(api_key=myr_client_id)
 
-    def get_channel_info(self, channel_id):
+    def get_channel_info(self, channel_id: str) -> Any:
         return self._service.get_channel_info(channel_id=channel_id)
 
-    def get_video(self, video_id):
+    def get_video(self, video_id: str) -> Any:
         video_by_id = self._service.get_video_by_id(video_id=video_id)
         return video_by_id
 
-    def list_playlists(self, channel_id):
+    def list_playlists(self, channel_id: str) -> Any:
         return self._service.get_playlists(channel_id=channel_id, count=None)
 
-    def list_playlist_videos(self, playlist_id):
+    def list_playlist_videos(self, playlist_id: str) -> Any:
         return self._service.get_playlist_items(
             playlist_id=playlist_id,
             count=None,
         ).items
 
-    def get_channel_videos(self, channel_id, default_language) -> list[YouTubeVideo]:
+    def get_channel_videos(
+        self, channel_id: str, default_language: str
+    ) -> list[YouTubeVideo]:
         channel = self.get_channel_info(channel_id)
         uploads = channel.items[0].contentDetails.relatedPlaylists.uploads
         return [
@@ -59,8 +63,8 @@ class YouTubeService:
         ]
 
     @staticmethod
-    def get_video_language(video_description, default_language):
-        language = None
+    def get_video_language(video_description: str, default_language: str) -> str:
+        language: str | None = None
         for line in video_description.split("\n"):
             line = line.strip()
             if line.lower().startswith(VIDEO_LANGUAGE_TAG.lower()):

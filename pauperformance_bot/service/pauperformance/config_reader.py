@@ -1,6 +1,7 @@
 import configparser
 import glob
 from itertools import count
+from typing import Any
 
 from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.pauperformance.myr import MyrFileSystem
@@ -26,25 +27,27 @@ logger = get_application_logger()
 @auto_repr
 @auto_str
 class ConfigReader:
-    def __init__(self, myr_file_system: MyrFileSystem = MyrFileSystem()):
+    def __init__(self, myr_file_system: MyrFileSystem = MyrFileSystem()) -> None:
         self.myr_file_system: MyrFileSystem = myr_file_system
 
     @staticmethod
-    def _read_config_file(config_file_path):
+    def _read_config_file(config_file_path: str) -> configparser.ConfigParser:
         logger.debug(f"Reading configuration file {config_file_path}...")
         config = configparser.ConfigParser(allow_no_value=True)
-        config.optionxform = lambda option: option  # preserve case
+        config.optionxform = lambda option: option  # type: ignore[method-assign, assignment]  # preserve case
         config.read(config_file_path)
         logger.debug(f"Read configuration file {config_file_path}.")
         return config
 
     @staticmethod
-    def _parse_list_value(raw_value) -> list[str]:
+    def _parse_list_value(raw_value: str) -> list[str]:
         return [value.strip(" ") for value in raw_value.split(",")] if raw_value else []
 
     @staticmethod
-    def _read_sequential_resources(config, key):
-        resources = []
+    def _read_sequential_resources(
+        config: configparser.ConfigParser, key: str
+    ) -> list[dict[str, Any]]:
+        resources: list[dict[str, Any]] = []
         for i in count(1):
             if f"{key}{i}" in config:
                 resources.append(
@@ -301,7 +304,7 @@ class ConfigReader:
         logger.info(f"Read Changelog from {config_file_path}.")
         return changelog
 
-    def get_archetype_name_from_alias(self, name):
+    def get_archetype_name_from_alias(self, name: str) -> str:
         for archetype in self.list_archetypes():
             if archetype.name == name:
                 return name

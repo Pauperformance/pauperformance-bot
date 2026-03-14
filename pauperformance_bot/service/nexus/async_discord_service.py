@@ -1,4 +1,7 @@
 import asyncio
+from typing import Any
+
+import discord
 
 from pauperformance_bot.constant.pauperformance.nexus import (
     DISCORD_CHANNEL_IMPORT_DECK_ID,
@@ -22,12 +25,12 @@ logger = get_application_logger()
 class AsyncDiscordService(AbstractDiscordService):
     def __init__(
         self,
-        myr_bot_token=DISCORD_BOT_TOKEN,
-        import_deck_channel_id=DISCORD_CHANNEL_IMPORT_DECK_ID,
-        welcome_channel_id=DISCORD_CHANNEL_WELCOME_ID,
-        myr_log_channel_id=DISCORD_CHANNEL_MYR_LOG_ID,
-        **options,
-    ):
+        myr_bot_token: str | None = DISCORD_BOT_TOKEN,
+        import_deck_channel_id: int = DISCORD_CHANNEL_IMPORT_DECK_ID,
+        welcome_channel_id: int = DISCORD_CHANNEL_WELCOME_ID,
+        myr_log_channel_id: int = DISCORD_CHANNEL_MYR_LOG_ID,
+        **options: Any,
+    ) -> None:
         super().__init__(
             myr_bot_token=myr_bot_token,
             import_deck_channel_id=import_deck_channel_id,
@@ -35,25 +38,25 @@ class AsyncDiscordService(AbstractDiscordService):
             myr_log_channel_id=myr_log_channel_id,
             **options,
         )
-        self._log_channel = None
+        self._log_channel: discord.TextChannel | None = None
         asyncio.create_task(self._run_background())  # fire and forget call
 
-    async def _run_background(self):
+    async def _run_background(self) -> None:
         logger.info("AsyncDiscordService starting in background...")
         logger.info("Logging on Discord with token...")
         await self.start(self.myr_bot_token)  # will call on_ready()
         logger.info("AsyncDiscordService stopped in background.")
 
-    async def wait_until_ready(self):
+    async def wait_until_ready(self) -> None:
         await super().wait_until_ready()
         logger.info(f"Retrieving log channel (id: {self.myr_log_channel_id})...")
         self.log_channel = self.get_channel(self.myr_log_channel_id)
         logger.info("Retrieved log channel.")
 
-    async def on_ready(self):
+    async def on_ready(self) -> None:
         logger.info(f"Logged on Discord as {self.user}.")
 
-    async def _clean_my_emoji(self, channel_id):
+    async def _clean_my_emoji(self, channel_id: int) -> None:
         channel = self.get_channel(channel_id)
         messages = await channel.history(limit=DISCORD_MAX_HISTORY_LIMIT).flatten()
         for m in messages:
@@ -63,9 +66,9 @@ class AsyncDiscordService(AbstractDiscordService):
             await m.remove_reaction(DISCORD_MYR_REACTION_WARNING, self.user)
 
     @property
-    def log_channel(self):
+    def log_channel(self) -> discord.TextChannel | None:
         return self._log_channel
 
     @log_channel.setter
-    def log_channel(self, value):
+    def log_channel(self, value: discord.TextChannel | None) -> None:
         self._log_channel = value

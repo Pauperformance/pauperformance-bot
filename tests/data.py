@@ -1,6 +1,6 @@
 from pauperformance_bot.entity.deck.playable import PlayedCard
 
-DECK_MAIN = [
+DECK_MAIN: list[PlayedCard] = [
     PlayedCard(4, "Thermo-Alchemist"),
     PlayedCard(4, "Voldaren Epicure"),
     PlayedCard(4, "Needle Drop"),
@@ -15,7 +15,7 @@ DECK_MAIN = [
     PlayedCard(1, "Forgotten Cave"),
     PlayedCard(16, "Mountain"),
 ]
-DECK_SIDE = [
+DECK_SIDE: list[PlayedCard] = [
     PlayedCard(2, "Molten Rain"),
     PlayedCard(2, "Martyr of Ashes"),
     PlayedCard(3, "Electrickery"),

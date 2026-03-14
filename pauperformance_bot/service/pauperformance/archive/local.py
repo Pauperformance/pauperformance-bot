@@ -29,14 +29,16 @@ logger = get_application_logger()
 class LocalArchiveService(AbstractArchiveService):
     def __init__(
         self,
-        root_dir=posix_path(ARCHIVE_DIR, MTGGOLDFISH_ARCHIVE_SUBDIR),
-    ):
+        root_dir: str = posix_path(ARCHIVE_DIR, MTGGOLDFISH_ARCHIVE_SUBDIR),
+    ) -> None:
         self._root_dir = root_dir
 
-    def get_uri(self, deck_id):
+    def get_uri(self, deck_id: str) -> str:
         return f"{self._root_dir}{sep}{deck_id}"
 
-    def create_deck(self, name, description, playable_deck):
+    def create_deck(
+        self, name: str, description: str, playable_deck: PlayableDeck
+    ) -> str:
         deck_id = uuid.uuid4().hex
         output_file = f"{self.get_uri(deck_id)}"
         if os.path.isfile(output_file):
@@ -58,7 +60,7 @@ class LocalArchiveService(AbstractArchiveService):
 
     def list_decks(self) -> list[AbstractArchivedDeck]:
         logger.info(f"Listing decks in {self._root_dir}...")
-        decks = []
+        decks: list[AbstractArchivedDeck] = []
         for file in (
             join(self._root_dir, f)
             for f in listdir(self._root_dir)
@@ -77,7 +79,7 @@ class LocalArchiveService(AbstractArchiveService):
         logger.info(f"Listed files in {self._root_dir}...")
         return decks
 
-    def delete_deck(self, deck_id):
+    def delete_deck(self, deck_id: str) -> None:
         file_name = self.get_uri(deck_id)
         logger.info(f"Deleting deck {file_name}...")
         os.remove(file_name)
@@ -85,7 +87,9 @@ class LocalArchiveService(AbstractArchiveService):
 
     @staticmethod
     def to_playable_deck(
-        listed_deck: AbstractArchivedDeck, decks_cache_dir="USELESS!", use_cache=False
+        listed_deck: AbstractArchivedDeck,
+        decks_cache_dir: str | None = "USELESS!",
+        use_cache: bool = False,
     ) -> PlayableDeck:
         if use_cache:
             logger.info("Ignoring cache on local Archive...")

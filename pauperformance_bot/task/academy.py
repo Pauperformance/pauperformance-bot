@@ -26,7 +26,7 @@ logger = get_application_logger()
     stop=stop_after_attempt(3),
     wait=wait_random_exponential(multiplier=1, max=60),
 )
-async def async_academy_update():
+async def async_academy_update() -> None:
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)
     discord = AsyncDiscordService()
@@ -58,7 +58,7 @@ async def async_academy_update():
     stop=stop_after_attempt(3),
     wait=wait_random_exponential(multiplier=1, max=60),
 )
-def main():
+def main() -> None:
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(async_academy_update())

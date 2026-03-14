@@ -10,12 +10,12 @@ class DeckListParser(metaclass=ABCMeta):
     SIDEBOARD_MAX = 15
 
     @abstractmethod
-    def parse_lines(self, lines) -> PlayableDeck:
+    def parse_lines(self, lines: list[str]) -> PlayableDeck:
         pass
 
 
 class MtgoDeckListParser(DeckListParser):
-    def parse_lines(self, lines) -> PlayableDeck:
+    def parse_lines(self, lines: list[str]) -> PlayableDeck:
         try:
             separator = lines.index("")
             maindeck = lines[:separator]

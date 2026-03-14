@@ -1,3 +1,5 @@
+from typing import Any
+
 from pauperformance_bot.constant.pauperformance.nexus import (
     DISCORD_CHANNEL_IMPORT_DECK_ID,
     DISCORD_CHANNEL_MYR_LOG_ID,
@@ -15,13 +17,13 @@ logger = get_application_logger()
 class DiscordMessagesSenderSyncService(AbstractSyncDiscordService):
     def __init__(
         self,
-        messages,
-        myr_bot_token=DISCORD_BOT_TOKEN,
-        import_deck_channel_id=DISCORD_CHANNEL_IMPORT_DECK_ID,
-        welcome_channel_id=DISCORD_CHANNEL_WELCOME_ID,
-        myr_log_channel_id=DISCORD_CHANNEL_MYR_LOG_ID,
-        **options,
-    ):
+        messages: list[str],
+        myr_bot_token: str | None = DISCORD_BOT_TOKEN,
+        import_deck_channel_id: int = DISCORD_CHANNEL_IMPORT_DECK_ID,
+        welcome_channel_id: int = DISCORD_CHANNEL_WELCOME_ID,
+        myr_log_channel_id: int = DISCORD_CHANNEL_MYR_LOG_ID,
+        **options: Any,
+    ) -> None:
         super().__init__(
             myr_bot_token=myr_bot_token,
             import_deck_channel_id=import_deck_channel_id,
@@ -30,9 +32,9 @@ class DiscordMessagesSenderSyncService(AbstractSyncDiscordService):
             **options,
         )
         self.messages = messages
-        self.result = False
+        self.result: bool = False
 
-    async def _task(self):
+    async def _task(self) -> bool:
         for message in self.messages:
             await self.send_log_message(message)
         return True

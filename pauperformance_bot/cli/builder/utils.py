@@ -1,23 +1,26 @@
 import argparse
 import logging
+from typing import Any
 
 from pauperformance_bot.cli.builder.options import QuietCLIOption, VerboseCLIOption
 from pauperformance_bot.constant.cli import GROUP_CLI_DEST_ID
 from pauperformance_bot.util.log import get_application_logger
 
 
-def get_default_parent_parser():
+def get_default_parent_parser() -> argparse.ArgumentParser:
     arg_parser = argparse.ArgumentParser(add_help=False)
     add_default_options(arg_parser)
     return arg_parser
 
 
-def add_default_options(arg_parser):
+def add_default_options(arg_parser: argparse.ArgumentParser) -> None:
     QuietCLIOption().add_to_parser(arg_parser, "")
     VerboseCLIOption().add_to_parser(arg_parser, "")
 
 
-def handle_default_cli_options(quiet, verbose, *args, **kwargs):
+def handle_default_cli_options(
+    quiet: bool, verbose: bool, *args: Any, **kwargs: Any
+) -> None:
     logger = get_application_logger()
     if quiet and verbose:
         raise ValueError("Unable to set both quiet and verbose flags")
@@ -27,7 +30,9 @@ def handle_default_cli_options(quiet, verbose, *args, **kwargs):
         logger.setLevel(logging.DEBUG)
 
 
-def build_commands_sub_parser(tool_parser, cli_commands):
+def build_commands_sub_parser(
+    tool_parser: argparse.ArgumentParser, cli_commands: list[Any]
+) -> None:
     description = (
         "Type 'command-name -h' to show its help message "
         "(e.g. '{} -h)'".format(next(iter(cli_commands)).name)

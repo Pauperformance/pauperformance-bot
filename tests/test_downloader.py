@@ -1,5 +1,6 @@
 import unittest
 from unittest import mock
+from unittest.mock import MagicMock
 
 from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
@@ -9,7 +10,7 @@ from pauperformance_bot.entity.deck.playable import (
 from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
 from pauperformance_bot.service.mtg.downloader.mtgdecks import MtgdecksDeckDownloader
 
-EXPECTED_DECK_AETHERHUB_MAIN = [
+EXPECTED_DECK_AETHERHUB_MAIN: list[PlayedCard] = [
     PlayedCard(3, "Thoughtcast"),
     PlayedCard(2, "Krark-Clan Shaman"),
     PlayedCard(3, "Great Furnace"),
@@ -35,7 +36,7 @@ EXPECTED_DECK_AETHERHUB_MAIN = [
     PlayedCard(1, "Nihil Spellbomb"),
     PlayedCard(1, "Aether Spellbomb"),
 ]
-EXPECTED_DECK_AETHERHUB_SIDE = [
+EXPECTED_DECK_AETHERHUB_SIDE: list[PlayedCard] = [
     PlayedCard(2, "Gorilla Shaman"),
     PlayedCard(3, "Hydroblast"),
     PlayedCard(4, "Pyroblast"),
@@ -44,7 +45,7 @@ EXPECTED_DECK_AETHERHUB_SIDE = [
     PlayedCard(1, "Electrickery"),
     PlayedCard(1, "Makeshift Munitions"),
 ]
-EXPECTED_DECK_TAPPEDOUT_MAIN = [
+EXPECTED_DECK_TAPPEDOUT_MAIN: list[PlayedCard] = [
     PlayedCard(4, "Chromatic Star"),
     PlayedCard(4, "Drossforge Bridge"),
     PlayedCard(1, "Duress"),
@@ -69,7 +70,7 @@ EXPECTED_DECK_TAPPEDOUT_MAIN = [
     PlayedCard(4, "Unearth"),
     PlayedCard(2, "Vault of Whispers"),
 ]
-EXPECTED_DECK_TAPPEDOUT_SIDE = [
+EXPECTED_DECK_TAPPEDOUT_SIDE: list[PlayedCard] = [
     PlayedCard(2, "Abrade"),
     PlayedCard(2, "Cuombajj Witches"),
     PlayedCard(2, "Duress"),
@@ -79,7 +80,7 @@ EXPECTED_DECK_TAPPEDOUT_SIDE = [
     PlayedCard(1, "Nameless Inversion"),
     PlayedCard(4, "Pyroblast"),
 ]
-EXPECTED_DECK_MTGTOP8_MAIN = [
+EXPECTED_DECK_MTGTOP8_MAIN: list[PlayedCard] = [
     PlayedCard(2, "River Boa"),
     PlayedCard(2, "Silhana Ledgewalker"),
     PlayedCard(3, "Vault Skirge"),
@@ -95,7 +96,7 @@ EXPECTED_DECK_MTGTOP8_MAIN = [
     PlayedCard(4, "Rancor"),
     PlayedCard(17, "Forest"),
 ]
-EXPECTED_DECK_MTGTOP8_SIDE = [
+EXPECTED_DECK_MTGTOP8_SIDE: list[PlayedCard] = [
     PlayedCard(2, "Weather the Storm"),
     PlayedCard(2, "Epic Confrontation"),
     PlayedCard(2, "Relic of Progenitus"),
@@ -103,7 +104,7 @@ EXPECTED_DECK_MTGTOP8_SIDE = [
     PlayedCard(3, "Gut Shot"),
     PlayedCard(4, "Gleeful Sabotage"),
 ]
-EXPECTED_DECK_MTGDECKS_MAIN = [
+EXPECTED_DECK_MTGDECKS_MAIN: list[PlayedCard] = [
     PlayedCard(4, "Thermo-Alchemist"),
     PlayedCard(4, "Voldaren Epicure"),
     PlayedCard(4, "Needle Drop"),
@@ -118,7 +119,7 @@ EXPECTED_DECK_MTGDECKS_MAIN = [
     PlayedCard(1, "Forgotten Cave"),
     PlayedCard(16, "Mountain"),
 ]
-EXPECTED_DECK_MTGDECKS_SIDE = [
+EXPECTED_DECK_MTGDECKS_SIDE: list[PlayedCard] = [
     PlayedCard(2, "Molten Rain"),
     PlayedCard(2, "Martyr of Ashes"),
     PlayedCard(3, "Electrickery"),
@@ -128,68 +129,72 @@ EXPECTED_DECK_MTGDECKS_SIDE = [
 
 
 class TestMtgoDownloader(unittest.TestCase):
-    def _read_mock_data(self, filename):
+    def _read_mock_data(self, filename: str) -> str:
         with open(filename) as fd:
             return fd.read()
 
-    def _validate_result(self, expected, res):
+    def _validate_result(self, expected: PlayableDeck, res: PlayableDeck) -> None:
         self.assertIsNotNone(res, "Should return a deck")
-        diff = get_decks_diff(expected, res)
+        diff: tuple[list[str], list[str], list[str], list[str]] = get_decks_diff(
+            expected, res
+        )
         self.assertTupleEqual(([], [], [], []), diff, "Should not have any difference")
 
     @mock.patch("pauperformance_bot.util.request.execute_http_request")
-    def test_mtgo_downloader_aetherhub(self, mock_ehr):
+    def test_mtgo_downloader_aetherhub(self, mock_ehr: MagicMock) -> None:
         mock_ehr.return_value = self._read_mock_data(
             "tests/mock_data/aetherhub_deck.txt"
         )
-        expected_deck = PlayableDeck(
+        expected_deck: PlayableDeck = PlayableDeck(
             EXPECTED_DECK_AETHERHUB_MAIN, EXPECTED_DECK_AETHERHUB_SIDE
         )
-        downloader = MtgoDeckDownloader(
+        downloader: MtgoDeckDownloader = MtgoDeckDownloader(
             "https://aetherhub.com/Deck/MtgoDeckExport/883786"
         )
 
-        res = downloader.download()
+        res: PlayableDeck = downloader.download()
 
         self._validate_result(expected_deck, res)
 
     @mock.patch("pauperformance_bot.util.request.execute_http_request")
-    def test_mtgo_downloader_mtgtop8(self, mock_ehr):
+    def test_mtgo_downloader_mtgtop8(self, mock_ehr: MagicMock) -> None:
         mock_ehr.return_value = self._read_mock_data("tests/mock_data/mtgtop8_deck.txt")
-        expected_deck = PlayableDeck(
+        expected_deck: PlayableDeck = PlayableDeck(
             EXPECTED_DECK_MTGTOP8_MAIN, EXPECTED_DECK_MTGTOP8_SIDE
         )
-        downloader = MtgoDeckDownloader("https://www.mtgtop8.com/mtgo?d=473002")
+        downloader: MtgoDeckDownloader = MtgoDeckDownloader(
+            "https://www.mtgtop8.com/mtgo?d=473002"
+        )
 
-        res = downloader.download()
+        res: PlayableDeck = downloader.download()
 
         self._validate_result(expected_deck, res)
 
     @mock.patch("pauperformance_bot.util.request.execute_http_request")
-    def test_mtgo_downloader_tappedout(self, mock_ehr):
+    def test_mtgo_downloader_tappedout(self, mock_ehr: MagicMock) -> None:
         mock_ehr.return_value = self._read_mock_data(
             "tests/mock_data/tappedout_deck.txt"
         )
-        expected_deck = PlayableDeck(
+        expected_deck: PlayableDeck = PlayableDeck(
             EXPECTED_DECK_TAPPEDOUT_MAIN, EXPECTED_DECK_TAPPEDOUT_SIDE
         )
-        downloader = MtgoDeckDownloader(
+        downloader: MtgoDeckDownloader = MtgoDeckDownloader(
             "https://tappedout.net/mtg-decks/gobliny-combo/?fmt=dek&cb=1653244312"
         )
 
-        res = downloader.download()
+        res: PlayableDeck = downloader.download()
 
         self._validate_result(expected_deck, res)
 
-    def test_downloader_mtgdeck(self):
-        expected_deck = PlayableDeck(
+    def test_downloader_mtgdeck(self) -> None:
+        expected_deck: PlayableDeck = PlayableDeck(
             EXPECTED_DECK_MTGDECKS_MAIN, EXPECTED_DECK_MTGDECKS_SIDE
         )
-        downloader = MtgdecksDeckDownloader(
+        downloader: MtgdecksDeckDownloader = MtgdecksDeckDownloader(
             "https://mtgdecks.net/Pauper/burn-decklist-by-thormyn-1380435/txt"
         )
 
-        res = downloader.download()
+        res: PlayableDeck = downloader.download()
 
         self._validate_result(expected_deck, res)
 

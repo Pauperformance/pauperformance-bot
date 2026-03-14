@@ -1,7 +1,9 @@
 from argparse import ArgumentParser
+from typing import Any
 
 import argcomplete
 
+from pauperformance_bot.cli.builder.command import CLICommand
 from pauperformance_bot.cli.builder.runnable import CLIRunnable
 from pauperformance_bot.cli.builder.utils import (
     build_commands_sub_parser,
@@ -11,14 +13,14 @@ from pauperformance_bot.cli.builder.utils import (
 
 
 class CLIGroup(CLIRunnable):
-    def __init__(self, name, cli_commands):
+    def __init__(self, name: str, cli_commands: list[CLICommand]) -> None:
         super().__init__(name)
         self.cli_commands = cli_commands
 
-    def add_parser_argument(self, tool_parser):
+    def add_parser_argument(self, tool_parser: ArgumentParser) -> None:
         build_commands_sub_parser(tool_parser, self.cli_commands)
 
-    def get_cli_parser(self):
+    def get_cli_parser(self) -> ArgumentParser:
         parser = ArgumentParser(
             description="A collection of {}-related tools.".format(self.name),
             parents=[get_default_parent_parser()],
@@ -27,7 +29,7 @@ class CLIGroup(CLIRunnable):
         argcomplete.autocomplete(parser)
         return parser
 
-    def dispatch_cmd(self, command, *args, **kwargs):
+    def dispatch_cmd(self, command: str, *args: Any, **kwargs: Any) -> None:
         handle_default_cli_options(*args, **kwargs)
         dispatcher = next(filter(lambda c: c.name == command, self.cli_commands))
         dispatcher.dispatch_cmd(*args, **kwargs)

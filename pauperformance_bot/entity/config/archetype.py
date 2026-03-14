@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pauperformance_bot.util.decorators import auto_repr, auto_str
 
 
@@ -10,10 +8,10 @@ class SideboardResource:
         self,
         *,
         link: str,
-    ):
-        self.link: str = link
+    ) -> None:
+        self.link = link
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.link)
 
 
@@ -26,12 +24,12 @@ class DiscordResource:
         name: str,
         link: str,
         language: str,
-    ):
-        self.name: str = name
-        self.link: str = link
-        self.language: str = language
+    ) -> None:
+        self.name = name
+        self.link = link
+        self.language = language
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.link)
 
 
@@ -46,14 +44,14 @@ class Resource:
         language: str,
         author: str,
         date: str,
-    ):
-        self.name: str = name
-        self.link: str = link
-        self.language: str = language
-        self.author: str = author
-        self.date: str = date
+    ) -> None:
+        self.name = name
+        self.link = link
+        self.language = language
+        self.author = author
+        self.date = date
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.link)
 
 
@@ -66,14 +64,14 @@ class ChangelogEntry:
         text: str,
         date: str,
         scope: str,
-        link: Optional[str],
-    ):
-        self.text: str = text
-        self.date: str = date
-        self.scope: str = scope
-        self.link: Optional[str] = link
+        link: str | None,
+    ) -> None:
+        self.text = text
+        self.date = date
+        self.scope = scope
+        self.link = link
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.text)
 
 
@@ -85,29 +83,29 @@ class ArchetypeConfig:
         *,
         name: str,
         aliases: list[str],
-        family: Optional[str],
+        family: str | None,
         dominant_mana: list[str],
         game_type: list[str],
         description: str,
         must_have_cards: list[str],
         must_not_have_cards: list[str],
         reference_decks: list[str],
-        resource_sideboard: Optional[SideboardResource],
+        resource_sideboard: SideboardResource | None,
         resources_discord: list[DiscordResource],
         resources: list[Resource],
-    ):
-        self.name: str = name
-        self.aliases: list[str] = aliases
-        self.family: Optional[str] = family
-        self.dominant_mana: list[str] = dominant_mana
-        self.game_type: list[str] = game_type
-        self.description: str = description
-        self.must_have_cards: list[str] = must_have_cards
-        self.must_not_have_cards: list[str] = must_not_have_cards
-        self.reference_decks: list[str] = reference_decks
-        self.resource_sideboard: Optional[SideboardResource] = resource_sideboard
-        self.resources_discord: list[DiscordResource] = resources_discord
-        self.resources: list[Resource] = resources
+    ) -> None:
+        self.name = name
+        self.aliases = aliases
+        self.family = family
+        self.dominant_mana = dominant_mana
+        self.game_type = game_type
+        self.description = description
+        self.must_have_cards = must_have_cards
+        self.must_not_have_cards = must_not_have_cards
+        self.reference_decks = reference_decks
+        self.resource_sideboard = resource_sideboard
+        self.resources_discord = resources_discord
+        self.resources = resources
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.name)

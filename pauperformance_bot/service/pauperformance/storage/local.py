@@ -1,6 +1,7 @@
 import json
 from os import listdir, remove
 from os.path import isfile, join, sep
+from typing import Any
 
 from pauperformance_bot.constant.pauperformance.myr import STORAGE_DIR
 from pauperformance_bot.exceptions import StoredFileNotFound
@@ -13,82 +14,82 @@ logger = get_application_logger()
 
 
 class LocalStorageService(AbstractStorageService):
-    def __init__(self, root_dir=STORAGE_DIR):
+    def __init__(self, root_dir: str = STORAGE_DIR) -> None:
         self._root_dir = root_dir
 
     @property
-    def _root(self):
+    def _root(self) -> str:
         return self._root_dir
 
     @property
-    def _dir_separator(self):
+    def _dir_separator(self) -> str:
         return sep
 
-    def _list_files(self, path, cursor=None):
+    def _list_files(self, path: str, cursor: Any = None) -> list[str]:
         return [join(path, f) for f in listdir(path) if isfile(join(path, f))]
 
-    def create_file(self, name, content=""):
+    def create_file(self, name: str, content: str = "") -> None:
         logger.info(f"Storing file {name}...")
         with open(name, "w", encoding="utf-8") as out_f:
             out_f.write(content)
         logger.info(f"Stored file {name}.")
 
-    def get_file(self, name):
+    def get_file(self, name: str) -> Any:
         logger.info(f"Reading file {name}...")
         with open(name, "r") as in_f:
             content = in_f.read()
         logger.info(f"Read file {name}.")
         return json.loads(content)
 
-    def list_imported_deckstats_deck_ids(self):
+    def list_imported_deckstats_deck_ids(self) -> set[str]:
         return set(
             self.get_imported_deckstats_deck_id_from_key(file)
             for file in self._list_files(self.deckstats_deck_path)
         )
 
-    def list_imported_deckstats_deck_names(self):
+    def list_imported_deckstats_deck_names(self) -> set[str]:
         return set(
             self.get_imported_deckstats_deck_name_from_key(file)
             for file in self._list_files(self.deckstats_deck_path)
         )
 
-    def list_imported_mtggoldfish_deck_ids(self):
+    def list_imported_mtggoldfish_deck_ids(self) -> set[str]:
         return set(
             self.get_imported_mtggoldfish_deck_id_from_key(file)
             for file in self._list_files(self.mtggoldfish_deck_path)
         )
 
-    def list_imported_mtggoldfish_deck_names(self):
+    def list_imported_mtggoldfish_deck_names(self) -> set[str]:
         return set(
             self.get_imported_mtggoldfish_deck_name_from_key(file)
             for file in self._list_files(self.mtggoldfish_deck_path)
         )
 
-    def list_imported_twitch_videos(self):
+    def list_imported_twitch_videos(self) -> set[str]:
         return set(
             self.get_imported_twitch_video(file)
             for file in self._list_files(self.twitch_video_path)
         )
 
-    def list_imported_twitch_videos_ids(self):
+    def list_imported_twitch_videos_ids(self) -> set[str]:
         return set(
             self.get_imported_twitch_video_id_from_key(file)
             for file in self._list_files(self.twitch_video_path)
         )
 
-    def list_imported_youtube_videos(self):
+    def list_imported_youtube_videos(self) -> set[str]:
         return set(
             self.get_imported_youtube_video(file)
             for file in self._list_files(self.youtube_video_path)
         )
 
-    def list_imported_youtube_videos_ids(self):
+    def list_imported_youtube_videos_ids(self) -> set[str]:
         return set(
             self.get_imported_youtube_video_id_from_key(file)
             for file in self._list_files(self.youtube_video_path)
         )
 
-    def delete_deck_by_name(self, deck_name):
+    def delete_deck_by_name(self, deck_name: str) -> None:
         logger.info(f"Deleting file containing {deck_name}...")
         file_path = None
         for file in self._list_files(self.deckstats_deck_path):
