@@ -25,6 +25,7 @@ coverage.xml
 mypy_result.xml
 
 # Myr
+resources/silver/classifier_snapshot.pkl
 pauperformance_bot/secrets.py
 pauperformance_bot/p13_secrets.py
 pauperformance_bot/task/dev.py

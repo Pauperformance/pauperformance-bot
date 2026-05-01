@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import itertools
 from collections import defaultdict
-from typing import DefaultDict, Tuple
+from typing import TYPE_CHECKING, DefaultDict, Tuple
 
 from scipy import spatial
 
@@ -20,12 +22,13 @@ from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
     parse_playable_deck_from_lines,
 )
-from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
-from pauperformance_bot.service.pauperformance.pauperformance import (
-    PauperformanceService,
-)
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.math import truncate
+
+if TYPE_CHECKING:
+    from pauperformance_bot.service.pauperformance.pauperformance import (
+        PauperformanceService,
+    )
 
 logger = get_application_logger()
 
@@ -44,13 +47,44 @@ class Decklassifier:
             known_decks if known_decks else []
         )
         self._decks_cache: dict[str, PlayableDeck] = {}
+        self._artifact_land_names: list[str] | None = None
+
+    @classmethod
+    def from_snapshot_data(
+        cls,
+        archetypes: list[ArchetypeConfig],
+        known_decks: list[tuple[PlayableDeck, ArchetypeConfig]],
+        decks_cache: dict[str, PlayableDeck],
+        artifact_land_names: list[str],
+    ) -> Decklassifier:
+        instance = cls.__new__(cls)
+        instance.pauperformance = None
+        instance.archetypes = archetypes
+        instance.known_decks = known_decks if known_decks else []
+        instance._decks_cache = decks_cache if decks_cache else {}
+        instance._artifact_land_names = artifact_land_names
+        return instance
+
+    @classmethod
+    def from_snapshot(cls, snapshot_path):
+        import pickle
+
+        logger.info(f"Loading classifier snapshot from {snapshot_path}...")
+        with open(snapshot_path, "rb") as f:
+            snapshot = pickle.load(f)
+        logger.info(
+            f"Loaded snapshot: {len(snapshot['archetypes'])} archetypes, "
+            f"{len(snapshot['known_decks'])} known decks, "
+            f"{len(snapshot['decks_cache'])} cached reference decks."
+        )
+        return cls.from_snapshot_data(**snapshot)
 
     def add_known_decks(self, known_decks: list[tuple[PlayableDeck, ArchetypeConfig]]):
         self.known_decks += known_decks
 
     @staticmethod
     def _cosine_similarity(v1, v2, w=1.0):
-        if w == 0:
+        if w == 0 or len(v1) == 0:
             return 1
         return 1 - spatial.distance.cosine(v1, v2, w=len(v1) * [w])
 
@@ -116,8 +150,11 @@ class Decklassifier:
         return sim
 
     def _is_affinity(self, deck: PlayableDeck) -> bool:
-        artifact_lands = self.pauperformance.scryfall.get_legal_artifact_lands()
-        artifact_lands_names = [c["name"] for c in artifact_lands]
+        if self._artifact_land_names is not None:
+            artifact_lands_names = self._artifact_land_names
+        else:
+            artifact_lands = self.pauperformance.scryfall.get_legal_artifact_lands()
+            artifact_lands_names = [c["name"] for c in artifact_lands]
         affinity_creatures = [
             "Frogmite",
             "Atog",
@@ -253,6 +290,12 @@ class Decklassifier:
             for reference_deck in archetype.reference_decks:
                 logger.debug(f"Comparing deck with reference list {reference_deck}...")
                 if reference_deck not in self._decks_cache:
+                    if self.pauperformance is None:
+                        logger.debug(
+                            f"Skipping uncached reference deck {reference_deck} "
+                            f"(no pauperformance service available)."
+                        )
+                        continue
                     self._decks_cache[reference_deck] = (
                         self.pauperformance.get_playable_deck(reference_deck)
                     )
@@ -275,6 +318,8 @@ class Decklassifier:
         return most_similar_archetype, highest_similarity
 
     def get_metagame(self) -> Metagame:
+        from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
+
         mtggoldfish = MTGGoldfish()
         mtggoldfish_meta = mtggoldfish.get_pauper_meta()
         meta_shares: DefaultDict[str, list[MetaShare]] = defaultdict(list)

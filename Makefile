@@ -28,6 +28,10 @@ test: install-test
 	tox -- -n 16
 .PHONY: test
 
+build-snapshot:
+	python -m pauperformance_bot.task.build_snapshot
+.PHONY: build-snapshot
+
 autocomplete-bash:
 	echo "eval \"\$$(register-python-argcomplete myr)\"" >> ~/.bashrc
 	echo "Start a new shell to start receiving tab completion."

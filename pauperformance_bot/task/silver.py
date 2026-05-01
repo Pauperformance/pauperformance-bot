@@ -4,46 +4,52 @@ import os
 import jsonpickle
 
 from pauperformance_bot.constant.pauperformance.myr import TOP_PATH
-from pauperformance_bot.service.academy.data_exporter import AcademyDataExporter
-from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
-    MTGGoldfishArchiveService,
-)
-from pauperformance_bot.service.pauperformance.pauperformance import (
-    PauperformanceService,
+from pauperformance_bot.constant.pauperformance.silver import (
+    CLASSIFIER_SNAPSHOT_PATH,
 )
 from pauperformance_bot.service.pauperformance.silver.decklassifier import Decklassifier
-from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import (
     posix_path,
     safe_dump_json_to_file,
 )
 
-logger = get_application_logger()
-
 
 def get_dpl_classifier():
-    # from pauperformance_bot.service.pauperformance.archive.local import (
-    #     LocalArchiveService
-    # )
-    # from pauperformance_bot.service.pauperformance.storage.local import (
-    #     LocalStorageService
-    # )
-    # storage = LocalStorageService()
-    # archive = LocalArchiveService()
+    from pauperformance_bot.service.academy.data_exporter import AcademyDataExporter
+    from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
+        MTGGoldfishArchiveService,
+    )
+    from pauperformance_bot.service.pauperformance.pauperformance import (
+        PauperformanceService,
+    )
+    from pauperformance_bot.service.pauperformance.storage.dropbox_ import (
+        DropboxService,
+    )
+
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)
     pauperformance = PauperformanceService(storage, archive)
 
     exporter = AcademyDataExporter(pauperformance)
-    # TODO: improve
     known_decks, _ = exporter._load_mtggoldfish_tournament_training_data()
     other_known_decks, _ = exporter._load_dpl_training_data()
     known_decks += other_known_decks
     return Decklassifier(pauperformance, known_decks)
 
 
-DPL_SILVER = get_dpl_classifier()
+def load_dpl_classifier():
+    if os.path.exists(CLASSIFIER_SNAPSHOT_PATH):
+        logger.info(f"Loading classifier from snapshot: {CLASSIFIER_SNAPSHOT_PATH}")
+        return Decklassifier.from_snapshot(CLASSIFIER_SNAPSHOT_PATH)
+    logger.warning(
+        f"Snapshot not found at {CLASSIFIER_SNAPSHOT_PATH}. "
+        f"Falling back to full initialization (this will be slow)."
+    )
+    return get_dpl_classifier()
+
+
+DPL_SILVER = load_dpl_classifier()
 
 
 def generate_dpl_meta(data, name="DPL metagame"):
