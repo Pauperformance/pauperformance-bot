@@ -6316,5 +6316,83 @@
         "scryfall_code": "tmsh",
         "name": "Marvel Super Heroes Tokens",
         "date": "2026-06-26"
+    },
+    "1054": {
+        "p12e_code": 1054,
+        "scryfall_code": "aspm",
+        "name": "Marvel's Spider-Man Art Series",
+        "date": "2025-09-26"
+    },
+    "1055": {
+        "p12e_code": 1055,
+        "scryfall_code": "pw26",
+        "name": "Wizards Play Network 2026",
+        "date": "2026-01-01"
+    },
+    "1056": {
+        "p12e_code": 1056,
+        "scryfall_code": "aecl",
+        "name": "Lorwyn Eclipsed Art Series",
+        "date": "2026-01-23"
+    },
+    "1057": {
+        "p12e_code": 1057,
+        "scryfall_code": "ecc",
+        "name": "Lorwyn Eclipsed Commander",
+        "date": "2026-01-23"
+    },
+    "1058": {
+        "p12e_code": 1058,
+        "scryfall_code": "pecl",
+        "name": "Lorwyn Eclipsed Promos",
+        "date": "2026-01-23"
+    },
+    "1059": {
+        "p12e_code": 1059,
+        "scryfall_code": "tecc",
+        "name": "Lorwyn Eclipsed Commander Tokens",
+        "date": "2026-01-23"
+    },
+    "1060": {
+        "p12e_code": 1060,
+        "scryfall_code": "tecl",
+        "name": "Lorwyn Eclipsed Tokens",
+        "date": "2026-01-23"
+    },
+    "1061": {
+        "p12e_code": 1061,
+        "scryfall_code": "yecl",
+        "name": "Alchemy: Lorwyn Eclipsed",
+        "date": "2026-02-03"
+    },
+    "1062": {
+        "p12e_code": 1062,
+        "scryfall_code": "pl26",
+        "name": "Year of the Horse 2026",
+        "date": "2026-02-17"
+    },
+    "1063": {
+        "p12e_code": 1063,
+        "scryfall_code": "ftmc",
+        "name": "Teenage Mutant Ninja Turtles Eternal Front Cards",
+        "date": "2026-03-06"
+    },
+    "1064": {
+        "p12e_code": 1064,
+        "scryfall_code": "soa",
+        "name": "Secrets of Strixhaven Mystical Archive",
+        "date": "2026-04-24"
+    },
+    "1065": {
+        "p12e_code": 1065,
+        "scryfall_code": "soc",
+        "name": "Secrets of Strixhaven Commander",
+        "date": "2026-04-24"
+    },
+    "1066": {
+        "p12e_code": 1066,
+        "scryfall_code": "sos",
+        "name": "Secrets of Strixhaven",
+        "date": "2026-04-24"
     }
 }
