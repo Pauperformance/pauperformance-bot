@@ -34,7 +34,14 @@ class TestMtgoDeckListParser(unittest.TestCase):
         self.assertEqual(names, sorted(names))
 
     def test_parse_sorts_sideboard_by_name(self):
-        lines = ["60 Forest", "", "4 Pyroblast", "4 Hydroblast", "4 Gorilla Shaman", "3 Relic of Progenitus"]
+        lines = [
+            "60 Forest",
+            "",
+            "4 Pyroblast",
+            "4 Hydroblast",
+            "4 Gorilla Shaman",
+            "3 Relic of Progenitus",
+        ]
         deck = self.parser.parse_lines(lines)
         names = [c.card_name for c in deck.sideboard]
         self.assertEqual(names, sorted(names))

@@ -5,7 +5,7 @@ from pauperformance_bot.constant.pauperformance.nexus import (
     DISCORD_MYR_REACTION_OK,
     DISCORD_MYR_REACTION_SEEN,
 )
-from pauperformance_bot.entity.config.phd import PhDConfig
+from pauperformance_bot.entity.config.creator import CreatorConfig
 from pauperformance_bot.service.arena.twitch import TwitchService
 from pauperformance_bot.service.arena.youtube import YouTubeService
 from pauperformance_bot.service.mtg.scryfall import ScryfallService
@@ -48,7 +48,7 @@ class AsyncPauperformanceService(PauperformanceService):
         players_by_deckstats_id = {
             int(p.deckstats_id): p for p in self.players if p.deckstats_id
         }
-        warning_player: PhDConfig = self.config_reader.get_pauperformance_phd()
+        warning_player: CreatorConfig = self.config_reader.get_pauperformance_creator()
         for player in self.players:
             if not player.deckstats_id:
                 logger.info(
@@ -83,7 +83,7 @@ class AsyncPauperformanceService(PauperformanceService):
     async def import_player_videos_from_twitch(self, player, send_notification=True):
         logger.info(f"Processing videos from Twitch user {player.twitch_login_name}...")
         twitch_user = self.twitch.get_user(player.twitch_login_name)
-        warning_player: PhDConfig = self.config_reader.get_pauperformance_phd()
+        warning_player: CreatorConfig = self.config_reader.get_pauperformance_creator()
         await self.archive.archive_player_videos_from_twitch(
             player,
             self.twitch.get_user_videos(twitch_user.user_id),
@@ -111,7 +111,7 @@ class AsyncPauperformanceService(PauperformanceService):
         logger.info(
             f"Processing videos from YouTube user " f"{player.youtube_channel_id}..."
         )
-        warning_player: PhDConfig = self.config_reader.get_pauperformance_phd()
+        warning_player: CreatorConfig = self.config_reader.get_pauperformance_creator()
         await self.archive.archive_player_videos_from_youtube(
             player,
             self.youtube.get_channel_videos(

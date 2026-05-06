@@ -66,7 +66,7 @@ SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
 CONFIG_DIR = posix_path(RESOURCES_DIR, "config")
 CONFIG_ARCHETYPES_DIR = posix_path(CONFIG_DIR, "archetypes")
 CONFIG_FAMILIES_DIR = posix_path(CONFIG_DIR, "families")
-CONFIG_PHDS_DIR = posix_path(CONFIG_DIR, "phds")
+CONFIG_CREATORS_DIR = posix_path(CONFIG_DIR, "creators")
 CONFIG_NEWSPAUPER_FILE = "newspauper.ini"
 
 TEMPLATES_DIR = posix_path(RESOURCES_DIR, "templates")
@@ -104,8 +104,8 @@ class MyrFileSystem:
         self.RESOURCES_CONFIG_FAMILIES_DIR: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "families"
         )
-        self.RESOURCES_CONFIG_PHDS_DIR: str = posix_path(
-            self.RESOURCES_CONFIG_DIR, "phds"
+        self.RESOURCES_CONFIG_CREATORS_DIR: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "creators"
         )
         self.RESOURCES_CONFIG_NEWSPAUPER: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "newspauper.ini"

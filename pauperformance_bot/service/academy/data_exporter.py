@@ -59,25 +59,27 @@ class AcademyDataExporter:
         self.academy_loader: AcademyDataLoader = AcademyDataLoader()
 
     def export_all(self):
-        self.export_archetypes()
-        self.export_decks()
-        self.export_intel_decks()
-        self.export_intel_cards()
-        # self.export_phd_sheets()
+        # self.export_archetypes()
+        # self.export_decks()
+        # self.export_intel_decks()
+        # self.export_intel_cards()
+        self.export_creator_sheets()
         # self.export_videos()
-        self.export_miscellanea()
+        # self.export_miscellanea()
 
-    def export_phd_sheets(self):
-        logger.info(f"Exporting phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}...")
-        for phd_sheet in self.config_reader.list_phd_sheets(
-            scryfall_service=self.scryfall
-        ):
+    def export_creator_sheets(self):
+        logger.info(
+            f"Exporting creator sheets to {self.academy_fs.ASSETS_DATA_CREATOR_DIR}..."
+        )
+        for sheet in self.config_reader.list_creator_sheets():
             safe_dump_json_to_file(
-                self.academy_fs.ASSETS_DATA_PHD_DIR,
-                f"{phd_sheet.name}.json",
-                phd_sheet,
+                self.academy_fs.ASSETS_DATA_CREATOR_DIR,
+                f"{sheet.name}.json",
+                sheet,
             )
-        logger.info(f"Exported phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}.")
+        logger.info(
+            f"Exported creator sheets to {self.academy_fs.ASSETS_DATA_CREATOR_DIR}."
+        )
 
     def export_archetypes(self):
         logger.info(
@@ -268,12 +270,12 @@ class AcademyDataExporter:
                 video_key + ".txt",
             )
             video_json = self.pauperformance.storage.get_file(video_path)
-            video_id, phd_name, _, date, _ = video_key.split(">")
+            video_id, creator_name, _, date, _ = video_key.split(">")
             video: Video = Video(
                 name=video_json["title"],
                 link=video_json["url"],
                 language=video_json["language"],
-                phd_name=phd_name,
+                creator_name=creator_name,
                 date=date,
                 archetype=video_json["archetype"],
                 video_id=video_id,

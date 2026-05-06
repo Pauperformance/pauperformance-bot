@@ -1,7 +1,40 @@
 import unittest
 from datetime import datetime
 
-from pauperformance_bot.util.time import datetime_to_ms, pretty_str, simple_str
+from pauperformance_bot.util.time import (
+    datetime_to_ms,
+    now,
+    now_utc,
+    pretty_str,
+    simple_str,
+)
+
+
+class TestNow(unittest.TestCase):
+    def test_returns_int(self):
+        self.assertIsInstance(now(), int)
+
+    def test_is_positive(self):
+        self.assertGreater(now(), 0)
+
+    def test_increases_over_time(self):
+        t1 = now()
+        t2 = now()
+        self.assertGreaterEqual(t2, t1)
+
+
+class TestNowUtc(unittest.TestCase):
+    def test_returns_int(self):
+        self.assertIsInstance(now_utc(), int)
+
+    def test_is_positive(self):
+        self.assertGreater(now_utc(), 0)
+
+    def test_close_to_now(self):
+        t_local = now()
+        t_utc = now_utc()
+        # allow up to 13 hours difference to account for any timezone
+        self.assertLess(abs(t_local - t_utc), 13 * 3600 * 1000)
 
 
 class TestDatetimeToMs(unittest.TestCase):

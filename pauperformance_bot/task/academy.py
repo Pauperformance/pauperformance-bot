@@ -7,7 +7,6 @@ from tenacity import (
     wait_random_exponential,
 )
 
-from pauperformance_bot.service.academy.academy import AcademyService
 from pauperformance_bot.service.nexus.async_discord_service import AsyncDiscordService
 from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
     MTGGoldfishArchiveService,
@@ -47,8 +46,8 @@ async def async_academy_update():
     await pauperformance.import_decks_from_discord(send_notification=send_notification)
 
     # update pages
-    academy = AcademyService(pauperformance)
-    academy.update_all()
+    # academy = AcademyService(pauperformance)
+    # academy.update_all()
 
 
 @retry(

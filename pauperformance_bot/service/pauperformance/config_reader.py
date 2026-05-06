@@ -5,17 +5,16 @@ from itertools import count
 from pauperformance_bot.constant.flags import get_language_flag
 from pauperformance_bot.constant.pauperformance.myr import MyrFileSystem
 from pauperformance_bot.entity.api.archetype import Resource
+from pauperformance_bot.entity.api.creator import CreatorSheet
 from pauperformance_bot.entity.api.miscellanea import Changelog, Newspauper
-from pauperformance_bot.entity.api.phd import PhDSheet
 from pauperformance_bot.entity.config.archetype import (
     ArchetypeConfig,
     ChangelogEntry,
     DiscordResource,
     SideboardResource,
 )
-from pauperformance_bot.entity.config.phd import PhDConfig
+from pauperformance_bot.entity.config.creator import CreatorConfig
 from pauperformance_bot.exceptions import PauperformanceException
-from pauperformance_bot.service.mtg.scryfall import ScryfallService
 from pauperformance_bot.util.config import read_config_with_sequential_resources
 from pauperformance_bot.util.decorators import auto_repr, auto_str
 from pauperformance_bot.util.log import get_application_logger
@@ -62,109 +61,50 @@ class ConfigReader:
             reverse=True,
         )
 
-    def list_phd_sheets(
-        self,
-        scryfall_service: ScryfallService = ScryfallService(),
-    ) -> list[PhDSheet]:
-        config_dir = self.myr_file_system.RESOURCES_CONFIG_PHDS_DIR
-        logger.info(f"Reading PhD sheets from {config_dir}...")
-        phd_sheets: list[PhDSheet] = [
-            self.get_phd_sheet(config_file, scryfall_service)
+    def list_creator_sheets(self) -> list[CreatorSheet]:
+        config_dir = self.myr_file_system.RESOURCES_CONFIG_CREATORS_DIR
+        logger.info(f"Reading creator sheets from {config_dir}...")
+        creator_sheets: list[CreatorSheet] = [
+            self.get_creator_sheet(config_file)
             for config_file in glob.glob(f"{config_dir}/*.ini")
         ]
-        logger.info(f"Read {len(phd_sheets)} PhD sheets from {config_dir}.")
-        return phd_sheets
+        logger.info(f"Read {len(creator_sheets)} creator sheets from {config_dir}.")
+        return creator_sheets
 
-    def get_phd_sheet(
+    def get_creator_sheet(
         self,
         config_file_path: str,
-        scryfall_service: ScryfallService = ScryfallService(),
-    ) -> PhDSheet:
+    ) -> CreatorSheet:
         config = self._read_config_file(config_file_path)
         values = config["values"]
-
-        if card_url := values["favorite_pauper_card_url"]:
-            card = scryfall_service.get_card_from_url(card_url)
-            favorite_pauper_card_name = card["name"]
-            favorite_pauper_card_image_url = card["image_uris"]["large"].rsplit(
-                "?", maxsplit=1
-            )[0]
-        else:
-            favorite_pauper_card_name = None
-            favorite_pauper_card_image_url = None
-
-        if card_url := values["favorite_flavor_text_url"]:
-            card = scryfall_service.get_card_from_url(card_url)
-            favorite_flavor_text_name = card["name"]
-            favorite_flavor_text_image_url = card["image_uris"]["large"].rsplit(
-                "?", maxsplit=1
-            )[0]
-            favorite_flavor_text_lines = card["flavor_text"]
-        else:
-            favorite_flavor_text_name = None
-            favorite_flavor_text_image_url = None
-            favorite_flavor_text_lines = None
-
-        if card_url := values["favorite_artwork_url"]:
-            card = scryfall_service.get_card_from_url(card_url)
-            favorite_artwork_name = card["name"]
-            favorite_artwork_image_url = card["image_uris"]["large"].rsplit(
-                "?", maxsplit=1
-            )[0]
-        else:
-            favorite_artwork_name = None
-            favorite_artwork_image_url = None
-
-        favorite_artist_gallery_url = (
-            scryfall_service.get_artist_gallery_search_url(artist_name)
-            if (artist_name := values["favorite_artist_name"])
-            else None
-        )
-
-        phd_sheet: PhDSheet = PhDSheet(
+        creator_sheet: CreatorSheet = CreatorSheet(
             name=values["name"],
-            bio=values["bio"],
             mtgo_name=values["mtgo_name"],
+            mtgo_name2=values["mtgo_name2"],
             twitch_channel_url=values["twitch_channel_url"],
             youtube_channel_url=values["youtube_channel_url"],
-            favorite_format=values["favorite_format"],
-            favorite_pauper_archetype=values["favorite_pauper_archetype"],
-            favorite_pauper_card_name=favorite_pauper_card_name,
-            favorite_pauper_card_url=values["favorite_pauper_card_url"],
-            favorite_pauper_card_image_url=favorite_pauper_card_image_url,
-            favorite_flavor_text_name=favorite_flavor_text_name,
-            favorite_flavor_text_url=values["favorite_flavor_text_url"],
-            favorite_flavor_text_image_url=favorite_flavor_text_image_url,
-            favorite_flavor_text_lines=favorite_flavor_text_lines,
-            favorite_artwork_name=favorite_artwork_name,
-            favorite_artwork_url=values["favorite_artwork_url"],
-            favorite_artwork_image_url=favorite_artwork_image_url,
-            favorite_artist_name=values["favorite_artist_name"],
-            favorite_artist_gallery_url=favorite_artist_gallery_url,
-            favorite_magic_quote_lines=values["favorite_magic_quote_lines"],
         )
-        logger.info(f"Read PhD sheet {phd_sheet}.")
-        return phd_sheet
+        logger.info(f"Read creator sheet {creator_sheet}.")
+        return creator_sheet
 
-    def list_phds(
+    def list_creators(
         self,
-    ) -> list[PhDConfig]:
-        config_dir = self.myr_file_system.RESOURCES_CONFIG_PHDS_DIR
-        logger.info(f"Reading PhDs from {config_dir}...")
-        phds: list[PhDConfig] = [
-            self.get_phd(config_file)
+    ) -> list[CreatorConfig]:
+        config_dir = self.myr_file_system.RESOURCES_CONFIG_CREATORS_DIR
+        logger.info(f"Reading creators from {config_dir}...")
+        creators: list[CreatorConfig] = [
+            self.get_creator(config_file)
             for config_file in glob.glob(f"{config_dir}/*.ini")
         ]
-        logger.info(f"Read {len(phds)} PhDs from {config_dir}.")
-        return phds
+        logger.info(f"Read {len(creators)} creators from {config_dir}.")
+        return creators
 
-    def get_phd(
+    def get_creator(
         self,
         config_file_path: str,
-    ) -> PhDConfig:
+    ) -> CreatorConfig:
         config = self._read_config_file(config_file_path)
         values = config["values"]
-        dev = config["dev"]
 
         twitch_login_name = (
             url.rsplit("/", maxsplit=1)[-1]
@@ -176,23 +116,18 @@ class ConfigReader:
             if (url := values["youtube_channel_url"])
             else None
         )
-        discord_id = int(discord_id) if (discord_id := dev["discord_id"]) else None
-
-        phd: PhDConfig = PhDConfig(
+        creator: CreatorConfig = CreatorConfig(
             name=values["name"],
             mtgo_name=values["mtgo_name"],
+            mtgo_name2=values["mtgo_name2"],
             twitch_login_name=twitch_login_name,
             youtube_channel_id=youtube_channel_id,
-            default_youtube_language=dev["default_youtube_language"],
-            discord_id=discord_id,
-            deckstats_name=dev["deckstats_name"],
-            deckstats_id=dev["deckstats_id"],
         )
-        logger.info(f"Read PhD {phd}.")
-        return phd
+        logger.info(f"Read creator {creator}.")
+        return creator
 
-    def get_pauperformance_phd(self) -> PhDConfig:
-        return next(phd for phd in self.list_phds() if phd.name == "Pauperformance")
+    def get_pauperformance_creator(self) -> CreatorConfig:
+        return next(c for c in self.list_creators() if c.name == "Pauperformance")
 
     def list_archetypes(self) -> list[ArchetypeConfig]:
         config_dir = self.myr_file_system.RESOURCES_CONFIG_ARCHETYPES_DIR

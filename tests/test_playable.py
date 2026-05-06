@@ -53,13 +53,19 @@ class TestPlayableDeck(unittest.TestCase):
 
 class TestPlayedCard(unittest.TestCase):
     def test_equality_case_insensitive(self):
-        self.assertEqual(PlayedCard(4, "Lightning Bolt"), PlayedCard(4, "lightning bolt"))
+        self.assertEqual(
+            PlayedCard(4, "Lightning Bolt"), PlayedCard(4, "lightning bolt")
+        )
 
     def test_inequality_different_quantity(self):
-        self.assertNotEqual(PlayedCard(4, "Lightning Bolt"), PlayedCard(3, "Lightning Bolt"))
+        self.assertNotEqual(
+            PlayedCard(4, "Lightning Bolt"), PlayedCard(3, "Lightning Bolt")
+        )
 
     def test_inequality_different_name(self):
-        self.assertNotEqual(PlayedCard(4, "Lightning Bolt"), PlayedCard(4, "Lava Spike"))
+        self.assertNotEqual(
+            PlayedCard(4, "Lightning Bolt"), PlayedCard(4, "Lava Spike")
+        )
 
     def test_less_than_case_insensitive(self):
         self.assertLess(PlayedCard(1, "Aaa"), PlayedCard(1, "zzz"))
@@ -134,19 +140,29 @@ class TestPlayableDeckCanBelongToArchetype(unittest.TestCase):
 
     def test_must_have_present(self):
         pd = PlayableDeck(data.DECK_MAIN, data.DECK_SIDE)
-        self.assertTrue(pd.can_belong_to_archetype(self._archetype(must_have=["Lightning Bolt"])))
+        self.assertTrue(
+            pd.can_belong_to_archetype(self._archetype(must_have=["Lightning Bolt"]))
+        )
 
     def test_must_have_absent(self):
         pd = PlayableDeck(data.DECK_MAIN, data.DECK_SIDE)
-        self.assertFalse(pd.can_belong_to_archetype(self._archetype(must_have=["Black Lotus"])))
+        self.assertFalse(
+            pd.can_belong_to_archetype(self._archetype(must_have=["Black Lotus"]))
+        )
 
     def test_must_not_have_absent(self):
         pd = PlayableDeck(data.DECK_MAIN, data.DECK_SIDE)
-        self.assertTrue(pd.can_belong_to_archetype(self._archetype(must_not_have=["Black Lotus"])))
+        self.assertTrue(
+            pd.can_belong_to_archetype(self._archetype(must_not_have=["Black Lotus"]))
+        )
 
     def test_must_not_have_present(self):
         pd = PlayableDeck(data.DECK_MAIN, data.DECK_SIDE)
-        self.assertFalse(pd.can_belong_to_archetype(self._archetype(must_not_have=["Lightning Bolt"])))
+        self.assertFalse(
+            pd.can_belong_to_archetype(
+                self._archetype(must_not_have=["Lightning Bolt"])
+            )
+        )
 
 
 if __name__ == "__main__":
