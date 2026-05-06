@@ -51,7 +51,11 @@ class AcademyDataExporter:
         self.decks: list[AbstractArchivedDeck] = (
             self.pauperformance.list_archived_decks()
         )
-        self.silver: Decklassifier = Decklassifier(self.pauperformance)
+        # TODO: improve this
+        known_decks, _ = self._load_mtggoldfish_tournament_training_data()
+        other_known_decks, _ = self._load_dpl_training_data()
+        known_decks += other_known_decks
+        self.silver: Decklassifier = Decklassifier(pauperformance, known_decks)
         self.academy_loader: AcademyDataLoader = AcademyDataLoader()
 
     def export_all(self):
@@ -61,7 +65,7 @@ class AcademyDataExporter:
         self.export_intel_cards()
         # self.export_phd_sheets()
         # self.export_videos()
-        # self.export_miscellanea()
+        self.export_miscellanea()
 
     def export_phd_sheets(self):
         logger.info(f"Exporting phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}...")
@@ -337,6 +341,7 @@ class AcademyDataExporter:
         )
         # let's help Silver loading some training data
         known_decks, _ = self._load_mtggoldfish_tournament_training_data()
+        known_decks, _ = self._load_dpl_training_data()
         self.silver.add_known_decks(known_decks)
         # we need to classify all unclassified decks
         self._classify_mtggoldfish_tournament_decks()
@@ -389,7 +394,7 @@ class AcademyDataExporter:
                 playable_deck
             )
             if not most_similar_archetype:
-                logger.warning("Unable to find similar deck...")
+                logger.debug("Unable to find similar deck...")
                 continue
             logger.debug(
                 f"Deck could be {most_similar_archetype.name} ({highest_similarity})."

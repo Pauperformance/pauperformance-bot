@@ -48,7 +48,7 @@ async def async_academy_update():
 
     # update pages
     academy = AcademyService(pauperformance)
-    academy.update_all(update_dev=False)  # avoid unnecessary changes
+    academy.update_all()
 
 
 @retry(

@@ -1,0 +1,42 @@
+1 Bojuka Bog
+1 Breath Weapon
+1 Cast Down
+1 Conduit Pylons
+2 Crop Rotation
+1 Crystal Grotto
+3 Energy Refractor
+1 Ephemerate
+3 Expedition Map
+1 Forest
+1 Generous Ent
+2 Ghostly Flicker
+1 Heritage Reclamation
+4 Impulse
+1 Island
+1 Lorien Revealed
+3 Mnemonic Wall
+1 Moment's Peace
+3 Mulldrifter
+1 Murmuring Mystic
+1 Mysidian Elder
+3 Mystical Teachings
+1 Prohibit
+4 Prophetic Prism
+1 Pulse of Murasa
+1 Remote Isle
+1 Tangled Islet
+1 Unwind
+4 Urza's Mine
+4 Urza's Power Plant
+4 Urza's Tower
+2 Weather the Storm
+
+1 Ancient Grudge
+1 Breath Weapon
+1 Exclude
+4 Hydroblast
+1 Pulse of Murasa
+4 Pyroblast
+1 Rolling Thunder
+1 Stonehorn Dignitary
+1 Weather the Storm

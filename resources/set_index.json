@@ -6394,5 +6394,59 @@
         "scryfall_code": "sos",
         "name": "Secrets of Strixhaven",
         "date": "2026-04-24"
+    },
+    "1067": {
+        "p12e_code": 1067,
+        "scryfall_code": "atmt",
+        "name": "Teenage Mutant Ninja Turtles Art Series",
+        "date": "2026-03-06"
+    },
+    "1068": {
+        "p12e_code": 1068,
+        "scryfall_code": "asos",
+        "name": "Secrets of Strixhaven Art Series",
+        "date": "2026-04-24"
+    },
+    "1069": {
+        "p12e_code": 1069,
+        "scryfall_code": "psos",
+        "name": "Secrets of Strixhaven Promos",
+        "date": "2026-04-24"
+    },
+    "1070": {
+        "p12e_code": 1070,
+        "scryfall_code": "tsoc",
+        "name": "Secrets of Strixhaven Commander Tokens",
+        "date": "2026-04-24"
+    },
+    "1071": {
+        "p12e_code": 1071,
+        "scryfall_code": "tsos",
+        "name": "Secrets of Strixhaven Tokens",
+        "date": "2026-04-24"
+    },
+    "1072": {
+        "p12e_code": 1072,
+        "scryfall_code": "hob",
+        "name": "The Hobbit",
+        "date": "2026-08-14"
+    },
+    "1073": {
+        "p12e_code": 1073,
+        "scryfall_code": "hoc",
+        "name": "The Hobbit Commander",
+        "date": "2026-08-14"
+    },
+    "1074": {
+        "p12e_code": 1074,
+        "scryfall_code": "thob",
+        "name": "The Hobbit Tokens",
+        "date": "2026-08-14"
+    },
+    "1075": {
+        "p12e_code": 1075,
+        "scryfall_code": "fra",
+        "name": "Reality Fracture",
+        "date": "2026-10-02"
     }
 }

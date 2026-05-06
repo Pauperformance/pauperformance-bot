@@ -113,6 +113,9 @@ class MyrFileSystem:
         self.RESOURCES_CONFIG_CHANGELOG: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "changelog.ini"
         )
+        self.RESOURCES_JSON_TIMELINE: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "timeline.json"
+        )
 
         self.RESOURCES_SILVER_DIR: str = posix_path(self.RESOURCES_DIR, "silver")
         self.RESOURCES_SILVER_TRAINING_DATA_ARCHETYPES_DIR: str = posix_path(
@@ -125,6 +128,9 @@ class MyrFileSystem:
         self.DPL_DECK_TRAINING_DATA: str = posix_path(
             self.RESOURCES_SILVER_TRAINING_DATA_ARCHETYPES_DIR,
             "dpl_decks.csv",
+        )
+        self.MTGGOLDFISH_DECKS_CACHE_DIR: str = posix_path(
+            self.RESOURCES_CACHE_DIR, "mtggoldfish_decks"
         )
 
 
