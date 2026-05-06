@@ -1,9 +1,106 @@
 [
+
+  {
+    "date": "November 10, 2025",
+    "subtitle": null,
+    "bullets": [
+      "[High Tide](https://scryfall.com/card/vma/73/high-tide) is banned."
+    ],
+    "refs": [
+      {
+        "text": "BANNED AND RESTRICTED ANNOUNCEMENT – NOVEMBER 10, 2025",
+        "url": "https://magic.wizards.com/en/news/announcements/banned-and-restricted-november-10-2025"
+      },
+      {
+        "text": "EXPLANATION OF THE PAUPER HIGH TIDE BAN FOR NOVEMBER 10, 2025",
+        "url": "https://magic.wizards.com/en/news/announcements/explanation-of-the-pauper-high-tide-ban-for-november-10-2025"
+      }
+    ]
+  },
+  {
+    "date": "March 31, 2025",
+    "subtitle": null,
+    "bullets": [
+      "[Basking Broodscale](https://scryfall.com/card/mh3/145/basking-broodscale), [Kuldotha Rebirth](https://scryfall.com/card/som/96/kuldotha-rebirth), and [Deadly Dispute](https://scryfall.com/card/afr/94/deadly-dispute) are banned.",
+      "[Prophetic Prism](https://scryfall.com/card/cmr/334/prophetic-prism), and [High Tide](https://scryfall.com/card/vma/73/high-tide) are unbanned."
+    ],
+    "refs": [
+      {
+        "text": "BANNED AND RESTRICTED ANNOUNCEMENT – MARCH 31, 2025",
+        "url": "https://magic.wizards.com/en/news/announcements/banned-and-restricted-announcement-march-31-2025"
+      },
+      {
+        "text": "EXPLANATION OF PAUPER BANS FOR MARCH 31, 2025",
+        "url": "https://magic.wizards.com/en/news/announcements/explanation-of-pauper-bans-for-march-31-2025"
+      }
+    ]
+  },
+  {
+    "date": "June 6, 2024",
+    "subtitle": null,
+    "bullets": [
+      "[Cranial Ram](https://scryfall.com/card/mh3/180/cranial-ram) is banned."
+    ],
+    "refs": [
+      {
+        "text": "PAUPER BANS FOR JUNE 6, 2024",
+        "url": "https://magic.wizards.com/en/news/announcements/pauper-bans-for-june-6-2024"
+      }
+    ]
+  },
+  {
+    "date": "May 13, 2024",
+    "subtitle": null,
+    "bullets": [
+      "[All That Glitters](https://scryfall.com/card/eld/2/all-that-glitters) is banned.",
+      "Cards that bring a sticker or an Attraction into the game are banned."
+    ],
+    "refs": [
+      {
+        "text": "MAY 13, 2024 BANNED AND RESTRICTED ANNOUNCEMENT",
+        "url": "https://magic.wizards.com/en/news/announcements/may-13-2024-banned-and-restricted-announcement"
+      },
+      {
+        "text": "EXPLANATION OF PAUPER BANS FOR MAY 13, 2024",
+        "url": "https://magic.wizards.com/en/news/announcements/explanation-of-pauper-bans-for-may-13-2024"
+      }
+    ]
+  },
+  {
+    "date": "December 4, 2023",
+    "subtitle": null,
+    "bullets": [
+      "[Monastery Swiftspear](https://scryfall.com/card/ima/140/monastery-swiftspear) is banned."
+    ],
+    "refs": [
+      {
+        "text": "DECEMBER 4, 2023 BANNED AND RESTRICTED ANNOUNCEMENT",
+        "url": "https://magic.wizards.com/en/news/announcements/december-4-2023-banned-and-restricted-announcement"
+      },
+      {
+        "text": "EXPLANATION OF PAUPER BANS FOR DECEMBER 4, 2023",
+        "url": "https://magic.wizards.com/en/news/announcements/explanation-of-pauper-bans-for-december-4-2023"
+      }
+    ]
+  },
+  {
+    "date": "September 19, 2022",
+    "subtitle": null,
+    "bullets": [
+      "[Aarakocra Sneak](https://scryfall.com/card/clb/54/aarakocra-sneak), [Stirring Bard](https://scryfall.com/card/clb/195/stirring-bard), [Underdark Explorer](https://scryfall.com/card/clb/154/underdark-explorer), and [Vicious Battlerager](https://scryfall.com/card/clb/155/vicious-battlerager) are banned."
+    ],
+    "refs": [
+      {
+        "text": "SEPTEMBER 19, 2022 BANNED AND RESTRICTED ANNOUNCEMENT",
+        "url": "https://magic.wizards.com/en/articles/archive/news/september-19-2022-banned-and-restricted-announcement"
+      }
+    ]
+  },
   {
     "date": "March 7, 2022",
     "subtitle": null,
     "bullets": [
-      "[Galvanic Relay](https://scryfall.com/card/mh2/127/galvanic-relay) and [Disciple of the Vault](https://scryfall.com/card/mir/118/disciple-of-the-vault) are banned.",
+      "[Galvanic Relay](https://scryfall.com/card/mh2/127/galvanic-relay) and [Disciple of the Vault](https://scryfall.com/card/mrd/62/disciple-of-the-vault) are banned.",
       "[Expedition Map](https://scryfall.com/card/2xm/255/expedition-map) is unbanned."
     ],
     "refs": [
@@ -109,23 +206,10 @@
     ]
   },
   {
-    "date": "July 9, 2019",
-    "subtitle": "Pauper comes to paper - Follow up",
-    "bullets": [
-      "Gatherer officially supports searching by Pauper legality."
-    ],
-    "refs": [
-      {
-        "text": "PAUPER COMES TO PAPER",
-        "url": "https://magic.wizards.com/en/articles/archive/news/pauper-comes-paper-2019-06-27"
-      }
-    ]
-  },
-  {
     "date": "July 2, 2019",
     "subtitle": "Pauper comes to paper - Follow up",
     "bullets": [
-      "Magic Online implements the new format and launches new leagues."
+      "Magic Online implements the new format rules and launches new leagues."
     ],
     "refs": [
       {
@@ -136,7 +220,7 @@
   },
   {
     "date": "June 27, 2019",
-    "subtitle": "Pauper comes to paper - \"The Unification\"",
+    "subtitle": "Pauper comes to paper - 'The Unification'",
     "bullets": [
       "Pauper is listed as a format on Magic website.",
       "The Wizards Event Reporter allows Pauper format events to be sanctioned at local stores and for large tournaments.",
@@ -152,7 +236,7 @@
   },
   {
     "date": "May 20, 2019",
-    "subtitle": "\"Blue Monday\"",
+    "subtitle": "Blue Monday",
     "bullets": [
       "[Gush](https://scryfall.com/card/jvc/27/gush), [Gitaxian Probe](https://scryfall.com/card/nph/35/gitaxian-probe), and [Daze](https://scryfall.com/card/ema/44/daze) are banned."
     ],
