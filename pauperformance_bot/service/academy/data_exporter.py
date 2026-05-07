@@ -1,3 +1,4 @@
+import collections
 from pathlib import Path
 
 import jsonpickle
@@ -62,8 +63,8 @@ class AcademyDataExporter:
     def export_all(self):
         # self.export_archetypes()
         # self.export_decks()
-        # self.export_intel_decks()
-        self.export_intel_cards()
+        self.export_intel_decks()
+        # self.export_intel_cards()
         # self.export_creator_sheets()
         # self.export_videos()
         # self.export_miscellanea()
@@ -207,9 +208,25 @@ class AcademyDataExporter:
         )
 
     def export_miscellanea(self):
-        self.export_changelog()
-        self.export_newspauper()
-        self.export_metagame()
+        self.export_set_index()
+        # self.export_changelog()
+        # self.export_newspauper()
+        # self.export_metagame()
+
+    def export_set_index(self):
+        logger.info(f"Exporting Set Index to {self.academy_fs.ASSETS_DATA_DIR}...")
+        augmented_set_index = collections.OrderedDict()
+        for key, value in self.pauperformance.set_index.items():
+            augmented_set_index[key] = value
+            augmented_set_index[key]["new_pauper_cards"] = (
+                len(self.pauperformance.incremental_card_index[key]) > 0
+            )
+        safe_dump_json_to_file(
+            self.academy_fs.ASSETS_DATA_DIR,
+            "set_index.json",
+            augmented_set_index,
+        )
+        logger.info(f"Exported Set Index to {self.academy_fs.ASSETS_DATA_DIR}.")
 
     def export_changelog(self):
         logger.info(f"Exporting Changelog to {self.academy_fs.ASSETS_DATA_DIR}...")
