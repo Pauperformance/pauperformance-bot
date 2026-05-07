@@ -61,13 +61,13 @@ class AcademyDataExporter:
         self.academy_loader: AcademyDataLoader = AcademyDataLoader()
 
     def export_all(self):
-        # self.export_archetypes()
         # self.export_decks()
-        self.export_intel_decks()
+        # self.export_archetypes()
+        # self.export_intel_decks()
         # self.export_intel_cards()
         # self.export_creator_sheets()
         # self.export_videos()
-        # self.export_miscellanea()
+        self.export_miscellanea()
 
     def export_creator_sheets(self):
         logger.info(
@@ -208,10 +208,11 @@ class AcademyDataExporter:
         )
 
     def export_miscellanea(self):
-        self.export_set_index()
+        # self.export_set_index()
         # self.export_changelog()
         # self.export_newspauper()
         # self.export_metagame()
+        self.export_pauper_pool()
 
     def export_set_index(self):
         logger.info(f"Exporting Set Index to {self.academy_fs.ASSETS_DATA_DIR}...")
@@ -393,7 +394,7 @@ class AcademyDataExporter:
         )
 
     def _classify_mtggoldfish_tournament_decks(self):
-        banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
+        # banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
         already_classified_deck_ids = set(
             p.as_posix().split("/")[-1].replace(".json", "")
             for p in Path(self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR).rglob("*.json")
@@ -447,23 +448,24 @@ class AcademyDataExporter:
                 unclassified_decks_count += 1
                 continue
             logger.debug("Similarity score sufficient. Storing intel...")
-            set_index_entry = self.pauperformance.get_set_index_by_date(
-                usa_date=tournament_deck.tournament_date
-            )
-            api_deck: Deck = Deck(
-                name=tournament_deck.archetype,
-                url=tournament_deck.url,
-                archetype=most_similar_archetype.name,
-                set_name=set_index_entry["name"],
-                set_date=set_index_entry["date"],
-                legal=playable_deck.is_legal(banned_cards),
-            )
+            # set_index_entry = self.pauperformance.get_set_index_by_date(
+            #     usa_date=tournament_deck.tournament_date
+            # )
+            # api_deck: Deck = Deck(
+            #     name=tournament_deck.archetype,
+            #     url=tournament_deck.url,
+            #     archetype=most_similar_archetype.name,
+            #     set_name=set_index_entry["name"],
+            #     set_date=set_index_entry["date"],
+            #     legal=playable_deck.is_legal(banned_cards),
+            # )
+            tournament_deck.archetype = most_similar_archetype.name
             safe_dump_json_to_file(
                 posix_path(
-                    self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR, api_deck.archetype
+                    self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR, tournament_deck.archetype
                 ),
                 f"{deck_id}.json",
-                api_deck,
+                tournament_deck,
             )
         logger.info(f"Classified decks: {len(already_classified_deck_ids)}")
         logger.warning(f"Unclassified decks: {unclassified_decks_count}")
@@ -623,3 +625,6 @@ class AcademyDataExporter:
             )
         logger.info(f"Classified decks: {len(already_classified_deck_ids)}")
         logger.warning(f"Unclassified decks: {unclassified_decks_count}")
+
+    def export_pauper_pool(self):
+        pass

@@ -30,7 +30,7 @@ TYPOS = {
     "Village Rite": "Village Rites",
     "Village Ritess": "Village Rites",
     "Corrupted convinction": "Corrupted Conviction",
-    "Anchovy &amp; Banana Pizza": "Anchovy & Banana Pizza",
+    " &amp; ": " & ",
     "Resistir a tempestade": "Weather the Storm",
     "lightining bolt": "Lightning Bolt",
     "stone horn dignatary": "Stonehorn Dignitary",
