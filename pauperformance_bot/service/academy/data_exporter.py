@@ -462,7 +462,8 @@ class AcademyDataExporter:
             tournament_deck.archetype = most_similar_archetype.name
             safe_dump_json_to_file(
                 posix_path(
-                    self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR, tournament_deck.archetype
+                    self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR,
+                    tournament_deck.archetype,
                 ),
                 f"{deck_id}.json",
                 tournament_deck,
@@ -627,4 +628,35 @@ class AcademyDataExporter:
         logger.warning(f"Unclassified decks: {unclassified_decks_count}")
 
     def export_pauper_pool(self):
-        pass
+        logger.info(f"Exporting pauper pool to {self.academy_fs.ASSETS_DATA_DIR}...")
+        pool = []
+        for p12e_code, cards in self.pauperformance.incremental_card_index.items():
+            if not cards:
+                continue
+            set_info = self.pauperformance.set_index[p12e_code]
+            pool.append(
+                {
+                    "code": p12e_code,
+                    "scryfall": set_info["scryfall_code"],
+                    "name": set_info["name"],
+                    "date": set_info["date"],
+                    "cards": sorted(
+                        [
+                            {
+                                "name": card["name"],
+                                "url": card["scryfall_uri"].replace(
+                                    "?utm_source=api", ""
+                                ),
+                            }
+                            for card in cards
+                        ],
+                        key=lambda c: c["name"],
+                    ),
+                }
+            )
+        safe_dump_json_to_file(
+            self.academy_fs.ASSETS_DATA_DIR,
+            "pauper_pool.json",
+            pool,
+        )
+        logger.info(f"Exported pauper pool to {self.academy_fs.ASSETS_DATA_DIR}.")
