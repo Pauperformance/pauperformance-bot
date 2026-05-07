@@ -1,11 +1,17 @@
 import json
 import pickle
+import time
 import urllib.parse
 from functools import lru_cache, partial
 
 import requests
+from util.naming import fix_card_name
 
-from pauperformance_bot.constant.mtg.scryfall import API_ENDPOINT, WEBSITE_URL
+from pauperformance_bot.constant.mtg.scryfall import (
+    API_ENDPOINT,
+    REQUESTS_SLEEP_SECONDS,
+    WEBSITE_URL,
+)
 from pauperformance_bot.constant.pauperformance.myr import SCRYFALL_CARDS_CACHE_DIR
 from pauperformance_bot.entity.api.archetype import ArchetypeCard
 from pauperformance_bot.exceptions import CardNotFoundException
@@ -34,6 +40,7 @@ class ScryfallService:
         exact_card_name,
         cards_cache_dir=SCRYFALL_CARDS_CACHE_DIR,
     ):
+        exact_card_name = fix_card_name(exact_card_name)
         try:
             with open(
                 posix_path(cards_cache_dir, to_pkl_name(exact_card_name)), "rb"
@@ -51,12 +58,14 @@ class ScryfallService:
             try:
                 response = execute_http_request(method, url)
                 card = json.loads(response.content)
+                time.sleep(REQUESTS_SLEEP_SECONDS)
                 with open(
                     posix_path(cards_cache_dir, to_pkl_name(exact_card_name)), "wb"
                 ) as cache_f:
                     pickle.dump(card, cache_f)
                 return card
             except requests.exceptions.HTTPError as exc:
+                time.sleep(REQUESTS_SLEEP_SECONDS)
                 if exc.response.status_code == 404:
                     message = f"Absent card in Scryfall: {exact_card_name}."
                     logger.warning(message)

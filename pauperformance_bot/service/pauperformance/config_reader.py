@@ -1,5 +1,6 @@
 import configparser
 import glob
+from functools import lru_cache
 from itertools import count
 
 from pauperformance_bot.constant.flags import get_language_flag
@@ -129,6 +130,7 @@ class ConfigReader:
     def get_pauperformance_creator(self) -> CreatorConfig:
         return next(c for c in self.list_creators() if c.name == "Pauperformance")
 
+    @lru_cache(maxsize=1)
     def list_archetypes(self) -> list[ArchetypeConfig]:
         config_dir = self.myr_file_system.RESOURCES_CONFIG_ARCHETYPES_DIR
         logger.info(f"Reading archetypes from {config_dir}...")

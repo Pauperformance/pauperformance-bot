@@ -8,7 +8,6 @@ from urllib.request import urlopen
 import requests
 from bs4 import BeautifulSoup
 from pyquery import PyQuery
-from service.mtg.downloader.mtggoldfish import MtggoldfishDeckDownloader
 
 from pauperformance_bot.constant.mtg.mtggoldfish import (
     API_ENDPOINT,
@@ -31,6 +30,9 @@ from pauperformance_bot.entity.deck.playable import (
 )
 from pauperformance_bot.entity.mtg.mtggoldfish import MTGGoldfishTournamentSearchResult
 from pauperformance_bot.exceptions import MTGGoldfishException
+from pauperformance_bot.service.mtg.downloader.mtggoldfish import (
+    MtggoldfishDeckDownloader,
+)
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path, safe_dump_json_to_file
 from pauperformance_bot.util.time import now_utc

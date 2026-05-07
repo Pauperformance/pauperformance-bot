@@ -74,7 +74,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         # MTGGoldfish has a ridiculous bug: by iterating over the pages of your decks
         # (i.e. here https://www.mtggoldfish.com/decks), you will NOT get all your
         # decks.
-        # For some reasons, the pagination mechanism is broken and some decks just
+        # For some reason, the pagination mechanism is broken and some decks just
         # disappear or are returned multiple times.
         # However, they can be found if you directly search for them by name.
         # I tried to explain the bug to the MTGGoldfish team, by email and by Twitter,
@@ -362,7 +362,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
 
     @cache
     def get_deck(self, deck_name: str) -> AbstractArchivedDeck:
-        for deck in self.list_decks():
+        for deck in self._decks_cache:
             if deck.p12e_name == deck_name:
                 return deck
         raise ArchiveException(f"Unable to find deck with name {deck_name}.")

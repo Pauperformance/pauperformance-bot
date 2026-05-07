@@ -1,7 +1,10 @@
 import requests
-from constant.mtg.mtggoldfish import DECK_PROXY_API_ENDPOINT, DECK_PROXY_CLASS
 from pyquery import PyQuery
 
+from pauperformance_bot.constant.mtg.mtggoldfish import (
+    DECK_PROXY_API_ENDPOINT,
+    DECK_PROXY_CLASS,
+)
 from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
     parse_playable_deck_from_lines,

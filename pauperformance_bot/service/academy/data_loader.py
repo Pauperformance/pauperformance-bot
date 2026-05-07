@@ -1,5 +1,6 @@
 import os
 import re
+from functools import lru_cache
 from os import path
 from typing import List, Optional
 
@@ -23,6 +24,7 @@ class AcademyDataLoader:
     def __init__(self, academy_fs=AcademyFileSystem()):
         self._academy_fs = academy_fs
 
+    @lru_cache(maxsize=1)
     def load_classified_decks(self, archetype: str) -> List[PlayableDeck]:
         """Returns a list of decks for the given archetype."""
         deck_dir = posix_path(self._academy_fs.ASSETS_DATA_INTEL_DECK_DIR, archetype)

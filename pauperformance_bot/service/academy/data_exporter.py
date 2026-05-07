@@ -3,6 +3,7 @@ from pathlib import Path
 import jsonpickle
 import matplotlib.pyplot as plt
 import seaborn
+from util.naming import fix_card_name
 
 from pauperformance_bot.constant.pauperformance.academy import (
     ACADEMY_FILE_SYSTEM,
@@ -62,8 +63,8 @@ class AcademyDataExporter:
         # self.export_archetypes()
         # self.export_decks()
         # self.export_intel_decks()
-        # self.export_intel_cards()
-        self.export_creator_sheets()
+        self.export_intel_cards()
+        # self.export_creator_sheets()
         # self.export_videos()
         # self.export_miscellanea()
 
@@ -86,6 +87,7 @@ class AcademyDataExporter:
             f"Exporting archetypes to {self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR}..."
         )
         for archetype in self.pauperformance.config_reader.list_archetypes():
+            logger.debug(f"Processing archetype {archetype}...")
             # Staples and frequents can be built:
             # a) from archived decks
             # b) from classified decks
@@ -127,6 +129,7 @@ class AcademyDataExporter:
                 f"{archetype.name}.json",
                 api_archetype,
             )
+            logger.debug(f"Processed archetype {archetype}.")
         logger.info(
             f"Exported archetypes to {self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR}."
         )
@@ -162,16 +165,37 @@ class AcademyDataExporter:
             f"Exporting cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}..."
         )
         cards_intel = {}
+        all_names = []
 
         for kd in self.silver.known_decks:
             deck = kd[0]
             arch = kd[1]
             for played_card in deck.mainboard + deck.sideboard:
-                if played_card.card_name not in cards_intel:
-                    cards_intel[played_card.card_name] = {"archetypes": set()}
-                cards_intel[played_card.card_name]["archetypes"].add(arch)
-        # TODO: enrich card data
-        for card_name, card_data in cards_intel.items():
+                card_name = fix_card_name(played_card.card_name)
+                all_names.append(card_name)
+                if card_name not in cards_intel:
+                    cards_intel[card_name] = {"archetypes": set()}
+                cards_intel[card_name]["name"] = card_name
+                cards_intel[card_name]["archetypes"].add(arch.name)
+        # avoid a situation where both cards like this appear
+        # "Delver of Secrets" and
+        # "Delver of Secrets // Insectile Aberration"
+        dedup_cards_intel = {}
+        for card_name in cards_intel.keys():
+            skip_card = False
+            for card in all_names:
+                if card_name != card and card_name in card and " // " in card:
+                    # card need to be skipped
+                    skip_card = True
+                    break
+            if not skip_card:
+                dedup_cards_intel[card_name] = cards_intel[card_name]
+
+        for card_name in dedup_cards_intel.keys():
+            dedup_cards_intel[card_name]["scryfall"] = self.scryfall.get_card_named(
+                card_name
+            )
+        for card_name, card_data in dedup_cards_intel.items():
             safe_dump_json_to_file(
                 self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR,
                 f"{safe_posix_path(card_name)}.json",
