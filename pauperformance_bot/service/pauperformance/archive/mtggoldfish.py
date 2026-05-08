@@ -118,7 +118,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         raise MTGGoldfishException("Unable to get authenticity_token from MTGGoldfish.")
 
     def _get_login_info(self):
-        logger.info("Getting dynamic login info from MTGGoldfish...")
+        logger.debug("Getting dynamic login info from MTGGoldfish...")
         response = self.session.get(f"{self.endpoint}")
         if "_mtg_session" not in response.cookies.get_dict():
             raise MTGGoldfishException(
@@ -161,10 +161,12 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
 
     @with_login
     def create_deck(self, name, description, playable_deck):
-        return self._create_deck(name, description, playable_deck, format_="pauper")
+        logger.info(f"Creating deck {name} for {self.email}...")
+        deck_id = self._create_deck(name, description, playable_deck, format_="pauper")
+        logger.info(f"Created deck {name} for {self.email}. Id: {deck_id}")
+        return deck_id
 
     def _create_deck(self, name, description, playable_deck, format_):
-        logger.info(f"Creating deck {name} for {self.email}...")
         # we need to perform a dummy request to parse the authenticity_token
         response = self.session.get(f"{self.endpoint}/decks/new")
         authenticity_token = self._parse_meta_authenticity_token(response)
@@ -197,7 +199,6 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         if response.status_code != 200:
             raise MTGGoldfishException(f"Failed to create deck {name} for {self.email}")
         deck_id = response.request.url.split("/")[-1]
-        logger.info(f"Created deck {name} for {self.email}. Id: {deck_id}")
         return deck_id
 
     @with_login
@@ -230,7 +231,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         self, page, filter_name="", mtg_format="pauper", visibility="public"
     ):
         # possible filter_visibility values: '', 'private', 'public'
-        logger.info(f"Listing decks for {self.email} in page {page}...")
+        logger.debug(f"Listing decks for {self.email} in page {page}...")
         params = {
             "filter_name": filter_name,
             "filter_format": mtg_format,
@@ -259,8 +260,8 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
             logger.debug(f"Deck {name} has url: {url}")
             deck_id = url.split("/")[-1]
             decks.append(MTGGoldfishArchivedDeck(name, creation_date, deck_id))
-        logger.info(f"Found {len(decks)} decks: {decks}")
-        logger.info(f"Listed decks for {self.email}.")
+        logger.debug(f"Found {len(decks)} decks: {decks}")
+        logger.debug(f"Listed decks for {self.email}.")
         return decks
 
     def _workaround_retrieve_missing_decks(self, all_decks):

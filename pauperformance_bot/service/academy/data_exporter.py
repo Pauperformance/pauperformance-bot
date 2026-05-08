@@ -61,13 +61,13 @@ class AcademyDataExporter:
         self.academy_loader: AcademyDataLoader = AcademyDataLoader()
 
     def export_all(self):
-        # self.export_decks()
-        # self.export_archetypes()
-        # self.export_intel_decks()
-        # self.export_intel_cards()
-        # self.export_creator_sheets()
-        # self.export_videos()
         self.export_miscellanea()
+        # self.export_creator_sheets()
+        # self.export_archetypes()
+        self.export_decks()
+        # self.export_videos()
+        self.export_intel_cards()
+        # self.export_intel_decks()
 
     def export_creator_sheets(self):
         logger.info(
@@ -166,49 +166,35 @@ class AcademyDataExporter:
             f"Exporting cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}..."
         )
         cards_intel = {}
-        all_names = []
-
-        for kd in self.silver.known_decks:
-            deck = kd[0]
-            arch = kd[1]
+        archetypes_index = collections.defaultdict(set)
+        logger.debug("Loading archetypes for each card...")
+        for known_deck in self.silver.known_decks:
+            deck, arch = known_deck
             for played_card in deck.mainboard + deck.sideboard:
-                card_name = fix_card_name(played_card.card_name)
-                all_names.append(card_name)
-                if card_name not in cards_intel:
-                    cards_intel[card_name] = {"archetypes": set()}
-                cards_intel[card_name]["name"] = card_name
-                cards_intel[card_name]["archetypes"].add(arch.name)
-        # avoid a situation where both cards like this appear
-        # "Delver of Secrets" and
-        # "Delver of Secrets // Insectile Aberration"
-        dedup_cards_intel = {}
-        for card_name in cards_intel.keys():
-            skip_card = False
-            for card in all_names:
-                if card_name != card and card_name in card and " // " in card:
-                    # card need to be skipped
-                    skip_card = True
-                    break
-            if not skip_card:
-                dedup_cards_intel[card_name] = cards_intel[card_name]
+                card = fix_card_name(played_card.card_name)
+                archetypes_index[card].add(arch.name)
 
-        for card_name in dedup_cards_intel.keys():
-            dedup_cards_intel[card_name]["scryfall"] = self.scryfall.get_card_named(
-                card_name
-            )
-        for card_name, card_data in dedup_cards_intel.items():
-            safe_dump_json_to_file(
-                self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR,
-                f"{safe_posix_path(card_name)}.json",
-                card_data,
-            )
-
+        for set_index, scryfall_cards in self.pauperformance.card_index.items():
+            logger.debug(f"Processing set: {set_index}...")
+            for scryfall_card in scryfall_cards:
+                card_name = scryfall_card["name"]
+                cards_intel[card_name] = {}
+                cards_intel[card_name]["scryfall"] = scryfall_card
+                if card_name in archetypes_index:
+                    cards_intel[card_name]["archetypes"] = archetypes_index[card_name]
+                else:
+                    cards_intel[card_name]["archetypes"] = set()
+                safe_dump_json_to_file(
+                    self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR,
+                    f"{safe_posix_path(card_name)}.json",
+                    cards_intel[card_name],
+                )
         logger.info(
             f"Exported cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}."
         )
 
     def export_miscellanea(self):
-        # self.export_set_index()
+        self.export_set_index()
         # self.export_changelog()
         # self.export_newspauper()
         # self.export_metagame()
