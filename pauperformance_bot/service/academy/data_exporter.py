@@ -4,7 +4,7 @@ from pathlib import Path
 import jsonpickle
 import matplotlib.pyplot as plt
 import seaborn
-from util.naming import fix_card_name
+from pauperformance_bot.util.naming import fix_card_name
 
 from pauperformance_bot.constant.pauperformance.academy import (
     ACADEMY_FILE_SYSTEM,
