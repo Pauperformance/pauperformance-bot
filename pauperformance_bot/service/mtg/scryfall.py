@@ -5,7 +5,6 @@ import urllib.parse
 from functools import lru_cache, partial
 
 import requests
-from util.naming import fix_card_name
 
 from pauperformance_bot.constant.mtg.scryfall import (
     API_ENDPOINT,
@@ -17,6 +16,7 @@ from pauperformance_bot.entity.api.archetype import ArchetypeCard
 from pauperformance_bot.exceptions import CardNotFoundException
 from pauperformance_bot.util.cache import to_pkl_name
 from pauperformance_bot.util.log import get_application_logger
+from pauperformance_bot.util.naming import fix_card_name
 from pauperformance_bot.util.path import posix_path
 from pauperformance_bot.util.request import execute_http_request
 
