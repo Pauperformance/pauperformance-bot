@@ -65,7 +65,7 @@ class PauperformanceService:
         self.twitch = twitch
         self.youtube = youtube
         self.config_reader = config_reader
-        self.players = config_reader.list_phds()
+        self.players = config_reader.list_creators()
         self.set_index = self._build_set_index()
         self.card_index = self._build_card_index()
         self.incremental_card_index = self._build_incremental_card_index()
@@ -327,7 +327,7 @@ class PauperformanceService:
                     date,
                     indexable_video["deck_name"],
                     indexable_video["archetype"],
-                    indexable_video["phd"],
+                    indexable_video["creator"],
                     f"{TWITCH_VIDEO_URL}{video_id}",
                     "twitch",
                 )
@@ -354,7 +354,7 @@ class PauperformanceService:
                     date,
                     indexable_video["deck_name"],
                     indexable_video["archetype"],
-                    indexable_video["phd"],
+                    indexable_video["creator"],
                     f"{YOUTUBE_VIDEO_URL}{video_id}",
                     "youtube",
                 )
@@ -369,7 +369,7 @@ class PauperformanceService:
         self,
         archetypes_config_dir=CONFIG_ARCHETYPES_DIR,
     ):
-        print(f"PhDs: {len(self.players) - 1}")
+        print(f"Creators: {len(self.players) - 1}")
         print(f"Archetypes: {len(self.get_archetypes())}")
         print(f"Families: {len(self.get_families())}")
         resources = 0

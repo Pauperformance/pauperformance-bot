@@ -44,7 +44,6 @@ class MTGGoldfishTournamentDeck:
         tournament_date: str,
     ):
         self.url: str = url
-        self.archetype: str = archetype
         self.place: str = place
         self.pilot: str = pilot
         self.tabletop_price: Optional[int] = tabletop_price
@@ -52,6 +51,15 @@ class MTGGoldfishTournamentDeck:
         self.tournament_id: str = tournament_id
         self.tournament_name: str = tournament_name
         self.tournament_date: str = tournament_date
+        self._archetype: str = archetype
+
+    @property
+    def archetype(self) -> str:
+        return self._archetype
+
+    @archetype.setter
+    def archetype(self, value: str) -> None:
+        self._archetype = value
 
     @property
     def identifier(self) -> str:

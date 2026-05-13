@@ -1,8 +1,10 @@
+import collections
 from pathlib import Path
 
 import jsonpickle
 import matplotlib.pyplot as plt
 import seaborn
+from util.naming import fix_card_name
 
 from pauperformance_bot.constant.pauperformance.academy import (
     ACADEMY_FILE_SYSTEM,
@@ -51,35 +53,42 @@ class AcademyDataExporter:
         self.decks: list[AbstractArchivedDeck] = (
             self.pauperformance.list_archived_decks()
         )
-        self.silver: Decklassifier = Decklassifier(self.pauperformance)
+        # TODO: improve this
+        known_decks, _ = self._load_mtggoldfish_tournament_training_data()
+        other_known_decks, _ = self._load_dpl_training_data()
+        known_decks += other_known_decks
+        self.silver: Decklassifier = Decklassifier(pauperformance, known_decks)
         self.academy_loader: AcademyDataLoader = AcademyDataLoader()
 
     def export_all(self):
-        self.export_archetypes()
+        self.export_miscellanea()
+        # self.export_creator_sheets()
+        # self.export_archetypes()
         self.export_decks()
-        self.export_intel_decks()
-        self.export_intel_cards()
-        # self.export_phd_sheets()
         # self.export_videos()
-        # self.export_miscellanea()
+        self.export_intel_cards()
+        # self.export_intel_decks()
 
-    def export_phd_sheets(self):
-        logger.info(f"Exporting phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}...")
-        for phd_sheet in self.config_reader.list_phd_sheets(
-            scryfall_service=self.scryfall
-        ):
+    def export_creator_sheets(self):
+        logger.info(
+            f"Exporting creator sheets to {self.academy_fs.ASSETS_DATA_CREATOR_DIR}..."
+        )
+        for sheet in self.config_reader.list_creator_sheets():
             safe_dump_json_to_file(
-                self.academy_fs.ASSETS_DATA_PHD_DIR,
-                f"{phd_sheet.name}.json",
-                phd_sheet,
+                self.academy_fs.ASSETS_DATA_CREATOR_DIR,
+                f"{sheet.name}.json",
+                sheet,
             )
-        logger.info(f"Exported phd sheets to {self.academy_fs.ASSETS_DATA_PHD_DIR}.")
+        logger.info(
+            f"Exported creator sheets to {self.academy_fs.ASSETS_DATA_CREATOR_DIR}."
+        )
 
     def export_archetypes(self):
         logger.info(
             f"Exporting archetypes to {self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR}..."
         )
         for archetype in self.pauperformance.config_reader.list_archetypes():
+            logger.debug(f"Processing archetype {archetype}...")
             # Staples and frequents can be built:
             # a) from archived decks
             # b) from classified decks
@@ -121,6 +130,7 @@ class AcademyDataExporter:
                 f"{archetype.name}.json",
                 api_archetype,
             )
+            logger.debug(f"Processed archetype {archetype}.")
         logger.info(
             f"Exported archetypes to {self.academy_fs.ASSETS_DATA_ARCHETYPE_DIR}."
         )
@@ -156,30 +166,54 @@ class AcademyDataExporter:
             f"Exporting cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}..."
         )
         cards_intel = {}
-
-        for kd in self.silver.known_decks:
-            deck = kd[0]
-            arch = kd[1]
+        archetypes_index = collections.defaultdict(set)
+        logger.debug("Loading archetypes for each card...")
+        for known_deck in self.silver.known_decks:
+            deck, arch = known_deck
             for played_card in deck.mainboard + deck.sideboard:
-                if played_card.card_name not in cards_intel:
-                    cards_intel[played_card.card_name] = {"archetypes": set()}
-                cards_intel[played_card.card_name]["archetypes"].add(arch)
-        # TODO: enrich card data
-        for card_name, card_data in cards_intel.items():
-            safe_dump_json_to_file(
-                self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR,
-                f"{safe_posix_path(card_name)}.json",
-                card_data,
-            )
+                card = fix_card_name(played_card.card_name)
+                archetypes_index[card].add(arch.name)
 
+        for set_index, scryfall_cards in self.pauperformance.card_index.items():
+            logger.debug(f"Processing set: {set_index}...")
+            for scryfall_card in scryfall_cards:
+                card_name = scryfall_card["name"]
+                cards_intel[card_name] = {}
+                cards_intel[card_name]["scryfall"] = scryfall_card
+                if card_name in archetypes_index:
+                    cards_intel[card_name]["archetypes"] = archetypes_index[card_name]
+                else:
+                    cards_intel[card_name]["archetypes"] = set()
+                safe_dump_json_to_file(
+                    self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR,
+                    f"{safe_posix_path(card_name)}.json",
+                    cards_intel[card_name],
+                )
         logger.info(
             f"Exported cards intel to {self.academy_fs.ASSETS_DATA_INTEL_CARD_DIR}."
         )
 
     def export_miscellanea(self):
-        self.export_changelog()
-        self.export_newspauper()
-        self.export_metagame()
+        self.export_set_index()
+        # self.export_changelog()
+        # self.export_newspauper()
+        # self.export_metagame()
+        self.export_pauper_pool()
+
+    def export_set_index(self):
+        logger.info(f"Exporting Set Index to {self.academy_fs.ASSETS_DATA_DIR}...")
+        augmented_set_index = collections.OrderedDict()
+        for key, value in self.pauperformance.set_index.items():
+            augmented_set_index[key] = value
+            augmented_set_index[key]["new_pauper_cards"] = (
+                len(self.pauperformance.incremental_card_index[key]) > 0
+            )
+        safe_dump_json_to_file(
+            self.academy_fs.ASSETS_DATA_DIR,
+            "set_index.json",
+            augmented_set_index,
+        )
+        logger.info(f"Exported Set Index to {self.academy_fs.ASSETS_DATA_DIR}.")
 
     def export_changelog(self):
         logger.info(f"Exporting Changelog to {self.academy_fs.ASSETS_DATA_DIR}...")
@@ -264,12 +298,12 @@ class AcademyDataExporter:
                 video_key + ".txt",
             )
             video_json = self.pauperformance.storage.get_file(video_path)
-            video_id, phd_name, _, date, _ = video_key.split(">")
+            video_id, creator_name, _, date, _ = video_key.split(">")
             video: Video = Video(
                 name=video_json["title"],
                 link=video_json["url"],
                 language=video_json["language"],
-                phd_name=phd_name,
+                creator_name=creator_name,
                 date=date,
                 archetype=video_json["archetype"],
                 video_id=video_id,
@@ -337,6 +371,7 @@ class AcademyDataExporter:
         )
         # let's help Silver loading some training data
         known_decks, _ = self._load_mtggoldfish_tournament_training_data()
+        known_decks, _ = self._load_dpl_training_data()
         self.silver.add_known_decks(known_decks)
         # we need to classify all unclassified decks
         self._classify_mtggoldfish_tournament_decks()
@@ -345,7 +380,7 @@ class AcademyDataExporter:
         )
 
     def _classify_mtggoldfish_tournament_decks(self):
-        banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
+        # banned_cards = [c["name"] for c in self.scryfall.get_banned_cards()]
         already_classified_deck_ids = set(
             p.as_posix().split("/")[-1].replace(".json", "")
             for p in Path(self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR).rglob("*.json")
@@ -389,7 +424,7 @@ class AcademyDataExporter:
                 playable_deck
             )
             if not most_similar_archetype:
-                logger.warning("Unable to find similar deck...")
+                logger.debug("Unable to find similar deck...")
                 continue
             logger.debug(
                 f"Deck could be {most_similar_archetype.name} ({highest_similarity})."
@@ -399,23 +434,25 @@ class AcademyDataExporter:
                 unclassified_decks_count += 1
                 continue
             logger.debug("Similarity score sufficient. Storing intel...")
-            set_index_entry = self.pauperformance.get_set_index_by_date(
-                usa_date=tournament_deck.tournament_date
-            )
-            api_deck: Deck = Deck(
-                name=tournament_deck.archetype,
-                url=tournament_deck.url,
-                archetype=most_similar_archetype.name,
-                set_name=set_index_entry["name"],
-                set_date=set_index_entry["date"],
-                legal=playable_deck.is_legal(banned_cards),
-            )
+            # set_index_entry = self.pauperformance.get_set_index_by_date(
+            #     usa_date=tournament_deck.tournament_date
+            # )
+            # api_deck: Deck = Deck(
+            #     name=tournament_deck.archetype,
+            #     url=tournament_deck.url,
+            #     archetype=most_similar_archetype.name,
+            #     set_name=set_index_entry["name"],
+            #     set_date=set_index_entry["date"],
+            #     legal=playable_deck.is_legal(banned_cards),
+            # )
+            tournament_deck.archetype = most_similar_archetype.name
             safe_dump_json_to_file(
                 posix_path(
-                    self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR, api_deck.archetype
+                    self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR,
+                    tournament_deck.archetype,
                 ),
                 f"{deck_id}.json",
-                api_deck,
+                tournament_deck,
             )
         logger.info(f"Classified decks: {len(already_classified_deck_ids)}")
         logger.warning(f"Unclassified decks: {unclassified_decks_count}")
@@ -575,3 +612,37 @@ class AcademyDataExporter:
             )
         logger.info(f"Classified decks: {len(already_classified_deck_ids)}")
         logger.warning(f"Unclassified decks: {unclassified_decks_count}")
+
+    def export_pauper_pool(self):
+        logger.info(f"Exporting pauper pool to {self.academy_fs.ASSETS_DATA_DIR}...")
+        pool = []
+        for p12e_code, cards in self.pauperformance.incremental_card_index.items():
+            if not cards:
+                continue
+            set_info = self.pauperformance.set_index[p12e_code]
+            pool.append(
+                {
+                    "code": p12e_code,
+                    "scryfall": set_info["scryfall_code"],
+                    "name": set_info["name"],
+                    "date": set_info["date"],
+                    "cards": sorted(
+                        [
+                            {
+                                "name": card["name"],
+                                "url": card["scryfall_uri"].replace(
+                                    "?utm_source=api", ""
+                                ),
+                            }
+                            for card in cards
+                        ],
+                        key=lambda c: c["name"],
+                    ),
+                }
+            )
+        safe_dump_json_to_file(
+            self.academy_fs.ASSETS_DATA_DIR,
+            "pauper_pool.json",
+            pool,
+        )
+        logger.info(f"Exported pauper pool to {self.academy_fs.ASSETS_DATA_DIR}.")

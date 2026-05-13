@@ -28,3 +28,7 @@ mypy_result.xml
 pauperformance_bot/secrets.py
 pauperformance_bot/p13_secrets.py
 pauperformance_bot/task/dev.py
+
+# Claude Code
+CLAUDE.md
+.claude

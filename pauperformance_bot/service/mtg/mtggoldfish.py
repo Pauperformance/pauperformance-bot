@@ -17,8 +17,10 @@ from pauperformance_bot.constant.mtg.mtggoldfish import (
     FULL_PAUPER_METAGAME_URL,
     METAGAME_ARCHETYPE_TITLE_URL_CLASS,
     METAGAME_SHARE_CLASS,
+    REQUEST_HEADERS,
     REQUESTS_SLEEP_SECONDS,
 )
+from pauperformance_bot.constant.pauperformance.myr import MYR_FILE_SYSTEM
 from pauperformance_bot.entity.api.deck import MTGGoldfishTournamentDeck
 from pauperformance_bot.entity.api.tournament import Tournament
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
@@ -28,7 +30,9 @@ from pauperformance_bot.entity.deck.playable import (
 )
 from pauperformance_bot.entity.mtg.mtggoldfish import MTGGoldfishTournamentSearchResult
 from pauperformance_bot.exceptions import MTGGoldfishException
-from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
+from pauperformance_bot.service.mtg.downloader.mtggoldfish import (
+    MtggoldfishDeckDownloader,
+)
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import posix_path, safe_dump_json_to_file
 from pauperformance_bot.util.time import now_utc
@@ -47,6 +51,7 @@ class MTGGoldfish:
             raise MTGGoldfishException(
                 f"Unable to get pauper meta from url: {metagame_page_url}"
             )
+        time.sleep(REQUESTS_SLEEP_SECONDS)
         logger.debug("Parsing meta...")
         pq = PyQuery(response.content)
         archetype_shares = [
@@ -64,6 +69,12 @@ class MTGGoldfish:
                 "Mismatch with archetype shares after parsing meta."
             )
         meta_decks = {}
+        cached_deck_ids = {
+            deck_id.name.rstrip(".txt")
+            for deck_id in Path(MYR_FILE_SYSTEM.MTGGOLDFISH_DECKS_CACHE_DIR).glob(
+                "*.txt"
+            )
+        }
         for share, link in zip(archetype_shares, archetype_links):
             logger.info(f"Archetype {link}: {share}.")
             logger.debug(f"Retrieving sample deck for archetype {link}...")
@@ -72,26 +83,41 @@ class MTGGoldfish:
                 raise MTGGoldfishException(
                     f"Unable to get pauper deck from url: {link}"
                 )
+            time.sleep(REQUESTS_SLEEP_SECONDS)
             deck_id = (
                 next(PyQuery(response.content)(DECK_TOOLS_CONTAINER_CLASS).items())
                 .attr["href"]
                 .replace(f"/{DECK_API_TOKEN}/", "")
             )
             logger.debug(f"Archetype deck has id {deck_id}.")
-            logger.debug("Downloading and parsing list...")
-            fake_deck = MTGGoldfishArchivedDeck(
-                "Foo 000.000.ABC | Foo (bar)",
-                now_utc(),
-                deck_id,
+            # check if deck is cached
+            playable_deck_path = posix_path(
+                MYR_FILE_SYSTEM.MTGGOLDFISH_DECKS_CACHE_DIR, f"{deck_id}.txt"
             )
-            content = urlopen(fake_deck.download_txt_url).read()
-            lines = content.decode("utf-8").split("\r\n")
-            playable_deck = parse_playable_deck_from_lines(lines)
-            # logger.debug(
-            #     f"Retrieved sample deck for archetype {link}: {playable_deck}"
-            # )
+            if deck_id in cached_deck_ids:
+                logger.debug("Loading deck from cache...")
+                playable_deck: PlayableDeck = parse_playable_deck_from_lines(
+                    [line.strip() for line in open(playable_deck_path).readlines()]
+                )
+            else:
+                logger.debug("Downloading and parsing list...")
+                fake_deck = MTGGoldfishArchivedDeck(
+                    "Foo 000.000.ABC | Foo (bar)",
+                    now_utc(),
+                    deck_id,
+                )
+                playable_deck = MtggoldfishDeckDownloader(
+                    fake_deck.download_txt_url
+                ).download()
+                time.sleep(REQUESTS_SLEEP_SECONDS)  # avoid flooding (and soft-ban)
+                with open(playable_deck_path, "w") as out_f:
+                    out_f.write(playable_deck.mainboard_mtggoldfish)
+                    out_f.write("\n\n")
+                    out_f.write(playable_deck.sideboard_mtggoldfish)
+                    out_f.write("\n")
+            logger.debug(f"Retrieved sample deck for archetype {link}: {playable_deck}")
             meta_decks[link] = (share, playable_deck)
-            time.sleep(REQUESTS_SLEEP_SECONDS)  # avoid flooding (and soft-ban)
+
         logger.info(f"Got pauper meta: {len(meta_decks)} archetypes.")
         return meta_decks
 
@@ -120,7 +146,8 @@ class MTGGoldfish:
                 url += "&tournament_search%5Bname%5D="
             logger.debug(f"Collecting results from page: {url}")
             try:
-                html_page = urllib.request.urlopen(url)
+                req = urllib.request.Request(url, headers=REQUEST_HEADERS)
+                html_page = urlopen(req)
                 bs = BeautifulSoup(html_page.read(), features="lxml")
                 rows = bs.findAll("tr")[1:]  # skip header
                 i = 0
@@ -158,7 +185,8 @@ class MTGGoldfish:
         url = tournament_result.url
         logger.debug(f"Extracting tournament decks from {url}...")
         tournament_decks: list[MTGGoldfishTournamentDeck] = []
-        html_page = urllib.request.urlopen(url)
+        req = urllib.request.Request(url, headers=REQUEST_HEADERS)
+        html_page = urlopen(req)
         bs = BeautifulSoup(html_page.read(), features="lxml")
         for tr in bs.findAll("tr")[1:]:  # skip header
             columns = tr.contents
@@ -237,8 +265,9 @@ class MTGGoldfish:
                         f"/{DECK_API_TOKEN}", f"/{DECK_DOWNLOAD_TOKEN}"
                     )
                     try:
-                        deck_downloader = MtgoDeckDownloader(download_url)
-                        playable_deck: PlayableDeck = deck_downloader.download()
+                        playable_deck: PlayableDeck = MtggoldfishDeckDownloader(
+                            download_url
+                        ).download()
                     except ValueError:
                         logger.warning(f"Unable to parse deck at {download_url}...")
                         continue

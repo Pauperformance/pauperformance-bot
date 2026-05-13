@@ -137,9 +137,11 @@ class TestMtgoDownloader(unittest.TestCase):
         diff = get_decks_diff(expected, res)
         self.assertTupleEqual(([], [], [], []), diff, "Should not have any difference")
 
-    @mock.patch("pauperformance_bot.util.request.execute_http_request")
+    @mock.patch(
+        "pauperformance_bot.service.mtg.downloader.downloader.execute_http_request"
+    )
     def test_mtgo_downloader_aetherhub(self, mock_ehr):
-        mock_ehr.return_value = self._read_mock_data(
+        mock_ehr.return_value.text = self._read_mock_data(
             "tests/mock_data/aetherhub_deck.txt"
         )
         expected_deck = PlayableDeck(
@@ -153,9 +155,13 @@ class TestMtgoDownloader(unittest.TestCase):
 
         self._validate_result(expected_deck, res)
 
-    @mock.patch("pauperformance_bot.util.request.execute_http_request")
+    @mock.patch(
+        "pauperformance_bot.service.mtg.downloader.downloader.execute_http_request"
+    )
     def test_mtgo_downloader_mtgtop8(self, mock_ehr):
-        mock_ehr.return_value = self._read_mock_data("tests/mock_data/mtgtop8_deck.txt")
+        mock_ehr.return_value.text = self._read_mock_data(
+            "tests/mock_data/mtgtop8_deck.txt"
+        )
         expected_deck = PlayableDeck(
             EXPECTED_DECK_MTGTOP8_MAIN, EXPECTED_DECK_MTGTOP8_SIDE
         )
@@ -165,9 +171,11 @@ class TestMtgoDownloader(unittest.TestCase):
 
         self._validate_result(expected_deck, res)
 
-    @mock.patch("pauperformance_bot.util.request.execute_http_request")
+    @mock.patch(
+        "pauperformance_bot.service.mtg.downloader.downloader.execute_http_request"
+    )
     def test_mtgo_downloader_tappedout(self, mock_ehr):
-        mock_ehr.return_value = self._read_mock_data(
+        mock_ehr.return_value.text = self._read_mock_data(
             "tests/mock_data/tappedout_deck.txt"
         )
         expected_deck = PlayableDeck(

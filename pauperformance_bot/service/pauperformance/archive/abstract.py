@@ -20,7 +20,7 @@ from pauperformance_bot.constant.pauperformance.nexus import (
     DISCORD_MYR_REACTION_WARNING,
 )
 from pauperformance_bot.entity.arena.youtube_video import YouTubeVideo
-from pauperformance_bot.entity.config.phd import PhDConfig
+from pauperformance_bot.entity.config.creator import CreatorConfig
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.archive.mtggoldfish import MTGGoldfishArchivedDeck
 from pauperformance_bot.entity.deck.playable import (
@@ -152,7 +152,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
     async def archive_player_videos_from_twitch(
         self,
-        player: PhDConfig,
+        player: CreatorConfig,
         videos,
         storage,
         discord,
@@ -222,7 +222,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                         **vars(video),
                         "deck_name": video.deck_name,
                         "archetype": base_archetype_name,
-                        "phd": player.name,
+                        "creator": player.name,
                     },
                     indent=4,
                 ),
@@ -244,7 +244,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
 
     async def archive_player_videos_from_youtube(
         self,
-        player: PhDConfig,
+        player: CreatorConfig,
         videos: list[YouTubeVideo],
         storage,
         discord,
@@ -315,7 +315,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
                         **vars(video),
                         "deck_name": video.deck_name,
                         "archetype": base_archetype_name,
-                        "phd": player.name,
+                        "creator": player.name,
                     },
                     indent=4,
                 ),
@@ -338,7 +338,7 @@ class AbstractArchiveService(metaclass=ABCMeta):
     async def import_player_deck_from_mtggoldfish(
         self,
         url,
-        player: PhDConfig,
+        player: CreatorConfig,
         pauperformance,
         discord_message,
         p12e_name=None,

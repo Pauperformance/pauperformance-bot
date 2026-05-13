@@ -1,0 +1,31 @@
+2 Ancient Den
+4 Black Mage's Rod
+4 Cleansing Wildfire
+4 Drossforge Bridge
+4 Experimental Synthesizer
+4 Galvanic Blast
+4 Glint Hawk
+1 Great Furnace
+4 Kor Skyfisher
+1 Krark-Clan Shaman
+4 Lembas
+3 Lightning Bolt
+1 Makeshift Munitions
+2 Mountain
+2 Navigator's Compass
+2 Plains
+4 Refurbished Familiar
+4 Rustvale Bridge
+2 Shattered Landscape
+2 Swamp
+1 Toxin Analysis
+1 Vault of Whispers
+
+3 Cast into the Fire
+1 Krark-Clan Shaman
+1 Navigator's Compass
+3 Nihil Spellbomb
+1 Omen of the Dead
+3 Pyroblast
+2 Tithing Blade
+1 Toxin Analysis

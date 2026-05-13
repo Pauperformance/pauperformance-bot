@@ -54,7 +54,7 @@ VIDEO_LANGUAGE_TAG = "Pauperformance language: "
 if (
     "VIRTUAL_ENV" in os.environ and "PYCHARM_HOSTED" not in os.environ
 ):  # running in venv, outside PyCharm
-    RESOURCES_DIR = posix_path(os.getenv("VIRTUAL_ENV"), "resources")
+    RESOURCES_DIR = posix_path(os.getenv("VIRTUAL_ENV", ""), "resources")
 else:
     RESOURCES_DIR = posix_path(TOP_PATH.as_posix(), "resources")
 
@@ -66,20 +66,8 @@ SCRYFALL_CARDS_CACHE_DIR = posix_path(CACHE_DIR, "scryfall_cards")
 CONFIG_DIR = posix_path(RESOURCES_DIR, "config")
 CONFIG_ARCHETYPES_DIR = posix_path(CONFIG_DIR, "archetypes")
 CONFIG_FAMILIES_DIR = posix_path(CONFIG_DIR, "families")
-CONFIG_PHDS_DIR = posix_path(CONFIG_DIR, "phds")
+CONFIG_CREATORS_DIR = posix_path(CONFIG_DIR, "creators")
 CONFIG_NEWSPAUPER_FILE = "newspauper.ini"
-
-TEMPLATES_DIR = posix_path(RESOURCES_DIR, "templates")
-TEMPLATES_ARCHETYPES_DIR = posix_path(TEMPLATES_DIR, "archetypes")
-ARCHETYPE_TEMPLATE_FILE = "archetype.md.j2"
-TEMPLATES_FAMILIES_DIR = posix_path(TEMPLATES_DIR, "families")
-FAMILY_TEMPLATE_FILE = "family.md.j2"
-TEMPLATES_PAGES_DIR = posix_path(TEMPLATES_DIR, "pages")
-ARCHETYPES_INDEX_TEMPLATE_FILE = "archetypes_index.md.j2"
-DEV_TEMPLATE_FILE = "dev.md.j2"
-HOME_TEMPLATE_FILE = "index.md.j2"
-PAUPER_POOL_TEMPLATE_FILE = "pauper_pool.md.j2"
-SET_INDEX_TEMPLATE_FILE = "set_index.md.j2"
 
 SET_INDEX_FILE = posix_path(RESOURCES_DIR, "set_index.json")
 
@@ -104,14 +92,17 @@ class MyrFileSystem:
         self.RESOURCES_CONFIG_FAMILIES_DIR: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "families"
         )
-        self.RESOURCES_CONFIG_PHDS_DIR: str = posix_path(
-            self.RESOURCES_CONFIG_DIR, "phds"
+        self.RESOURCES_CONFIG_CREATORS_DIR: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "creators"
         )
         self.RESOURCES_CONFIG_NEWSPAUPER: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "newspauper.ini"
         )
         self.RESOURCES_CONFIG_CHANGELOG: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "changelog.ini"
+        )
+        self.RESOURCES_JSON_TIMELINE: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "timeline.json"
         )
 
         self.RESOURCES_SILVER_DIR: str = posix_path(self.RESOURCES_DIR, "silver")
@@ -125,6 +116,9 @@ class MyrFileSystem:
         self.DPL_DECK_TRAINING_DATA: str = posix_path(
             self.RESOURCES_SILVER_TRAINING_DATA_ARCHETYPES_DIR,
             "dpl_decks.csv",
+        )
+        self.MTGGOLDFISH_DECKS_CACHE_DIR: str = posix_path(
+            self.RESOURCES_CACHE_DIR, "mtggoldfish_decks"
         )
 
 

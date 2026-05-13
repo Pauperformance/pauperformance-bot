@@ -12,7 +12,7 @@ class Video:
         name: str,
         link: str,
         language: str,
-        phd_name: str,
+        creator_name: str,
         date: str,
         archetype: str,
         video_id: str,
@@ -21,7 +21,7 @@ class Video:
         self.name: str = name
         self.link: str = link
         self.language: str = language
-        self.phd_name: str = phd_name
+        self.creator_name: str = creator_name
         self.date: str = date
         self.archetype: str = archetype
         self.video_id: str = video_id

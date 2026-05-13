@@ -14,13 +14,14 @@ def safe_posix_path(name: str) -> str:
     underscores, or hyphens. Converts to lowercase. Converts '//' to '_or_'.
     Converts spaces or repeated dashes to single dashes. Also strips leading and
     trailing whitespace, dashes, and underscores."""
-    res = unicodedata.normalize("NFKC", name).encode("ASCII").lower()
-    res = str(res).replace("//", "_or_")
-    # remove all  except for word characters (letters, digits, and underscores),
-    # whitespace characters, and hyphens.
+    res = (
+        unicodedata.normalize("NFKD", name)
+        .encode("ASCII", errors="ignore")
+        .decode("ASCII")
+    )
+    res = res.lower().replace("//", "_or_")
     res = re.sub(r"[^\w\s-]", "", res)
-    # replace repeating whitespaces or dashes.
-    re.sub(r"[-\s]+", "-", res).strip("-_")
+    res = re.sub(r"[-\s]+", "-", res).strip("-_")
     return res
 
 
