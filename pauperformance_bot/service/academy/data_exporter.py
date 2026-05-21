@@ -61,12 +61,12 @@ class AcademyDataExporter:
         self.academy_loader: AcademyDataLoader = AcademyDataLoader()
 
     def export_all(self):
-        self.export_miscellanea()
+        # self.export_miscellanea()
         # self.export_creator_sheets()
         # self.export_archetypes()
-        self.export_decks()
+        # self.export_decks()
         self.export_youtube_videos()
-        self.export_intel_cards()
+        # self.export_intel_cards()
         # self.export_intel_decks()
 
     def export_creator_sheets(self):
@@ -279,12 +279,15 @@ class AcademyDataExporter:
         )
 
     def _export_videos(self, video_keys):
+        folder = self.pauperformance.storage.get_folder(
+            self.pauperformance.storage.youtube_video_path
+        )
+        # zip entries are named "<folder_name>/<filename>" — extract just the filename
+        files_by_name = {
+            name.split("/")[-1]: content for name, content in folder.items()
+        }
         for video_key in video_keys:
-            video_path = posix_path(
-                self.pauperformance.storage.youtube_video_path,
-                video_key + ".txt",
-            )
-            video_json = self.pauperformance.storage.get_file(video_path)
+            video_json = files_by_name[video_key + ".txt"]
             video_id, creator_name, _, date, _ = video_key.split(">")
             video: Video = Video(
                 name=video_json["title"],
@@ -295,6 +298,7 @@ class AcademyDataExporter:
                 archetype=video_json["archetype"],
                 video_id=video_id,
                 deck_name=video_json["deck_name"],
+                is_short=video_json["is_short"],
             )
             safe_dump_json_to_file(
                 posix_path(self.academy_fs.ASSETS_DATA_VIDEO_DIR, video.archetype),

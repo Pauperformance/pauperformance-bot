@@ -33,9 +33,6 @@ DEFAULT_LOGGING_FILE = posix_path(PAUPERFORMANCE_BOT_DIR, "pauperformance.log")
 DEFAULT_DATE_FORMAT = "%Y-%m-%d, %H:%M:%S"  # allows chronological sorting
 USA_DATE_FORMAT = "%Y-%m-%d"
 
-VIDEO_DECK_TAG = "Pauperformance: "
-VIDEO_LANGUAGE_TAG = "Pauperformance language: "
-
 # resources/
 # | cache/
 # | config/

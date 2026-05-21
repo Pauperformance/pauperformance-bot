@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from pauperformance_bot.constant.pauperformance.myr import (
     DEFAULT_DATE_FORMAT,
@@ -14,7 +14,11 @@ def now():
 def now_utc() -> int:
     # please note this function does not always return the same value of now(),
     # because the local timezone (used by now()) can be different (e.g. 'CET').
-    return datetime_to_ms(datetime.utcnow())
+    return datetime_to_ms(datetime.now(timezone.utc))
+
+
+def last_week() -> int:
+    return datetime_to_ms(datetime.now(timezone.utc) - timedelta(weeks=1))
 
 
 def datetime_to_ms(dt):

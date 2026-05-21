@@ -1,5 +1,7 @@
+import io
 import json
 import tempfile
+import zipfile
 
 from dropbox import Dropbox as OfficialDropbox
 from dropbox import DropboxOAuth2FlowNoRedirect
@@ -70,6 +72,18 @@ class DropboxService(AbstractStorageService):
             content = out_f.read()
         logger.info(f"Downloaded file {name}.")
         return json.loads(content)
+
+    def get_folder(self, path):
+        logger.info(f"Downloading folder {path} as zip...")
+        _, response = self._service.files_download_zip(path)
+        with zipfile.ZipFile(io.BytesIO(response.content)) as zf:
+            result = {
+                name: json.loads(zf.read(name).decode("utf-8"))
+                for name in zf.namelist()
+                if not name.endswith("/")
+            }
+        logger.info(f"Downloaded folder {path} ({len(result)} files).")
+        return result
 
     def list_imported_deckstats_deck_ids(self):
         return set(

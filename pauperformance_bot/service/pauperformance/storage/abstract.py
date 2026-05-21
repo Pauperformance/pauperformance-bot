@@ -55,6 +55,10 @@ class AbstractStorageService(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def get_folder(self, path):
+        pass
+
+    @abstractmethod
     def list_imported_deckstats_deck_ids(self):
         pass
 

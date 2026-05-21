@@ -17,6 +17,7 @@ class Video:
         archetype: str,
         video_id: str,
         deck_name: Optional[str],
+        is_short: bool,
     ):
         self.name: str = name
         self.link: str = link
@@ -26,6 +27,7 @@ class Video:
         self.archetype: str = archetype
         self.video_id: str = video_id
         self.deck_name: Optional[str] = deck_name
+        self.is_short: bool = is_short
 
     def __hash__(self):
         return hash(self.video_id)

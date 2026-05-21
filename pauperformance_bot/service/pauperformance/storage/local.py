@@ -40,6 +40,16 @@ class LocalStorageService(AbstractStorageService):
         logger.info(f"Read file {name}.")
         return json.loads(content)
 
+    def get_folder(self, path):
+        logger.info(f"Reading folder {path}...")
+        result = {
+            f: json.loads(open(join(path, f), "r").read())
+            for f in listdir(path)
+            if isfile(join(path, f))
+        }
+        logger.info(f"Read folder {path} ({len(result)} files).")
+        return result
+
     def list_imported_deckstats_deck_ids(self):
         return set(
             self.get_imported_deckstats_deck_id_from_key(file)

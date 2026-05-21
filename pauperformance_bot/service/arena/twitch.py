@@ -1,12 +1,10 @@
 from twitchAPI.twitch import Twitch
-from twitchAPI.types import TimePeriod
 
 from pauperformance_bot.credentials import (
     TWITCH_APP_CLIENT_ID,
     TWITCH_APP_CLIENT_SECRET,
 )
 from pauperformance_bot.entity.arena.twitch_user import TwitchUser
-from pauperformance_bot.entity.arena.twitch_video import TwitchVideo
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
@@ -38,28 +36,4 @@ class TwitchService:
                 user["description"],
             )
             for user in self._service.get_users(logins=login_names)["data"]
-        ]
-
-    def get_user_videos(self, user_id):
-        return [
-            TwitchVideo(
-                video["id"],
-                video["stream_id"],
-                video["user_id"],
-                video["user_login"],
-                video["user_name"],
-                video["title"],
-                video["description"],
-                video["created_at"],
-                video["published_at"],
-                video["url"],
-                video["viewable"],
-                video["language"],
-                video["duration"],
-            )
-            for video in self._service.get_videos(
-                user_id=user_id,
-                first=100,
-                period=TimePeriod.MONTH,
-            )["data"]
         ]

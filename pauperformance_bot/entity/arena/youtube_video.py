@@ -21,6 +21,7 @@ class YouTubeVideo(IndexableVideo):
         privacy_status,
         url,
         language,
+        is_short,
     ):
         super().__init__(description)
         self.video_id = video_id
@@ -36,6 +37,7 @@ class YouTubeVideo(IndexableVideo):
         self.privacy_status = privacy_status
         self.url = url
         self.language = language
+        self.is_short = is_short
 
     def __hash__(self) -> int:
         return hash(self.video_id)

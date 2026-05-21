@@ -235,6 +235,7 @@ class TestVideo(unittest.TestCase):
             archetype="Burn",
             video_id="abc123",
             deck_name="Burn 100.001.Alice",
+            is_short=False,
         )
         kwargs.update(overrides)
         return Video(**kwargs)

@@ -9,6 +9,7 @@ from pauperformance_bot.constant.pauperformance.academy import AcademyFileSystem
 from pauperformance_bot.entity.api.tournament import Tournament
 from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
 from pauperformance_bot.util.log import get_application_logger
+from pauperformance_bot.util.time import last_week
 
 logger = get_application_logger()
 logger.setLevel(logging.DEBUG)
@@ -32,19 +33,22 @@ def check_mtg_tournament_decks_are_downloaded():
                 print(f"Missing {deck_id}.txt from tournament {tournament_file}.")
 
 
-if __name__ == "__main__":
+def download_mtggoldfish(since):
     mtggoldfish = MTGGoldfish()
-    # beginning = datetime.datetime(day=1, month=1, year=2011)
-
-    # 2023 done
-    # 2024 done
-    # 2025 done
-    # 2026 done
-
+    # You can download a custom range of tournaments building datetime objects via e.g.
+    # datetime.datetime(day=18, month=5, year=2026)
+    # datetime.datetime(day=26, month=5, year=2026)
     mtggoldfish.download_mtggoldfish_tournaments(
-        datetime.datetime(day=18, month=5, year=2026),
-        datetime.datetime(day=21, month=5, year=2026),
+        datetime.datetime.fromtimestamp(since / 1000),
+        datetime.datetime.now(),
         AcademyFileSystem(),
     )
-
     check_mtg_tournament_decks_are_downloaded()
+
+
+def scrape(since):
+    download_mtggoldfish(since)
+
+
+if __name__ == "__main__":
+    scrape(last_week())

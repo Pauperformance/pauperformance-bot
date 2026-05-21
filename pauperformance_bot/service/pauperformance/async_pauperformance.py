@@ -59,34 +59,29 @@ class AsyncPauperformanceService(PauperformanceService):
             )
         logger.info("Updated Archive decks for all users.")
 
-    async def import_players_videos_from_youtube(self, send_notification=True):
+    async def import_players_videos_from_youtube(self, since=None):
         logger.info("Updating YouTube videos for all users...")
         for player in self.players:
             if not player.youtube_channel_id:
                 logger.info(f"Skipping player {player.name} with no YouTube account...")
                 continue
 
-            await self.import_player_videos_from_youtube(
-                player,
-                send_notification=send_notification,
-            )
+            await self.import_player_videos_from_youtube(player, since=since)
         logger.info("Updated YouTube videos for all users.")
 
-    async def import_player_videos_from_youtube(self, player, send_notification=True):
+    async def import_player_videos_from_youtube(self, player, since=None):
         logger.info(
-            f"Processing videos from YouTube user " f"{player.youtube_channel_id}..."
+            f"Processing videos from YouTube user {player.youtube_channel_id}..."
         )
-        warning_player: CreatorConfig = self.config_reader.get_pauperformance_creator()
         videos = await asyncio.to_thread(
             self.youtube.get_channel_videos,
             player.youtube_channel_id,
+            since,
         )
-        await self.archive.archive_player_videos_from_youtube(
+        await asyncio.to_thread(
+            self.archive.archive_player_videos_from_youtube,
             player,
             videos,
             self.storage,
-            self.discord,
-            warning_player=warning_player,
-            send_notification=send_notification,
         )
         logger.info(f"Processed videos from YouTube user {player.youtube_channel_id}.")

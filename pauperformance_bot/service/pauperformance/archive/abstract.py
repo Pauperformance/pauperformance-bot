@@ -150,106 +150,11 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 )
         logger.info(f"Updated Archive decks for {player.name}.")
 
-    async def archive_player_videos_from_twitch(
-        self,
-        player: CreatorConfig,
-        videos,
-        storage,
-        discord,
-        warning_player,
-        send_notification=True,
-    ):
-        logger.info(f"Updating Archive videos for {player.name}...")
-        imported_twitch_videos = storage.list_imported_twitch_videos_ids()
-        config_reader = ConfigReader()
-        for video in videos:
-            logger.debug(
-                f"Processing video '{video.title}' "
-                f"({video.video_id}) "
-                f"from {video.user_login_name}, "
-                f"published on {video.published_at}, "
-                f"url: {video.url}..."
-            )
-            if video.video_id in imported_twitch_videos:
-                logger.debug(
-                    f"Video {video.video_id} already stored on "
-                    f"Storage. Skipping it."
-                )
-                continue
-
-            if video.viewable != "public":
-                await discord.send_user_message(
-                    warning_player.discord_id,
-                    f"⚠️ Skipped {video.viewable} Twitch video. "
-                    f"'{video.title}' "
-                    f"({video.video_id}) "
-                    f"from {video.user_login_name}, "
-                    f"published on {video.published_at}, "
-                    f"url: {video.url}...",
-                )
-                continue
-
-            if not video.deck_name and not video.archetype:
-                logger.debug(
-                    f"Unable to find deck name or archetype for video {video.url}. "
-                    f"Skipping it..."
-                )
-                continue
-
-            # either the deck name or the archetype was provided: start importing!
-            deck_key = video.deck_name
-            if not deck_key:
-                deck_key = video.archetype
-
-            storage_key = storage.get_imported_twitch_video_key(
-                video.video_id,
-                player.name,
-                video.language,
-                video.published_at.split("T")[0],
-                deck_key,
-            )
-            logger.info(f"Archiving information on storage in file {storage_key}...")
-            try:
-                base_archetype_name = config_reader.get_archetype_name_from_alias(
-                    video.archetype
-                )
-            except PauperformanceException:
-                base_archetype_name = "Brew"
-            storage.create_file(
-                f"{storage_key}",
-                json.dumps(
-                    {
-                        **vars(video),
-                        "deck_name": video.deck_name,
-                        "archetype": base_archetype_name,
-                        "creator": player.name,
-                    },
-                    indent=4,
-                ),
-            )
-            message = (
-                f"📌 Imported video: {video.title}.\n\n"
-                f"Source: {video.url}\n\n"
-                f"Archetype: {base_archetype_name}\n\n"
-                f"Deck: {video.deck_name}"
-            )
-            if send_notification:
-                logger.info("Informing player on Discord...")
-                await discord.send_user_message(
-                    player.discord_id,
-                    message,
-                )
-            await discord.send_log_message(message)
-        logger.info(f"Updated Archive videos for {player.name}.")
-
-    async def archive_player_videos_from_youtube(
+    def archive_player_videos_from_youtube(
         self,
         player: CreatorConfig,
         videos: list[YouTubeVideo],
         storage,
-        discord,
-        warning_player,
-        send_notification=True,
     ):
         logger.info(f"Updating Archive videos for {player.name}...")
         imported_youtube_videos = storage.list_imported_youtube_videos_ids()
@@ -271,21 +176,13 @@ class AbstractArchiveService(metaclass=ABCMeta):
                 continue
 
             if video.privacy_status != "public":
-                await discord.send_user_message(
-                    warning_player.discord_id,
-                    f"⚠️ Skipped {video.privacy_status} YouTube video. "
+                logger.warning(
+                    f"Skipped {video.privacy_status} YouTube video. "
                     f"'{video.title}' "
                     f"({video.content_video_id}) "
                     f"from {video.channel_title}, "
                     f"published on {video.published_at}, "
-                    f"url: {video.url}...",
-                )
-                continue
-
-            if not video.deck_name and not video.archetype:
-                logger.debug(
-                    f"Unable to find deck name or archetype for video {video.url}. "
-                    f"Skipping it..."
+                    f"url: {video.url}..."
                 )
                 continue
 
@@ -293,6 +190,8 @@ class AbstractArchiveService(metaclass=ABCMeta):
             deck_key = video.deck_name
             if not deck_key:
                 deck_key = video.archetype
+            if not deck_key:
+                deck_key = "???"
 
             storage_key = storage.get_imported_youtube_video_key(
                 video.content_video_id,
@@ -320,19 +219,12 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     indent=4,
                 ),
             )
-            message = (
-                f"📌 Imported video: {video.title}.\n\n"
-                f"Source: {video.url}\n\n"
-                f"Archetype: {base_archetype_name}\n\n"
+            logger.info(
+                f"Imported video: {video.title}. "
+                f"Source: {video.url}. "
+                f"Archetype: {base_archetype_name}. "
                 f"Deck: {video.deck_name}"
             )
-            if send_notification:
-                logger.info("Informing player on Discord...")
-                await discord.send_user_message(
-                    player.discord_id,
-                    message,
-                )
-            await discord.send_log_message(message)
         logger.info(f"Updated Archive videos for {player.name}.")
 
     async def import_player_deck_from_mtggoldfish(
