@@ -5,6 +5,7 @@ import zipfile
 
 from dropbox import Dropbox as OfficialDropbox
 from dropbox import DropboxOAuth2FlowNoRedirect
+from dropbox.files import WriteMode
 
 from pauperformance_bot.constant.dropbox import MYR_ROOT_DIR
 from pauperformance_bot.credentials import (
@@ -64,6 +65,16 @@ class DropboxService(AbstractStorageService):
         logger.info(f"Storing file {name}...")
         results = self._service.files_upload(content.encode("utf-8"), name, mute=True)
         logger.info(f"Stored file {name}: {results}")
+
+    def update_file(self, name, content=""):
+        logger.info(f"Updating file {name}...")
+        results = self._service.files_upload(
+            content.encode("utf-8"),
+            name,
+            mode=WriteMode.overwrite,
+            mute=True,
+        )
+        logger.info(f"Updated file {name}: {results}")
 
     def get_file(self, name):
         logger.info(f"Downloading file {name}...")

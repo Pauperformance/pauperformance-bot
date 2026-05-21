@@ -1,0 +1,15 @@
+{
+    "saved_id": "4379843",
+    "sections": [
+        {
+            "name": "Main",
+            "cards": [
+                {"amount": 4, "name": "Lightning Bolt", "valid": true},
+                {"amount": 56, "name": "Mountain", "valid": true}
+            ]
+        }
+    ],
+    "sideboard": [
+        {"amount": 4, "name": "Pyroblast", "valid": true}
+    ]
+}

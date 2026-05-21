@@ -1,3 +1,4 @@
+import json
 import unittest
 from unittest import mock
 
@@ -6,8 +7,15 @@ from pauperformance_bot.entity.deck.playable import (
     PlayedCard,
     get_decks_diff,
 )
+from pauperformance_bot.service.mtg.deckstats import DeckstatsService
+from pauperformance_bot.service.mtg.downloader.deckstats import DeckstatsDeckDownloader
 from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
+from pauperformance_bot.service.mtg.downloader.moxfield import MoxfieldDeckDownloader
 from pauperformance_bot.service.mtg.downloader.mtgdecks import MtgdecksDeckDownloader
+from pauperformance_bot.service.mtg.downloader.mtggoldfish import (
+    MtggoldfishDeckDownloader,
+)
+from pauperformance_bot.service.mtg.downloader.service import DeckDownloaderService
 
 EXPECTED_DECK_AETHERHUB_MAIN = [
     PlayedCard(3, "Thoughtcast"),
@@ -200,6 +208,147 @@ class TestMtgoDownloader(unittest.TestCase):
         res = downloader.download()
 
         self._validate_result(expected_deck, res)
+
+
+EXPECTED_DECK_SIMPLE_MAIN = [
+    PlayedCard(4, "Lightning Bolt"),
+    PlayedCard(56, "Mountain"),
+]
+EXPECTED_DECK_SIMPLE_SIDE = [
+    PlayedCard(4, "Pyroblast"),
+]
+
+
+class TestMtggoldfishDeckDownloader(unittest.TestCase):
+    def _read_mock_data(self, filename):
+        with open(filename, "rb") as f:
+            return f.read()
+
+    @mock.patch(
+        "pauperformance_bot.service.mtg.downloader.mtggoldfish.execute_http_request"
+    )
+    def test_download_returns_playable_deck(self, mock_ehr):
+        mock_ehr.return_value.content = self._read_mock_data(
+            "tests/mock_data/mtggoldfish_deck.html"
+        )
+        expected = PlayableDeck(EXPECTED_DECK_SIMPLE_MAIN, EXPECTED_DECK_SIMPLE_SIDE)
+        downloader = MtggoldfishDeckDownloader("https://www.mtggoldfish.com/deck/12345")
+
+        result = downloader.download()
+
+        diff = get_decks_diff(expected, result)
+        self.assertTupleEqual(([], [], [], []), diff)
+
+
+class TestMoxfieldDeckDownloader(unittest.TestCase):
+    def _read_mock_data(self, filename):
+        with open(filename) as f:
+            return json.load(f)
+
+    @mock.patch("pauperformance_bot.service.mtg.downloader.moxfield.time.sleep")
+    @mock.patch(
+        "pauperformance_bot.service.mtg.downloader.moxfield.execute_http_request"
+    )
+    @mock.patch(
+        "pauperformance_bot.service.mtg.downloader.moxfield.MOXFIELD_USER_AGENT",
+        "test-agent",
+    )
+    def test_download_returns_playable_deck(self, mock_ehr, _mock_sleep):
+        mock_ehr.return_value.json.return_value = self._read_mock_data(
+            "tests/mock_data/moxfield_deck.json"
+        )
+        expected = PlayableDeck(EXPECTED_DECK_SIMPLE_MAIN, EXPECTED_DECK_SIMPLE_SIDE)
+        downloader = MoxfieldDeckDownloader("https://www.moxfield.com/decks/abc123")
+
+        result = downloader.download()
+
+        diff = get_decks_diff(expected, result)
+        self.assertTupleEqual(([], [], [], []), diff)
+
+
+class TestDeckstatsDeckDownloader(unittest.TestCase):
+    def _read_mock_data(self, filename):
+        with open(filename) as f:
+            return json.load(f)
+
+    def test_url_parsing(self):
+        downloader = DeckstatsDeckDownloader(
+            "https://deckstats.net/decks/78813/4379843-Foo"
+        )
+        self.assertEqual(downloader._owner_id, "78813")
+        self.assertEqual(downloader._saved_id, "4379843")
+
+    @mock.patch.object(DeckstatsService, "get_deck")
+    def test_download_returns_playable_deck(self, mock_get_deck):
+        mock_get_deck.return_value = self._read_mock_data(
+            "tests/mock_data/deckstats_deck.json"
+        )
+        expected = PlayableDeck(EXPECTED_DECK_SIMPLE_MAIN, EXPECTED_DECK_SIMPLE_SIDE)
+        downloader = DeckstatsDeckDownloader(
+            "https://deckstats.net/decks/78813/4379843-Foo"
+        )
+
+        result = downloader.download()
+
+        diff = get_decks_diff(expected, result)
+        self.assertTupleEqual(([], [], [], []), diff)
+
+
+class TestDeckDownloaderServiceRouting(unittest.TestCase):
+    def _assert_routes_to(self, url, downloader_cls):
+        with mock.patch.object(
+            downloader_cls, "download", return_value=mock.MagicMock(spec=PlayableDeck)
+        ) as mock_download:
+            DeckDownloaderService.from_url(url)
+            mock_download.assert_called_once()
+
+    def test_deckstats(self):
+        self._assert_routes_to(
+            "https://deckstats.net/decks/78813/4379843-Foo",
+            DeckstatsDeckDownloader,
+        )
+
+    def test_mtgdecks(self):
+        self._assert_routes_to(
+            "https://mtgdecks.net/Pauper/burn-decklist-by-thormyn-1380435/txt",
+            MtgdecksDeckDownloader,
+        )
+
+    def test_moxfield(self):
+        with mock.patch(
+            "pauperformance_bot.service.mtg.downloader.moxfield.MOXFIELD_USER_AGENT",
+            "test-agent",
+        ):
+            self._assert_routes_to(
+                "https://www.moxfield.com/decks/abc123",
+                MoxfieldDeckDownloader,
+            )
+
+    def test_mtggoldfish(self):
+        self._assert_routes_to(
+            "https://www.mtggoldfish.com/deck/12345",
+            MtggoldfishDeckDownloader,
+        )
+
+    def _assert_mtgo_fallback(self, url):
+        with mock.patch.object(
+            MtgoDeckDownloader,
+            "download",
+            return_value=mock.MagicMock(spec=PlayableDeck),
+        ) as mock_download:
+            DeckDownloaderService.from_url(url)
+            mock_download.assert_called_once()
+
+    def test_tappedout_uses_mtgo_fallback(self):
+        self._assert_mtgo_fallback(
+            "https://tappedout.net/mtg-decks/gobliny-combo/?fmt=dek"
+        )
+
+    def test_aetherhub_uses_mtgo_fallback(self):
+        self._assert_mtgo_fallback("https://aetherhub.com/Deck/MtgoDeckExport/883786")
+
+    def test_mtgtop8_uses_mtgo_fallback(self):
+        self._assert_mtgo_fallback("https://www.mtgtop8.com/mtgo?d=473002")
 
 
 if __name__ == "__main__":

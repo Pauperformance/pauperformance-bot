@@ -1,4 +1,5 @@
 import collections
+import shutil
 from pathlib import Path
 
 import jsonpickle
@@ -273,6 +274,14 @@ class AcademyDataExporter:
         logger.info(
             f"Exporting YouTube videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}..."
         )
+        logger.debug(
+            f"Deleting old YouTube videos at {self.academy_fs.ASSETS_DATA_VIDEO_DIR}..."
+        )
+        for child in Path(self.academy_fs.ASSETS_DATA_VIDEO_DIR).iterdir():
+            if child.is_dir():
+                shutil.rmtree(child)
+            else:
+                child.unlink()
         self._export_videos(self.pauperformance.storage.list_imported_youtube_videos())
         logger.info(
             f"Exported YouTube videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}."
@@ -286,9 +295,16 @@ class AcademyDataExporter:
         files_by_name = {
             name.split("/")[-1]: content for name, content in folder.items()
         }
+        myr_fs = self.pauperformance.config_reader.myr_file_system
+        with open(myr_fs.VIDEO_BANNED_IDS) as f:
+            banned_ids = {line.strip() for line in f if line.strip()}
         for video_key in video_keys:
             video_json = files_by_name[video_key + ".txt"]
             video_id, creator_name, _, date, _ = video_key.split(">")
+            if "premodern" in video_json["title"].lower():
+                continue
+            if video_id in banned_ids:
+                continue
             video: Video = Video(
                 name=video_json["title"],
                 link=video_json["url"],

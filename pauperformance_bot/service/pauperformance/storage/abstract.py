@@ -51,6 +51,10 @@ class AbstractStorageService(metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def update_file(self, name, content=""):
+        pass
+
+    @abstractmethod
     def get_file(self, name):
         pass
 

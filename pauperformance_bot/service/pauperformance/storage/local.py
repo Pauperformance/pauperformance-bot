@@ -33,6 +33,9 @@ class LocalStorageService(AbstractStorageService):
             out_f.write(content)
         logger.info(f"Stored file {name}.")
 
+    def update_file(self, name, content=""):
+        self.create_file(name, content)
+
     def get_file(self, name):
         logger.info(f"Reading file {name}...")
         with open(name, "r") as in_f:

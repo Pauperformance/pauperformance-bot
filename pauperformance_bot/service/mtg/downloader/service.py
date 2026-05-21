@@ -2,9 +2,13 @@ from typing import Dict, Optional, Type
 
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.service.mtg.downloader.abstract import AbstractDeckDownloader
+from pauperformance_bot.service.mtg.downloader.deckstats import DeckstatsDeckDownloader
 from pauperformance_bot.service.mtg.downloader.downloader import MtgoDeckDownloader
 from pauperformance_bot.service.mtg.downloader.moxfield import MoxfieldDeckDownloader
 from pauperformance_bot.service.mtg.downloader.mtgdecks import MtgdecksDeckDownloader
+from pauperformance_bot.service.mtg.downloader.mtggoldfish import (
+    MtggoldfishDeckDownloader,
+)
 from pauperformance_bot.util.log import get_application_logger
 
 logger = get_application_logger()
@@ -14,8 +18,10 @@ class DeckDownloaderService:
     """Service to download a deck from different sources given an input url"""
 
     _downloaders: Dict[str, Type[AbstractDeckDownloader]] = {
+        "deckstats.net": DeckstatsDeckDownloader,
         "mtgdecks.net": MtgdecksDeckDownloader,
         "moxfield.com": MoxfieldDeckDownloader,
+        "mtggoldfish.com": MtggoldfishDeckDownloader,
     }
 
     @classmethod

@@ -41,6 +41,9 @@ class _ConcreteStorage(AbstractStorageService):
     def create_file(self, name, content=""):
         pass
 
+    def update_file(self, name, content=""):
+        pass
+
     def get_file(self, name):
         pass
 

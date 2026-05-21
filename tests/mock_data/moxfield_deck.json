@@ -1,0 +1,16 @@
+{
+    "name": "Burn",
+    "boards": {
+        "mainboard": {
+            "cards": {
+                "1": {"quantity": 4, "card": {"name": "Lightning Bolt"}},
+                "2": {"quantity": 56, "card": {"name": "Mountain"}}
+            }
+        },
+        "sideboard": {
+            "cards": {
+                "1": {"quantity": 4, "card": {"name": "Pyroblast"}}
+            }
+        }
+    }
+}

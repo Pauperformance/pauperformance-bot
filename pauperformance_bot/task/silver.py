@@ -3,7 +3,6 @@ import os
 
 import jsonpickle
 
-from pauperformance_bot.constant.pauperformance.myr import TOP_PATH
 from pauperformance_bot.service.academy.data_exporter import AcademyDataExporter
 from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
     MTGGoldfishArchiveService,
@@ -12,10 +11,12 @@ from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
 )
 from pauperformance_bot.service.pauperformance.silver.decklassifier import Decklassifier
+from pauperformance_bot.service.pauperformance.silver.video_classifier import (
+    VideoClassifier,
+)
 from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import (
-    posix_path,
     safe_dump_json_to_file,
 )
 
@@ -88,8 +89,23 @@ def dpl_classifier(environ, start_response):
         return [json.dumps({"error": str(e)}).encode("utf-8")]
 
 
+def classify():
+    storage = DropboxService()
+    archive = MTGGoldfishArchiveService(storage)
+    pauperformance = PauperformanceService(storage, archive)
+    exporter = AcademyDataExporter(pauperformance)
+    # TODO: improve
+    known_decks, _ = exporter._load_mtggoldfish_tournament_training_data()
+    other_known_decks, _ = exporter._load_dpl_training_data()
+    known_decks += other_known_decks
+    decklassifier = Decklassifier(pauperformance, known_decks)
+    classifier = VideoClassifier(pauperformance, decklassifier)
+    classifier.classify_videos()
+
+
 if __name__ == "__main__":
-    main(
-        posix_path(TOP_PATH, "dev", "decks-all-tournaments.json"),
-        posix_path(TOP_PATH, "dev", "decks-all-tournaments-classified.json"),
-    )
+    # main(
+    #     posix_path(TOP_PATH, "dev", "decks-all-tournaments.json"),
+    #     posix_path(TOP_PATH, "dev", "decks-all-tournaments-classified.json"),
+    # )
+    classify()
