@@ -42,8 +42,8 @@ if __name__ == "__main__":
     # 2026 done
 
     mtggoldfish.download_mtggoldfish_tournaments(
-        datetime.datetime(day=31, month=12, year=2025),
-        datetime.datetime(day=7, month=6, year=2026),
+        datetime.datetime(day=18, month=5, year=2026),
+        datetime.datetime(day=21, month=5, year=2026),
         AcademyFileSystem(),
     )
 
