@@ -35,12 +35,6 @@ class _ConcreteStorage(AbstractStorageService):
     def list_imported_mtggoldfish_deck_names(self):
         return []
 
-    def list_imported_twitch_videos(self):
-        return []
-
-    def list_imported_twitch_videos_ids(self):
-        return []
-
     def list_imported_youtube_videos(self):
         return []
 
@@ -67,9 +61,6 @@ class TestAbstractStorageProperties(unittest.TestCase):
     def test_videos_path(self):
         self.assertEqual(self.svc.videos_path, "/storage/videos")
 
-    def test_twitch_video_path(self):
-        self.assertIn("twitch", self.svc.twitch_video_path)
-
     def test_youtube_video_path(self):
         self.assertIn("youtube", self.svc.youtube_video_path)
 
@@ -92,14 +83,6 @@ class TestAbstractStorageKeyBuilders(unittest.TestCase):
         )
         self.assertIn("12345", key)
         self.assertIn("Faeries 99.042.Alice.txt", key)
-
-    def test_get_imported_twitch_video_key(self):
-        key = self.svc.get_imported_twitch_video_key(
-            "v123", "streamer", "en", "2023-01-15", "Burn 42.001"
-        )
-        self.assertIn("v123", key)
-        self.assertIn("streamer", key)
-        self.assertIn("Burn 42.001.txt", key)
 
     def test_get_imported_youtube_video_key(self):
         key = self.svc.get_imported_youtube_video_key(

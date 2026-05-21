@@ -32,22 +32,21 @@ async def async_academy_update():
     pauperformance = AsyncPauperformanceService(discord, storage, archive)
     await pauperformance.discord.wait_until_ready()
 
-    # import new content
-    send_notification = False
-    # await pauperformance.import_players_videos_from_twitch(
-    #     send_notification=send_notification
-    # )
-    # await pauperformance.import_players_videos_from_youtube(
-    #     send_notification=send_notification
-    # )
-    # await pauperformance.import_decks_from_deckstats(
-    #     send_notification=send_notification
-    # )
-    await pauperformance.import_decks_from_discord(send_notification=send_notification)
+    try:
+        # import new content
+        send_notification = False
+        await pauperformance.import_players_videos_from_youtube(
+            send_notification=send_notification
+        )
+        # await pauperformance.import_decks_from_deckstats(
+        #     send_notification=send_notification
+        # )
 
-    # update pages
-    # academy = AcademyService(pauperformance)
-    # academy.update_all()
+        # update pages
+        # academy = AcademyService(pauperformance)
+        # academy.update_all()
+    finally:
+        await pauperformance.discord.close()
 
 
 @retry(
@@ -58,13 +57,10 @@ async def async_academy_update():
     wait=wait_random_exponential(multiplier=1, max=60),
 )
 def main():
-    loop = asyncio.get_event_loop()
     try:
-        loop.run_until_complete(async_academy_update())
+        asyncio.run(async_academy_update())
     except RuntimeError as exc:
         logger.exception(exc)
-    finally:
-        loop.close()
 
 
 if __name__ == "__main__":

@@ -4,7 +4,6 @@ from pathlib import Path
 import jsonpickle
 import matplotlib.pyplot as plt
 import seaborn
-from pauperformance_bot.util.naming import fix_card_name
 
 from pauperformance_bot.constant.pauperformance.academy import (
     ACADEMY_FILE_SYSTEM,
@@ -31,6 +30,7 @@ from pauperformance_bot.service.pauperformance.silver.deckstatistics import (
     DeckstatisticsFactory,
 )
 from pauperformance_bot.util.log import get_application_logger
+from pauperformance_bot.util.naming import fix_card_name
 from pauperformance_bot.util.path import (
     posix_path,
     safe_dump_json_to_file,
@@ -65,7 +65,7 @@ class AcademyDataExporter:
         # self.export_creator_sheets()
         # self.export_archetypes()
         self.export_decks()
-        # self.export_videos()
+        self.export_youtube_videos()
         self.export_intel_cards()
         # self.export_intel_decks()
 
@@ -267,19 +267,6 @@ class AcademyDataExporter:
         plt.savefig(posix_path(self.academy_fs.ASSETS_DATA_INTEL_DIR, "metagame.png"))
         logger.info(
             f"Exported Metagame picture to {self.academy_fs.ASSETS_DATA_INTEL_DIR}."
-        )
-
-    def export_videos(self):
-        self.export_twitch_videos()
-        self.export_youtube_videos()
-
-    def export_twitch_videos(self):
-        logger.info(
-            f"Exporting Twitch videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}..."
-        )
-        self._export_videos(self.pauperformance.storage.list_imported_twitch_videos())
-        logger.info(
-            f"Exported Twitch videos to {self.academy_fs.ASSETS_DATA_VIDEO_DIR}."
         )
 
     def export_youtube_videos(self):

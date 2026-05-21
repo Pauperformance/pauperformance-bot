@@ -43,18 +43,6 @@ class TestStorageKeyParsing(unittest.TestCase):
             "Faeries 99.042.Alice",
         )
 
-    def test_twitch_video_id(self):
-        self.assertEqual(
-            AbstractStorageService.get_imported_twitch_video_id_from_key(_TWITCH_KEY),
-            "v123",
-        )
-
-    def test_twitch_video_full_name(self):
-        self.assertEqual(
-            AbstractStorageService.get_imported_twitch_video(_TWITCH_KEY),
-            "v123>streamer>en>2023-01-15>Burn 42.001",
-        )
-
     def test_youtube_video_id(self):
         self.assertEqual(
             AbstractStorageService.get_imported_youtube_video_id_from_key(_YOUTUBE_KEY),

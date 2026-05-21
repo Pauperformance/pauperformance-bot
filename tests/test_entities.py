@@ -197,25 +197,10 @@ class TestChangelog(unittest.TestCase):
 def _make_creator_sheet(**overrides):
     kwargs = dict(
         name="Alice",
-        bio="A Pauper enthusiast.",
         mtgo_name="AliceMTGO",
+        mtgo_name2=None,
         twitch_channel_url=None,
         youtube_channel_url=None,
-        favorite_format=None,
-        favorite_pauper_archetype=None,
-        favorite_pauper_card_name=None,
-        favorite_pauper_card_url=None,
-        favorite_pauper_card_image_url=None,
-        favorite_flavor_text_name=None,
-        favorite_flavor_text_url=None,
-        favorite_flavor_text_image_url=None,
-        favorite_flavor_text_lines=None,
-        favorite_artwork_name=None,
-        favorite_artwork_url=None,
-        favorite_artwork_image_url=None,
-        favorite_artist_name=None,
-        favorite_artist_gallery_url=None,
-        favorite_magic_quote_lines=None,
     )
     kwargs.update(overrides)
     return CreatorSheet(**kwargs)
@@ -230,7 +215,7 @@ class TestCreatorSheet(unittest.TestCase):
 
     def test_hash_based_on_name(self):
         p1 = _make_creator_sheet(name="Alice")
-        p2 = _make_creator_sheet(name="Alice", bio="Different bio.")
+        p2 = _make_creator_sheet(name="Alice", mtgo_name="AnotheName")
         self.assertEqual(hash(p1), hash(p2))
 
     def test_repr_and_str(self):

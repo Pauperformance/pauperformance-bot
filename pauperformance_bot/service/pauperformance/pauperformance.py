@@ -153,7 +153,12 @@ class PauperformanceService:
                 sleep(REQUESTS_SLEEP_SECONDS)
             finally:
                 card_index[p12e_code] = set_index
-        useless_sets = set(i for i in card_index if len(card_index[i]) == 0)
+        today = datetime.now().date().isoformat()
+        useless_sets = set(
+            i
+            for i in card_index
+            if len(card_index[i]) == 0 and self.set_index[i]["date"] <= today
+        )
         to_be_removed_sets = useless_sets - set(KNOWN_SETS_WITH_NO_PAUPER_CARDS)
         if len(to_be_removed_sets) > 0:
             constant_module = pauperformance_bot.__path__[0]

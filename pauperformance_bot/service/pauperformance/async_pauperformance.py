@@ -1,18 +1,10 @@
-from pauperformance_bot.constant.mtg.mtggoldfish import DECK_API_ENDPOINT
-from pauperformance_bot.constant.pauperformance.nexus import (
-    DISCORD_MAX_HISTORY_LIMIT,
-    DISCORD_MYR_REACTION_KO,
-    DISCORD_MYR_REACTION_OK,
-    DISCORD_MYR_REACTION_SEEN,
-)
+import asyncio
+
 from pauperformance_bot.entity.config.creator import CreatorConfig
 from pauperformance_bot.service.arena.twitch import TwitchService
 from pauperformance_bot.service.arena.youtube import YouTubeService
 from pauperformance_bot.service.mtg.scryfall import ScryfallService
 from pauperformance_bot.service.nexus.async_discord_service import AsyncDiscordService
-from pauperformance_bot.service.nexus.sync.messages_sender import (
-    DiscordMessagesSenderSyncService,
-)
 from pauperformance_bot.service.pauperformance.config_reader import ConfigReader
 from pauperformance_bot.service.pauperformance.pauperformance import (
     PauperformanceService,
@@ -67,33 +59,6 @@ class AsyncPauperformanceService(PauperformanceService):
             )
         logger.info("Updated Archive decks for all users.")
 
-    async def import_players_videos_from_twitch(self, send_notification=True):
-        logger.info("Updating Twitch videos for all users...")
-        for player in self.players:
-            if not player.twitch_login_name:
-                logger.info(f"Skipping player {player.name} with no Twitch account...")
-                continue
-
-            await self.import_player_videos_from_twitch(
-                player,
-                send_notification=send_notification,
-            )
-        logger.info("Updated Twitch videos for all users.")
-
-    async def import_player_videos_from_twitch(self, player, send_notification=True):
-        logger.info(f"Processing videos from Twitch user {player.twitch_login_name}...")
-        twitch_user = self.twitch.get_user(player.twitch_login_name)
-        warning_player: CreatorConfig = self.config_reader.get_pauperformance_creator()
-        await self.archive.archive_player_videos_from_twitch(
-            player,
-            self.twitch.get_user_videos(twitch_user.user_id),
-            self.storage,
-            self.discord,
-            warning_player=warning_player,
-            send_notification=send_notification,
-        )
-        logger.info(f"Processed videos from Twitch user {player.twitch_login_name}.")
-
     async def import_players_videos_from_youtube(self, send_notification=True):
         logger.info("Updating YouTube videos for all users...")
         for player in self.players:
@@ -112,79 +77,16 @@ class AsyncPauperformanceService(PauperformanceService):
             f"Processing videos from YouTube user " f"{player.youtube_channel_id}..."
         )
         warning_player: CreatorConfig = self.config_reader.get_pauperformance_creator()
+        videos = await asyncio.to_thread(
+            self.youtube.get_channel_videos,
+            player.youtube_channel_id,
+        )
         await self.archive.archive_player_videos_from_youtube(
             player,
-            self.youtube.get_channel_videos(
-                player.youtube_channel_id,
-                player.default_youtube_language,
-            ),
+            videos,
             self.storage,
             self.discord,
             warning_player=warning_player,
             send_notification=send_notification,
         )
         logger.info(f"Processed videos from YouTube user {player.youtube_channel_id}.")
-
-    async def import_decks_from_discord(self, send_notification=True):
-        import_deck_channel_id = self.discord.import_deck_channel_id
-        logger.info(f"Importing new decks from channel {import_deck_channel_id}...")
-        import_deck_channel = self.discord.get_channel(import_deck_channel_id)
-        messages = await import_deck_channel.history(
-            limit=DISCORD_MAX_HISTORY_LIMIT
-        ).flatten()
-        for message in messages:
-            await self._process_discord_import_deck_message(message, send_notification)
-        logger.info(f"Imported new decks from channel {import_deck_channel_id}.")
-
-    async def _process_discord_import_deck_message(self, message, send_notification):
-        logger.debug(
-            f"Processing message {message.id} by {message.author.id} "
-            f"({message.author.name})..."
-        )
-        logger.info(f"Discord message {message.id}: {message.content}")
-        if not any(r.emoji == DISCORD_MYR_REACTION_OK for r in message.reactions):
-            # If a DISCORD_MYR_REACTION_OK is found in the reactions, that means the
-            # message may have been already processed, and nothing else
-            # needs to be done.
-            # In this case, we would *not* apply the DISCORD_MYR_REACTION_SEEN reaction
-            # to avoid spam.
-            # Here, DISCORD_MYR_REACTION_OK is not found, so we add the
-            # DISCORD_MYR_REACTION_SEEN reaction.
-            await message.add_reaction(DISCORD_MYR_REACTION_SEEN)
-        if message.content.strip().startswith(DECK_API_ENDPOINT):
-            logger.info("Detected MTGGoldfish deck.")
-            await self._try_import_mtggoldfish_deck_from_discord(
-                message, send_notification
-            )
-        else:
-            log_message = (
-                f"Unrecognized deck format in message {message.content}. Skipping it."
-            )
-            logger.info(log_message)
-            discord_logger = DiscordMessagesSenderSyncService([log_message])
-            discord_logger.run_task()
-            await message.remove_reaction(DISCORD_MYR_REACTION_SEEN, self.discord.user)
-            await message.add_reaction(DISCORD_MYR_REACTION_KO)
-        logger.debug(
-            f"Processed message {message.id} by {message.author.id} "
-            f"({message.author.name})."
-        )
-
-    async def _try_import_mtggoldfish_deck_from_discord(
-        self, message, send_notification
-    ):
-        url = message.content.strip()
-        if "#" in url:
-            url = url[: url.index("#")]
-        logger.debug(f"Polished URL: {url}")
-        candidates = [p for p in self.players if p.discord_id == message.author.id]
-        player = candidates[-1]
-        logger.debug(f"Detected owner: {player.name}")
-        await self.archive.import_player_deck_from_mtggoldfish(
-            url,
-            player,
-            self,
-            message,
-            None,
-            send_notification=send_notification,
-        )

@@ -6448,5 +6448,11 @@
         "scryfall_code": "fra",
         "name": "Reality Fracture",
         "date": "2026-10-02"
+    },
+    "1076": {
+        "p12e_code": 1076,
+        "scryfall_code": "ysos",
+        "name": "Alchemy: Secrets of Strixhaven",
+        "date": "2026-05-19"
     }
 }
