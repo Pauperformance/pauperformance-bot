@@ -171,11 +171,11 @@ class AcademyDataExporter:
         cards_intel = {}
         archetypes_index = collections.defaultdict(set)
         logger.debug("Loading archetypes for each card...")
-        for known_deck in self.decklassifier.known_decks:
-            deck, arch = known_deck
-            for played_card in deck.mainboard + deck.sideboard:
-                card = fix_card_name(played_card.card_name)
-                archetypes_index[card].add(arch.name)
+        for arch, decks in self.decklassifier.known_decks.items():
+            for deck in decks:
+                for played_card in deck.mainboard + deck.sideboard:
+                    card = fix_card_name(played_card.card_name)
+                    archetypes_index[card].add(arch.name)
 
         for set_index, scryfall_cards in self.pauperformance.card_index.items():
             logger.debug(f"Processing set: {set_index}...")

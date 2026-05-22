@@ -89,6 +89,7 @@ class YouTubeService:
         channel = self.get_channel_info(channel_id)
         uploads = channel.items[0].contentDetails.relatedPlaylists.uploads
         videos = self.list_playlist_videos(uploads, since=since)
+        logger.info(f"Found {len(videos)} videos.")
 
         video_ids = [item.contentDetails.videoId for item in videos]
         default_languages = self._get_default_audio_languages(video_ids)

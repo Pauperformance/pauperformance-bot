@@ -85,7 +85,7 @@ class ConfigReader:
             twitch_channel_url=values["twitch_channel_url"],
             youtube_channel_url=values["youtube_channel_url"],
         )
-        logger.info(f"Read creator sheet {creator_sheet}.")
+        logger.debug(f"Read creator sheet {creator_sheet}.")
         return creator_sheet
 
     def list_creators(
@@ -124,7 +124,7 @@ class ConfigReader:
             twitch_login_name=twitch_login_name,
             youtube_channel_id=youtube_channel_id,
         )
-        logger.info(f"Read creator {creator}.")
+        logger.debug(f"Read creator {creator}.")
         return creator
 
     def get_pauperformance_creator(self) -> CreatorConfig:

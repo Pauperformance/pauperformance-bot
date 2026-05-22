@@ -45,28 +45,26 @@ class Decklassifier:
             self.pauperformance.config_reader.list_archetypes()
         )
         self.academy_fs: AcademyFileSystem = academy_fs
-        self.known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = []
+        self.known_decks: dict[ArchetypeConfig, list[PlayableDeck]] = {}
         self._decks_cache: dict[str, PlayableDeck] = {}
         self.load_training_data()
 
     def load_training_data(self):
-        known_decks = self._load_mtggoldfish_tournament_training_data()
-        other_known_decks = self._load_dpl_training_data()
-        known_decks += other_known_decks
+        flat = self._load_mtggoldfish_tournament_training_data()
+        flat += self._load_dpl_training_data()
         # For better similarity results, we apply some assumptions on the decks.
         # Upon classification, we'll apply the same assumptions.
-        for deck, _ in known_decks:
+        for deck, _ in flat:
             self._simplify_deck(deck)
-        self.known_decks = known_decks
+        self.known_decks = {}
+        for deck, archetype in flat:
+            self.known_decks.setdefault(archetype, []).append(deck)
 
     def _load_training_data(
         self, training_file, assets_data_deck_dir
     ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
         # Note: this method assumes all the decks in the training data are available in
         # the academy as .txt to load and parse.
-        archetypes: list[ArchetypeConfig] = (
-            self.pauperformance.config_reader.list_archetypes()
-        )
         known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = []
         training_data = [
             tuple(line.split(","))
@@ -82,7 +80,7 @@ class Decklassifier:
                 [line.strip() for line in open(playable_deck_path).readlines()]
             )
             try:
-                archetype = next(a for a in archetypes if a.name == archetype_name)
+                archetype = next(a for a in self.archetypes if a.name == archetype_name)
                 known_decks.append((playable_deck, archetype))
             except StopIteration:
                 logger.error(
@@ -108,9 +106,6 @@ class Decklassifier:
             self.pauperformance.config_reader.myr_file_system.DPL_DECK_TRAINING_DATA,
             self.academy_fs.ASSETS_DATA_DECK_DPL_DIR,
         )
-
-    def add_known_decks(self, known_decks: list[tuple[PlayableDeck, ArchetypeConfig]]):
-        self.known_decks += known_decks
 
     @staticmethod
     def _magnitude(cards_map: dict) -> float:
@@ -283,14 +278,16 @@ class Decklassifier:
                 logger.debug(f"Compared deck with reference lists of {archetype.name}.")
 
         logger.debug("Comparing deck with known decks...")
-        for deck2, archetype in self.known_decks:
+        for archetype, decks in self.known_decks.items():
             # known_decks were simplified upon loading
             if not deck.can_belong_to_archetype(archetype):
+                logger.debug(f"Skipping archetype {archetype.name} due to rules...")
                 continue
-            score = self.get_similarity(deck, deck2)
-            logger.debug(f"Similarity: {score}.")
-            if score > highest_similarity:
-                most_similar_archetype, highest_similarity = archetype, score
+            for deck2 in decks:
+                score = self.get_similarity(deck, deck2)
+                logger.debug(f"Similarity: {score}.")
+                if score > highest_similarity:
+                    most_similar_archetype, highest_similarity = archetype, score
         logger.debug("Compared deck with known decks.")
         logger.debug("Classified deck.")
         return most_similar_archetype, highest_similarity
@@ -394,7 +391,7 @@ class Decklassifier:
             if highest_similarity < brew_threshold:
                 most_similar_archetype = None
             elif learn_on_the_fly:
-                self.known_decks.append((playable_deck, most_similar_archetype))
+                self.known_decks.setdefault(most_similar_archetype, []).append(playable_deck)
             dpl_decks.append(
                 DPLDeck(
                     identifier=deck_id,
