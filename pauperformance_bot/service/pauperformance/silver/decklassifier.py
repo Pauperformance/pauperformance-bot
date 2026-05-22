@@ -285,9 +285,11 @@ class Decklassifier:
         logger.debug("Comparing deck with known decks...")
         for deck2, archetype in self.known_decks:
             # known_decks were simplified upon loading
+            if not deck.can_belong_to_archetype(archetype):
+                continue
             score = self.get_similarity(deck, deck2)
             logger.debug(f"Similarity: {score}.")
-            if score > highest_similarity and deck.can_belong_to_archetype(archetype):
+            if score > highest_similarity:
                 most_similar_archetype, highest_similarity = archetype, score
         logger.debug("Compared deck with known decks.")
         logger.debug("Classified deck.")
