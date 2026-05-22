@@ -45,8 +45,10 @@ class Decklassifier:
             self.pauperformance.config_reader.list_archetypes()
         )
         self.academy_fs: AcademyFileSystem = academy_fs
-        self.known_decks: dict[ArchetypeConfig, list[PlayableDeck]] = {}
-        self._decks_cache: dict[str, PlayableDeck] = {}
+        self.known_decks: dict[
+            ArchetypeConfig, list[tuple[PlayableDeck, dict, float, dict, float]]
+        ] = {}
+        self._decks_cache: dict[str, tuple[PlayableDeck, dict, float, dict, float]] = {}
         self.load_training_data()
 
     def load_training_data(self):
@@ -58,7 +60,9 @@ class Decklassifier:
             self._simplify_deck(deck)
         self.known_decks = {}
         for deck, archetype in flat:
-            self.known_decks.setdefault(archetype, []).append(deck)
+            self.known_decks.setdefault(archetype, []).append(
+                (deck, *self._deck_fingerprint(deck))
+            )
 
     def _load_training_data(
         self, training_file, assets_data_deck_dir
@@ -111,6 +115,11 @@ class Decklassifier:
     def _magnitude(cards_map: dict) -> float:
         return math.sqrt(sum(qty * qty for qty in cards_map.values()))
 
+    def _deck_fingerprint(self, deck: PlayableDeck) -> tuple[dict, float, dict, float]:
+        main = deck.mainboard_cards_map
+        side = deck.sideboard_cards_map
+        return main, self._magnitude(main), side, self._magnitude(side)
+
     @staticmethod
     def _sparse_cosine_similarity(
         cards_map1: dict, mag1: float, cards_map2: dict, mag2: float, w: float = 1.0
@@ -120,29 +129,40 @@ class Decklassifier:
         if mag1 == 0 or mag2 == 0:
             return 0.0
         dot = sum(
-            cards_map1[c] * cards_map2[c]
-            for c in cards_map1.keys() & cards_map2.keys()
+            cards_map1[c] * cards_map2[c] for c in cards_map1.keys() & cards_map2.keys()
         )
         return dot / (mag1 * mag2)
 
-    def get_similarity(self, deck1: PlayableDeck, deck2: PlayableDeck) -> float:
-        logger.debug("Computing similarity between decks...")
-        main1, main2 = deck1.mainboard_cards_map, deck2.mainboard_cards_map
-        side1, side2 = deck1.sideboard_cards_map, deck2.sideboard_cards_map
+    def _get_similarity_precomputed(
+        self,
+        main1: dict,
+        mag_main1: float,
+        side1: dict,
+        mag_side1: float,
+        main2: dict,
+        mag_main2: float,
+        side2: dict,
+        mag_side2: float,
+    ) -> float:
         sim_main = self._sparse_cosine_similarity(
-            main1, self._magnitude(main1), main2, self._magnitude(main2), MAINBOARD_WEIGHT
+            main1, mag_main1, main2, mag_main2, MAINBOARD_WEIGHT
         )
         logger.debug(f"Mainboard similarity: {sim_main}")
         sim_side = self._sparse_cosine_similarity(
-            side1, self._magnitude(side1), side2, self._magnitude(side2), SIDEBOARD_WEIGHT
+            side1, mag_side1, side2, mag_side2, SIDEBOARD_WEIGHT
         )
-        logger.debug(f"sideboard similarity: {sim_side}")
-        # give same weight to main and sideboard:
-        # sim = (sim_main + sim_side) / 2
-        # alternatively, give different weights:
+        logger.debug(f"Sideboard similarity: {sim_side}")
         w_sim_main = 3
         w_sim_side = 1
-        sim = (w_sim_main * sim_main + w_sim_side * sim_side) / (w_sim_main + w_sim_side)
+        return (w_sim_main * sim_main + w_sim_side * sim_side) / (
+            w_sim_main + w_sim_side
+        )
+
+    def get_similarity(self, deck1: PlayableDeck, deck2: PlayableDeck) -> float:
+        logger.debug("Computing similarity between decks...")
+        sim = self._get_similarity_precomputed(
+            *self._deck_fingerprint(deck1), *self._deck_fingerprint(deck2)
+        )
         logger.debug(f"Computed similarity between decks: {sim}.")
         return sim
 
@@ -254,7 +274,9 @@ class Decklassifier:
                 logger.debug(f"Deck is {archetype_name}.")
                 return next(a for a in self.archetypes if a.name == archetype_name), 1.0
 
-        # second, compare with other known decks
+        main1, mag_main1, side1, mag_side1 = self._deck_fingerprint(deck)
+
+        # second, compare with reference decks
         for archetype in self.archetypes:
             if not deck.can_belong_to_archetype(archetype):
                 logger.debug(f"Skipping archetype {archetype.name} due to rules...")
@@ -268,23 +290,47 @@ class Decklassifier:
                     )
                     # for better similarity results, apply same assumptions as above
                     self._simplify_deck(playable_reference_deck)
-                    self._decks_cache[reference_deck] = playable_reference_deck
-                deck2 = self._decks_cache[reference_deck]
+                    self._decks_cache[reference_deck] = (
+                        playable_reference_deck,
+                        *self._deck_fingerprint(playable_reference_deck),
+                    )
+                _, main2, mag_main2, side2, mag_side2 = self._decks_cache[
+                    reference_deck
+                ]
                 logger.debug(f"Compared deck with reference list {reference_deck}.")
-                score = self.get_similarity(deck, deck2)
+                score = self._get_similarity_precomputed(
+                    main1,
+                    mag_main1,
+                    side1,
+                    mag_side1,
+                    main2,
+                    mag_main2,
+                    side2,
+                    mag_side2,
+                )
                 logger.debug(f"Similarity: {score}.")
                 if score > highest_similarity:
                     most_similar_archetype, highest_similarity = archetype, score
                 logger.debug(f"Compared deck with reference lists of {archetype.name}.")
 
+        # third, compare with other known decks
         logger.debug("Comparing deck with known decks...")
         for archetype, decks in self.known_decks.items():
             # known_decks were simplified upon loading
             if not deck.can_belong_to_archetype(archetype):
                 logger.debug(f"Skipping archetype {archetype.name} due to rules...")
                 continue
-            for deck2 in decks:
-                score = self.get_similarity(deck, deck2)
+            for _, main2, mag_main2, side2, mag_side2 in decks:
+                score = self._get_similarity_precomputed(
+                    main1,
+                    mag_main1,
+                    side1,
+                    mag_side1,
+                    main2,
+                    mag_main2,
+                    side2,
+                    mag_side2,
+                )
                 logger.debug(f"Similarity: {score}.")
                 if score > highest_similarity:
                     most_similar_archetype, highest_similarity = archetype, score
@@ -391,7 +437,9 @@ class Decklassifier:
             if highest_similarity < brew_threshold:
                 most_similar_archetype = None
             elif learn_on_the_fly:
-                self.known_decks.setdefault(most_similar_archetype, []).append(playable_deck)
+                self.known_decks.setdefault(most_similar_archetype, []).append(
+                    (playable_deck, *self._deck_fingerprint(playable_deck))
+                )
             dpl_decks.append(
                 DPLDeck(
                     identifier=deck_id,
