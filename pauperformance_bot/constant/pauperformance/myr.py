@@ -120,6 +120,10 @@ class MyrFileSystem:
             self.RESOURCES_SILVER_DIR,
             "video_archetypes.csv",
         )
+        self.MISSING_DECK_ARCHETYPES: str = posix_path(
+            self.RESOURCES_SILVER_DIR,
+            "missing_deck_archetypes.csv",
+        )
         self.MISSING_VIDEO_ARCHETYPES: str = posix_path(
             self.RESOURCES_SILVER_DIR,
             "missing_video_archetypes.csv",

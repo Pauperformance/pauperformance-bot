@@ -6454,5 +6454,17 @@
         "scryfall_code": "ysos",
         "name": "Alchemy: Secrets of Strixhaven",
         "date": "2026-05-19"
+    },
+    "1077": {
+        "p12e_code": 1077,
+        "scryfall_code": "trc",
+        "name": "Star Trek Commander",
+        "date": "2026-06-22"
+    },
+    "1078": {
+        "p12e_code": 1078,
+        "scryfall_code": "trk",
+        "name": "Star Trek",
+        "date": "2026-11-13"
     }
 }

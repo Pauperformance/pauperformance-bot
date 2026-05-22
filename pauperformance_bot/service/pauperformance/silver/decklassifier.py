@@ -1,9 +1,12 @@
 import itertools
 from collections import defaultdict
-from typing import DefaultDict, Tuple
+from typing import DefaultDict, Optional, Tuple
 
+from entity.deck.playable import PlayedCard
 from scipy import spatial
 
+from pauperformance_bot.constant.mtg.game import BASIC_LANDS
+from pauperformance_bot.constant.pauperformance.academy import AcademyFileSystem
 from pauperformance_bot.constant.pauperformance.silver import (
     BREW_CLASSIFICATION_THRESHOLD,
     MAINBOARD_WEIGHT,
@@ -26,6 +29,7 @@ from pauperformance_bot.service.pauperformance.pauperformance import (
 )
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.math import truncate
+from pauperformance_bot.util.path import posix_path
 
 logger = get_application_logger()
 
@@ -34,16 +38,76 @@ class Decklassifier:
     def __init__(
         self,
         pauperformance: PauperformanceService,
-        known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = None,
+        academy_fs: AcademyFileSystem,
     ):
         self.pauperformance: PauperformanceService = pauperformance
         self.archetypes: list[ArchetypeConfig] = (
             self.pauperformance.config_reader.list_archetypes()
         )
-        self.known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = (
-            known_decks if known_decks else []
-        )
+        self.academy_fs: AcademyFileSystem = academy_fs
+        self.known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = []
         self._decks_cache: dict[str, PlayableDeck] = {}
+        self.load_training_data()
+
+    def load_training_data(self):
+        known_decks = self._load_mtggoldfish_tournament_training_data()
+        other_known_decks = self._load_dpl_training_data()
+        known_decks += other_known_decks
+        # For better similarity results, we apply some assumptions on the decks.
+        # Upon classification, we'll apply the same assumptions.
+        for deck, _ in known_decks:
+            self._simplify_deck(deck)
+        self.known_decks = known_decks
+
+    def _load_training_data(
+        self, training_file, assets_data_deck_dir
+    ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
+        # Note: this method assumes all the decks in the training data are available in
+        # the academy as .txt to load and parse.
+        archetypes: list[ArchetypeConfig] = (
+            self.pauperformance.config_reader.list_archetypes()
+        )
+        known_decks: list[tuple[PlayableDeck, ArchetypeConfig]] = []
+        training_data = [
+            tuple(line.split(","))
+            for line in open(training_file, "r").read().splitlines()
+            if line != "" and not line.startswith("#")
+        ]
+        for deck_id, archetype_name in training_data:
+            playable_deck_path = posix_path(
+                assets_data_deck_dir,
+                f"{deck_id}.txt",
+            )
+            playable_deck: PlayableDeck = parse_playable_deck_from_lines(
+                [line.strip() for line in open(playable_deck_path).readlines()]
+            )
+            try:
+                archetype = next(a for a in archetypes if a.name == archetype_name)
+                known_decks.append((playable_deck, archetype))
+            except StopIteration:
+                logger.error(
+                    f"Unrecognized archetype label '{archetype_name}' for deck with "
+                    f"id {deck_id}."
+                )
+                raise
+        return known_decks
+
+    def _load_mtggoldfish_tournament_training_data(
+        self,
+    ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
+        config_reader = self.pauperformance.config_reader
+        return self._load_training_data(
+            config_reader.myr_file_system.MTGGOLDFISH_DECK_TRAINING_DATA,
+            self.academy_fs.ASSETS_DATA_DECK_MTGGOLDFISH_TOURNAMENT_DIR,
+        )
+
+    def _load_dpl_training_data(
+        self,
+    ) -> list[tuple[PlayableDeck, ArchetypeConfig]]:
+        return self._load_training_data(
+            self.pauperformance.config_reader.myr_file_system.DPL_DECK_TRAINING_DATA,
+            self.academy_fs.ASSETS_DATA_DECK_DPL_DIR,
+        )
 
     def add_known_decks(self, known_decks: list[tuple[PlayableDeck, ArchetypeConfig]]):
         self.known_decks += known_decks
@@ -56,34 +120,6 @@ class Decklassifier:
 
     @staticmethod
     def _vectorize(cards_map1, cards_map2):
-        # In Pauper, only few decks take advantage of Snow-Covered lands.
-        # However, Snow-Covered lands are often used.
-        # For better similarity results, we want Snow-Covered lands to be treated as
-        # normal lands.
-        basic_lands = ["Forest", "Island", "Mountain", "Plains", "Swamp"]
-        for card_map in (cards_map1, cards_map2):
-            for land in basic_lands:
-                snow_land = f"Snow-Covered {land}"
-                if snow_land in card_map:
-                    snow_amount = card_map[snow_land]
-                    non_snow_amount = card_map.get(land, 0)
-                    del card_map[snow_land]
-                    card_map[land] = snow_amount + non_snow_amount
-
-        # Hydroblast and Blue Elemental Blast should be considered equivalent.
-        # Same holds for Pyroblast and Red Elemental Blast.
-        for card_map in (cards_map1, cards_map2):
-            if "Blue Elemental Blast" in card_map:
-                beb_amount = card_map["Blue Elemental Blast"]
-                hydro_amount = card_map.get("Hydroblast", 0)
-                del card_map["Blue Elemental Blast"]
-                card_map["Hydroblast"] = beb_amount + hydro_amount
-            if "Red Elemental Blast" in card_map:
-                beb_amount = card_map["Red Elemental Blast"]
-                hydro_amount = card_map.get("Pyroblast", 0)
-                del card_map["Red Elemental Blast"]
-                card_map["Pyroblast"] = beb_amount + hydro_amount
-
         all_cards = list(set(cards_map1.keys()).union(set(cards_map2.keys())))
         all_cards.sort()
         return (
@@ -101,12 +137,24 @@ class Decklassifier:
             deck1.sideboard_cards_map,
             deck2.sideboard_cards_map,
         )
+        return self.get_vector_similarity(
+            vector_main1, vector_side1, vector_main2, vector_side2
+        )
+
+    def get_vector_similarity(
+        self,
+        vector_main1,
+        vector_side1,
+        vector_main2,
+        vector_side2,
+    ) -> float:
         sim_main = self._cosine_similarity(vector_main1, vector_main2, MAINBOARD_WEIGHT)
         logger.debug(f"Mainboard similarity: {sim_main}")
         sim_side = self._cosine_similarity(vector_side1, vector_side2, SIDEBOARD_WEIGHT)
         logger.debug(f"sideboard similarity: {sim_side}")
+        # give same weight to main and sideboard:
         # sim = (sim_main + sim_side) / 2
-        # alternatively, give different weights
+        # alternatively, give different weights:
         w_sim_main = 3
         w_sim_side = 1
         sim = (w_sim_main * sim_main + w_sim_side * sim_side) / (
@@ -114,29 +162,6 @@ class Decklassifier:
         )
         logger.debug(f"Computed similarity between decks: {sim}.")
         return sim
-
-    def _is_affinity(self, deck: PlayableDeck) -> bool:
-        artifact_lands = self.pauperformance.scryfall.get_legal_artifact_lands()
-        artifact_lands_names = [c["name"] for c in artifact_lands]
-        affinity_creatures = [
-            "Frogmite",
-            "Atog",
-            "Myr Enforcer",
-            "Carapace Forger",
-            "Sojourner's Companion",
-            "Somber Hoverguard",
-        ]
-        has_artifact_mana_base = (
-            len([c for c in artifact_lands_names if c in deck]) >= 4
-        )
-        has_affinity_creatures = len([c for c in affinity_creatures if c in deck]) >= 2
-        if (
-            has_artifact_mana_base
-            and has_affinity_creatures
-            and "Galvanic Blast" in deck
-        ):
-            return True
-        return False
 
     def _is_flicker_tron(self, deck: PlayableDeck) -> bool:
         return all(
@@ -219,14 +244,16 @@ class Decklassifier:
     def classify_deck(
         self,
         deck: PlayableDeck,
-    ) -> Tuple[ArchetypeConfig, float]:
+    ) -> Tuple[ArchetypeConfig, Optional[float]]:
         logger.debug("Classifying deck...")
         most_similar_archetype, highest_similarity = None, 0
 
+        # for better similarity results, we are going to make some assumptions on decks
+        self._simplify_deck(deck)
+
         # TODO: remove this block in the future if it becomes useless
-        # First, check if archetype can be detected with rules.
+        # first, check if archetype can be detected with rules
         archetype_predicates = [
-            ("Affinity", self._is_affinity),
             ("Flicker Tron", self._is_flicker_tron),
             ("Empty The Warrens Storm", self._is_empty_the_warrens_storm),
             ("Goblins", self._is_goblins),
@@ -244,7 +271,7 @@ class Decklassifier:
                 logger.debug(f"Deck is {archetype_name}.")
                 return next(a for a in self.archetypes if a.name == archetype_name), 1.0
 
-        # Second, compare with other known decks.
+        # second, compare with other known decks
         for archetype in self.archetypes:
             if not deck.can_belong_to_archetype(archetype):
                 logger.debug(f"Skipping archetype {archetype.name} due to rules...")
@@ -253,9 +280,12 @@ class Decklassifier:
             for reference_deck in archetype.reference_decks:
                 logger.debug(f"Comparing deck with reference list {reference_deck}...")
                 if reference_deck not in self._decks_cache:
-                    self._decks_cache[reference_deck] = (
-                        self.pauperformance.get_playable_deck(reference_deck)
+                    playable_reference_deck = self.pauperformance.get_playable_deck(
+                        reference_deck
                     )
+                    # for better similarity results, apply same assumptions as above
+                    self._simplify_deck(playable_reference_deck)
+                    self._decks_cache[reference_deck] = playable_reference_deck
                 deck2 = self._decks_cache[reference_deck]
                 logger.debug(f"Compared deck with reference list {reference_deck}.")
                 score = self.get_similarity(deck, deck2)
@@ -266,6 +296,7 @@ class Decklassifier:
 
         logger.debug("Comparing deck with known decks...")
         for deck2, archetype in self.known_decks:
+            # known_decks were simplified upon loading
             score = self.get_similarity(deck, deck2)
             logger.debug(f"Similarity: {score}.")
             if score > highest_similarity and deck.can_belong_to_archetype(archetype):
@@ -273,6 +304,39 @@ class Decklassifier:
         logger.debug("Compared deck with known decks.")
         logger.debug("Classified deck.")
         return most_similar_archetype, highest_similarity
+
+    def _simplify_deck(self, playable_deck: PlayableDeck):
+        # In Pauper, only few decks take advantage of Snow-Covered lands.
+        # However, Snow-Covered lands are often used for no reason.
+        swap_tuples = [(f"Snow-Covered {land}", land) for land in BASIC_LANDS]
+
+        # Hydroblast and Blue Elemental Blast should be considered equivalent.
+        # Same holds for Pyroblast and Red Elemental Blast.
+        swap_tuples += [
+            ("Blue Elemental Blast", "Hydroblast"),
+            ("Red Elemental Blast", "Pyroblast"),
+        ]
+
+        # TODO: treat equals UB and IU versions of the same card
+
+        self._simplify_mainboard(playable_deck, swap_tuples)
+        self._simplify_sideboard(playable_deck, swap_tuples)
+
+    @staticmethod
+    def _simplify_mainboard(playable_deck: PlayableDeck, swap_tuples):
+        for old_card, new_card in swap_tuples:
+            if old_card in playable_deck.mainboard_cards_map:
+                old_amount = playable_deck.mainboard_cards_map[old_card]
+                playable_deck.remove_mainboard_card(PlayedCard(old_amount, old_card))
+                playable_deck.add_mainboard_card(PlayedCard(old_amount, new_card))
+
+    @staticmethod
+    def _simplify_sideboard(playable_deck: PlayableDeck, swap_tuples):
+        for old_card, new_card in swap_tuples:
+            if old_card in playable_deck.sideboard_cards_map:
+                old_amount = playable_deck.sideboard_cards_map[old_card]
+                playable_deck.remove_sideboard_card(PlayedCard(old_amount, old_card))
+                playable_deck.add_sideboard_card(PlayedCard(old_amount, new_card))
 
     def get_metagame(self) -> Metagame:
         mtggoldfish = MTGGoldfish()

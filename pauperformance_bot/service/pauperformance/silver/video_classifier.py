@@ -25,9 +25,14 @@ class VideoClassifier:
         myr_fs = self.pauperformance.config_reader.myr_file_system
         with open(myr_fs.VIDEO_ARCHETYPES, newline="") as f:
             manual_labels = {row[0]: row[1] for row in csv.reader(f) if row}
-        # TODO: remove myr_fs.MISSING_VIDEO_ARCHETYPES
-        for filename, video_json in videos.items():
-            self._classify_video(filename, video_json, manual_labels)
+        with open(myr_fs.VIDEO_BANNED_IDS) as f:
+            banned_ids = {line.strip() for line in f if line.strip()}
+        with open(myr_fs.MISSING_VIDEO_ARCHETYPES, "w", newline="") as out_f:
+            for file, video_json in videos.items():
+                if video_json["content_video_id"] not in banned_ids:
+                    missing_row = self._classify_video(file, video_json, manual_labels)
+                    if missing_row:
+                        csv.writer(out_f).writerow(missing_row)
 
     def _classify_video(
         self,
@@ -43,11 +48,11 @@ class VideoClassifier:
                 f"Found manual label for {video_id}: {manual_labels[video_id]}."
             )
             self._update_video_archetype(filename, video_json, manual_labels[video_id])
-            return
+            return None
 
         # leave unchanged any other previously classified video
         if video_json["archetype"] != "Brew":
-            return
+            return None
 
         # check video description: try to download decks from linked URLs
         description = video_json.get("description", "")
@@ -70,9 +75,9 @@ class VideoClassifier:
             )
             if highest_similarity >= brew_threshold:
                 archetype = most_similar_archetype.name
-                logger.info(f"Classifying deck as {archetype}")
+                logger.debug(f"Classifying deck as {archetype}")
                 self._update_video_archetype(filename, video_json, archetype)
-                return
+                return None
 
         # check video title
         title = video_json["title"].lower()
@@ -87,14 +92,11 @@ class VideoClassifier:
             None,
         )
         if archetype is not None:
-            logger.info(f"Found label for {video_id} in title: {archetype}.")
-            print(f"{video_id},")
+            logger.debug(f"Found label for {video_id} in title: {archetype}.")
             self._update_video_archetype(filename, video_json, archetype)
-            return
+            return None
 
-        myr_fs = self.pauperformance.config_reader.myr_file_system
-        with open(myr_fs.MISSING_VIDEO_ARCHETYPES, "a", newline="") as f:
-            csv.writer(f).writerow([video_id, video_json["url"], video_json["title"]])
+        return [video_id, "Brew", video_json["url"], video_json["title"]]
 
     @staticmethod
     def _extract_urls_from_description(description):

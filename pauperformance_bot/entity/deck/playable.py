@@ -1,6 +1,7 @@
 from itertools import chain
 from typing import List, Tuple
 
+from pauperformance_bot.constant.pauperformance.silver import FORBID_INVALID_DECKS
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
 from pauperformance_bot.util.decorators import auto_repr
 
@@ -57,14 +58,14 @@ class PlayableDeck:
                 + f" {PlayableDeck.SIDEBOARD_MAX_AMOUNT}"
             )
 
-        # TODO check that there is no more than 4 copies of a non-land card
+        # TODO check that there is no more than 4 copies of a non-basic-land card
         return len(errors) == 0, errors
 
     def __init__(
         self,
         mainboard: list[PlayedCard],
         sideboard: list[PlayedCard],
-        raise_error_if_invalid=True,
+        raise_error_if_invalid=FORBID_INVALID_DECKS,
     ):
         valid, errors = PlayableDeck.validate_boards(mainboard, sideboard)
         if raise_error_if_invalid and not valid:
@@ -136,6 +137,42 @@ class PlayableDeck:
     def __contains__(self, item):
         return any(c.card_name == item for c in chain(self.mainboard, self.sideboard))
 
+    @staticmethod
+    def _add_card(played_card: PlayedCard, board: list):
+        for existing in board:
+            if existing.card_name.lower() == played_card.card_name.lower():
+                existing.quantity += played_card.quantity
+                return
+        board.append(PlayedCard(played_card.quantity, played_card.card_name))
+
+    def add_mainboard_card(self, played_card: PlayedCard):
+        self._add_card(played_card, self.mainboard)
+
+    def add_sideboard_card(self, played_card: PlayedCard):
+        self._add_card(played_card, self.sideboard)
+
+    @staticmethod
+    def _remove_card(played_card: PlayedCard, board: list):
+        for i, existing in enumerate(board):
+            if existing.card_name.lower() == played_card.card_name.lower():
+                if existing.quantity < played_card.quantity:
+                    raise ValueError(
+                        f"Cannot remove {played_card.quantity} copies of"
+                        f" '{played_card.card_name}': only {existing.quantity} in deck"
+                    )
+                if existing.quantity == played_card.quantity:
+                    board.pop(i)
+                else:
+                    existing.quantity -= played_card.quantity
+                return
+        raise ValueError(f"'{played_card.card_name}' not found in deck")
+
+    def remove_mainboard_card(self, played_card: PlayedCard):
+        self._remove_card(played_card, self.mainboard)
+
+    def remove_sideboard_card(self, played_card: PlayedCard):
+        self._remove_card(played_card, self.sideboard)
+
     def can_belong_to_archetype(self, archetype: ArchetypeConfig) -> bool:
         for must_have_card in archetype.must_have_cards:
             if must_have_card not in self:
@@ -146,15 +183,23 @@ class PlayableDeck:
         return True
 
 
+def _parse_and_merge_lines(lines) -> list[PlayedCard]:
+    merged: dict[str, PlayedCard] = {}
+    for line in lines:
+        qty, name = line.split(" ", maxsplit=1)
+        key = name.lower()
+        if key in merged:
+            merged[key].quantity += int(qty)
+        else:
+            merged[key] = PlayedCard(qty, name)
+    return sorted(merged.values())
+
+
 def parse_playable_deck_from_lines(lines, raise_error_if_invalid=True) -> PlayableDeck:
     separator = lines.index("")
-    maindeck = lines[:separator]
-    maindeck.sort(key=lambda pc: pc.split(" ", maxsplit=1)[1])
-    sideboard = lines[separator + 1 : -1]
-    sideboard.sort(key=lambda pc: pc.split(" ", maxsplit=1)[1])
     return PlayableDeck(
-        [PlayedCard(*(line.split(" ", maxsplit=1))) for line in maindeck],
-        [PlayedCard(*(line.split(" ", maxsplit=1))) for line in sideboard],
+        _parse_and_merge_lines(lines[:separator]),
+        _parse_and_merge_lines(lines[separator + 1 : -1]),
         raise_error_if_invalid,
     )
 

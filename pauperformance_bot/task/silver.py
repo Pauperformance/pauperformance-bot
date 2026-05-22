@@ -3,7 +3,7 @@ import os
 
 import jsonpickle
 
-from pauperformance_bot.service.academy.data_exporter import AcademyDataExporter
+from pauperformance_bot.constant.pauperformance.academy import ACADEMY_FILE_SYSTEM
 from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
     MTGGoldfishArchiveService,
 )
@@ -35,13 +35,7 @@ def get_dpl_classifier():
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)
     pauperformance = PauperformanceService(storage, archive)
-
-    exporter = AcademyDataExporter(pauperformance)
-    # TODO: improve
-    known_decks, _ = exporter._load_mtggoldfish_tournament_training_data()
-    other_known_decks, _ = exporter._load_dpl_training_data()
-    known_decks += other_known_decks
-    return Decklassifier(pauperformance, known_decks)
+    return Decklassifier(pauperformance, ACADEMY_FILE_SYSTEM)
 
 
 DPL_SILVER = get_dpl_classifier()
@@ -93,12 +87,7 @@ def classify():
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)
     pauperformance = PauperformanceService(storage, archive)
-    exporter = AcademyDataExporter(pauperformance)
-    # TODO: improve
-    known_decks, _ = exporter._load_mtggoldfish_tournament_training_data()
-    other_known_decks, _ = exporter._load_dpl_training_data()
-    known_decks += other_known_decks
-    decklassifier = Decklassifier(pauperformance, known_decks)
+    decklassifier = Decklassifier(pauperformance, ACADEMY_FILE_SYSTEM)
     classifier = VideoClassifier(pauperformance, decklassifier)
     classifier.classify_videos()
 

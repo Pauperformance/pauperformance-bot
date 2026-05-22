@@ -17,7 +17,7 @@ from pauperformance_bot.service.pauperformance.async_pauperformance import (
 )
 from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 from pauperformance_bot.util.log import get_application_logger
-from pauperformance_bot.util.time import last_week
+from pauperformance_bot.util.time import last_week  # noqa: F401
 
 logger = get_application_logger()
 
@@ -27,7 +27,7 @@ logger = get_application_logger()
     stop=stop_after_attempt(3),
     wait=wait_random_exponential(multiplier=1, max=60),
 )
-async def scrape(since):
+async def scrape(since=None):
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)
     discord = AsyncDiscordService()
@@ -36,7 +36,8 @@ async def scrape(since):
 
     try:
         # import new content
-        since = datetime.fromtimestamp(since / 1000, tz=timezone.utc)
+        if since:
+            since = datetime.fromtimestamp(since / 1000, tz=timezone.utc)
         await pauperformance.import_players_videos_from_youtube(since=since)
         # await pauperformance.import_decks_from_deckstats(
         #     send_notification=False
@@ -58,7 +59,8 @@ async def scrape(since):
 )
 def main():
     try:
-        asyncio.run(scrape(last_week()))
+        # asyncio.run(scrape(last_week()))
+        asyncio.run(scrape())
     except RuntimeError as exc:
         logger.exception(exc)
 
