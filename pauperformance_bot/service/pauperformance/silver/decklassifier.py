@@ -1,9 +1,9 @@
 import itertools
+import math
 from collections import defaultdict
 from typing import DefaultDict, Optional, Tuple
 
 from entity.deck.playable import PlayedCard
-from scipy import spatial
 
 from pauperformance_bot.constant.mtg.game import BASIC_LANDS
 from pauperformance_bot.constant.pauperformance.academy import AcademyFileSystem
@@ -113,53 +113,41 @@ class Decklassifier:
         self.known_decks += known_decks
 
     @staticmethod
-    def _cosine_similarity(v1, v2, w=1.0):
-        if w == 0:
-            return 1
-        return 1 - spatial.distance.cosine(v1, v2, w=len(v1) * [w])
+    def _magnitude(cards_map: dict) -> float:
+        return math.sqrt(sum(qty * qty for qty in cards_map.values()))
 
     @staticmethod
-    def _vectorize(cards_map1, cards_map2):
-        all_cards = list(set(cards_map1.keys()).union(set(cards_map2.keys())))
-        all_cards.sort()
-        return (
-            [cards_map1.get(c, 0) for c in all_cards],
-            [cards_map2.get(c, 0) for c in all_cards],
+    def _sparse_cosine_similarity(
+        cards_map1: dict, mag1: float, cards_map2: dict, mag2: float, w: float = 1.0
+    ) -> float:
+        if w == 0:
+            return 1.0
+        if mag1 == 0 or mag2 == 0:
+            return 0.0
+        dot = sum(
+            cards_map1[c] * cards_map2[c]
+            for c in cards_map1.keys() & cards_map2.keys()
         )
+        return dot / (mag1 * mag2)
 
     def get_similarity(self, deck1: PlayableDeck, deck2: PlayableDeck) -> float:
         logger.debug("Computing similarity between decks...")
-        vector_main1, vector_main2 = self._vectorize(
-            deck1.mainboard_cards_map,
-            deck2.mainboard_cards_map,
+        main1, main2 = deck1.mainboard_cards_map, deck2.mainboard_cards_map
+        side1, side2 = deck1.sideboard_cards_map, deck2.sideboard_cards_map
+        sim_main = self._sparse_cosine_similarity(
+            main1, self._magnitude(main1), main2, self._magnitude(main2), MAINBOARD_WEIGHT
         )
-        vector_side1, vector_side2 = self._vectorize(
-            deck1.sideboard_cards_map,
-            deck2.sideboard_cards_map,
-        )
-        return self.get_vector_similarity(
-            vector_main1, vector_side1, vector_main2, vector_side2
-        )
-
-    def get_vector_similarity(
-        self,
-        vector_main1,
-        vector_side1,
-        vector_main2,
-        vector_side2,
-    ) -> float:
-        sim_main = self._cosine_similarity(vector_main1, vector_main2, MAINBOARD_WEIGHT)
         logger.debug(f"Mainboard similarity: {sim_main}")
-        sim_side = self._cosine_similarity(vector_side1, vector_side2, SIDEBOARD_WEIGHT)
+        sim_side = self._sparse_cosine_similarity(
+            side1, self._magnitude(side1), side2, self._magnitude(side2), SIDEBOARD_WEIGHT
+        )
         logger.debug(f"sideboard similarity: {sim_side}")
         # give same weight to main and sideboard:
         # sim = (sim_main + sim_side) / 2
         # alternatively, give different weights:
         w_sim_main = 3
         w_sim_side = 1
-        sim = (w_sim_main * sim_main + w_sim_side * sim_side) / (
-            w_sim_main + w_sim_side
-        )
+        sim = (w_sim_main * sim_main + w_sim_side * sim_side) / (w_sim_main + w_sim_side)
         logger.debug(f"Computed similarity between decks: {sim}.")
         return sim
 
