@@ -343,9 +343,8 @@ class AcademyDataExporter:
             f"{deck_id}.json",
         )
         try:
-            tournament_deck: MTGGoldfishTournamentDeck = jsonpickle.decode(
-                open(tournament_deck_path).read()
-            )
+            with open(tournament_deck_path) as f:
+                tournament_deck: MTGGoldfishTournamentDeck = jsonpickle.decode(f.read())
         except FileNotFoundError:
             logger.warning(
                 f"Unable to find tournament deck metadata: "
@@ -354,9 +353,10 @@ class AcademyDataExporter:
             return None
         logger.debug(f"Classifying deck {playable_deck_file}...")
         try:
-            playable_deck = parse_playable_deck_from_lines(
-                [line.strip() for line in open(playable_deck_file).readlines()]
-            )
+            with open(playable_deck_file) as f:
+                playable_deck = parse_playable_deck_from_lines(
+                    [line.strip() for line in f.readlines()]
+                )
         except (IndexError, ValueError):
             logger.warning(f"Unable to parse deck {playable_deck_file}...")
             return None
@@ -381,40 +381,41 @@ class AcademyDataExporter:
             results = list(executor.map(self._classify_deck_file, unclassified_files))
 
         myr_fs = self.pauperformance.config_reader.myr_file_system
-        unclassified_decks_count = 0
+        missing_rows = []
+        for result in results:
+            if result is None:
+                continue
+            deck_id, tournament_deck, similar_archetype, similarity_score = result
+            if not similar_archetype or not similarity_score:
+                logger.debug("Unable to find similar deck...")
+                continue
+            logger.debug(
+                f"Deck could be {similar_archetype.name} ({similarity_score})."
+            )
+            if similarity_score < 0.80:
+                logger.debug("Similarity score not sufficient. Skipping deck...")
+                missing_rows.append([
+                    deck_id,
+                    similar_archetype.name,
+                    similarity_score,
+                    f"https://www.mtggoldfish.com/proxies/new?id={deck_id}",
+                ])
+                continue
+            logger.debug("Similarity score sufficient. Storing intel...")
+            safe_dump_json_to_file(
+                posix_path(
+                    self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR,
+                    similar_archetype.name,
+                ),
+                f"{deck_id}.json",
+                similar_archetype.name,
+            )
+        missing_rows.sort(key=lambda row: int(row[0]), reverse=True)
         with open(myr_fs.MISSING_DECK_ARCHETYPES, "w") as out_f:
             writer = csv.writer(out_f)
-            for result in results:
-                if result is None:
-                    continue
-                deck_id, tournament_deck, similar_archetype, similarity_score = result
-                if not similar_archetype or not similarity_score:
-                    logger.debug("Unable to find similar deck...")
-                    continue
-                logger.debug(
-                    f"Deck could be {similar_archetype.name} ({similarity_score})."
-                )
-                if similarity_score < 0.80:
-                    logger.debug("Similarity score not sufficient. Skipping deck...")
-                    unclassified_decks_count += 1
-                    writer.writerow([
-                        deck_id,
-                        similar_archetype.name,
-                        similarity_score,
-                        f"https://www.mtggoldfish.com/proxies/new?id={deck_id}",
-                    ])
-                    continue
-                logger.debug("Similarity score sufficient. Storing intel...")
-                safe_dump_json_to_file(
-                    posix_path(
-                        self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR,
-                        similar_archetype.name,
-                    ),
-                    f"{deck_id}.json",
-                    similar_archetype.name,
-                )
+            writer.writerows(missing_rows)
         logger.info(f"Classified decks: {len(already_classified_deck_ids)}")
-        logger.warning(f"Unclassified decks: {unclassified_decks_count}")
+        logger.warning(f"Unclassified decks: {len(missing_rows)}")
 
     # TODO: this is a temporary function to create the dataset
     def _label_mtggoldfish_tournament_decks(self, latest_training_sample):
