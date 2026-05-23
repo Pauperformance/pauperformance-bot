@@ -29,6 +29,10 @@ pauperformance_bot/secrets.py
 pauperformance_bot/p13_secrets.py
 pauperformance_bot/task/dev.py
 
+# LocalStorageService for dev
+resources/cache/decks
+resources/cache/videos
+
 # Claude Code
 CLAUDE.md
 .claude

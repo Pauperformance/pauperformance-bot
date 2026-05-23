@@ -1,0 +1,133 @@
+pioneer
+premodern
+edh
+cedh
+#cedh
+#commander
+#edh
+#legacy
+#modern
+#pioneer
+#premodern
+#standard
+#vintage
+[cedh]
+[commander]
+[edh]
+[legacy]
+[modern]
+[pioneer]
+[premodern]
+[standard]
+[vintage]
+#mtgcedh
+#mtgcommander
+#mtgedh
+#mtglegacy
+#mtgmodern
+#mtgpioneer
+#mtgpremodern
+#mtgstandard
+#mtgvintage
+mtg cedh
+mtg commander
+mtg edh
+mtg legacy
+mtg modern
+mtg pioneer
+mtg premodern
+mtg standard
+mtg vintage
+cedh challenge
+commander challenge
+edh challenge
+legacy challenge
+modern challenge
+pioneer challenge
+premodern challenge
+standard challenge
+vintage challenge
+cedh league
+commander league
+edh league
+legacy league
+modern league
+pioneer league
+premodern league
+standard league
+vintage league
+vintage cube
+legacy cube
+modern cube
+mengucube
+legacy playoff
+cedh showcase
+commander showcase
+edh showcase
+legacy showcase
+modern showcase
+pioneer showcase
+premodern showcase
+standard showcase
+vintage showcase
+mind's desire
+legacy doomsday
+legacy combo
+legacy solidarity
+legacy tes
+legacy paradoxical
+legacy magic
+modern biquarterly
+budget legacy
+legacy b&r
+doomsday
+painter
+legacy the
+legacy reanimator
+ad nauseam
+legacy |
+legacy storm |
+legacy playable
+legacy coveted
+sneak & show
+legacy poison
+planar genesis
+umori solidarity
+legacy gameplay
+mystic forge
+necrodominance
+cool but rude
+undercity informer
+undercity sewers
+gifts storm
+legacy outburst
+paradoxical outcome
+reserved list
+vexing bauble
+echo of eons
+entomb
+tezzeret
+legacy bomberman
+yorion storm
+yorion combo
+yorion, sky nomad
+yorion bantalk
+goblin charbelcher
+hexing squelcher
+legacy storm
+show and tell
+artist's talent
+artist’s talent
+legacy ban
+riddler deck
+legacy enchantress
+creative technique
+gaak
+atraxa
+the epic storm
+modern storm
+song of creation
+modern ruby storm
+beseech the mirror
+modern living end
+amulet storm

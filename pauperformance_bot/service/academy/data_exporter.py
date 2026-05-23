@@ -68,9 +68,9 @@ class AcademyDataExporter:
         # self.export_creator_sheets()
         # self.export_archetypes()
         # self.export_decks()
-        # self.export_youtube_videos()
+        self.export_youtube_videos()
         # self.export_intel_cards()
-        self.export_intel_decks()
+        # self.export_intel_decks()
 
     def export_creator_sheets(self):
         logger.info(
@@ -172,7 +172,7 @@ class AcademyDataExporter:
         archetypes_index = collections.defaultdict(set)
         logger.debug("Loading archetypes for each card...")
         for arch, decks in self.decklassifier.known_decks.items():
-            for deck in decks:
+            for deck, *_ in decks:
                 for played_card in deck.mainboard + deck.sideboard:
                     card = fix_card_name(played_card.card_name)
                     archetypes_index[card].add(arch.name)
@@ -300,17 +300,25 @@ class AcademyDataExporter:
         myr_fs = self.pauperformance.config_reader.myr_file_system
         with open(myr_fs.VIDEO_BANNED_IDS) as f:
             banned_ids = {line.strip() for line in f if line.strip()}
+        with open(myr_fs.VIDEO_BANNED_KEYWORDS) as f:
+            banned_keywords = {line.strip() for line in f if line.strip()}
+        with open(myr_fs.VIDEO_LANGUAGES) as f:
+            language_overrides = {
+                row[0]: row[1]
+                for line in f
+                if (row := line.strip().split(",")) and len(row) == 2
+            }
         for video_key in video_keys:
             video_json = files_by_name[video_key + ".txt"]
             video_id, creator_name, _, date, _ = video_key.split(">")
-            if "premodern" in video_json["title"].lower():
+            if any(k in video_json["title"].lower() for k in banned_keywords):
                 continue
             if video_id in banned_ids:
                 continue
             video: Video = Video(
                 name=video_json["title"],
                 link=video_json["url"],
-                language=video_json["language"],
+                language=language_overrides.get(video_id, video_json["language"]),
                 creator_name=creator_name,
                 date=date,
                 archetype=video_json["archetype"],
@@ -394,21 +402,24 @@ class AcademyDataExporter:
             )
             if similarity_score < 0.80:
                 logger.debug("Similarity score not sufficient. Skipping deck...")
-                missing_rows.append([
-                    deck_id,
-                    similar_archetype.name,
-                    similarity_score,
-                    f"https://www.mtggoldfish.com/proxies/new?id={deck_id}",
-                ])
+                missing_rows.append(
+                    [
+                        deck_id,
+                        similar_archetype.name,
+                        similarity_score,
+                        f"https://www.mtggoldfish.com/proxies/new?id={deck_id}",
+                    ]
+                )
                 continue
             logger.debug("Similarity score sufficient. Storing intel...")
+            tournament_deck.archetype = similar_archetype.name
             safe_dump_json_to_file(
                 posix_path(
                     self.academy_fs.ASSETS_DATA_INTEL_DECK_DIR,
-                    similar_archetype.name,
+                    tournament_deck.archetype,
                 ),
                 f"{deck_id}.json",
-                similar_archetype.name,
+                tournament_deck,
             )
         missing_rows.sort(key=lambda row: int(row[0]), reverse=True)
         with open(myr_fs.MISSING_DECK_ARCHETYPES, "w") as out_f:

@@ -85,11 +85,14 @@ class MyrFileSystem:
         self.RESOURCES_CONFIG_ARCHETYPES_DIR: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "archetypes"
         )
+        self.RESOURCES_CONFIG_CREATORS_DIR: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "creators"
+        )
         self.RESOURCES_CONFIG_FAMILIES_DIR: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "families"
         )
-        self.RESOURCES_CONFIG_CREATORS_DIR: str = posix_path(
-            self.RESOURCES_CONFIG_DIR, "creators"
+        self.RESOURCES_CONFIG_VIDEOS_DIR: str = posix_path(
+            self.RESOURCES_CONFIG_DIR, "videos"
         )
         self.RESOURCES_CONFIG_NEWSPAUPER: str = posix_path(
             self.RESOURCES_CONFIG_DIR, "newspauper.ini"
@@ -101,9 +104,14 @@ class MyrFileSystem:
             self.RESOURCES_CONFIG_DIR, "timeline.json"
         )
         self.VIDEO_BANNED_IDS: str = posix_path(
-            self.RESOURCES_CONFIG_DIR, "video_banned_ids.txt"
+            self.RESOURCES_CONFIG_VIDEOS_DIR, "video_banned_ids.txt"
         )
-
+        self.VIDEO_BANNED_KEYWORDS: str = posix_path(
+            self.RESOURCES_CONFIG_VIDEOS_DIR, "video_banned_keywords.txt"
+        )
+        self.VIDEO_LANGUAGES: str = posix_path(
+            self.RESOURCES_CONFIG_VIDEOS_DIR, "video_languages.csv"
+        )
         self.RESOURCES_SILVER_DIR: str = posix_path(self.RESOURCES_DIR, "silver")
         self.RESOURCES_SILVER_TRAINING_DATA_ARCHETYPES_DIR: str = posix_path(
             self.RESOURCES_SILVER_DIR, "training_data_archetypes"
