@@ -5,6 +5,7 @@ cedh
 #cedh
 #commander
 #edh
+#historic
 #legacy
 #modern
 #pioneer
@@ -14,15 +15,67 @@ cedh
 [cedh]
 [commander]
 [edh]
+[historic]
 [legacy]
 [modern]
 [pioneer]
 [premodern]
 [standard]
 [vintage]
+(cedh)
+(commander)
+(edh)
+(historic)
+(legacy)
+(modern)
+(pioneer)
+(premodern)
+(standard)
+(vintage)
+cedh super qualifier
+commander super qualifier
+edh super qualifier
+historic super qualifier
+legacy super qualifier
+modern super qualifier
+pioneer super qualifier
+premodern super qualifier
+standard super qualifier
+vintage super qualifier
+cedh ptq
+commander ptq
+edh ptq
+historic ptq
+legacy ptq
+modern ptq
+pioneer ptq
+premodern ptq
+standard ptq
+vintage ptq
+cedh mcq
+commander mcq
+edh mcq
+historic mcq
+legacy mcq
+modern mcq
+pioneer mcq
+premodern mcq
+standard mcq
+vintage mcq
+cedh preliminary
+commander preliminary
+edh preliminary
+historic preliminary
+legacy preliminary
+modern preliminary
+pioneer preliminary
+premodern preliminary
+standard preliminary
+vintage preliminary
 #mtgcedh
 #mtgcommander
 #mtgedh
+#mtghistoric
 #mtglegacy
 #mtgmodern
 #mtgpioneer
@@ -32,6 +85,7 @@ cedh
 mtg cedh
 mtg commander
 mtg edh
+mtg historic
 mtg legacy
 mtg modern
 mtg pioneer
@@ -42,6 +96,7 @@ cedh challenge
 commander challenge
 edh challenge
 legacy challenge
+historic challenge
 modern challenge
 pioneer challenge
 premodern challenge
@@ -50,6 +105,7 @@ vintage challenge
 cedh league
 commander league
 edh league
+historic league
 legacy league
 modern league
 pioneer league
@@ -64,6 +120,7 @@ legacy playoff
 cedh showcase
 commander showcase
 edh showcase
+historic showcase
 legacy showcase
 modern showcase
 pioneer showcase
@@ -131,3 +188,38 @@ modern ruby storm
 beseech the mirror
 modern living end
 amulet storm
+gwenom
+saga storm
+legacy metagame
+ugin storm combo
+will of the jeskai
+mistrise village
+legacy post-ban
+phyrexian dreadnought
+cephalid breakfast
+boltwave
+legacy cheerios
+radstorm solidarity
+worldgorger reanimator
+ral, monsoon mage
+beseech
+eternal weekend | legacy
+paradox engine
+top 5 legacy decks
+modern izzet
+modern twiddle
+lotus breach
+modern monthly tierlist
+neobrand
+neoform
+vivi ornitier
+blue belcher
+historic event
+historic ranked
+historic ladder
+nadu, winged
+stormscale scion
+veil of summer
+modern horizons draft
+gra medżik podcast
+snowko
