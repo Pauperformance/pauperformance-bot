@@ -1,9 +1,11 @@
 import csv
 import json
 import re
+from concurrent.futures import ThreadPoolExecutor
 
 from pauperformance_bot.constant.pauperformance.silver import (
     BREW_CLASSIFICATION_THRESHOLD,
+    VIDEO_CLASSIFICATION_THREADS,
 )
 from pauperformance_bot.service.mtg.downloader.service import DeckDownloaderService
 from pauperformance_bot.util.log import get_application_logger
@@ -27,12 +29,25 @@ class VideoClassifier:
             manual_labels = {row[0]: row[1] for row in csv.reader(f) if row}
         with open(myr_fs.VIDEO_BANNED_IDS) as f:
             banned_ids = {line.strip() for line in f if line.strip()}
+        candidates = [
+            (file, video_json)
+            for file, video_json in videos.items()
+            if video_json["content_video_id"] not in banned_ids
+        ]
+        missing_rows = []
+        with ThreadPoolExecutor(max_workers=VIDEO_CLASSIFICATION_THREADS) as executor:
+            for i in range(0, len(candidates), VIDEO_CLASSIFICATION_THREADS):
+                batch = candidates[i : i + VIDEO_CLASSIFICATION_THREADS]
+                futures = [
+                    executor.submit(
+                        self._classify_video, file, video_json, manual_labels
+                    )
+                    for file, video_json in batch
+                ]
+                missing_rows.extend(row for f in futures if (row := f.result()))
+        missing_rows.sort(key=lambda row: row[0])
         with open(myr_fs.MISSING_VIDEO_ARCHETYPES, "w", newline="") as out_f:
-            for file, video_json in videos.items():
-                if video_json["content_video_id"] not in banned_ids:
-                    missing_row = self._classify_video(file, video_json, manual_labels)
-                    if missing_row:
-                        csv.writer(out_f).writerow(missing_row)
+            csv.writer(out_f).writerows(missing_rows)
 
     def _classify_video(
         self,
@@ -58,8 +73,14 @@ class VideoClassifier:
         description = video_json.get("description", "")
         urls = self._extract_urls_from_description(description)
         logger.debug(f"Found {len(urls)} video urls.")
+        deck_urls = [
+            url
+            for url in urls
+            if any(domain in url for domain in DeckDownloaderService.known_domains())
+        ]
+        logger.debug(f"Found {len(deck_urls)} deck urls.")
         playable_decks = []
-        for url in urls:
+        for url in deck_urls:
             try:
                 deck = DeckDownloaderService.from_url(url)
                 if deck:

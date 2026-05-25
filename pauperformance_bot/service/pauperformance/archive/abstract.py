@@ -155,9 +155,9 @@ class AbstractArchiveService(metaclass=ABCMeta):
         player: CreatorConfig,
         videos: list[YouTubeVideo],
         storage,
+        imported_youtube_videos: set,
     ):
-        logger.info(f"Updating Archive videos for {player.name}...")
-        imported_youtube_videos = storage.list_imported_youtube_videos_ids()
+        logger.info(f"Updating archive videos for {player.name}...")
         config_reader = ConfigReader()
         for video in videos:
             logger.debug(
@@ -219,13 +219,14 @@ class AbstractArchiveService(metaclass=ABCMeta):
                     indent=4,
                 ),
             )
+            imported_youtube_videos.add(video.content_video_id)
             logger.info(
                 f"Imported video: {video.title}. "
                 f"Source: {video.url}. "
                 f"Archetype: {base_archetype_name}. "
                 f"Deck: {video.deck_name}"
             )
-        logger.info(f"Updated Archive videos for {player.name}.")
+        logger.info(f"Updated archive videos for {player.name}.")
 
     async def import_player_deck_from_mtggoldfish(
         self,

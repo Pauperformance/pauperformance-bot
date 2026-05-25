@@ -25,6 +25,10 @@ class DeckDownloaderService:
     }
 
     @classmethod
+    def known_domains(cls) -> list[str]:
+        return list(cls._downloaders.keys())
+
+    @classmethod
     def from_url(cls, url: str) -> Optional[PlayableDeck]:
         """Downloads a deck from a given url.
 

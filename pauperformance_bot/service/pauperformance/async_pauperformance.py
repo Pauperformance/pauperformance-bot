@@ -1,5 +1,6 @@
 import asyncio
 
+from pauperformance_bot.constant.arena.youtube import YOUTUBE_CONNECTION_POOL_SIZE_API
 from pauperformance_bot.entity.config.creator import CreatorConfig
 from pauperformance_bot.service.arena.twitch import TwitchService
 from pauperformance_bot.service.arena.youtube import YouTubeService
@@ -61,15 +62,24 @@ class AsyncPauperformanceService(PauperformanceService):
 
     async def import_players_videos_from_youtube(self, since=None):
         logger.info("Updating YouTube videos for all users...")
-        for player in self.players:
-            if not player.youtube_channel_id:
-                logger.info(f"Skipping player {player.name} with no YouTube account...")
-                continue
+        imported_youtube_videos = await asyncio.to_thread(
+            self.storage.list_imported_youtube_videos_ids
+        )
+        players_with_youtube = [p for p in self.players if p.youtube_channel_id]
+        semaphore = asyncio.Semaphore(YOUTUBE_CONNECTION_POOL_SIZE_API)
 
-            await self.import_player_videos_from_youtube(player, since=since)
+        async def bounded(player):
+            async with semaphore:
+                await self.import_player_videos_from_youtube(
+                    player, imported_youtube_videos, since=since
+                )
+
+        await asyncio.gather(*(bounded(player) for player in players_with_youtube))
         logger.info("Updated YouTube videos for all users.")
 
-    async def import_player_videos_from_youtube(self, player, since=None):
+    async def import_player_videos_from_youtube(
+        self, player, imported_youtube_videos: set, since=None
+    ):
         logger.info(
             f"Processing videos from YouTube user {player.youtube_channel_id}..."
         )
@@ -83,5 +93,6 @@ class AsyncPauperformanceService(PauperformanceService):
             player,
             videos,
             self.storage,
+            imported_youtube_videos,
         )
         logger.info(f"Processed videos from YouTube user {player.youtube_channel_id}.")

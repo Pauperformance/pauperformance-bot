@@ -42,7 +42,7 @@ class Archetype(ArchetypeConfig):
         must_have_cards: list[str],
         must_not_have_cards: list[str],
         reference_decks: list[str],
-        resource_sideboard: Optional[SideboardResource],
+        resource_sideboards: list[SideboardResource],
         resources_discord: list[DiscordResource],
         resources: list[Resource],
         staples: list[ArchetypeCard],
@@ -58,7 +58,7 @@ class Archetype(ArchetypeConfig):
             must_have_cards=must_have_cards,
             must_not_have_cards=must_not_have_cards,
             reference_decks=reference_decks,
-            resource_sideboard=resource_sideboard,
+            resource_sideboards=resource_sideboards,
             resources_discord=resources_discord,
             resources=resources,
         )

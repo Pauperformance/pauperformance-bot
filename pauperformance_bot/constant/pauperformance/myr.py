@@ -109,6 +109,9 @@ class MyrFileSystem:
         self.VIDEO_BANNED_KEYWORDS: str = posix_path(
             self.RESOURCES_CONFIG_VIDEOS_DIR, "video_banned_keywords.txt"
         )
+        self.VIDEO_CREATOR_LANGUAGES: str = posix_path(
+            self.RESOURCES_CONFIG_VIDEOS_DIR, "video_creator_languages.csv"
+        )
         self.VIDEO_LANGUAGES: str = posix_path(
             self.RESOURCES_CONFIG_VIDEOS_DIR, "video_languages.csv"
         )

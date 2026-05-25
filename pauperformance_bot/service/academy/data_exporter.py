@@ -68,9 +68,10 @@ class AcademyDataExporter:
         # self.export_creator_sheets()
         # self.export_archetypes()
         # self.export_decks()
-        self.export_youtube_videos()
+        # self.export_youtube_videos()
         # self.export_intel_cards()
         # self.export_intel_decks()
+        pass
 
     def export_creator_sheets(self):
         logger.info(
@@ -122,7 +123,7 @@ class AcademyDataExporter:
                 must_have_cards=archetype.must_have_cards,
                 must_not_have_cards=archetype.must_not_have_cards,
                 reference_decks=archetype.reference_decks,
-                resource_sideboard=archetype.resource_sideboard,
+                resource_sideboards=archetype.resource_sideboards,
                 resources_discord=archetype.resources_discord,
                 resources=archetype.resources,
                 staples=staples,
@@ -308,6 +309,12 @@ class AcademyDataExporter:
                 for line in f
                 if (row := line.strip().split(",")) and len(row) == 2
             }
+        with open(myr_fs.VIDEO_CREATOR_LANGUAGES) as f:
+            creator_language_overrides = {
+                row[0]: row[1]
+                for line in f
+                if (row := line.strip().split(",")) and len(row) == 2
+            }
         for video_key in video_keys:
             video_json = files_by_name[video_key + ".txt"]
             video_id, creator_name, _, date, _ = video_key.split(">")
@@ -315,10 +322,15 @@ class AcademyDataExporter:
                 continue
             if video_id in banned_ids:
                 continue
+            language = (
+                language_overrides.get(video_id)
+                or creator_language_overrides.get(creator_name)
+                or video_json["language"]
+            )
             video: Video = Video(
                 name=video_json["title"],
                 link=video_json["url"],
-                language=language_overrides.get(video_id, video_json["language"]),
+                language=language,
                 creator_name=creator_name,
                 date=date,
                 archetype=video_json["archetype"],

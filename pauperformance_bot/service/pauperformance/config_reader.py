@@ -158,9 +158,19 @@ class ConfigReader:
                     f"p12e code: {key} does not match value for deck {value}."
                 )
 
-        resource_sideboard = None
-        if "sideboard" in config:
-            resource_sideboard = SideboardResource(link=config["sideboard"]["url"])
+        resource_sideboards = []
+        for i in count(1):
+            if f"sideboard{i}" not in config:
+                break
+            section = config[f"sideboard{i}"]
+            resource_sideboards.append(
+                SideboardResource(
+                    author=section["author"],
+                    link=section["url"],
+                    price=section["price"],
+                    notes=section.get("notes") or None,
+                )
+            )
 
         resources_discord = [
             DiscordResource(
@@ -192,7 +202,7 @@ class ConfigReader:
             must_have_cards=must_have_cards,
             must_not_have_cards=must_not_have_cards,
             reference_decks=list(references.values()),
-            resource_sideboard=resource_sideboard,
+            resource_sideboards=resource_sideboards,
             resources_discord=resources_discord,
             resources=resources,
         )

@@ -9,9 +9,15 @@ class SideboardResource:
     def __init__(
         self,
         *,
+        author: str,
         link: str,
+        price: str,
+        notes: Optional[str],
     ):
+        self.author: str = author
         self.link: str = link
+        self.price: str = price
+        self.notes: Optional[str] = notes
 
     def __hash__(self):
         return hash(self.link)
@@ -84,7 +90,7 @@ class ArchetypeConfig:
         self,
         *,
         name: str,
-        aliases: list[str],
+        aliases: Optional[list[str]],
         family: Optional[str],
         dominant_mana: list[str],
         game_type: list[str],
@@ -92,12 +98,12 @@ class ArchetypeConfig:
         must_have_cards: list[str],
         must_not_have_cards: list[str],
         reference_decks: list[str],
-        resource_sideboard: Optional[SideboardResource],
+        resource_sideboards: list[SideboardResource],
         resources_discord: list[DiscordResource],
         resources: list[Resource],
     ):
         self.name: str = name
-        self.aliases: list[str] = aliases
+        self.aliases: Optional[list[str]] = aliases
         self.family: Optional[str] = family
         self.dominant_mana: list[str] = dominant_mana
         self.game_type: list[str] = game_type
@@ -105,7 +111,7 @@ class ArchetypeConfig:
         self.must_have_cards: list[str] = must_have_cards
         self.must_not_have_cards: list[str] = must_not_have_cards
         self.reference_decks: list[str] = reference_decks
-        self.resource_sideboard: Optional[SideboardResource] = resource_sideboard
+        self.resource_sideboards: list[SideboardResource] = resource_sideboards
         self.resources_discord: list[DiscordResource] = resources_discord
         self.resources: list[Resource] = resources
 
