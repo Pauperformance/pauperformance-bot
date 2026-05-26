@@ -318,9 +318,11 @@ class AcademyDataExporter:
         for video_key in video_keys:
             video_json = files_by_name[video_key + ".txt"]
             video_id, creator_name, _, date, _ = video_key.split(">")
+            if video_id in banned_ids:
+                continue
             if any(k in video_json["title"].lower() for k in banned_keywords):
                 continue
-            if video_id in banned_ids:
+            if any(k in video_json["description"].lower() for k in banned_keywords):
                 continue
             language = (
                 language_overrides.get(video_id)

@@ -1,17 +1,3 @@
-pioneer
-premodern
-edh
-cedh
-#cedh
-#commander
-#edh
-#historic
-#legacy
-#modern
-#pioneer
-#premodern
-#standard
-#vintage
 [cedh]
 [commander]
 [edh]
@@ -72,16 +58,6 @@ pioneer preliminary
 premodern preliminary
 standard preliminary
 vintage preliminary
-#mtgcedh
-#mtgcommander
-#mtgedh
-#mtghistoric
-#mtglegacy
-#mtgmodern
-#mtgpioneer
-#mtgpremodern
-#mtgstandard
-#mtgvintage
 mtg cedh
 mtg commander
 mtg edh
@@ -127,99 +103,21 @@ pioneer showcase
 premodern showcase
 standard showcase
 vintage showcase
-mind's desire
-legacy doomsday
-legacy combo
-legacy solidarity
-legacy tes
-legacy paradoxical
-legacy magic
 modern biquarterly
 budget legacy
 legacy b&r
-doomsday
-painter
-legacy the
-legacy reanimator
-ad nauseam
-legacy |
-legacy storm |
 legacy playable
-legacy coveted
-sneak & show
-legacy poison
-planar genesis
-umori solidarity
 legacy gameplay
-mystic forge
-necrodominance
-cool but rude
-undercity informer
-undercity sewers
-gifts storm
-legacy outburst
-paradoxical outcome
-reserved list
-vexing bauble
-echo of eons
-entomb
-tezzeret
-legacy bomberman
-yorion storm
-yorion combo
-yorion, sky nomad
 yorion bantalk
-goblin charbelcher
-hexing squelcher
-legacy storm
-show and tell
-artist's talent
-artist’s talent
 legacy ban
-riddler deck
-legacy enchantress
-creative technique
-gaak
-atraxa
-the epic storm
-modern storm
-song of creation
-modern ruby storm
-beseech the mirror
-modern living end
-amulet storm
-gwenom
-saga storm
 legacy metagame
-ugin storm combo
-will of the jeskai
-mistrise village
 legacy post-ban
-phyrexian dreadnought
-cephalid breakfast
-boltwave
-legacy cheerios
-radstorm solidarity
-worldgorger reanimator
-ral, monsoon mage
-beseech
 eternal weekend | legacy
-paradox engine
 top 5 legacy decks
-modern izzet
-modern twiddle
-lotus breach
 modern monthly tierlist
-neobrand
-neoform
-vivi ornitier
-blue belcher
 historic event
 historic ranked
 historic ladder
-nadu, winged
-stormscale scion
-veil of summer
 modern horizons draft
 gra medżik podcast
-snowko
+legacy combo deck

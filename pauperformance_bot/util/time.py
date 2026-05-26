@@ -21,6 +21,10 @@ def last_week() -> int:
     return datetime_to_ms(datetime.now(timezone.utc) - timedelta(weeks=1))
 
 
+def last_n_weeks(n) -> int:
+    return datetime_to_ms(datetime.now(timezone.utc) - timedelta(weeks=n))
+
+
 def datetime_to_ms(dt):
     return int(dt.timestamp() * 1000)
 
