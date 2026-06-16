@@ -9,6 +9,7 @@ import requests
 from pauperformance_bot.constant.mtg.scryfall import (
     API_ENDPOINT,
     REQUESTS_SLEEP_SECONDS,
+    USER_AGENT,
     WEBSITE_URL,
 )
 from pauperformance_bot.constant.pauperformance.myr import SCRYFALL_CARDS_CACHE_DIR
@@ -28,11 +29,16 @@ class ScryfallService:
         self.website_url = website_url
         self.endpoint = endpoint
 
+    def _execute_http_request(self, request_fn, url, **kwargs):
+        headers = kwargs.pop("headers", {})
+        headers["User-Agent"] = USER_AGENT
+        return execute_http_request(request_fn, url, headers=headers, **kwargs)
+
     @lru_cache(maxsize=1)
     def get_sets(self):
         url = f"{self.endpoint}/sets"
         method = requests.get
-        response = execute_http_request(method, url)
+        response = self._execute_http_request(method, url)
         return json.loads(response.content)
 
     def get_card_named(
@@ -56,7 +62,7 @@ class ScryfallService:
             params = {"exact": exact_card_name}
             method = partial(method, params=params)
             try:
-                response = execute_http_request(method, url)
+                response = self._execute_http_request(method, url)
                 card = json.loads(response.content)
                 time.sleep(REQUESTS_SLEEP_SECONDS)
                 with open(
@@ -82,7 +88,7 @@ class ScryfallService:
         cards = []
         try:
             while has_more:
-                response = execute_http_request(method, url)
+                response = self._execute_http_request(method, url)
                 response = json.loads(response.content)
                 cards += response["data"]
                 has_more = response["has_more"]
