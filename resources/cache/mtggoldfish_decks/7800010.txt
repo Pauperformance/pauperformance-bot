@@ -1,0 +1,26 @@
+4 Ancient Den
+3 Cryogen Relic
+3 Experimental Synthesizer
+4 Galvanic Blast
+4 Glint Hawk
+4 Great Furnace
+4 Kor Skyfisher
+4 Lightning Bolt
+1 Makeshift Munitions
+3 Myr Enforcer
+2 Navigator's Compass
+2 Prophetic Prism
+2 Razortide Bridge
+1 Relic of Progenitus
+2 Rustvale Bridge
+4 Seat of the Synod
+2 Silverbluff Bridge
+4 Thoughtcast
+3 Thraben Charm
+4 Utrom Monitor
+
+3 Dust to Dust
+4 Hydroblast
+2 Journey to Nowhere
+3 Krark-Clan Shaman
+3 Pyroblast

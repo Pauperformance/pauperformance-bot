@@ -1,0 +1,34 @@
+1 Archaeomancer
+1 Ardent Elementalist
+3 Augur of Bolas
+4 Brainstorm
+4 Cleansing Wildfire
+4 Counterspell
+1 Destroy Evil
+2 Dispel
+3 Ephemerate
+1 Glacial Floodplain
+4 Lorien Revealed
+3 Mulldrifter
+2 Murmuring Mystic
+1 Ride's End
+4 Rustvale Bridge
+4 Silverbluff Bridge
+3 Skred
+6 Snow-Covered Island
+1 Snow-Covered Mountain
+2 Snow-Covered Plains
+2 Suplex
+1 Thraben Charm
+2 Union of the Third Path
+1 Volatile Fjord
+
+2 Blue Elemental Blast
+1 Breath Weapon
+1 Destroy Evil
+2 Dust to Dust
+2 Envelop
+2 Hydroblast
+2 Pyroblast
+2 Red Elemental Blast
+1 Stonehorn Dignitary
