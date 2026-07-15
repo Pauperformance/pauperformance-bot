@@ -64,6 +64,7 @@ class AcademyDataExporter:
 
     def export_all(self):
         # TODO: remove each (relevant) folder before re-exporting to avoid stale files
+        # TODO: figure out what is the right order of export operations
         # self.export_miscellanea()
         # self.export_creator_sheets()
         # self.export_archetypes()

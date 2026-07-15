@@ -17,7 +17,11 @@ from pauperformance_bot.service.pauperformance.async_pauperformance import (
 )
 from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 from pauperformance_bot.util.log import get_application_logger
-from pauperformance_bot.util.time import last_week  # noqa: F401
+from pauperformance_bot.util.time import (  # noqa: F401
+    last_n_hours,
+    last_n_weeks,
+    last_week,
+)
 
 logger = get_application_logger()
 
@@ -59,8 +63,10 @@ async def scrape(since=None):
 )
 def main():
     try:
+        asyncio.run(scrape(last_n_hours(1)))
+        # asyncio.run(scrape(last_n_weeks(1)))
         # asyncio.run(scrape(last_week()))
-        asyncio.run(scrape())
+        # asyncio.run(scrape())
     except RuntimeError as exc:
         logger.exception(exc)
 

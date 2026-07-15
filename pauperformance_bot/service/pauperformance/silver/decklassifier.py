@@ -3,8 +3,6 @@ import math
 from collections import defaultdict
 from typing import DefaultDict, Optional, Tuple
 
-from entity.deck.playable import PlayedCard
-
 from pauperformance_bot.constant.mtg.game import BASIC_LANDS
 from pauperformance_bot.constant.pauperformance.academy import AcademyFileSystem
 from pauperformance_bot.constant.pauperformance.silver import (
@@ -21,6 +19,7 @@ from pauperformance_bot.entity.api.miscellanea import (
 from pauperformance_bot.entity.config.archetype import ArchetypeConfig
 from pauperformance_bot.entity.deck.playable import (
     PlayableDeck,
+    PlayedCard,
     parse_playable_deck_from_lines,
 )
 from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish

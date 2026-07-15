@@ -8,8 +8,11 @@ import jsonpickle
 from pauperformance_bot.constant.pauperformance.academy import AcademyFileSystem
 from pauperformance_bot.entity.api.tournament import Tournament
 from pauperformance_bot.service.mtg.mtggoldfish import MTGGoldfish
+from pauperformance_bot.service.pauperformance.silver.sideboard_scraper import (
+    update_sideboard_guides,
+)
 from pauperformance_bot.util.log import get_application_logger
-from pauperformance_bot.util.time import last_week
+from pauperformance_bot.util.time import last_n_weeks
 
 logger = get_application_logger()
 logger.setLevel(logging.DEBUG)
@@ -48,7 +51,9 @@ def download_mtggoldfish(since):
 
 def scrape(since):
     download_mtggoldfish(since)
+    update_sideboard_guides()
 
 
 if __name__ == "__main__":
-    scrape(last_week())
+    # scrape(last_week())
+    scrape(last_n_weeks(4 * 12))

@@ -4,6 +4,7 @@ import os
 import jsonpickle
 
 from pauperformance_bot.constant.pauperformance.academy import ACADEMY_FILE_SYSTEM
+from pauperformance_bot.constant.pauperformance.myr import TOP_PATH
 from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
     MTGGoldfishArchiveService,
 )
@@ -17,6 +18,7 @@ from pauperformance_bot.service.pauperformance.silver.video_classifier import (
 from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import (
+    posix_path,
     safe_dump_json_to_file,
 )
 
@@ -134,4 +136,5 @@ if __name__ == "__main__":
     #     posix_path(TOP_PATH, "dev", "decks-all-tournaments.json"),
     #     posix_path(TOP_PATH, "dev", "decks-all-tournaments-classified.json"),
     # )
-    classify()
+    # classify()
+    generate_dpl_meta(posix_path(TOP_PATH, "dev", "decks-all-tournaments-mini.json"))
