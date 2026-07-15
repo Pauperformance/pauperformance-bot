@@ -28,7 +28,7 @@ def _make_archetype(**overrides):
         must_have_cards=[],
         must_not_have_cards=[],
         reference_decks=[],
-        resource_sideboard=None,
+        resource_sideboards=None,
         resources_discord=[],
         resources=[],
         staples=[],

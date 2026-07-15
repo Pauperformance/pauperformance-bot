@@ -30,13 +30,13 @@ class TestPlayableDeck(unittest.TestCase):
         main_deck = data.DECK_MAIN[:-1]
 
         with self.assertRaises(ValueError):
-            PlayableDeck(main_deck, [])
+            PlayableDeck(main_deck, [], raise_error_if_invalid=True)
 
     def test_playable_deck_with_more_than_fifteen_side(self):
         side_deck = data.DECK_SIDE + [PlayedCard(4, "Fake Card")]
 
         with self.assertRaises(ValueError):
-            PlayableDeck(data.DECK_MAIN, side_deck)
+            PlayableDeck(data.DECK_MAIN, side_deck, raise_error_if_invalid=True)
 
     def test_playable_deck(self):
         pd = PlayableDeck(data.DECK_MAIN, data.DECK_SIDE)

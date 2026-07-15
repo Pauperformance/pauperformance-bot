@@ -10,7 +10,6 @@ from typing import Any, Dict, List
 from requests.exceptions import HTTPError
 
 import pauperformance_bot
-from pauperformance_bot.constant.arena.twitch import TWITCH_VIDEO_URL
 from pauperformance_bot.constant.arena.youtube import YOUTUBE_VIDEO_URL
 from pauperformance_bot.constant.mtg.scryfall import REQUESTS_SLEEP_SECONDS
 from pauperformance_bot.constant.pauperformance.myr import (
@@ -28,7 +27,6 @@ from pauperformance_bot.entity.academy_video import AcademyVideo
 from pauperformance_bot.entity.deck.archive.abstract import AbstractArchivedDeck
 from pauperformance_bot.entity.deck.playable import PlayableDeck
 from pauperformance_bot.exceptions import PauperformanceException
-from pauperformance_bot.service.arena.twitch import TwitchService
 from pauperformance_bot.service.arena.youtube import YouTubeService
 from pauperformance_bot.service.mtg.deckstats import DeckstatsService
 from pauperformance_bot.service.mtg.scryfall import ScryfallService
@@ -55,14 +53,12 @@ class PauperformanceService:
         storage,
         archive,
         scryfall=ScryfallService(),
-        twitch=TwitchService(),
         youtube=YouTubeService(),
         config_reader=ConfigReader(),
     ):
         self.storage: AbstractStorageService = storage
         self.archive: AbstractArchiveService = archive
         self.scryfall = scryfall
-        self.twitch = twitch
         self.youtube = youtube
         self.config_reader = config_reader
         self.players = config_reader.list_creators()
@@ -313,33 +309,6 @@ class PauperformanceService:
         discord_logger = DiscordMessagesSenderSyncService([message])
         discord_logger.run_task()
 
-    def _list_twitch_videos(self):
-        logger.debug("Retrieving stored Twitch videos...")
-        academy_videos = []
-        for video in self.storage.list_imported_twitch_videos():
-            video_id, user_name, language, date, key = video.split(">")
-            video_path = posix_path(
-                self.storage.youtube_video_path,
-                video + ".txt",  # TODO: get rid of this
-            )
-            indexable_video = self.storage.get_file(video_path)
-            academy_videos.append(
-                AcademyVideo(
-                    video_id,
-                    user_name,
-                    indexable_video["title"],
-                    language,
-                    date,
-                    indexable_video["deck_name"],
-                    indexable_video["archetype"],
-                    indexable_video["creator"],
-                    f"{TWITCH_VIDEO_URL}{video_id}",
-                    "twitch",
-                )
-            )
-        logger.debug("Retrieved stored Twitch videos.")
-        return academy_videos
-
     def _list_youtube_videos(self):
         logger.debug("Retrieving stored YouTube videos...")
         academy_videos = []
@@ -368,7 +337,7 @@ class PauperformanceService:
         return academy_videos
 
     def list_videos(self) -> list[AcademyVideo]:
-        return self._list_twitch_videos() + self._list_youtube_videos()
+        return self._list_youtube_videos()
 
     def print_stats(
         self,

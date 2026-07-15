@@ -82,6 +82,7 @@ class MTGGoldfishArchiveService(AbstractArchiveService):
         # So, let's just fix this shit ourselves with some caching mechanism.
         self.storage = storage  # will be the source of truth to detect missing decks
         self._decks_cache: list[AbstractArchivedDeck] = []  # will act as a cache
+        self.list_decks()  # forces caching
 
     @staticmethod
     def _parse_login_authenticity_token(response):

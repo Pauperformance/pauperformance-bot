@@ -4,6 +4,7 @@ import os
 import jsonpickle
 
 from pauperformance_bot.constant.pauperformance.academy import ACADEMY_FILE_SYSTEM
+from pauperformance_bot.constant.pauperformance.myr import TOP_PATH
 from pauperformance_bot.service.pauperformance.archive.mtggoldfish import (
     MTGGoldfishArchiveService,
 )
@@ -17,6 +18,7 @@ from pauperformance_bot.service.pauperformance.silver.video_classifier import (
 from pauperformance_bot.service.pauperformance.storage.dropbox_ import DropboxService
 from pauperformance_bot.util.log import get_application_logger
 from pauperformance_bot.util.path import (
+    posix_path,
     safe_dump_json_to_file,
 )
 
@@ -83,6 +85,43 @@ def dpl_classifier(environ, start_response):
         return [json.dumps({"error": str(e)}).encode("utf-8")]
 
 
+def apl_classifier(environ, start_response):
+    try:
+        method = environ["REQUEST_METHOD"]
+        if method != "POST":
+            start_response(
+                "405 Method Not Allowed", [("Content-Type", "application/json")]
+            )
+            return [json.dumps({"error": "Method not allowed"}).encode("utf-8")]
+        try:
+            request_length = int(environ.get("CONTENT_LENGTH", 0))
+        except (ValueError, TypeError):
+            request_length = 0
+        request_body = environ["wsgi.input"].read(request_length)
+        raw_data = json.loads(request_body.decode("utf-8"))
+        data = []
+        for d in raw_data["decks"]:
+            data.append(
+                {
+                    "id": d["id"],
+                    "cards": {
+                        "mainboard": d["mainDeck"],
+                        "sideboard": d["sideboard"],
+                    },
+                }
+            )
+        response = generate_dpl_meta(data)
+        response = {d.identifier: d.archetype for d in response.dpl_decks}
+        response = json.loads(jsonpickle.encode(response, make_refs=False, warn=True))
+        start_response("200 OK", [("Content-Type", "application/json")])
+        return [json.dumps(response).encode("utf-8")]
+    except Exception as e:
+        start_response(
+            "500 Internal Server Error", [("Content-Type", "application/json")]
+        )
+        return [json.dumps({"error": str(e)}).encode("utf-8")]
+
+
 def classify():
     storage = DropboxService()
     archive = MTGGoldfishArchiveService(storage)
@@ -97,4 +136,5 @@ if __name__ == "__main__":
     #     posix_path(TOP_PATH, "dev", "decks-all-tournaments.json"),
     #     posix_path(TOP_PATH, "dev", "decks-all-tournaments-classified.json"),
     # )
-    classify()
+    # classify()
+    generate_dpl_meta(posix_path(TOP_PATH, "dev", "decks-all-tournaments-mini.json"))

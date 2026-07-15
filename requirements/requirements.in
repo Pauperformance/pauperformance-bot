@@ -3,7 +3,6 @@ pyquery
 requests
 retrying
 argcomplete
-twitchAPI==2.5.5  # v3.10.0+ requires additional work
 python-youtube
 discord.py==1.7.3  # v2+ requires additional work
 beautifulsoup4

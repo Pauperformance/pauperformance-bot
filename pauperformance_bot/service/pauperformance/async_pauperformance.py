@@ -2,7 +2,6 @@ import asyncio
 
 from pauperformance_bot.constant.arena.youtube import YOUTUBE_CONNECTION_POOL_SIZE_API
 from pauperformance_bot.entity.config.creator import CreatorConfig
-from pauperformance_bot.service.arena.twitch import TwitchService
 from pauperformance_bot.service.arena.youtube import YouTubeService
 from pauperformance_bot.service.mtg.scryfall import ScryfallService
 from pauperformance_bot.service.nexus.async_discord_service import AsyncDiscordService
@@ -22,7 +21,6 @@ class AsyncPauperformanceService(PauperformanceService):
         storage,
         archive,
         scryfall=ScryfallService(),
-        twitch=TwitchService(),
         youtube=YouTubeService(),
         config_reader=ConfigReader(),
     ):
@@ -30,7 +28,6 @@ class AsyncPauperformanceService(PauperformanceService):
             storage,
             archive,
             scryfall,
-            twitch,
             youtube,
             config_reader,
         )

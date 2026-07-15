@@ -1,10 +1,9 @@
-from pauperformance_bot.entity.arena.indexable_video import IndexableVideo
 from pauperformance_bot.util.decorators import auto_repr, auto_str
 
 
 @auto_repr
 @auto_str
-class YouTubeVideo(IndexableVideo):
+class YouTubeVideo:
     def __init__(
         self,
         video_id,  # YouTube internals
@@ -23,13 +22,13 @@ class YouTubeVideo(IndexableVideo):
         language,
         is_short,
     ):
-        super().__init__(description)
         self.video_id = video_id
         self.etag = etag
         self.content_video_id = content_video_id
         self.published_at = published_at
         self.channel_id = channel_id
         self.channel_title = channel_title
+        self.description = description
         self.playlist_id = playlist_id
         self.position = position
         self.created_at = created_at

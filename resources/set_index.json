@@ -6466,5 +6466,35 @@
         "scryfall_code": "trk",
         "name": "Star Trek",
         "date": "2026-11-13"
+    },
+    "1079": {
+        "p12e_code": 1079,
+        "scryfall_code": "amsh",
+        "name": "Marvel Super Heroes Art Series",
+        "date": "2026-06-26"
+    },
+    "1080": {
+        "p12e_code": 1080,
+        "scryfall_code": "fmsc",
+        "name": "Marvel Super Heroes Jumpstart Front Cards",
+        "date": "2026-06-26"
+    },
+    "1081": {
+        "p12e_code": 1081,
+        "scryfall_code": "tmsc",
+        "name": "Marvel Super Heroes Commander Tokens",
+        "date": "2026-06-26"
+    },
+    "1082": {
+        "p12e_code": 1082,
+        "scryfall_code": "sds",
+        "name": "Stardates",
+        "date": "2026-11-20"
+    },
+    "1083": {
+        "p12e_code": 1083,
+        "scryfall_code": "ttrk",
+        "name": "Star Trek Tokens",
+        "date": "2026-11-20"
     }
 }
